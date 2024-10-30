@@ -1,101 +1,79 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using BussinessLayer.Interfaces.IAutenticacion;
 using BussinessLayer.DTOs.Autenticacion;
 using Swashbuckle.AspNetCore.Annotations;
+using BussinessLayer.Dtos.Account;
+using BussinessLayer.Interface.IAccount;
+using System.Net.Mime;
+using BussinessLayer.FluentValidations;
+using BussinessLayer.FluentValidations.Account;
 
 namespace PTP_API.Controllers.Autenticacion
 {
-    [Route("api/[controller]")]
+   
     [ApiController]
+    [ApiVersion("1.0")]
+    [SwaggerTag("Servicio de manejo de usuarios")]
     public class AutenticacionController : ControllerBase
     {
-        private readonly IAutenticacionService _autenticacionServices;
-        private readonly IRepositorySection _repositorySection;
-        private readonly IConfiguration _configuration;
+        private readonly IAccountService _accountService;
 
-        public AutenticacionController(IAutenticacionService autenticacionServices,
-            IRepositorySection repositorySection,
-            IConfiguration configuration)
+        public AutenticacionController(IAccountService accountService)
         {
-            _autenticacionServices = autenticacionServices;
-            _repositorySection = repositorySection;
-            _configuration = configuration;
+            _accountService = accountService;
         }
 
         [HttpPost("Login")]
+        [Consumes(MediaTypeNames.Application.Json)]
         [SwaggerOperation(Summary = "Logear empresa", Description = "Devuelve el token de seguridad")]
-        public IActionResult Login([FromBody] LoginRequestDTO request)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
         {
-            try
+            if (string.IsNullOrEmpty(request.Usuario))
             {
-                if (string.IsNullOrEmpty(request.Usuario))
-                {
-                    return BadRequest("El campo usuario no puede estar vacio.");
-                }
-
-                if (string.IsNullOrEmpty(request.Password))
-                {
-                    return BadRequest("El campo contraseña no puede estar vacio.");
-                }
-
-                var isValid = _repositorySection.TextCaractersValidation(request.Usuario);
-                if (!isValid)
-                {
-                    return BadRequest("Usuario no valido");
-                }
-
-                var result = _autenticacionServices.IniciarSesion(request.Usuario, request.Password);
-                if (result == null)
-                {
-                    return Unauthorized("Credenciales incorrectas.");
-                }
-
-                var claims = new List<Claim>
-                {
-                    new("IpUsuario", result.Ip),
-                    new("IdEmpresa", result.DatosEmpresa.CODIGO_EMP.ToString()),
-                    new("NombreEmpresa", result.DatosEmpresa.NOMBRE_EMP),
-                    new("TelefonoEmpresa", result.DatosEmpresa.TELEFONO1),
-                    new("CodigoUsuario", result.DatosUsuario.CODIGO_USUARIO.ToString()),
-                    new("NombreUsuario", result.DatosUsuario.NOMBRE_USUARIO),
-                    new("IdPerfilUsuario", result.DatosUsuario.ID_PERFIL.ToString()),
-                    new("EmailUsuario", result.DatosUsuario.CORREO),
-                    new("TelefonoUsuario", result.DatosUsuario.TELEFONO),
-                    new("FechaAdiccion", result.DatosUsuario.FECHA_ADICION.ToString()),
-                    new("IdSucursal", result.DatosSucursal.CODIGO_SUC.ToString()),
-                    new("Sucursal", result.DatosSucursal.NOMBRE_SUC.ToString()),
-                    new("TelefonSucursal1", result.DatosSucursal.TELEFONO1.ToString()),
-                };
-
-                var token = GenerateToken(claims);
-
-                return Ok(new { Token = token });
+                return BadRequest("El campo usuario no puede estar vacio.");
             }
-            catch (Exception ex)
+
+            if (string.IsNullOrEmpty(request.Password))
             {
-                Console.Error.WriteLine(ex.ToString());
-                return BadRequest(ex.Message);
+                return BadRequest("El campo contraseña no puede estar vacio.");
             }
+
+            var response = await _accountService.AuthenticateAsync(new AuthenticationRequest
+            {
+                UserCredential = request.Usuario,
+                Password = request.Password
+            });
+
+            if (response.HasError)
+            {
+                return Unauthorized(response.Error);
+            }
+
+            return Ok(new
+            {
+                Token = response.JWToken,
+                RefreshToken = response.RefreshToken
+            });
         }
 
-        private string GenerateToken(IEnumerable<Claim> claims)
+        [HttpPost("Register")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [SwaggerOperation(
+            Summary = "Registro de Usuarios",
+            Description = "Endpoint para registrar los usuarios"
+        )]
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddMinutes(30); 
+            var validator = new RegisterRequestValidator();
+            var validationResult = await validator.ValidateAsync(request);
 
-            var token = new JwtSecurityToken(
-                issuer: null,
-                audience: null,
-                claims: claims,
-                expires: expires,
-                signingCredentials: creds);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(new { code = 400, error = errors });
+            }
+            var origin = Request?.Headers["origin"].ToString() ?? string.Empty;
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(await _accountService.RegisterUserAsync(request, origin, "Developer"));
         }
     }
 }

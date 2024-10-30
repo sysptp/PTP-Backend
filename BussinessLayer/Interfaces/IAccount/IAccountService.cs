@@ -1,0 +1,11 @@
+﻿using BussinessLayer.Dtos.Account;
+
+namespace BussinessLayer.Interface.IAccount
+{
+    public interface IAccountService
+    {
+        Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request);
+        Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin, string Role);
+        Task<bool> VerifyUser(string UserName);
+    }
+}

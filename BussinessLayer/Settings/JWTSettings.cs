@@ -1,6 +1,6 @@
 ﻿
 
-namespace TaskMaster.Core.Domain.Settings
+namespace BussinessLayer.Settings
 {
     public class JWTSettings
     {

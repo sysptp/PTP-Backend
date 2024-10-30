@@ -4,27 +4,27 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using IdentityLayer.Entities;
 using BussinessLayer.Dtos.Account;
 using AutoMapper;
-using TaskMaster.Core.Domain.Settings;
+using BussinessLayer.Settings;
 using DataLayer.Enums;
+using System.Security.Cryptography;
+using BussinessLayer.Interface.IAccount;
 
 namespace IdentityLayer.Services
 {
-    public class AccountService 
+    public class AccountService : IAccountService
     {
-        private readonly UserManager<SC_USUAR001> _userManager;
-        private readonly SignInManager<SC_USUAR001> _signInManager;
+        private readonly UserManager<Usuario> _userManager;
+        private readonly SignInManager<Usuario> _signInManager;
         private readonly JWTSettings _jwtSettings;
         private readonly IMapper _mapper;
 
         public AccountService(
-              UserManager<SC_USUAR001> userManager,
-              SignInManager<SC_USUAR001> signInManager,
-              IOptions<JWTSettings> jwtSettings
-,
+              UserManager<Usuario> userManager,
+              SignInManager<Usuario> signInManager,
+              IOptions<JWTSettings> jwtSettings,
               IMapper mapper)
         {
             _userManager = userManager;
@@ -43,23 +43,22 @@ namespace IdentityLayer.Services
             return true;
         }
 
-        public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request, bool IsForApi)
+        public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         {
-            AuthenticationResponse response = new();
+            var response = new AuthenticationResponse();
 
-            var user = await _userManager.FindByEmailAsync(request.UserCredential);
+            var user = await _userManager.FindByEmailAsync(request.UserCredential) ??
+                       await _userManager.FindByNameAsync(request.UserCredential);
+
             if (user == null)
             {
-                user = await _userManager.FindByNameAsync(request.UserCredential);
-                if (user == null)
-                {
-                    response.HasError = true;
-                    response.Error = $"No Accounts registered with {request.UserCredential}";
-                    return response;
-                }
+                response.HasError = true;
+                response.Error = $"No Accounts registered with {request.UserCredential}";
+                return response;
             }
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
-            if (!result.Succeeded)
+
+            var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
+            if (!signInResult.Succeeded)
             {
                 response.HasError = true;
                 response.Error = $"Invalid credentials for {request.UserCredential}";
@@ -69,28 +68,64 @@ namespace IdentityLayer.Services
             response.Id = user.Id;
             response.Email = user.Email;
             response.UserName = user.UserName;
-
-            var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
-
-            response.Roles = rolesList.ToList();
+            response.Roles = (await _userManager.GetRolesAsync(user)).ToList();
             response.IsVerified = user.EmailConfirmed;
 
-            if (IsForApi)
-            {
-                JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
+            // Incluye los claims adicionales
+            var additionalClaims = new List<Claim>
+                {
+                    new Claim("IpUsuario", "IP_DEL_USUARIO"),
+                    new Claim("IdEmpresa", user.CodigoEmp.ToString()),
+                    new Claim("NombreEmpresa", "NOMBRE_EMPRESA"),
+                    new Claim("TelefonoEmpresa", "TELEFONO_EMPRESA"),
+                    new Claim("CodigoUsuario", user.Id.ToString()),
+                    new Claim("NombreUsuario", user.Nombre),
+                    new Claim("IdPerfilUsuario", user.IdPerfil.ToString()),
+                    new Claim("EmailUsuario", user.Email),
+                    new Claim("TelefonoUsuario", user.PhoneNumber),
+                    new Claim("FechaAdiccion", user.FechaAdicion.ToString()),
+                    new Claim("IdSucursal", "ID_SUCURSAL"),
+                    new Claim("Sucursal", "NOMBRE_SUCURSAL"),
+                    new Claim("TelefonSucursal1", "TELEFONO_SUCURSAL")
+                };
 
-                response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-                var refreshToken = GenerateRefreshToken();
-                response.RefreshToken = refreshToken.Token;
+            JwtSecurityToken jwtToken = await GenerateJWToken(user, additionalClaims);
+            response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+            var refreshToken = GenerateRefreshToken();
+            response.RefreshToken = refreshToken.Token;
 
-            }
 
             return response;
         }
 
-        public async Task SignOutAsync()
+        #region PrivateMethods
+
+        private async Task<JwtSecurityToken> GenerateJWToken(Usuario user, IEnumerable<Claim> additionalClaims)
         {
-            await _signInManager.SignOutAsync();
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("uid", user.Id.ToString())
+            }
+            .Union(userClaims)
+            .Union(roles.Select(role => new Claim("roles", role)))
+            .Union(additionalClaims);
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes);
+
+            return new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: expires,
+                signingCredentials: creds);
         }
 
         public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin, string Role)
@@ -116,10 +151,11 @@ namespace IdentityLayer.Services
                 return response;
             }
 
-            var user = new SC_USUAR001
+            var user = new Usuario
             {
                 Email = request.Email,
-                NombreUsuario = request.FirstName,
+                Nombre = request.FirstName,
+                Apellido = request.LastName,
                 UserName = request.UserName,
                 PhoneNumber = request.Phone,
                 EmailConfirmed = true
@@ -127,52 +163,15 @@ namespace IdentityLayer.Services
 
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
-            { 
+            {
                 response.HasError = true;
                 response.Error = $"An error occurred trying to register the user.";
                 return response;
             }
-              
+
             await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
-                 
+
             return response;
-        }
-
-        #region PrivateMethods
-
-        private async Task<JwtSecurityToken> GenerateJWToken(SC_USUAR001 user)
-        {
-            var userClaims = await _userManager.GetClaimsAsync(user);
-            var roles = await _userManager.GetRolesAsync(user);
-
-            var roleClaims = new List<Claim>();
-
-            foreach (var role in roles)
-            {
-                roleClaims.Add(new Claim("roles", role));
-            }
-
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub,user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email,user.Email),
-                new Claim("uid", user.Id)
-            }
-            .Union(userClaims)
-            .Union(roleClaims);
-
-            var symmectricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-            var signingCredetials = new SigningCredentials(symmectricSecurityKey, SecurityAlgorithms.HmacSha256);
-
-            var jwtSecurityToken = new JwtSecurityToken(
-                issuer: _jwtSettings.Issuer,
-                audience: _jwtSettings.Audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
-                signingCredentials: signingCredetials);
-
-            return jwtSecurityToken;
         }
 
         private RefreshToken GenerateRefreshToken()
@@ -193,7 +192,6 @@ namespace IdentityLayer.Services
 
             return BitConverter.ToString(ramdomBytes).Replace("-", "");
         }
-
 
         #endregion
     }
