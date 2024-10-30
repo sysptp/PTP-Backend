@@ -48,7 +48,7 @@ using BussinessLayer.Helpers.CargaMasivaHelpers;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PDbContext>(option =>
-    option.UseSqlServer(builder.Configuration.GetConnectionString("YourConnectionStringName")));
+    option.UseSqlServer(builder.Configuration.GetConnectionString("POS_CONN")));
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
@@ -116,7 +116,6 @@ builder.Services.AddScoped<IBilletes_MonedaService, Billetes_MonedaService>();
 builder.Services.AddScoped<IBancosService, BancosService>();
 builder.Services.AddScoped<IModuloService, ModuloService>();
 builder.Services.AddScoped<DeserializadorCrearReporte>();
-
 builder.Services.AddScoped<EntityMapper>();
 builder.Services.AddScoped<CsvProcessor>();
 
