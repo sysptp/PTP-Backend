@@ -1,9 +1,7 @@
 ﻿using BussinessLayer.Interfaces.ISeguridad;
 using DataLayer.Models.Seguridad;
 using DataLayer.PDbContex;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.Services.SSeguridad
 {

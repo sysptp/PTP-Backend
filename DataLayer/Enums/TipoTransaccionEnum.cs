@@ -1,4 +1,4 @@
-﻿namespace BussinessLayer.Enums
+﻿namespace DataLayer.Enums
 {
     public enum TipoTransaccionEnum
     {

@@ -8,7 +8,7 @@ using DataLayer.Models.Otros;
 using DataLayer.Models.Productos;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
-using TipoPago = BussinessLayer.Enums.TipoPago;
+using TipoPago = DataLayer.Enums.TipoPago;
 
 namespace BussinessLayer.Services.SFacturacion
 {

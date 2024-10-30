@@ -1,4 +1,5 @@
-﻿using BussinessLayer.Interfaces.IAutenticacion;
+﻿using BussinessLayer.Interface.IOtros;
+using BussinessLayer.Interfaces.IAutenticacion;
 using BussinessLayer.Interfaces.IMenu;
 using BussinessLayer.Interfaces.IModulo;
 using BussinessLayer.Services.SOtros;
@@ -9,22 +10,20 @@ using System.Security.Claims;
 
 namespace BussinessLayer.Services.SMenu
 {
-    public class MenuService : GenericService<GnMenu>,IMenuService
+    public class MenuService : IMenuService
     {
         // CREADO POR MANUEL 3/10/2024
         private readonly PDbContext _context;
         private readonly IModuloService _moduloService;
         private readonly IClaimsService _claimsService;
 
-        public MenuService(PDbContext dbContext, IClaimsService claimsService, IModuloService moduloService) : base(dbContext)
+        public MenuService(PDbContext dbContext, 
+            IClaimsService claimsService, 
+            IModuloService moduloService) 
         {
             _context = dbContext;
             _claimsService = claimsService;
             _moduloService = moduloService;
-        }
-        public MenuService(PDbContext dbContext) : base(dbContext)
-        {
-            _context = dbContext;
         }
 
         public async Task Add(GnMenu menu)
@@ -33,11 +32,11 @@ namespace BussinessLayer.Services.SMenu
 
             if(menu.Nivel == 1)
             {
-            var modulo = new GnModulo
-            {
-                Modulo = menu.Menu,
-                AdicionadoPor = _claimsService.GetClaimValueByType("nombreUsuario")
-            };
+                var modulo = new GnModulo
+                {
+                    Modulo = menu.Menu,
+                    AdicionadoPor = _claimsService.GetClaimValueByType("nombreUsuario")
+                };
             }
 
             await _context.SaveChangesAsync();
@@ -113,6 +112,14 @@ namespace BussinessLayer.Services.SMenu
             return modulos;
         }
 
+        Task<IList<GnMenu>> IGenericService<GnMenu>.GetAll()
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
