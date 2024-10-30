@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using BussinessLayer.Interface.IOtros;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
+using DataLayer.Enums;
 
 namespace BussinessLayer.Services.SOtros
 {
@@ -49,11 +47,11 @@ namespace BussinessLayer.Services.SOtros
         {
             List<TipoTransaccion> lista_tipo = new List<TipoTransaccion>
             {
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.Efectivo.ToString(), Id = 1 },
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.Tarjeta.ToString(), Id = 3 },
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.Cheques.ToString(), Id = 2 },
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.Cupones.ToString(), Id = 4 },
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.TarjetayEfectivo.ToString(), Id = 5 }
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.Efectivo.ToString(), Id = 1 },
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.Tarjeta.ToString(), Id = 3 },
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.Cheques.ToString(), Id = 2 },
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.Cupones.ToString(), Id = 4 },
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.TarjetayEfectivo.ToString(), Id = 5 }
             };
 
             return Task.FromResult((IList<TipoTransaccion>)lista_tipo);
@@ -72,11 +70,11 @@ namespace BussinessLayer.Services.SOtros
         
             List<TipoTransaccion> lista_tipo = new List<TipoTransaccion>
             {
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.Efectivo.ToString(), Id = 1 },
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.Tarjeta.ToString(), Id = 3 },
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.Cheques.ToString(), Id = 2 },
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.Cupones.ToString(), Id = 4 },
-                new TipoTransaccion() { Nombre = Enums.TipoTransaccionEnum.TarjetayEfectivo.ToString(), Id = 5 }
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.Efectivo.ToString(), Id = 1 },
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.Tarjeta.ToString(), Id = 3 },
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.Cheques.ToString(), Id = 2 },
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.Cupones.ToString(), Id = 4 },
+                new TipoTransaccion() { Nombre = TipoTransaccionEnum.TarjetayEfectivo.ToString(), Id = 5 }
             };
 
             return  lista_tipo;

@@ -1,7 +1,8 @@
-﻿using BussinessLayer.Interfaces.IAutenticacion;
+﻿
+using BussinessLayer.Interfaces.IAutenticacion;
 using System.Text.RegularExpressions;
 
-namespace BussinessLayer.Interfaces.SAutenticacion
+namespace BussinessLayer.Services.SAutenticacion
 {
     public class RepositorySection : IRepositorySection
     {

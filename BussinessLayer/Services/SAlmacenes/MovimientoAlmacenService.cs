@@ -41,7 +41,7 @@ namespace BussinessLayer.Services.SALmacenes
                 var tp = await _tipoPagoService.GetById(entity.IdTipoPago, entity.IdEmpresa);
                 var tpm = await _tipoMovimientoService.GetById(entity.IdTipoMovimiento, entity.IdEmpresa);
 
-                if ((Enums.TipoPago) int.Parse(tp.IN_OUT.ToString()) == Enums.TipoPago.Credito)
+                if ((TipoPago) int.Parse(tp.IN_OUT.ToString()) == TipoPago.Credito)
                 {
                     CuentasPorPagar _cuentasPorPagar = new CuentasPorPagar
                     {
@@ -79,7 +79,7 @@ namespace BussinessLayer.Services.SALmacenes
                     }
 
                 }
-                else if ((Enums.TipoPago)int.Parse(tp.IN_OUT.ToString()) == Enums.TipoPago.Contado)
+                else if ((TipoPago)int.Parse(tp.IN_OUT.ToString()) == TipoPago.Contado)
                 {
 
                     if ((TipoMovimientoEnum)int.Parse(tpm.IN_OUT.ToString()) == TipoMovimientoEnum.ENTRADA)

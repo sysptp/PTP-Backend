@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BussinessLayer.Services
+namespace BussinessLayer.Helpers.CargaMasivaHelpers
 {
     public class EntityMapper 
     {

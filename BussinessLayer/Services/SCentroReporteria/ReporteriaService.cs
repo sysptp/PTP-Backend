@@ -6,7 +6,6 @@ using System.Data.Common;
 using DataLayer.Data;
 using BussinessLayer.Interfaces.ICentroReporteria;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.SqlClient;
 using Dapper;
 
 namespace BussinessLayer.Services.SCentroReporteria
