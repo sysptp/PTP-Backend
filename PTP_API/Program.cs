@@ -1,5 +1,7 @@
 using IdentityLayer;
 using BussinessLayer.DendeciesInjections;
+using PTP_API.Extensions;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,8 @@ builder.Services.AddServiceRegistration();
 builder.Services.AddRepositoryInjections();
 builder.Services.AddIdentityLayer(builder.Configuration);
 builder.Services.AddSession();
+builder.Services.AddSwaggerExtension();
+builder.Services.AddApiVersioningExtension();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
