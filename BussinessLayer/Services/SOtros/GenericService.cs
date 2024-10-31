@@ -48,6 +48,14 @@ namespace BussinessLayer.Services
             return vm;
         }
 
+        public virtual async Task<Dto> GetByIdDto(int id)
+        {
+            var entity = await _repository.GetById(id);
+
+            Dto vm = _mapper.Map<Dto>(entity);
+            return vm;
+        }
+
         public virtual async Task<List<Dto>> GetAllDto()
         {
             var entityList = await _repository.GetAll();

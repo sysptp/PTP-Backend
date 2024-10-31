@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.Otros;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.Empresa
@@ -26,9 +25,5 @@ namespace DataLayer.Models.Empresa
         public int CANT_SUCURSALES { get; set; }
         public int CANT_USUARIO { get; set; }
         public string? WEB { get; set; }
-        public int USUARIO_ADICCION { get; set; }
-        public DateTime FECHA_ADICION { get; set; }
-        public int USUARIO_MODIFICACION { get; set; }
-        public DateTime FECHA_MODIFICACION { get; set; }
     }
 }

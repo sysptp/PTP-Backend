@@ -10,5 +10,6 @@
         Task<List<Dto>> GetAllDto();
         Task<SaveDto> GetByIdSaveDto(int id);
         Task Update(SaveDto vm, int id);
+        Task<Dto> GetByIdDto(int id);
     }
 }

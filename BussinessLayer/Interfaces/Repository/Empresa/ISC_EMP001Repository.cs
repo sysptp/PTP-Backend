@@ -5,5 +5,6 @@ namespace BussinessLayer.Interfaces.Repository.Empresa
 {
     public interface ISC_EMP001Repository : IGenericRepository<SC_EMP001>
     {
+        Task<SC_EMP001> GetByEmpCode(long empCode);
     }
 }

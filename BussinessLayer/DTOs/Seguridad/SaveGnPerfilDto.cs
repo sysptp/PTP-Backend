@@ -1,14 +1,10 @@
-﻿using System;
-
+﻿
 namespace BussinessLayer.DTOs.Seguridad
 {
-    public class GnPerfilDto
+    public class SaveGnPerfilDto
     {
-        public int IDPerfil { get; set; }
         public string Perfil { get; set; }
-        public string Descripcion { get; set; }
         public long IDUsuario { get; set; }
-        public int Bloquear { get; set; }
         public long IDEmpresa { get; set; }
     }
 }

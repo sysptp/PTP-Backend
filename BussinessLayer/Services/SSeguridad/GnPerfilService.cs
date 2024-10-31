@@ -1,63 +1,66 @@
-﻿//using AutoMapper;
-//using DataLayer.Models.Entities;
-//using DataLayer.PDbContex;
-//using BussinessLayer.DTOs.Seguridad;
-//using BussinessLayer.Interfaces.ISeguridad;
-//using Microsoft.EntityFrameworkCore;
-//using BussinessLayer.Services.SOtros;
+﻿using AutoMapper;
+using DataLayer.Models.Entities;
+using DataLayer.PDbContex;
+using BussinessLayer.DTOs.Seguridad;
+using Microsoft.EntityFrameworkCore;
+using BussinessLayer.Interfaces.ISeguridad;
+using BussinessLayer.Interfaces.IAutenticacion;
+using BussinessLayer.Interfaces.Repository.Seguridad;
 
-//namespace BussinessLayer.Services.SSeguridad
-//{
-  
-//    namespace BussinessLayer.Services.SOtros
-//    {
-//        //public class GnPerfilService : GenericService<GnPerfil>,IGnPerfilService
-//        {
-//            private readonly PDbContext _context;
-//            private readonly IMapper _mapper;
+namespace BussinessLayer.Services.SSeguridad
+{
 
-//            public GnPerfilService(PDbContext dbContext, IMapper mapper) : base(dbContext) 
-//            {
-//                _context = dbContext;
-//                _mapper = mapper;
-//            }
+    namespace BussinessLayer.Services.SOtros
+    {
+        public class GnPerfilService : GenericService<SaveGnPerfilDto, GnPerfilDto, GnPerfil>, IGnPerfilService
+        {
+            private readonly IGnPerfilRepository _gnPerfilRepository;
+            private readonly IMapper _mapper;
+            private readonly IClaimsService claimsService;
 
-//            public async Task<IList<GnPerfilDto>> GetAll(int? idPerfil = null, long? idEmpresa = null)
-//            {
-//                var query = _context.Set<GnPerfil>().AsQueryable();
+            public GnPerfilService(IGnPerfilRepository gnPerfilRepository, IMapper mapper, IClaimsService claimsService) : base(gnPerfilRepository, mapper)
+            {
+                _gnPerfilRepository = gnPerfilRepository;
+                _mapper = mapper;
+                this.claimsService = claimsService;
+            }
 
-//                if (idPerfil.HasValue)
-//                {
-//                    query = query.Where(p => p.IDPerfil == idPerfil.Value);
-//                }
+            //public async Task<IList<GnPerfilDto>> GetAll(int? idPerfil = null, long? idEmpresa = null)
+            //{
+            //    //var query = _context.Set<GnPerfil>().AsQueryable();
 
-//                if (idEmpresa.HasValue)
-//                {
-//                    query = query.Where(p => p.IDEmpresa == idEmpresa.Value);
-//                }
+            //    //if (idPerfil.HasValue)
+            //    //{
+            //    //    query = query.Where(p => p.IDPerfil == idPerfil.Value);
+            //    //}
 
-//                var perfiles = await query.ToListAsync();
+            //    //if (idEmpresa.HasValue)
+            //    //{
+            //    //    query = query.Where(p => p.IDEmpresa == idEmpresa.Value);
+            //    //}
 
-//                return _mapper.Map<IList<GnPerfilDto>>(perfiles);
-//            }
+            //    //var perfiles = await query.ToListAsync();
 
-//            public async Task PatchUpdate(int id, Dictionary<string, object> updatedProperties)
-//            {
-//                var entity = await GetById(id);
-//                if (entity == null) throw new KeyNotFoundException("Role not found");
+            //    //return _mapper.Map<IList<GnPerfilDto>>(perfiles);
+            //}
 
-//                foreach (var property in updatedProperties)
-//                {
-//                    var propInfo = typeof(GnPerfil).GetProperty(property.Key);
-//                    if (propInfo != null)
-//                    {
-//                        propInfo.SetValue(entity, property.Value);
-//                    }
-//                }
+            //public async Task PatchUpdate(int id, Dictionary<string, object> updatedProperties)
+            //{
+            //    //var entity = await GET(id);
+            //    //if (entity == null) throw new KeyNotFoundException("Role not found");
 
-//                await _context.SaveChangesAsync();
-//            }
-//        }
-//    }
+            //    //foreach (var property in updatedProperties)
+            //    //{
+            //    //    var propInfo = typeof(GnPerfil).GetProperty(property.Key);
+            //    //    if (propInfo != null)
+            //    //    {
+            //    //        propInfo.SetValue(entity, property.Value);
+            //    //    }
+            //    //}
 
-//}
+            //    //await _context.SaveChangesAsync();
+            //}
+        }
+    }
+
+}

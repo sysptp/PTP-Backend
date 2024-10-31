@@ -68,32 +68,26 @@ namespace IdentityLayer.Services
             response.Id = user.Id;
             response.Email = user.Email;
             response.UserName = user.UserName;
-            response.Roles = (await _userManager.GetRolesAsync(user)).ToList();
+            //response.Roles = (await _userManager.GetRolesAsync(user)).ToList();
             response.IsVerified = user.EmailConfirmed;
 
             // Incluye los claims adicionales
             var additionalClaims = new List<Claim>
-                {
-                    new Claim("IpUsuario", "IP_DEL_USUARIO"),
-                    new Claim("IdEmpresa", user.CodigoEmp.ToString()),
-                    new Claim("NombreEmpresa", "NOMBRE_EMPRESA"),
-                    new Claim("TelefonoEmpresa", "TELEFONO_EMPRESA"),
-                    new Claim("CodigoUsuario", user.Id.ToString()),
-                    new Claim("NombreUsuario", user.Nombre),
-                    new Claim("IdPerfilUsuario", user.IdPerfil.ToString()),
-                    new Claim("EmailUsuario", user.Email),
-                    new Claim("TelefonoUsuario", user.PhoneNumber),
-                    new Claim("FechaAdiccion", user.FechaAdicion.ToString()),
-                    new Claim("IdSucursal", "ID_SUCURSAL"),
-                    new Claim("Sucursal", "NOMBRE_SUCURSAL"),
-                    new Claim("TelefonSucursal1", "TELEFONO_SUCURSAL")
-                };
+            {
+                new Claim("IpUsuario", user.IpAdiccion ?? string.Empty),
+                new Claim("IdEmpresa", user.CodigoEmp.ToString() ?? string.Empty),
+                new Claim("CodigoUsuario", user.Id.ToString() ?? string.Empty),
+                new Claim("NombreUsuario", user.Nombre ?? string.Empty),
+                new Claim("IdPerfilUsuario", user.IdPerfil?.ToString() ?? string.Empty),
+                new Claim("EmailUsuario", user.Email ?? string.Empty),
+                new Claim("PhoneNumber", user.PhoneNumber ?? string.Empty),
+                new Claim("IdSucursal", user.CodigoSuc?.ToString() ?? string.Empty),
+            };
 
             JwtSecurityToken jwtToken = await GenerateJWToken(user, additionalClaims);
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
             var refreshToken = GenerateRefreshToken();
             response.RefreshToken = refreshToken.Token;
-
 
             return response;
         }
@@ -113,7 +107,7 @@ namespace IdentityLayer.Services
                 new Claim("uid", user.Id.ToString())
             }
             .Union(userClaims)
-            .Union(roles.Select(role => new Claim("roles", role)))
+            //.Union(roles.Select(role => new Claim("roles", role)))
             .Union(additionalClaims);
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
@@ -169,7 +163,7 @@ namespace IdentityLayer.Services
                 return response;
             }
 
-            await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
+            //await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
 
             return response;
         }

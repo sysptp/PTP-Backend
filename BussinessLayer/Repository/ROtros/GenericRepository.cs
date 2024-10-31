@@ -33,7 +33,7 @@ namespace BussinessLayer.Repository.ROtros
             try
             {
                 entity.FECHA_ADICION = DateTime.Now;
-                entity.USUARIO_ADICCIONUSUARIO_ADICCION = _claimsService.GetClaimValueByType("Usuario") ?? "UsuarioDesconocido";
+                //entity.USUARIO_ADICCION = _claimsService.GetClaimValueByType("Usuario") ?? "UsuarioDesconocido";
 
                 _context.Set<T>().Add(entity);
                 await _context.SaveChangesAsync();
@@ -50,7 +50,7 @@ namespace BussinessLayer.Repository.ROtros
             try
             {
                 entity.FECHA_MODIFICACION = DateTime.Now;
-                entity.USUARIO_MODIFICACION = _claimsService.GetClaimValueByType("Usuario") ?? "UsuarioDesconocido";
+                //entity.USUARIO_MODIFICACION = _claimsService.GetClaimValueByType("Usuario") ?? "UsuarioDesconocido";
 
                 _context.Entry(entity).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
@@ -70,7 +70,7 @@ namespace BussinessLayer.Repository.ROtros
                 {
                     entity.Borrado = true;
                     entity.FECHA_MODIFICACION = DateTime.Now;
-                    entity.USUARIO_MODIFICACION = _claimsService.GetClaimValueByType("NombreUsuario") ?? "UsuarioDesconocido";
+                    //entity.USUARIO_MODIFICACION = _claimsService.GetClaimValueByType("NombreUsuario") ?? "UsuarioDesconocido";
 
                     _context.Entry(entity).State = EntityState.Modified;
                     await _context.SaveChangesAsync();

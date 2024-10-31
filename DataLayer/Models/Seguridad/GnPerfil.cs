@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DataLayer.Models.Otros;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.Entities
 {
-    public class GnPerfil 
+    public class GnPerfil : AuditableEntities
     {
         [Key]
         public int IDPerfil { get; set; }

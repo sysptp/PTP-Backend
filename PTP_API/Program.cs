@@ -1,5 +1,4 @@
 using IdentityLayer;
-using PTP_API.Extensions;
 using BussinessLayer.DendeciesInjections;
 
 
@@ -14,11 +13,9 @@ builder.Services.AddRepositoryInjections();
 builder.Services.AddIdentityLayer(builder.Configuration);
 builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddApiVersioningExtension();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
-builder.Services.AddSwaggerExtension();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 

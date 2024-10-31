@@ -1,6 +1,5 @@
 ﻿//using AutoMapper;
 //using BussinessLayer.DTOs.Seguridad;
-//using BussinessLayer.Interfaces.ISeguridad;
 //using DataLayer.Models.Entities;
 //using Microsoft.AspNetCore.Mvc;
 //using Swashbuckle.AspNetCore.Annotations;
@@ -47,7 +46,7 @@
 //            }
 //            return Ok(perfiles);
 //        }
-        
+
 //        [HttpPost("Perfil")]
 //        [Consumes(MediaTypeNames.Application.Json)]
 //        [ProducesResponseType(StatusCodes.Status201Created)]

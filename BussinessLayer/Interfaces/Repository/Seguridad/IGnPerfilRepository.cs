@@ -6,7 +6,7 @@ namespace BussinessLayer.Interfaces.Repository.Seguridad
 {
     public interface IGnPerfilRepository : IGenericRepository<GnPerfil>
     {
-        Task PatchUpdate(int id, Dictionary<string, object> updatedProperties);
-        Task<IList<GnPerfilDto>> GetAll(int? idPerfil = null, long? idEmpresa = null);
+        //Task PatchUpdate(int id, Dictionary<string, object> updatedProperties);
+        //Task<IList<GnPerfilDto>> GetAll(int? idPerfil = null, long? idEmpresa = null);
     }
 }
