@@ -1,5 +1,6 @@
 using IdentityLayer;
 using BussinessLayer.DendeciesInjections;
+using PTP_API.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,20 +42,26 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//if (app.Environment.IsProduction())
+//app.UseDeveloperExceptionPage();
+//app.UseSwagger();
+//app.UseSwaggerUI(c =>
 //{
-//    app.UseDeveloperExceptionPage();
-//    app.UseSwagger();
-//    app.UseSwaggerUI(c =>
-//    {
-//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-//        c.RoutePrefix = string.Empty;
-//    });
-//}
+//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+//    c.RoutePrefix = string.Empty;
+//});
+
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+app.UseSession();
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSwaggerExtension();
 
 app.MapControllers();
 
