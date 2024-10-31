@@ -1,9 +1,9 @@
-﻿using BussinessLayer.Interface.IOtros;
-using DataLayer.Models.MenuApp;
+﻿//using BussinessLayer.Interface.IOtros;
+//using DataLayer.Models.MenuApp;
 
-namespace BussinessLayer.Interfaces.IModulo
-{
-    public interface IModuloService : IGenericService<GnModulo>
-    {
-    }
-}
+//namespace BussinessLayer.Interfaces.IModulo
+//{
+//    public interface IModuloService : IGenericService<GnModulo>
+//    {
+//    }
+//}

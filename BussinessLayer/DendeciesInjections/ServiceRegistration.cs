@@ -16,9 +16,12 @@ using BussinessLayer.Interfaces.ICentroReporteria;
 using BussinessLayer.Interfaces.ICuentas;
 using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.Interfaces.IGeografia;
-using BussinessLayer.Interfaces.IMenu;
-using BussinessLayer.Interfaces.IModulo;
+using BussinessLayer.Interfaces.IOtros;
 using BussinessLayer.Interfaces.ISeguridad;
+using BussinessLayer.Interfaces.Repositories;
+using BussinessLayer.Interfaces.Repository;
+using BussinessLayer.Repository.ROtros;
+using BussinessLayer.Services;
 using BussinessLayer.Services.SALmacenes;
 using BussinessLayer.Services.SAutenticacion;
 using BussinessLayer.Services.SBancos;
@@ -31,38 +34,26 @@ using BussinessLayer.Services.SCuentas;
 using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Services.SFacturacion;
 using BussinessLayer.Services.SGeografia;
-using BussinessLayer.Services.SMenu;
-using BussinessLayer.Services.SModulo;
+//using BussinessLayer.Services.SMenu;
+//using BussinessLayer.Services.SModulo;
 using BussinessLayer.Services.SOtros;
 using BussinessLayer.Services.SPedidos;
 using BussinessLayer.Services.SProductos;
 using BussinessLayer.Services.SSeguridad;
-using BussinessLayer.Services.SSeguridad.BussinessLayer.Services.SOtros;
 using BussinessLayer.Services.SSuplidores;
-using DataLayer.PDbContex;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
-namespace BussinessLayer
+namespace BussinessLayer.DendeciesInjections
 {
     public static class ServiceRegistration
     {
-        public static void AddBusinessLayer(this IServiceCollection services,IConfiguration configuration   )
+        public static void AddServiceRegistration(this IServiceCollection services)
         {
-            #region DbContex
-            services.AddDbContext<PDbContext>(option =>
-            option.UseSqlServer(configuration.GetConnectionString("POS_CONN")));
-            #endregion
 
-            #region AutoMapper
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            #endregion
-
-            services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
             services.AddScoped<IRepositorySection, RepositorySection>();
-            services.AddScoped<IMenuService, MenuService>();
+            //services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<IReporteriaService, ReporteriaService>();
             services.AddScoped<IAlmacenesService, AlmacenesService>();
             services.AddScoped<IClientesService, ClienteService>();
@@ -123,11 +114,12 @@ namespace BussinessLayer
             services.AddScoped<IBovedaCajaDesglosesService, BovedaCajaDesglosesService>();
             services.AddScoped<IBilletes_MonedaService, Billetes_MonedaService>();
             services.AddScoped<IBancosService, BancosService>();
-            services.AddScoped<IModuloService, ModuloService>();
+            //services.AddScoped<IModuloService, ModuloService>();
             services.AddScoped<DeserializadorCrearReporte>();
             services.AddScoped<EntityMapper>();
             services.AddScoped<CsvProcessor>();
-            services.AddScoped<IGnPerfilService,GnPerfilService>();
+            //services.AddScoped<IGnPerfilService, GnPerfilService>();
+            services.AddScoped<ISC_EMP001service, SC_EMP001service>();
         }
     }
 }

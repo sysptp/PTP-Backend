@@ -1,13 +1,16 @@
 using IdentityLayer;
-using BussinessLayer;
 using PTP_API.Extensions;
+using BussinessLayer.DendeciesInjections;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddBusinessLayer(builder.Configuration);
+builder.Services.AddDependenciesRegistration(builder.Configuration);
+builder.Services.AddServiceRegistration();
+builder.Services.AddRepositoryInjections();
 builder.Services.AddIdentityLayer(builder.Configuration);
 builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();

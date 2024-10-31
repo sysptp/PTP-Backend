@@ -1,20 +1,12 @@
-﻿using DataLayer.Models;
+﻿
+using BussinessLayer.DTOs.Empresas;
+using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.Empresa;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.Interfaces.IEmpresa
 {
-    public interface ISC_EMP001service
+    public interface ISC_EMP001service : IGenericService<SaveSC_EMP001Dto, SC_EMP001Dto, SC_EMP001>
     {
-        Task Add(SC_EMP001 entity);
-
-        Task<SC_EMP001> GetById(int id);
-
-        Task<IList<SC_EMP001>> GetAll();
-        
-        Task Delete(int id);
-
-        Task Edit(SC_EMP001 entity);
+       
     }
 }

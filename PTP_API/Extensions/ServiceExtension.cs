@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace PTP_API.Extensions
 {
@@ -53,7 +54,21 @@ namespace PTP_API.Extensions
                              }, new List<string>()
                          },
                      });
-              
+
+                options.DocInclusionPredicate((version, apiDescription) =>
+                {
+                    if (!apiDescription.TryGetMethodInfo(out var methodInfo)) return false;
+
+                    var versions = methodInfo.DeclaringType?
+                        .GetCustomAttributes(true)
+                        .OfType<ApiVersionAttribute>()
+                        .SelectMany(attr => attr.Versions);
+
+                    return versions?.Any(v => $"v{v}" == version) ?? false;
+                });
+
+                options.OperationFilter<SwaggerDefaultValues>();
+
             });
         }
 
@@ -65,6 +80,8 @@ namespace PTP_API.Extensions
                 config.AssumeDefaultVersionWhenUnspecified = true;
                 config.ReportApiVersions = true;
             });
+
+
         }
     }
 

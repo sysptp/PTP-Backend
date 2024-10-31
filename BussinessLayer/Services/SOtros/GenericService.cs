@@ -1,66 +1,58 @@
-﻿using BussinessLayer.Interface.IOtros;
-using DataLayer.PDbContex;
-using Microsoft.EntityFrameworkCore;
+﻿using BussinessLayer.Interfaces.Repositories;
+using AutoMapper;
+using BussinessLayer.Interfaces.IOtros;
 
-namespace BussinessLayer.Services.SOtros
+namespace BussinessLayer.Services
 {
-    public class GenericService<T> : IGenericService<T> where T : class
+    public class GenericService<SaveDto, Dto, Model> : IGenericService<SaveDto, Dto,Model> where SaveDto : class
+            where Dto : class
+            where Model : class
     {
-        protected readonly PDbContext _context;
+        private readonly IGenericRepository<Model> _repository;
+        private readonly IMapper _mapper;
 
-        public GenericService(PDbContext dbContext)
+        public GenericService(IGenericRepository<Model> repository, IMapper mapper)
         {
-            _context = dbContext;
+            _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<T> GetById(int id)
+        public virtual async Task Update(SaveDto vm, int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            Model entity = _mapper.Map<Model>(vm);
+            await _repository.Update(entity);
         }
 
-        public async Task<IList<T>> GetAll()
+        public virtual async Task<SaveDto> Add(SaveDto vm)
         {
-            return await _context.Set<T>().ToListAsync();
+            Model entity = _mapper.Map<Model>(vm);
+
+            entity = await _repository.Add(entity);
+
+            SaveDto entityVm = _mapper.Map<SaveDto>(entity);
+
+            return entityVm;
         }
 
-        public async Task Add(T entity)
+        public virtual async Task Delete(int id)
         {
-            try
-            {
-                _context.Set<T>().Add(entity);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+            var entity = await GetByIdSaveDto(id);
+            await _repository.Delete(id);
         }
 
-        public async Task Update(T entity)
+        public virtual async Task<SaveDto> GetByIdSaveDto(int id)
         {
-            try
-            {
-                _context.Entry(entity).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+            var entity = await _repository.GetById(id);
+
+            SaveDto vm = _mapper.Map<SaveDto>(entity);
+            return vm;
         }
 
-        public async Task Delete(int id)
+        public virtual async Task<List<Dto>> GetAllDto()
         {
-            var entity = await GetById(id);
-            if (entity != null)
-            {
-                _context.Set<T>().Remove(entity);
-                await _context.SaveChangesAsync();
-            }
+            var entityList = await _repository.GetAll();
+
+            return _mapper.Map<List<Dto>>(entityList);
         }
     }
 }
-
-
