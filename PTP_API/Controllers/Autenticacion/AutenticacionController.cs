@@ -42,14 +42,9 @@ namespace PTP_API.Controllers.Autenticacion
             {
                 var response = await _accountService.AuthenticateAsync(new AuthenticationRequest
                 {
-                    UserCredential = request.Usuario,
+                    UserCredential = request.User,
                     Password = request.Password
                 });
-
-                if (response.HasError)
-                {
-                    return Unauthorized(Response<string>.Unauthorized(response.Error));
-                }
 
                 return Ok(Response<object>.Success(response, "Autenticación exitosa"));
             }
