@@ -22,39 +22,30 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
-
-
 var app = builder.Build();
 
-app.UseCors("AllowAll");
+app.UseCors(policy => policy.AllowAnyHeader()
+                             .AllowAnyMethod()
+                             .SetIsOriginAllowed(origin => true)
+                             .AllowCredentials());
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-//if (app.Environment.IsProduction())
+//if (app.Environment.IsDevelopment())
 //{
 //    app.UseDeveloperExceptionPage();
 //    app.UseSwagger();
-//    app.UseSwaggerUI(c =>
-//    {
-//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-//        c.RoutePrefix = string.Empty;
-//    });
+//    app.UseSwaggerUI();
 //}
+
+if (app.Environment.IsProduction())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty;
+    });
+}
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
