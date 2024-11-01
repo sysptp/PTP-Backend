@@ -49,23 +49,23 @@ namespace IdentityLayer.Services
             var user = await _userManager.FindByEmailAsync(request.UserCredential) ??
                        await _userManager.FindByNameAsync(request.UserCredential);
 
-            //if (user == null)
-            //{
-            //    response.HasError = true;
-            //    response.Error = $"No Accounts registered with {request.UserCredential}";
-            //    return response;
-            //}
+            if (user == null)
+            {
+                response.HasError = true;
+                response.Error = $"No Accounts registered with {request.UserCredential}";
+                return response;
+            }
 
             var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
-            //if (!signInResult.Succeeded)
-            //{
-            //    response.HasError = true;
-            //    response.Error = $"Invalid credentials for {request.UserCredential}";
-            //    return response;
-            //}
+            if (!signInResult.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = $"Invalid credentials for {request.UserCredential}";
+                return response;
+            }
 
             response.Id = user.Id;
-            response.Email = user.Email;
+            response.Email = user?.Email;
             response.UserName = user.UserName;
             response.FullName = $"{user.Nombre} {user.Apellido}";
             response.RoleId = Guid.NewGuid();
@@ -111,7 +111,6 @@ namespace IdentityLayer.Services
                 signingCredentials: creds);
         }
 
-
         public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin, string Role)
         {
             RegisterResponse response = new()
@@ -123,7 +122,7 @@ namespace IdentityLayer.Services
             if (userWithSameUserName != null)
             {
                 response.HasError = true;
-                response.Error = $"username '{request.UserName}' is already taken.";
+                response.Error = $"Username '{request.UserName}' is already taken.";
                 return response;
             }
 
@@ -135,28 +134,19 @@ namespace IdentityLayer.Services
                 return response;
             }
 
-            var user = new Usuario
-            {
-                Email = request.Email,
-                Nombre = request.FirstName,
-                Apellido = request.LastName,
-                UserName = request.UserName,
-                PhoneNumber = request.Phone,
-                EmailConfirmed = true
-            };
+            var user = MapRegisterRequestToUsuario(request);
 
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
             {
                 response.HasError = true;
-                response.Error = $"An error occurred trying to register the user.";
+                response.Error = "An error occurred trying to register the user.";
                 return response;
             }
 
-            //await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
-
             return response;
         }
+
 
         private RefreshToken GenerateRefreshToken()
         {
@@ -176,6 +166,22 @@ namespace IdentityLayer.Services
 
             return BitConverter.ToString(ramdomBytes).Replace("-", "");
         }
+        private Usuario MapRegisterRequestToUsuario(RegisterRequest request)
+        {
+            return new Usuario
+            {
+                Nombre = request.FirstName,
+                Apellido = request.LastName,
+                Email = request.Email,
+                UserName = request.UserName,
+                PhoneNumber = request.Phone,
+                CodigoEmp = request.CompanyId,
+                CodigoSuc = request.SucursalId,
+                IdPerfil = request.RoleId,
+                EmailConfirmed = true
+            };
+        }
+
 
         #endregion
     }

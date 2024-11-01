@@ -12,12 +12,18 @@ namespace BussinessLayer.Dtos.Account
         public string FullName { get; set; } = null!;
         public Guid RoleId { get; set; }
         public bool IsVerified { get; set; }
-        [JsonIgnore]
-        public string? RefreshToken { get; set; }
+
         public int TokenDurationInMinutes { get; set; } 
         public DateTime RequestDate { get; set; } 
         public string IPUser { get; set; } = string.Empty;
         public long? CompanyId { get; set; }
         public long? SucursalId { get; set; }
+
+        [JsonIgnore]
+        public string? RefreshToken { get; set; }
+        [JsonIgnore]
+        public string? Error{ get; set; }
+        [JsonIgnore]
+        public bool HasError { get; set; }
     }
 }

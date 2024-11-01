@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.IAutenticacion;
+﻿using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Interfaces.Repository.Seguridad;
 using BussinessLayer.Repository.ROtros;
 using DataLayer.Models.Entities;
@@ -8,8 +8,18 @@ namespace BussinessLayer.Repository.RSeguridad
 {
     public class GnPerfilRepository : GenericRepository<GnPerfil>, IGnPerfilRepository
     {
-        public GnPerfilRepository(PDbContext dbContext, IClaimsService claimsService) : base(dbContext, claimsService)
+
+        public async Task PatchUpdateAsync(int id, Dictionary<string, object> updatedProperties)
         {
+            var perfil = await GetById(id);
+            if (perfil == null) throw new KeyNotFoundException("Perfil no encontrado.");
+
+            foreach (var prop in updatedProperties)
+            {
+                typeof(GnPerfil).GetProperty(prop.Key)?.SetValue(perfil, prop.Value);
+            }
+
+            await Update(perfil);
         }
     }
 }
