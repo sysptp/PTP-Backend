@@ -23,20 +23,14 @@ builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
 
 
 var app = builder.Build();
 
-app.UseCors("AllowAll");
+app.UseCors(policy => policy.AllowAnyHeader()
+                             .AllowAnyMethod()
+                             .SetIsOriginAllowed(origin => true)
+                             .AllowCredentials());
 
 if (app.Environment.IsDevelopment())
 {

@@ -1,60 +1,51 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using BussinessLayer.Validations;
-using DataLayer.Models;
+﻿using BussinessLayer.Validations;
 using DataLayer.Models.Productos;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BussinessLayer.ViewModels
+namespace BussinessLayer.DTOs.Productos
 {
-    public class ProductoCreateViewModel
+    public class CrearProductoDto
     {
         public int? Id { get; set; }
-        [Display(Name = "Activo")]
+
         public bool Activo { get; set; }
 
-        [Display(Name = "Codigo")]
         [UniqueProductCode]
         public string Codigo { get; set; }
 
-        [Display(Name = "Marca")]
         [Required(ErrorMessage = "Marca Requerida")]
         public int MarcaId { get; set; }
 
-        [Display(Name = "Version")]
         [Required(ErrorMessage = "Version Requerida")]
         public int VersionId { get; set; }
 
-        [Display(Name = "Envase")]
         [Required(ErrorMessage = "Envase Requerido")]
         public int EnvaseId { get; set; }
 
-        [Display(Name = "Es un Lote?")]
         public bool EsLote { get; set; }
 
-        [Display(Name = "Cantidad por Lote")]
         [CantidadRequerido]
         public int? CantidadLote { get; set; }
 
-        [Display(Name = "Descripcion")]
         [Required(ErrorMessage = "Descripcion Requerida")]
         public string Descripcion { get; set; }
 
-        [Display(Name = "Precio Base")]
         [Required(ErrorMessage = "Precio Base Requerido")]
         public decimal PrecioBase { get; set; }
 
-        [Display(Name = "Precio Compra")]
         [Required(ErrorMessage = "Precio Compra Requerido")]
         public decimal PrecioCompra { get; set; }
 
-        [Display(Name = "Cant.Minima")]
         [Required(ErrorMessage = "Cantidad Minima Requerida")]
         public int CantidadMinima { get; set; }
 
-        [Display(Name = "Cantidad Inventario")]
         public int CantidadInventario { get; set; }
 
-        [StringLength(50), Required(ErrorMessage = "Codigo de Barra Requerido")]
         public string CodigoBarra { get; set; }
 
         public ICollection<Imagen> Imagenes { get; set; }

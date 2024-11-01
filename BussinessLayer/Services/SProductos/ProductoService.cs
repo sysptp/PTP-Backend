@@ -3,6 +3,8 @@ using BussinessLayer.Interface.IProductos;
 using BussinessLayer.ViewModels;
 using DataLayer.Models.Productos;
 using DataLayer.PDbContex;
+using BussinessLayer.DTOs.Productos;
+using static Dapper.SqlMapper;
 
 namespace BussinessLayer.Services.SProductos
 {
@@ -15,7 +17,7 @@ namespace BussinessLayer.Services.SProductos
             _context = dbContext;
         }
 
-        public async Task Create(ProductoCreateViewModel producto)
+        public async Task CreateProduct(CrearProductoDto producto)
         {
             var newProducto = new Producto
             {
@@ -30,16 +32,17 @@ namespace BussinessLayer.Services.SProductos
                 CantidadInventario = producto.CantidadInventario,
                 PrecioBase = producto.PrecioBase,
                 PrecioCompra = producto.PrecioCompra,
-                IdEmpresa=producto.IdEmpresa,
+                IdEmpresa = producto.IdEmpresa,
                 EsProducto = producto.EsProducto,
                 HabilitaVenta = producto.HabilitaVenta,
                 AdmiteDescuento = producto.AdmiteDescuento,
                 Imagen = producto.Imagen,
-                AplicaImp=producto.AplicaImp,
-                ValorImpuesto=producto.ValorImpuesto
+                AplicaImp = producto.AplicaImp,
+                ValorImpuesto = producto.ValorImpuesto
             };
 
-            await Add(newProducto);
+            _context.Productos.Add(newProducto);
+            await _context.SaveChangesAsync();
         }
         
         public ProductoInfoViewModel GetInfoViewModel(Producto producto, long idEMpresa)
@@ -71,10 +74,10 @@ namespace BussinessLayer.Services.SProductos
             ProductoToInfoViewModel(await GetAll(idEMpresa));
         public async Task<List<ProductoInfoViewModel>> GetInfoViewModelListAgotado(long idEMpresa) =>
            ProductoToInfoViewModel(await GetAllAgotados(idEMpresa));
-        public ProductoCreateViewModel GetCreateViewModel(Producto producto, long idEMpresa)
+        public CrearProductoDto GetCreateViewModel(Producto producto, long idEMpresa)
         {
             if (producto == null) return null;
-            return new ProductoCreateViewModel
+            return new CrearProductoDto
             {
                 Descuentos = producto.Descuentos,
                 Descripcion = producto.Descripcion,
@@ -129,7 +132,7 @@ namespace BussinessLayer.Services.SProductos
 
         }
 
-        public Producto GetProductoFromViewModel(ProductoCreateViewModel producto, long idEMpresa)
+        public Producto GetProductoFromViewModel(CrearProductoDto producto, long idEMpresa)
         {       
             return new Producto
             {
@@ -227,20 +230,19 @@ namespace BussinessLayer.Services.SProductos
             }
         }
 
-        public async Task Add(Producto entity)
-        {
-
-            try
-            {
-                _context.Productos.Add(entity);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }  
-        }
+        //public async Task Add(Producto entity)
+        //{
+        //    try
+        //    {
+        //        _context.Productos.Add(entity);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        throw;
+        //    }  
+        //}
 
         public async Task Edit(Producto entity)
         {

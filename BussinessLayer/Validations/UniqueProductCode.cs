@@ -13,7 +13,7 @@ namespace BussinessLayer.Validations
             _context = new PDbContext();
         }
 
-        protected override  ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null) return new ValidationResult("Codigo Requerido");
             var result = _context.Productos.AnyAsync(x => x.Codigo.Equals(value.ToString())).Result;
