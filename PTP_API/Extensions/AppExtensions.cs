@@ -1,5 +1,4 @@
-﻿using PTP_API.Middlewares;
-using Swashbuckle.AspNetCore.SwaggerUI;
+﻿using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace PTP_API.Extensions
 {
@@ -10,14 +9,10 @@ namespace PTP_API.Extensions
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "PTP");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "PTP-API");
                 options.DefaultModelRendering(ModelRendering.Model);
             });
         }
 
-        public static void UseErrorHandlingMiddleware(this IApplicationBuilder app)
-        {
-            app.UseMiddleware<ErrorHandleMiddleware>();
-        }
     }
 }

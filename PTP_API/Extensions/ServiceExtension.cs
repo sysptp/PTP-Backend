@@ -5,6 +5,7 @@ namespace PTP_API.Extensions
 {
     public static class ServiceExtension
     {
+
         public static void AddSwaggerExtension(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
@@ -15,19 +16,15 @@ namespace PTP_API.Extensions
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "RealStateApp",
-                    Description = "This Api will be responsible for overall data distribution",
+                    Title = "PTP-API",
+                    Description = "POINT TO POINT FACTURACION RAPIDA.n",
                     Contact = new OpenApiContact
                     {
-                        Name = "Eliott Reyes\nSamuel Jimenez\nDomingo Ruiz",
-                        Email = "eliottreyes22@gmail.com\nsamuelelias13@hotmail.com\ndomingojruiz21@gmail.com",
-                        Url = new Uri("https://www.instagram.com/ey_reyes17/"),
-
+                        Name = "Sys PTP",
+                        Email = "sysptp@gmail.com"
 
                     }
                 }) ;
-
-
 
                    options.EnableAnnotations();
                    options.DescribeAllParametersInCamelCase();
