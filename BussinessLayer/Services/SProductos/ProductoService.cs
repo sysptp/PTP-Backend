@@ -44,31 +44,36 @@ namespace BussinessLayer.Services.SProductos
             _context.Productos.Add(newProducto);
             await _context.SaveChangesAsync();
         }
+
+
+
+
+
         
-        public ProductoInfoViewModel GetInfoViewModel(Producto producto, long idEMpresa)
-        {
-            if (producto == null) return null;
-            return new ProductoInfoViewModel
-            {
-                Id = producto.Id,
-                Version = producto.Version.Nombre,
-                Marca = producto.Version.Marca.Nombre,
-                Descuentos = producto.Descuentos,
-                Activo = producto.Activo,
-                Imagenes = producto.Imagenes,
-                Descripcion = producto.Descripcion,
-                Codigo = producto.Codigo,
-                CantidadLote = producto.CantidadLote,
-                FechaCreacion = producto.FechaCreacion,
-                EsLote = producto.EsLote,
-                Envase = producto.Envase.Descripcion,
-                FechaEdicion = producto.FechaModificacion,
-                Stock = producto.CantidadInventario,
-                CantidadMinima = producto.CantidadMinima,
-                PrecioCompra = producto.PrecioCompra,
-                IdEmpresa=producto.IdEmpresa
-            };
-        }
+        ////public ProductoInfoViewModel GetInfoViewModel(Producto producto, long idEMpresa)
+        //{
+        //    if (producto == null) return null;
+        //    return new ProductoInfoViewModel
+        //    {
+        //        Id = producto.Id,
+        //        Version = producto.Version.Nombre,
+        //        Marca = producto.Version.Marca.Nombre,
+        //        Descuentos = producto.Descuentos,
+        //        Activo = producto.Activo,
+        //        Imagenes = producto.Imagenes,
+        //        Descripcion = producto.Descripcion,
+        //        Codigo = producto.Codigo,
+        //        CantidadLote = producto.CantidadLote,
+        //        FechaCreacion = producto.FechaCreacion,
+        //        EsLote = producto.EsLote,
+        //        Envase = producto.Envase.Descripcion,
+        //        FechaEdicion = producto.FechaModificacion,
+        //        Stock = producto.CantidadInventario,
+        //        CantidadMinima = producto.CantidadMinima,
+        //        PrecioCompra = producto.PrecioCompra,
+        //        IdEmpresa=producto.IdEmpresa
+        //    };
+        //}
 
         public async Task<List<ProductoInfoViewModel>> GetInfoViewModelList(long idEMpresa) =>
             ProductoToInfoViewModel(await GetAll(idEMpresa));
