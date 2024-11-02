@@ -71,7 +71,7 @@ namespace IdentityLayer.Services
             response.Email = user?.Email;
             response.UserName = user.UserName;
             response.FullName = $"{user.Nombre} {user.Apellido}";
-            response.RoleId = Guid.NewGuid();
+            response.RoleId = user.IdPerfil;
             response.IsVerified = user.EmailConfirmed;
 
             response.IPUser = user.IpAdiccion ?? string.Empty;
@@ -81,11 +81,11 @@ namespace IdentityLayer.Services
             response.PhoneNumber = user.PhoneNumber ?? string.Empty;
             response.SucursalId = user.CodigoSuc;
 
-            JwtSecurityToken jwtToken = await GenerateJWToken(user);
+            JwtSecurityToken jwtToken = GenerateJWToken(user);
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
             response.RefreshToken = GenerateRefreshToken().Token;
-            response.TokenDurationInMinutes = 1440;
+            response.TokenDurationInMinutes = _jwtSettings.ExpirationInMinutes;
             response.RequestDate = DateTime.Now;
 
             return response;
@@ -94,7 +94,7 @@ namespace IdentityLayer.Services
 
         #region PrivateMethods
 
-        private async Task<JwtSecurityToken> GenerateJWToken(Usuario user)
+        private JwtSecurityToken GenerateJWToken(Usuario user)
         {
             var claims = new List<Claim>
     {
@@ -104,7 +104,8 @@ namespace IdentityLayer.Services
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes);
+            var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes); 
+
 
             return new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
@@ -116,54 +117,53 @@ namespace IdentityLayer.Services
 
         public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin)
         {
-            RegisterResponse response = new()
+            try
             {
-                HasError = false
-            };
+                RegisterResponse response = new()
+                {
+                    HasError = false
+                };
 
-            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
-            if (userWithSameUserName != null)
-            {
-                response.HasError = true;
-                response.Error = $"El nombre de usuario '{request.UserName}' ya está en uso.";
+                var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+                if (userWithSameUserName != null)
+                {
+                    response.HasError = true;
+                    response.Error = $"El nombre de usuario '{request.UserName}' ya está en uso.";
+                    return response;
+                }
+
+                var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+                if (userWithSameEmail != null)
+                {
+                    response.HasError = true;
+                    response.Error = $"El correo electrónico '{request.Email}' ya está registrado.";
+                    return response;
+                }
+
+                var perfil = await _roleManager.FindByIdAsync(request.RoleId.ToString());
+                if (perfil == null)
+                {
+                    response.HasError = true;
+                    response.Error = "El ID de rol especificado no existe.";
+                    return response;
+                }
+
+                var user = MapRegisterRequestToUsuario(request);
+                var result = await _userManager.CreateAsync(user, request.Password);
+                if (!result.Succeeded)
+                {
+                    response.HasError = true;
+                    response.Error = "Ocurrió un error al intentar registrar al usuario.";
+                    return response;
+                }
+
                 return response;
             }
-
-            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
-            if (userWithSameEmail != null)
+            catch (Exception ex)
             {
-                response.HasError = true;
-                response.Error = $"El correo electrónico '{request.Email}' ya está registrado.";
-                return response;
+                throw new Exception(ex.Message, ex);
             }
-
-            // Buscar el rol usando RoleManager y asignarlo al usuario
-            var perfil = await _roleManager.FindByIdAsync(request.RoleId?.ToString());
-            if (perfil == null)
-            {
-                response.HasError = true;
-                response.Error = "El ID de rol especificado no existe.";
-                return response;
-            }
-
-            var user = MapRegisterRequestToUsuario(request);
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (!result.Succeeded)
-            {
-                response.HasError = true;
-                response.Error = "Ocurrió un error al intentar registrar al usuario.";
-                return response;
-            }
-
-            var roleResult = await _userManager.AddToRoleAsync(user, perfil.Perfil);
-            if (!roleResult.Succeeded)
-            {
-                response.HasError = true;
-                response.Error = "Ocurrió un error al asignar el rol al usuario.";
-                return response;
-            }
-
-            return response;
+          
         }
 
         private RefreshToken GenerateRefreshToken()
@@ -196,7 +196,8 @@ namespace IdentityLayer.Services
                 CodigoEmp = request.CompanyId,
                 CodigoSuc = request.SucursalId,
                 IdPerfil = request.RoleId,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                IpAdiccion = request.UserIP
             };
         }
 

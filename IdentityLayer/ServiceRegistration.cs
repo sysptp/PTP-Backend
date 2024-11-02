@@ -24,9 +24,12 @@ namespace IdentityLayer
             ContextConfiguration(services, configuration);
 
             #region Identity
-            services.AddIdentity<Usuario, GnPerfil>() 
-                .AddEntityFrameworkStores<IdentityContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentity<Usuario, GnPerfil>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            })
+         .AddEntityFrameworkStores<IdentityContext>()
+         .AddDefaultTokenProviders();
 
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
            
@@ -57,7 +60,8 @@ namespace IdentityLayer
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         context.Response.ContentType = "application/json";
 
-                        var result = JsonConvert.SerializeObject(Response<string>.Unauthorized("Autenticación fallida. Token inválido o expirado."));
+                        var errorDescription = $"Autenticación fallida: {context.Exception.Message}";
+                        var result = JsonConvert.SerializeObject(Response<string>.Unauthorized(errorDescription));
                         return context.Response.WriteAsync(result);
                     },
                     OnChallenge = context =>

@@ -15,21 +15,29 @@ namespace IdentityLayer.Services
 
         public async Task<bool> CreateRoleAsync(string roleName, string descripcion, long? idEmpresa)
         {
-            if (await _roleManager.RoleExistsAsync(roleName))
-                return false;
-
-            var role = new GnPerfil
+            try
             {
-                Name = roleName,
-                NormalizedName = roleName.ToUpper(),
-                Descripcion = descripcion,
-                IDEmpresa = idEmpresa,
-                FechaAdicion = DateTime.Now,
-                UsuarioAdicion = "System"
-            };
+                if (await _roleManager.RoleExistsAsync(roleName))
+                    return false;
 
-            var result = await _roleManager.CreateAsync(role);
-            return result.Succeeded;
+                var role = new GnPerfil
+                {
+                    Name = roleName,
+                    NormalizedName = roleName.ToUpper(),
+                    Descripcion = descripcion,
+                    IDEmpresa = idEmpresa,
+                    FechaAdicion = DateTime.Now,
+                    UsuarioAdicion = "System"
+                };
+
+                var result = await _roleManager.CreateAsync(role);
+                return result.Succeeded;
+            }
+            catch (Exception ex) 
+            {
+                throw new ArgumentException(ex.Message, ex);
+            }
+          
         }
 
         public async Task<bool> RoleExistsAsync(string roleName)

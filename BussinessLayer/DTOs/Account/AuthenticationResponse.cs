@@ -10,7 +10,7 @@ namespace BussinessLayer.Dtos.Account
         public string Email { get; set; } = null!;
         public string PhoneNumber { get; set; } = string.Empty;
         public string FullName { get; set; } = null!;
-        public Guid RoleId { get; set; }
+        public int? RoleId { get; set; }
         public bool IsVerified { get; set; }
 
         public int TokenDurationInMinutes { get; set; } 
