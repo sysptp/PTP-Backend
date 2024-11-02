@@ -7,7 +7,7 @@ namespace DataLayer.Models.Entities
     {
         [Key]
         public int Id { get; set; }
-        public string Perfil { get; set; } = null!;
+        public string Name { get; set; } = null!;
         public string? Descripcion { get; set; }
         public long? IDEmpresa { get; set; }
     }

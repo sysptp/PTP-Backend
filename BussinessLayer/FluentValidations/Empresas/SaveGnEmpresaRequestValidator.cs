@@ -1,49 +1,49 @@
-﻿
+﻿using FluentValidation;
+using BussinessLayer.DTOs.Empresas;
+
 namespace BussinessLayer.FluentValidations.Empresas
 {
-    using FluentValidation;
-    using global::BussinessLayer.DTOs.Empresas;
 
-    namespace BussinessLayer.Validations
+    namespace BussinessLayer.FluentValidations.Empresas
     {
-        public class SaveGnEmpresaRequestValidator : AbstractValidator<SaveGnEmpresaDto>
+
+        public class SaveGnEmpresaRequestValidator : AbstractValidator<GnEmpresaRequest>
         {
             public SaveGnEmpresaRequestValidator()
             {
-                RuleFor(x => x.NOMBRE_EMP)
+                RuleFor(x => x.CompanyName)
                     .NotEmpty().WithMessage("El nombre de la empresa es requerido.")
                     .Length(1, 100).WithMessage("El nombre de la empresa no debe exceder los 100 caracteres.");
 
-                RuleFor(x => x.RNC_EMP)
+                RuleFor(x => x.RNC)
                     .NotEmpty().WithMessage("El RNC de la empresa es requerido.")
                     .Length(1, 15).WithMessage("El RNC no debe exceder los 15 caracteres.");
 
-                RuleFor(x => x.DIRECCION)
+                RuleFor(x => x.Address)
                     .NotEmpty().WithMessage("La dirección es requerida.")
                     .Length(1, 300).WithMessage("La dirección no debe exceder los 300 caracteres.");
 
-                RuleFor(x => x.TELEFONO1)
+                RuleFor(x => x.PrimaryPhone)
                     .NotEmpty().WithMessage("El teléfono principal es requerido.")
                     .Length(1, 15).WithMessage("El teléfono principal no debe exceder los 15 caracteres.");
 
-                RuleFor(x => x.TELEFONO2)
+                RuleFor(x => x.SecondaryPhone)
                     .Length(0, 15).WithMessage("El teléfono secundario no debe exceder los 15 caracteres.")
-                    .When(x => !string.IsNullOrEmpty(x.TELEFONO2));
+                    .When(x => !string.IsNullOrEmpty(x.SecondaryPhone));
 
-                RuleFor(x => x.EXT_TEL1)
-                    .Length(0, 10).WithMessage("La extensión del teléfono 1 no debe exceder los 10 caracteres.")
-                    .When(x => !string.IsNullOrEmpty(x.EXT_TEL1));
+                RuleFor(x => x.PrimaryExtension)
+                    .Length(0, 10).WithMessage("La extensión del teléfono principal no debe exceder los 10 caracteres.")
+                    .When(x => !string.IsNullOrEmpty(x.PrimaryExtension));
 
-                RuleFor(x => x.EXT_TEL2)
-                    .Length(0, 10).WithMessage("La extensión del teléfono 2 no debe exceder los 10 caracteres.")
-                    .When(x => !string.IsNullOrEmpty(x.EXT_TEL2));
+                RuleFor(x => x.SecondaryExtension)
+                    .Length(0, 10).WithMessage("La extensión del teléfono secundario no debe exceder los 10 caracteres.")
+                    .When(x => !string.IsNullOrEmpty(x.SecondaryExtension));
 
-                RuleFor(x => x.CANT_SUCURSALES)
-                    .GreaterThanOrEqualTo(0).WithMessage("La cantidad de sucursales debe ser mayor a 0.");
+                RuleFor(x => x.SucursalCount)
+                    .GreaterThanOrEqualTo(0).WithMessage("La cantidad de sucursales debe ser mayor o igual a 0.");
 
-                RuleFor(x => x.CANT_USUARIO)
-                    .GreaterThanOrEqualTo(0).WithMessage("La cantidad de usuarios debe ser mayor a 0.");
-
+                RuleFor(x => x.UserCount)
+                    .GreaterThanOrEqualTo(0).WithMessage("La cantidad de usuarios debe ser mayor o igual a 0.");
             }
         }
     }

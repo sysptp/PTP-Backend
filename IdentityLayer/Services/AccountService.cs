@@ -55,7 +55,7 @@ namespace IdentityLayer.Services
             if (user == null)
             {
                 response.HasError = true;
-                response.Error = $"No Accounts registered with {request.UserCredential}";
+                response.Error = $"{request.UserCredential} no tiene cuenta registrada";
                 return response;
             }
 
@@ -63,7 +63,7 @@ namespace IdentityLayer.Services
             if (!signInResult.Succeeded)
             {
                 response.HasError = true;
-                response.Error = $"Invalid credentials for {request.UserCredential}";
+                response.Error = $"Credenciales incorrectas {request.UserCredential}";
                 return response;
             }
 

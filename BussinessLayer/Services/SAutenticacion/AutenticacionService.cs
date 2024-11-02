@@ -21,8 +21,8 @@ namespace BussinessLayer.Services.SAutenticacion
             var userdata = _context?.SC_USUAR001
                 .FirstOrDefault(x => x.USUARIO == usuario && x.PASSWOR == password);
 
-            var sucursalUsuario = _context.SC_SUC001
-                .FirstOrDefault(x => x.ESTADO_SUC == true && x.CODIGO_SUC == userdata.CODIGO_SUC);
+            var sucursalUsuario = _context.GnSucursal
+                .FirstOrDefault(x => x.EstadoSuc == true && x.CodigoSuc == userdata.CODIGO_SUC);
 
             var usuarioEmpresa = _context.GnEmpresa.FirstOrDefault(x => x.CODIGO_EMP == userdata.CODIGO_EMP);
 

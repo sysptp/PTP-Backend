@@ -92,7 +92,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICargaMasivaService, CargaMasivaService>();
             services.AddScoped<IAperturaCierreCajasService, AperturaCierreCajasService>();
             services.AddScoped<ISC_USUAR001Service, SC_USUAR001Service>();
-            services.AddScoped<ISC_SUC001Service, SC_SUC001Service>();
+            services.AddScoped<IGnSucursalService, GnSucursalService>();
             services.AddScoped<ICajaService, CajaService>();
             services.AddScoped<ITipoMovimientoBancoService, TipoMovimientoBancoService>();
             services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
@@ -124,6 +124,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IGnEmpresaservice, GnEmpresaservice>(); 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddTransient<IGnSucursalService,  GnSucursalService>();    
         }
     }
 }

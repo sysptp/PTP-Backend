@@ -16,16 +16,22 @@ namespace TaskMaster.Core.Application.Mapping
             #endregion
 
             #region GnPefil
-            CreateMap<GnPerfil, GnPerfilResponse>().ReverseMap();
-            CreateMap<GnPerfil, GnPerfilRequest>().ReverseMap();
+            CreateMap<GnPerfil, GnPerfilResponse>()
+               .ForMember(dest => dest.IdRole, opt => opt.MapFrom(src => src.Id))
+               .ForMember(dest => dest.IDEmpresa, opt => opt.MapFrom(src => src.IDEmpresa.HasValue ? src.IDEmpresa.Value : 0))
+               .ReverseMap();
+
+            CreateMap<GnPerfilRequest, GnPerfil>()
+                .ForMember(dest => dest.IDEmpresa, opt => opt.MapFrom(src => (long?)src.IDEmpresa))
+                .ReverseMap();
             #endregion
 
             #region
-            CreateMap<SaveGnEmpresaDto, GnEmpresaDto>().ReverseMap();
+            CreateMap<GnEmpresaRequest, GnEmpresaResponse>().ReverseMap();
             #endregion
 
         }
     }
 
-    
+
 }

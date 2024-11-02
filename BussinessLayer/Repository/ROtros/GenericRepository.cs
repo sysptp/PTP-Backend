@@ -36,8 +36,7 @@ namespace BussinessLayer.Repository.ROtros
             try
             {
                 entity.FechaAdicion = DateTime.Now;
-                //entity.UsuarioAdicion = _tokenService.GetClaimValue("unique_name") ?? "UsuarioDesconocido";
-                entity.UsuarioAdicion = "System";
+                entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
                 _context.Set<T>().Add(entity);
                 await _context.SaveChangesAsync();
@@ -54,7 +53,7 @@ namespace BussinessLayer.Repository.ROtros
             try
             {
                 entity.FechaModificacion = DateTime.Now;
-                entity.UsuarioModificacion = _tokenService.GetClaimValue("unique_name") ?? "UsuarioDesconocido";
+                entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
                 _context.Entry(entity).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
@@ -74,7 +73,7 @@ namespace BussinessLayer.Repository.ROtros
                 {
                     entity.Borrado = true;
                     entity.FechaModificacion = DateTime.Now;
-                    entity.UsuarioModificacion = _tokenService.GetClaimValue("unique_name") ?? "UsuarioDesconocido";
+                    entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
                     _context.Entry(entity).State = EntityState.Modified;
                     await _context.SaveChangesAsync();

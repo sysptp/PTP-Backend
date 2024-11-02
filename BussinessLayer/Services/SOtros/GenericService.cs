@@ -23,13 +23,13 @@ namespace BussinessLayer.Services
             await _repository.Update(entity);
         }
 
-        public virtual async Task<Request> Add(Request vm)
+        public virtual async Task<Response> Add(Request vm)
         {
             Model entity = _mapper.Map<Model>(vm);
 
             entity = await _repository.Add(entity);
 
-            Request entityVm = _mapper.Map<Request>(entity);
+            Response entityVm = _mapper.Map<Response>(entity);
 
             return entityVm;
         }

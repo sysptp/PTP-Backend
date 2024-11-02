@@ -113,7 +113,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<GnEmpresa> GnEmpresa  { get; set; }
 
-        public DbSet<SC_SUC001> SC_SUC001 { get; set; }
+        public DbSet<GnSucursal> GnSucursal { get; set; }
 
         public DbSet<SC_HORA_X_USR002> SC_HORA_X_USR002 { get; set; }
 

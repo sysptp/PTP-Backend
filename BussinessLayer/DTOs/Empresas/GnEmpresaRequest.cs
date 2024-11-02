@@ -1,9 +1,8 @@
 ﻿
 namespace BussinessLayer.DTOs.Empresas
 {
-    public class GnEmpresaResponse
+    public class GnEmpresaRequest
     {
-        public long CompanyId { get; set; }
         public string CompanyName { get; set; } = null!;
         public string? Logo { get; set; }
         public string RNC { get; set; } = null!;

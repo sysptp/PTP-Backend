@@ -6,7 +6,7 @@ using BussinessLayer.Interfaces.Repository.Empresa;
 
 namespace BussinessLayer.Services.SEmpresa
 {
-    public class GnEmpresaservice : GenericService<SaveGnEmpresaDto, GnEmpresaDto, GnEmpresa>, IGnEmpresaservice
+    public class GnEmpresaservice : GenericService<GnEmpresaRequest, GnEmpresaResponse, GnEmpresa>, IGnEmpresaservice
     {
         private readonly IGnEmpresaRepository _repository;
         private readonly IMapper _mapper;
@@ -16,10 +16,10 @@ namespace BussinessLayer.Services.SEmpresa
             _mapper = mapper;
         }
 
-        public async Task<GnEmpresaDto> GetByCodEmp(long id)
+        public async Task<GnEmpresaResponse> GetByCodEmp(long id)
         {
            var empresa = await _repository.GetByEmpCode(id);
-            return _mapper.Map<GnEmpresaDto>(empresa);
+            return _mapper.Map<GnEmpresaResponse>(empresa);
         }
     }
 }

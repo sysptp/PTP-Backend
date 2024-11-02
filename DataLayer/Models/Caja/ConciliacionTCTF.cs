@@ -43,7 +43,7 @@ namespace DataLayer.Models.Caja
         public long IdSucursal { get; set; }
 
         [ForeignKey("IdSucursal")]
-        public virtual SC_SUC001 sucursal { get; set; }
+        public virtual GnSucursal sucursal { get; set; }
 
     }
 }

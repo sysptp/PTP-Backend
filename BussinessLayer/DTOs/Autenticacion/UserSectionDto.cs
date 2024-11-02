@@ -10,7 +10,7 @@ namespace BussinessLayer.DTOs.Autenticacion
 
         public GnEmpresa DatosEmpresa { get; set; }
 
-        public SC_SUC001 DatosSucursal { get; set; }
+        public GnSucursal DatosSucursal { get; set; }
 
         public string Ip { get; set; }
     }

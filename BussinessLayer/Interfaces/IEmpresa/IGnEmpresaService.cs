@@ -5,8 +5,8 @@ using DataLayer.Models.Empresa;
 
 namespace BussinessLayer.Interfaces.IEmpresa
 {
-    public interface IGnEmpresaservice : IGenericService<SaveGnEmpresaDto, GnEmpresaDto, GnEmpresa>
+    public interface IGnEmpresaservice : IGenericService<GnEmpresaRequest, GnEmpresaResponse, GnEmpresa>
     {
-        Task<GnEmpresaDto> GetByCodEmp(long id);
+        Task<GnEmpresaResponse> GetByCodEmp(long id);
     }
 }

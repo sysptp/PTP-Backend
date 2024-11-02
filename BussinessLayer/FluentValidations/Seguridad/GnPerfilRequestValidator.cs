@@ -8,7 +8,7 @@ namespace BussinessLayer.FluentValidations.Seguridad
     {
         public GnPerfilRequestValidator()
         {
-            RuleFor(p => p.Perfil).NotEmpty().WithMessage("El nombre del perfil es obligatorio.");
+            RuleFor(p => p.Name).NotEmpty().WithMessage("El nombre del perfil es obligatorio.");
         }
     }
 
