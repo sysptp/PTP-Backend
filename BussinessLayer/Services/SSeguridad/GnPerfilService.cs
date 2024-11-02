@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.Seguridad;
+using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Repository.RSeguridad;
 using BussinessLayer.Wrappers;
@@ -12,12 +13,31 @@ namespace BussinessLayer.Services.SSeguridad
     {
         private readonly IGnPerfilRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IRoleService _roleService;
 
-        public GnPerfilService(IGnPerfilRepository repository, IMapper mapper) : base(repository, mapper) 
+        public GnPerfilService(IGnPerfilRepository repository, IMapper mapper, IRoleService roleService) : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
+            _roleService = roleService;
         }
 
-   }
+        public override Task<GnPerfilRequest> Add(GnPerfilRequest vm)
+        {
+            try
+            {
+                var add = base.Add(vm);
+                if (add != null)
+                {
+                    _roleService.CreateRoleAsync(vm.Perfil, vm.Descripcion, vm.IDEmpresa);
+                }
+                return add;
+            }
+            catch (ArgumentException ex)
+            {
+                throw ex;
+            }
+        }
+
+    }
 }

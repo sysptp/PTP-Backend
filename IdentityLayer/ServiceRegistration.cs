@@ -110,6 +110,7 @@ namespace IdentityLayer
             #region Services
 
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IRoleService, RoleService>();
             #endregion
         }
         #endregion
