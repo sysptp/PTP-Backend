@@ -16,6 +16,7 @@ using DataLayer.Models.Pedidos;
 using DataLayer.Models.Almacen;
 using DataLayer.Models.Suplidor;
 using Microsoft.EntityFrameworkCore;
+using DataLayer.Models.Entities;
 
 namespace DataLayer.PDbContex
 {
@@ -110,7 +111,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<GnMenu> GnMenu { get; set; }
 
-        public DbSet<SC_EMP001> SC_EMP001  { get; set; }
+        public DbSet<GnEmpresa> GnEmpresa  { get; set; }
 
         public DbSet<SC_SUC001> SC_SUC001 { get; set; }
 
@@ -161,6 +162,7 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
+        public DbSet<GnPerfil> GnPerfil {get; set; }
 
         #region refactor del Menu
         public DbSet<GnModulo> GNModulos { get; set; }

@@ -8,7 +8,7 @@ namespace BussinessLayer.DTOs.Autenticacion
     {
         public SC_USUAR001 DatosUsuario { get; set; }
 
-        public SC_EMP001 DatosEmpresa { get; set; }
+        public GnEmpresa DatosEmpresa { get; set; }
 
         public SC_SUC001 DatosSucursal { get; set; }
 

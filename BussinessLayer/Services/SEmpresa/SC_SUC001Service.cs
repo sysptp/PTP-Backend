@@ -35,7 +35,7 @@ namespace BussinessLayer.Services.SEmpresa
         public async Task<List<SC_SUC001>> GetAllIndex()
         {
             return await _context.SC_SUC001
-                .Include(s => s.SC_EMP001)
+                .Include(s => s.GnEmpresa)
                 .ToListAsync();
         }
 

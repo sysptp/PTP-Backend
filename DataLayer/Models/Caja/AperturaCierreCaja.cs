@@ -54,7 +54,7 @@ namespace DataLayer.Models.Caja
         public long IdEmpresa { get; set; }
 
         [ForeignKey("IdEmpresa")]
-        public virtual SC_EMP001 empresa { get; set; }
+        public virtual GnEmpresa empresa { get; set; }
 
         public long IdSucursal { get; set; }
 

@@ -41,6 +41,7 @@ using BussinessLayer.Services.SPedidos;
 using BussinessLayer.Services.SProductos;
 using BussinessLayer.Services.SSeguridad;
 using BussinessLayer.Services.SSuplidores;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BussinessLayer.DendeciesInjections
@@ -79,7 +80,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IProductoService, ProductoService>();
             services.AddScoped<IProvinciaService, ProvinciasService>();
             services.AddScoped<IRegionService, RegionService>();
-            services.AddScoped<ISC_EMP001service, SC_EMP001service>();
+            services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
             services.AddScoped<ISuplidoresService, SuplidoresService>();
             services.AddScoped<ITipoMovimientoService, TipoMovimientoService>();
             services.AddScoped<ITipoPagoService, TipoPagoService>();
@@ -118,8 +119,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<DeserializadorCrearReporte>();
             services.AddScoped<EntityMapper>();
             services.AddScoped<CsvProcessor>();
-            //services.AddScoped<IGnPerfilService, GnPerfilService>();
-            services.AddScoped<ISC_EMP001service, SC_EMP001service>();
+            services.AddScoped<IGnPerfilService, GnPerfilService>();
+            services.AddScoped<IGnEmpresaservice, GnEmpresaservice>(); 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ITokenService, TokenService>();
         }
     }
 }

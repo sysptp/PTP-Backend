@@ -20,7 +20,7 @@ namespace DataLayer.Models.Bancos
         public bool Estado { get; set; }
         public long IdEmpresa { get; set; }
         [ForeignKey("IdEmpresa")]
-        public virtual SC_EMP001 empresa { get; set; }
+        public virtual GnEmpresa empresa { get; set; }
 
     }
 }

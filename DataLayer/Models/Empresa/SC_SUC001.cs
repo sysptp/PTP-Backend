@@ -8,7 +8,7 @@ namespace DataLayer.Models.Empresa
     {
         public long CODIGO_EMP { get; set; }
         [ForeignKey("CODIGO_EMP")]
-        public SC_EMP001 SC_EMP001 { get; set; }
+        public GnEmpresa GnEmpresa { get; set; }
 
         [Key]
         public long CODIGO_SUC { get; set; }

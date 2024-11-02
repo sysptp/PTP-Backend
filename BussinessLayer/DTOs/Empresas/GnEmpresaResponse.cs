@@ -1,7 +1,7 @@
 ﻿
 namespace BussinessLayer.DTOs.Empresas
 {
-    public class SC_EMP001Dto
+    public class GnEmpresaDto
     {
         public long CODIGO_EMP { get; set; }
         public string NOMBRE_EMP { get; set; } = null!;

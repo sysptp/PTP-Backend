@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.Empresa
 {
-    public class SC_EMP001 : AuditableEntities 
+    public class GnEmpresa : AuditableEntities 
     {
         [Key]
         public long CODIGO_EMP { get; set; }

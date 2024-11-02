@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Text;
 using BussinessLayer.Settings;
 using Identity.Context;
+using BussinessLayer.Wrappers;
 
 namespace IdentityLayer
 {
@@ -23,7 +24,7 @@ namespace IdentityLayer
             ContextConfiguration(services, configuration);
 
             #region Identity
-            services.AddIdentity<Usuario, IdentityRole<int>>() 
+            services.AddIdentity<Usuario, GnPerfil>() 
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
@@ -36,7 +37,7 @@ namespace IdentityLayer
             }).AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
-                options.SaveToken = false;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -55,7 +56,8 @@ namespace IdentityLayer
                         context.NoResult();
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         context.Response.ContentType = "application/json";
-                        var result = JsonConvert.SerializeObject(new { error = "Authentication failed." });
+
+                        var result = JsonConvert.SerializeObject(Response<string>.Unauthorized("Autenticación fallida. Token inválido o expirado."));
                         return context.Response.WriteAsync(result);
                     },
                     OnChallenge = context =>
@@ -64,7 +66,8 @@ namespace IdentityLayer
                         {
                             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject(new { error = "You are not Authorized" });
+
+                            var result = JsonConvert.SerializeObject(Response<string>.Unauthorized("No autorizado. Token faltante o inválido."));
                             return context.Response.WriteAsync(result);
                         }
                         return Task.CompletedTask;
@@ -73,7 +76,8 @@ namespace IdentityLayer
                     {
                         context.Response.StatusCode = StatusCodes.Status403Forbidden;
                         context.Response.ContentType = "application/json";
-                        var result = JsonConvert.SerializeObject(new { error = "You are not authorized to access this resource." });
+
+                        var result = JsonConvert.SerializeObject(Response<string>.Forbidden("Acceso prohibido. No tiene los permisos necesarios."));
                         return context.Response.WriteAsync(result);
                     }
                 };

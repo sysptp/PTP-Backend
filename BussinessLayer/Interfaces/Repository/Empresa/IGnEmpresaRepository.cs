@@ -3,8 +3,8 @@ using DataLayer.Models.Empresa;
 
 namespace BussinessLayer.Interfaces.Repository.Empresa
 {
-    public interface ISC_EMP001Repository : IGenericRepository<SC_EMP001>
+    public interface IGnEmpresaRepository : IGenericRepository<GnEmpresa>
     {
-        Task<SC_EMP001> GetByEmpCode(long empCode);
+        Task<GnEmpresa> GetByEmpCode(long empCode);
     }
 }

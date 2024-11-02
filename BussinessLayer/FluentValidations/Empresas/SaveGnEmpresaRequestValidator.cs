@@ -6,9 +6,9 @@ namespace BussinessLayer.FluentValidations.Empresas
 
     namespace BussinessLayer.Validations
     {
-        public class SaveSC_EMP001DtoValidator : AbstractValidator<SaveSC_EMP001Dto>
+        public class SaveGnEmpresaRequestValidator : AbstractValidator<SaveGnEmpresaDto>
         {
-            public SaveSC_EMP001DtoValidator()
+            public SaveGnEmpresaRequestValidator()
             {
                 RuleFor(x => x.NOMBRE_EMP)
                     .NotEmpty().WithMessage("El nombre de la empresa es requerido.")

@@ -37,7 +37,7 @@ namespace BussinessLayer.Services.SSeguridad
 
         public async Task<List<SC_USUAR001>> GetAllWithEmpId(long id)
         {
-            var data = await _context.SC_USUAR001.Where(x => x.CODIGO_EMP == id).Include(s => s.SC_EMP001).ToListAsync();
+            var data = await _context.SC_USUAR001.Where(x => x.CODIGO_EMP == id).Include(s => s.GnEmpresa).ToListAsync();
             return data;   
         }
 

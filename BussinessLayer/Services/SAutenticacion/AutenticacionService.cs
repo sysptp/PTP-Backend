@@ -24,7 +24,7 @@ namespace BussinessLayer.Services.SAutenticacion
             var sucursalUsuario = _context.SC_SUC001
                 .FirstOrDefault(x => x.ESTADO_SUC == true && x.CODIGO_SUC == userdata.CODIGO_SUC);
 
-            var usuarioEmpresa = _context.SC_EMP001.FirstOrDefault(x => x.CODIGO_EMP == userdata.CODIGO_EMP);
+            var usuarioEmpresa = _context.GnEmpresa.FirstOrDefault(x => x.CODIGO_EMP == userdata.CODIGO_EMP);
 
             var ip = Utilidades.GetIP(NetworkInterfaceType.Wireless80211, "Fisica").ToString();
 

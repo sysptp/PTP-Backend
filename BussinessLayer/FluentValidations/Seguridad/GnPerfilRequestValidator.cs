@@ -4,9 +4,9 @@ using FluentValidation;
 namespace BussinessLayer.FluentValidations.Seguridad
 {
   
-    public class GnPerfilDtoValidator : AbstractValidator<GnPerfilDto>
+    public class GnPerfilRequestValidator : AbstractValidator<GnPerfilRequest>
     {
-        public GnPerfilDtoValidator()
+        public GnPerfilRequestValidator()
         {
             RuleFor(p => p.Perfil).NotEmpty().WithMessage("El nombre del perfil es obligatorio.");
         }

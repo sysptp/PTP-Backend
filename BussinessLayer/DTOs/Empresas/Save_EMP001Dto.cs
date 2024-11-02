@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace BussinessLayer.DTOs.Empresas
 {
-    public class SaveSC_EMP001Dto
+    public class SaveGnEmpresaDto
     {
         [JsonIgnore]
         public long CODIGO_EMP { get; set; }

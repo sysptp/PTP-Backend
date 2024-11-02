@@ -17,6 +17,6 @@ namespace DataLayer.Models.MenuApp
         public bool Borrado { get; set; }
         public virtual Gn_Perfil Perfil { get; set; }
         public virtual GnSubMenu SubMenu { get; set; }
-        public virtual SC_EMP001 Empresa { get; set; }
+        public virtual GnEmpresa Empresa { get; set; }
     }
 }

@@ -60,7 +60,6 @@ namespace PTP_API.Controllers.Autenticacion
             }
         }
 
-        [Authorize]
         [HttpPost("Register")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -80,7 +79,7 @@ namespace PTP_API.Controllers.Autenticacion
                 }
 
                 var origin = Request?.Headers["origin"].ToString() ?? string.Empty;
-                var registrationResponse = await _accountService.RegisterUserAsync(request, origin, "Developer");
+                var registrationResponse = await _accountService.RegisterUserAsync(request, origin);
 
                return Ok(Response<object>.Created(registrationResponse, "Registro de usuario exitoso"));
             }

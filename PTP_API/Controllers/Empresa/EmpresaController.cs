@@ -10,11 +10,11 @@
 //    [ApiController]
 //    [Route("api/v1/Empresa")]
 //    [SwaggerTag("Gestión de Empresas")]
-//    public class SC_EMP001Controller : ControllerBase
+//    public class GnEmpresaController : ControllerBase
 //    {
-//        private readonly ISC_EMP001service _scEmp001Service;
+//        private readonly IGnEmpresaservice _scEmp001Service;
 
-//        public SC_EMP001Controller(ISC_EMP001service scEmp001Service)
+//        public GnEmpresaController(IGnEmpresaservice scEmp001Service)
 //        {
 //            _scEmp001Service = scEmp001Service;
 //        }
@@ -31,18 +31,18 @@
 //                    var empresa = await _scEmp001Service.GetByCodEmp(id.Value);
 //                    if (empresa == null)
 //                    {
-//                        return NotFound(Response<SC_EMP001Dto>.NotFound("Empresa no encontrada."));
+//                        return NotFound(Response<GnEmpresaDto>.NotFound("Empresa no encontrada."));
 //                    }
-//                    return Ok(Response<SC_EMP001Dto>.Success(empresa, "Empresa encontrada."));
+//                    return Ok(Response<GnEmpresaDto>.Success(empresa, "Empresa encontrada."));
 //                }
 //                else
 //                {
 //                    var empresas = await _scEmp001Service.GetAllDto();
 //                    if (empresas == null || empresas.Count == 0)
 //                    {
-//                        return Ok(Response<IEnumerable<SC_EMP001Dto>>.NoContent("No hay empresas disponibles."));
+//                        return Ok(Response<IEnumerable<GnEmpresaDto>>.NoContent("No hay empresas disponibles."));
 //                    }
-//                    return Ok(Response<IEnumerable<SC_EMP001Dto>>.Success(empresas, "Empresas obtenidas correctamente."));
+//                    return Ok(Response<IEnumerable<GnEmpresaDto>>.Success(empresas, "Empresas obtenidas correctamente."));
 //                }
 //            }
 //            catch (Exception ex)
@@ -55,7 +55,7 @@
 //        [Consumes(MediaTypeNames.Application.Json)]
 //        [ProducesResponseType(StatusCodes.Status200OK)]
 //        [SwaggerOperation(Summary = "Crear una nueva empresa", Description = "Crea una nueva empresa en el sistema.")]
-//        public async Task<IActionResult> Add([FromBody] SaveSC_EMP001Dto saveDto)
+//        public async Task<IActionResult> Add([FromBody] SaveGnEmpresaDto saveDto)
 //        {
 //            if (!ModelState.IsValid)
 //            {
@@ -66,7 +66,7 @@
 //            try
 //            {
 //                var empresa = await _scEmp001Service.Add(saveDto);
-//                return Ok(Response<SaveSC_EMP001Dto>.Created(empresa, "Empresa creada correctamente."));
+//                return Ok(Response<SaveGnEmpresaDto>.Created(empresa, "Empresa creada correctamente."));
 //            }
 //            catch (Exception ex)
 //            {
@@ -78,7 +78,7 @@
 //        [Consumes(MediaTypeNames.Application.Json)]
 //        [ProducesResponseType(StatusCodes.Status200OK)]
 //        [SwaggerOperation(Summary = "Actualizar una empresa", Description = "Actualiza la información de una empresa existente.")]
-//        public async Task<IActionResult> Update(int id, [FromBody] SaveSC_EMP001Dto saveDto)
+//        public async Task<IActionResult> Update(int id, [FromBody] SaveGnEmpresaDto saveDto)
 //        {
 //            if (!ModelState.IsValid)
 //            {
@@ -91,7 +91,7 @@
 //                var existingEmpresa = await _scEmp001Service.GetByIdSaveDto(id);
 //                if (existingEmpresa == null)
 //                {
-//                    return NotFound(Response<SC_EMP001Dto>.NotFound("Empresa no encontrada."));
+//                    return NotFound(Response<GnEmpresaDto>.NotFound("Empresa no encontrada."));
 //                }
 
 //                await _scEmp001Service.Update(saveDto, id);

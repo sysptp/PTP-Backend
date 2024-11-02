@@ -12,16 +12,16 @@ namespace TaskMaster.Core.Application.Mapping
         {
 
             #region GnPerfil
-            CreateMap<GnPerfil, GnPerfilDto>().ReverseMap();
+            CreateMap<GnPerfil, GnPerfilResponse>().ReverseMap();
             #endregion
 
             #region GnPefil
-            CreateMap<GnPerfil, GnPerfilDto>().ReverseMap();
-            CreateMap<GnPerfil, SaveGnPerfilDto>();
+            CreateMap<GnPerfil, GnPerfilResponse>().ReverseMap();
+            CreateMap<GnPerfil, GnPerfilRequest>().ReverseMap();
             #endregion
 
             #region
-            CreateMap<SaveSC_EMP001Dto, SC_EMP001Dto>().ReverseMap();
+            CreateMap<SaveGnEmpresaDto, GnEmpresaDto>().ReverseMap();
             #endregion
 
         }

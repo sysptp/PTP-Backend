@@ -19,15 +19,18 @@ namespace IdentityLayer.Services
         private readonly SignInManager<Usuario> _signInManager;
         private readonly JWTSettings _jwtSettings;
         private readonly IMapper _mapper;
+        private readonly RoleManager<GnPerfil> _roleManager;
 
         public AccountService(
               UserManager<Usuario> userManager,
               SignInManager<Usuario> signInManager,
+              RoleManager<GnPerfil> roleManager,
               IOptions<JWTSettings> jwtSettings,
               IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
             _mapper = mapper;
         }
@@ -111,7 +114,7 @@ namespace IdentityLayer.Services
                 signingCredentials: creds);
         }
 
-        public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin, string Role)
+        public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin)
         {
             RegisterResponse response = new()
             {
@@ -122,7 +125,7 @@ namespace IdentityLayer.Services
             if (userWithSameUserName != null)
             {
                 response.HasError = true;
-                response.Error = $"Username '{request.UserName}' is already taken.";
+                response.Error = $"El nombre de usuario '{request.UserName}' ya está en uso.";
                 return response;
             }
 
@@ -130,23 +133,38 @@ namespace IdentityLayer.Services
             if (userWithSameEmail != null)
             {
                 response.HasError = true;
-                response.Error = $"Email '{request.Email}' is already registered.";
+                response.Error = $"El correo electrónico '{request.Email}' ya está registrado.";
+                return response;
+            }
+
+            // Buscar el rol usando RoleManager y asignarlo al usuario
+            var perfil = await _roleManager.FindByIdAsync(request.RoleId?.ToString());
+            if (perfil == null)
+            {
+                response.HasError = true;
+                response.Error = "El ID de rol especificado no existe.";
                 return response;
             }
 
             var user = MapRegisterRequestToUsuario(request);
-
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
             {
                 response.HasError = true;
-                response.Error = "An error occurred trying to register the user.";
+                response.Error = "Ocurrió un error al intentar registrar al usuario.";
+                return response;
+            }
+
+            var roleResult = await _userManager.AddToRoleAsync(user, perfil.Perfil);
+            if (!roleResult.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = "Ocurrió un error al asignar el rol al usuario.";
                 return response;
             }
 
             return response;
         }
-
 
         private RefreshToken GenerateRefreshToken()
         {
