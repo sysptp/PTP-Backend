@@ -19,12 +19,12 @@ namespace BussinessLayer.Repository.RGeografia
         public IEnumerable<Municipio> GetMunicipiosByProvinciaId(int provinciaId)
         {
 
-            return _context.Municipios.ToList().Where(x => x.Borrado != true && x.IdProvincia == provinciaId);
+            return _context.Municipio.ToList().Where(x => x.Borrado != true && x.IdProvincia == provinciaId);
         }
 
         public async Task<List<Municipio>> GetIndex()
         {
-            var municipios = await _context.Municipios.Include(m => m.Provincia).ToListAsync();
+            var municipios = await _context.Municipio.Include(m => m.Provincia).ToListAsync();
 
             return municipios;
         }

@@ -18,7 +18,7 @@ namespace BussinessLayer.Repository.RGeografia
 
         public async Task<List<Region>> GetAllIndex()
         {
-            var regiones = await _context.Regiones.Include(r => r.Pais).ToListAsync();
+            var regiones = await _context.Region.Include(r => r.Pais).ToListAsync();
             return regiones;
         }
     }

@@ -47,8 +47,9 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom(x => x.Name))
                 .ForMember(dest => dest.IdPais, opt => opt.MapFrom(x => x.CountryId))
                 .ReverseMap();
-            CreateMap<CountryResponse, Pais>()
+            CreateMap<RegionResponse, Region>()
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom(x => x.Name))
+                .ForMember(dest => dest.IdPais, opt => opt.MapFrom(x => x.CountryId))
                 .ReverseMap();
 
             CreateMap<MunicipioRequest, Municipio>()

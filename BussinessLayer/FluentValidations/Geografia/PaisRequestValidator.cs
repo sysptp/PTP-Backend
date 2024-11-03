@@ -12,5 +12,5 @@ namespace BussinessLayer.FluentValidations.Geografia
                 .NotEmpty().NotNull().WithMessage("El nombre no puede ser null ni vacío");
         }
     }
-}
+
 }

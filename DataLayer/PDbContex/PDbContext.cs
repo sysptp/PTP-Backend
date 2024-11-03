@@ -41,13 +41,13 @@ namespace DataLayer.PDbContex
         public DbSet<VariablesReporteria> VariablesReporterias { get; set; }
 
         // 
-        public DbSet<Pais> Paises { get; set; }
+        public DbSet<Pais> Pais { get; set; }
 
-        public DbSet<Region> Regiones { get; set; }
+        public DbSet<Region> Region { get; set; }
 
-        public DbSet<Provincia> Provincias { get; set; }
+        public DbSet<Provincia> Provincia { get; set; }
 
-        public DbSet<Municipio> Municipios { get; set; }
+        public DbSet<Municipio> Municipio { get; set; }
 
         public DbSet<Marca> Marcas { get; set; }
 

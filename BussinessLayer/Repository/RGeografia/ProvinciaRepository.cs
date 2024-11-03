@@ -18,12 +18,12 @@ namespace BussinessLayer.Repository.RGeografia
         public async Task<IEnumerable<Provincia>> GetProvinciasByRegionId(int regionId)
         {
 
-            return await _context.Provincias.Where(x => x.IdRegion == regionId).ToListAsync();
+            return await _context.Provincia.Where(x => x.IdRegion == regionId).ToListAsync();
         }
 
         public Task<List<Provincia>> GetAllIndex()
         {
-            var provincias = _context.Provincias.Include(p => p.Region).ToListAsync();
+            var provincias = _context.Provincia.Include(p => p.Region).ToListAsync();
             return provincias;
         }
     }
