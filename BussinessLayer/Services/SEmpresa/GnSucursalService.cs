@@ -2,7 +2,7 @@
 using BussinessLayer.DTOs.Sucursal;
 using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.Interfaces.Repositories;
-using BussinessLayer.Interfaces.Repository.Geografia;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using DataLayer.Models.Empresa;
 using DataLayer.PDbContex;
 

@@ -1,8 +1,6 @@
 using IdentityLayer;
 using BussinessLayer.DendeciesInjections;
 using PTP_API.Extensions;
-using Microsoft.Extensions.Options;
-using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 

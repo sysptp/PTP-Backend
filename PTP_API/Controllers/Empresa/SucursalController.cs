@@ -6,7 +6,7 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IEmpresa;
 
-namespace PTP_API.Controllers.Sucursal
+namespace PTP_API.Controllers.Empresa
 {
     [ApiController]
     [Route("api/v1/Sucursal")]
@@ -42,14 +42,14 @@ namespace PTP_API.Controllers.Sucursal
                     var sucursales = await _sucursalService.GetAllDto();
                     if (sucursales == null || !sucursales.Any())
                     {
-                        return StatusCode(204,Response<IEnumerable<GnSucursalResponse>>.NoContent("No hay sucursales disponibles."));
+                        return StatusCode(204, Response<IEnumerable<GnSucursalResponse>>.NoContent("No hay sucursales disponibles."));
                     }
                     return Ok(Response<IEnumerable<GnSucursalResponse>>.Success(sucursales, "Sucursales obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500,Response<string>.ServerError("Ocurrió un error al obtener las sucursales. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener las sucursales. Por favor, intente nuevamente."));
             }
         }
 
@@ -73,7 +73,7 @@ namespace PTP_API.Controllers.Sucursal
             }
             catch (Exception ex)
             {
-                return StatusCode(500,Response<string>.ServerError("Ocurrió un error al crear la sucursal. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear la sucursal. Por favor, intente nuevamente."));
             }
         }
     }

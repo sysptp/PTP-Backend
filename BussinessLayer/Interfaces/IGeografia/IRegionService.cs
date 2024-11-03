@@ -1,24 +1,13 @@
-﻿using DataLayer.Models.Geografia;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using BussinessLayer.DTOs.Geografia.DRegion;
+using BussinessLayer.Interfaces.IOtros;
+using DataLayer.Models.Geografia;
 
 namespace BussinessLayer.Interfaces.IGeografia
 {
-    public interface IRegionService
+    public interface IRegionService : IGenericService<RegionRequest, RegionResponse,Region>
     {
-        Task Add(Region model);
-
-        Task Delete(Region model);
-
-        Task<List<Region>> GetAll();
 
         Task<List<Region>> GetAllIndex();
-
-        Task<IList<Region>> GetAllByEmp(long idEMpresa);
-
-        Task<Region> GetById(int id);
-
-        Task Update(Region model);
 
     }
 }

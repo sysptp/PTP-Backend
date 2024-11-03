@@ -1,7 +1,7 @@
 ﻿
 
 using AutoMapper;
-using BussinessLayer.Interfaces.Repository.Geografia;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using BussinessLayer.Repository.ROtros;
 using DataLayer.Models.Empresa;
 using DataLayer.PDbContex;
