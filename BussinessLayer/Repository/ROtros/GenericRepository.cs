@@ -1,26 +1,32 @@
-﻿using BussinessLayer.Interfaces.IAutenticacion;
-using BussinessLayer.Interfaces.Repositories;
+﻿using BussinessLayer.Interfaces.Repositories;
+using Dapper;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+
 
 namespace BussinessLayer.Repository.ROtros
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : AuditableEntities
     {
+        private readonly ITokenService _tokenService;
         protected readonly PDbContext _context;
-        private readonly IClaimsService _claimsService;
 
-        public GenericRepository(PDbContext dbContext, IClaimsService claimsService)
+        public GenericRepository(PDbContext dbContext, ITokenService tokenService)
         {
             _context = dbContext;
-            _claimsService = claimsService;
+            _tokenService = tokenService;
         }
 
         public async Task<T> GetById(int id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
-            return entity?.Borrado == true ? null : entity;
+            if (entity == null)
+            {
+                return null;
+            }
+            return entity.Borrado == true ? null : entity;
         }
 
         public async Task<IList<T>> GetAll()
@@ -32,8 +38,8 @@ namespace BussinessLayer.Repository.ROtros
         {
             try
             {
-                entity.FECHA_ADICION = DateTime.Now;
-                //entity.USUARIO_ADICCION = _claimsService.GetClaimValueByType("Usuario") ?? "UsuarioDesconocido";
+                entity.FechaAdicion = DateTime.Now;
+                entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
                 _context.Set<T>().Add(entity);
                 await _context.SaveChangesAsync();
@@ -49,8 +55,8 @@ namespace BussinessLayer.Repository.ROtros
         {
             try
             {
-                entity.FECHA_MODIFICACION = DateTime.Now;
-                //entity.USUARIO_MODIFICACION = _claimsService.GetClaimValueByType("Usuario") ?? "UsuarioDesconocido";
+                entity.FechaModificacion = DateTime.Now;
+                entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
                 _context.Entry(entity).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
@@ -69,8 +75,8 @@ namespace BussinessLayer.Repository.ROtros
                 try
                 {
                     entity.Borrado = true;
-                    entity.FECHA_MODIFICACION = DateTime.Now;
-                    //entity.USUARIO_MODIFICACION = _claimsService.GetClaimValueByType("NombreUsuario") ?? "UsuarioDesconocido";
+                    entity.FechaModificacion = DateTime.Now;
+                    entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
                     _context.Entry(entity).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
@@ -81,5 +87,19 @@ namespace BussinessLayer.Repository.ROtros
                 }
             }
         }
+
+
+        public async Task<IEnumerable<TResult>> ExecuteStoredProcedureAsync<TResult>(string storedProcedure, object parameters = null)
+        {
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    await connection.OpenAsync();
+
+                var result = await connection.QueryAsync<TResult>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+
     }
 }

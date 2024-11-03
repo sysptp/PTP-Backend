@@ -15,10 +15,12 @@ namespace PTP_API.Controllers.Autenticacion
     public class AutenticacionController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly RegisterRequestValidator _validator;
 
-        public AutenticacionController(IAccountService accountService)
+        public AutenticacionController(IAccountService accountService, RegisterRequestValidator validator)
         {
             _accountService = accountService;
+            _validator = validator;
         }
 
         [HttpPost("Login")]
@@ -42,13 +44,13 @@ namespace PTP_API.Controllers.Autenticacion
             {
                 var response = await _accountService.AuthenticateAsync(new AuthenticationRequest
                 {
-                    UserCredential = request.Usuario,
+                    UserCredential = request.User,
                     Password = request.Password
                 });
 
                 if (response.HasError)
                 {
-                    return Unauthorized(Response<string>.Unauthorized(response.Error));
+                    return BadRequest(Response<string>.BadRequest(new List<string> {response.Error ?? "Error en el Login"}, 400));
                 }
 
                 return Ok(Response<object>.Success(response, "Autenticación exitosa"));
@@ -68,8 +70,7 @@ namespace PTP_API.Controllers.Autenticacion
         {
             try
             {
-                var validator = new RegisterRequestValidator();
-                var validationResult = await validator.ValidateAsync(request);
+                var validationResult = await _validator.ValidateAsync(request);
 
                 if (!validationResult.IsValid)
                 {
@@ -78,9 +79,9 @@ namespace PTP_API.Controllers.Autenticacion
                 }
 
                 var origin = Request?.Headers["origin"].ToString() ?? string.Empty;
-                var registrationResponse = await _accountService.RegisterUserAsync(request, origin, "Developer");
+                var registrationResponse = await _accountService.RegisterUserAsync(request, origin);
 
-                return Ok(Response<object>.Created(registrationResponse, "Registro de usuario exitoso"));
+               return Ok(Response<object>.Created(registrationResponse, "Registro de usuario exitoso"));
             }
             catch (Exception ex)
             {

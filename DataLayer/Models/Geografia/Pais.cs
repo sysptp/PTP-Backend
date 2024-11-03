@@ -1,11 +1,12 @@
 ﻿using DataLayer.Models.Otros;
-using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.Geografia
 {
-    public class Pais : BaseModel
+    public class Pais : AuditableEntities
     {
-        public string Nombre { get; set; }
-        public DateTime FechaModificacion { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public string Nombre { get; set; } = null!;
     }
 }

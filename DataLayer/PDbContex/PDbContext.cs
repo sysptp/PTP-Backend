@@ -16,6 +16,7 @@ using DataLayer.Models.Pedidos;
 using DataLayer.Models.Almacen;
 using DataLayer.Models.Suplidor;
 using Microsoft.EntityFrameworkCore;
+using DataLayer.Models.Entities;
 
 namespace DataLayer.PDbContex
 {
@@ -40,13 +41,13 @@ namespace DataLayer.PDbContex
         public DbSet<VariablesReporteria> VariablesReporterias { get; set; }
 
         // 
-        public DbSet<Pais> Paises { get; set; }
+        public DbSet<Pais> Pais { get; set; }
 
-        public DbSet<Region> Regiones { get; set; }
+        public DbSet<Region> Region { get; set; }
 
-        public DbSet<Provincia> Provincias { get; set; }
+        public DbSet<Provincia> Provincia { get; set; }
 
-        public DbSet<Municipio> Municipios { get; set; }
+        public DbSet<Municipio> Municipio { get; set; }
 
         public DbSet<Marca> Marcas { get; set; }
 
@@ -110,9 +111,9 @@ namespace DataLayer.PDbContex
 
         public DbSet<GnMenu> GnMenu { get; set; }
 
-        public DbSet<SC_EMP001> SC_EMP001  { get; set; }
+        public DbSet<GnEmpresa> GnEmpresa  { get; set; }
 
-        public DbSet<SC_SUC001> SC_SUC001 { get; set; }
+        public DbSet<GnSucursal> GnSucursal { get; set; }
 
         public DbSet<SC_HORA_X_USR002> SC_HORA_X_USR002 { get; set; }
 
@@ -161,6 +162,7 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
+        public DbSet<GnPerfil> GnPerfil {get; set; }
 
         #region refactor del Menu
         public DbSet<GnModulo> GNModulos { get; set; }

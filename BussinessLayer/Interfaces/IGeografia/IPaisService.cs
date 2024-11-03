@@ -1,21 +1,10 @@
-﻿using DataLayer.Models;
+﻿using BussinessLayer.DTOs.Geografia.DPais;
+using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.Geografia;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.Interfaces.IGeografia
 {
-    public interface IPaisService
+    public interface IPaisService :IGenericService<CountryRequest, CountryResponse, Pais>
     {
-        Task Add(Pais model);
-
-        Task Delete(Pais model);
-
-        Task<List<Pais>> GetAll();
-
-        Task<Pais> GetById(int id);
-
-        Task Update(Pais model);
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.Helpers.CargaMasivaHelpers;
 using BussinessLayer.Helpers.CentroReporteriaHelpers;
+using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interface.IAlmacenes;
 using BussinessLayer.Interface.ICotizaciones;
 using BussinessLayer.Interface.IFacturacion;
@@ -16,10 +17,10 @@ using BussinessLayer.Interfaces.ICentroReporteria;
 using BussinessLayer.Interfaces.ICuentas;
 using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.Interfaces.IGeografia;
+using BussinessLayer.Interfaces.IMenu;
 using BussinessLayer.Interfaces.IOtros;
 using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Interfaces.Repositories;
-using BussinessLayer.Interfaces.Repository;
 using BussinessLayer.Repository.ROtros;
 using BussinessLayer.Services;
 using BussinessLayer.Services.SALmacenes;
@@ -34,14 +35,15 @@ using BussinessLayer.Services.SCuentas;
 using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Services.SFacturacion;
 using BussinessLayer.Services.SGeografia;
-//using BussinessLayer.Services.SMenu;
-//using BussinessLayer.Services.SModulo;
+using BussinessLayer.Services.SMenu;
 using BussinessLayer.Services.SOtros;
 using BussinessLayer.Services.SPedidos;
 using BussinessLayer.Services.SProductos;
 using BussinessLayer.Services.SSeguridad;
 using BussinessLayer.Services.SSuplidores;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System.Runtime.InteropServices;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -53,7 +55,6 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
             services.AddScoped<IRepositorySection, RepositorySection>();
-            //services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<IReporteriaService, ReporteriaService>();
             services.AddScoped<IAlmacenesService, AlmacenesService>();
             services.AddScoped<IClientesService, ClienteService>();
@@ -72,14 +73,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IFacturacionService, FacturacionService>();
             services.AddScoped<IMarcaService, MarcaService>();
             services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
-            services.AddScoped<IMunicipioService, MunicipioService>();
-            services.AddScoped<IPaisService, PaisService>();
             services.AddScoped<IPedidoService, PedidoService>();
             services.AddScoped<IPrecioService, PrecioService>();
             services.AddScoped<IProductoService, ProductoService>();
-            services.AddScoped<IProvinciaService, ProvinciasService>();
-            services.AddScoped<IRegionService, RegionService>();
-            services.AddScoped<ISC_EMP001service, SC_EMP001service>();
+            services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
             services.AddScoped<ISuplidoresService, SuplidoresService>();
             services.AddScoped<ITipoMovimientoService, TipoMovimientoService>();
             services.AddScoped<ITipoPagoService, TipoPagoService>();
@@ -90,7 +87,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICargaMasivaService, CargaMasivaService>();
             services.AddScoped<IAperturaCierreCajasService, AperturaCierreCajasService>();
             services.AddScoped<ISC_USUAR001Service, SC_USUAR001Service>();
-            services.AddScoped<ISC_SUC001Service, SC_SUC001Service>();
+            services.AddScoped<IGnSucursalService, GnSucursalService>();
             services.AddScoped<ICajaService, CajaService>();
             services.AddScoped<ITipoMovimientoBancoService, TipoMovimientoBancoService>();
             services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
@@ -114,12 +111,27 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IBovedaCajaDesglosesService, BovedaCajaDesglosesService>();
             services.AddScoped<IBilletes_MonedaService, Billetes_MonedaService>();
             services.AddScoped<IBancosService, BancosService>();
-            //services.AddScoped<IModuloService, ModuloService>();
             services.AddScoped<DeserializadorCrearReporte>();
             services.AddScoped<EntityMapper>();
             services.AddScoped<CsvProcessor>();
-            //services.AddScoped<IGnPerfilService, GnPerfilService>();
-            services.AddScoped<ISC_EMP001service, SC_EMP001service>();
+            services.AddScoped<IGnPerfilService, GnPerfilService>();
+            services.AddScoped<IGnEmpresaservice, GnEmpresaservice>(); 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddTransient<IGnSucursalService,  GnSucursalService>();
+
+            #region Geografia
+
+            services.AddTransient<IPaisService, PaisService>();
+            services.AddTransient<IMunicipioService, MunicipioService>();
+            services.AddTransient<IRegionService, RegionService>();
+            services.AddTransient<IProvinciaService, ProvinciaService>();
+
+            #endregion
+
+            #region Configuracion 
+            services.AddTransient<IGnMenuService,GnMenuService>();
+            #endregion 
         }
     }
 }

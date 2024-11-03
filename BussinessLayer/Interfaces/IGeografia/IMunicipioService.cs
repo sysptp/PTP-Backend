@@ -1,24 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using DataLayer.Models;
+﻿using BussinessLayer.DTOs.Geografia.DMunicipio;
+using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.Geografia;
 
 namespace BussinessLayer.Interfaces.IGeografia
 {
-    public interface IMunicipioService
+    public interface IMunicipioService : IGenericService<MunicipioRequest, MunicipioResponse, Municipio>
     {
         IEnumerable<Municipio> GetMunicipiosByProvinciaId(int provinciaId);
 
         Task<List<Municipio>> GetIndex();
-
-        Task Add(Municipio model);
-
-        Task Delete(Municipio model);
-
-        Task<List<Municipio>> GetAll();
-
-        Task<Municipio> GetById(int id);
-
-        Task Update(Municipio model);
     }
 }

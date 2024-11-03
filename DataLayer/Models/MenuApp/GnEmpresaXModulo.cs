@@ -14,7 +14,7 @@ namespace DataLayer.Models.MenuApp
         public int IDModulo { get; set; }
         public bool Borrado { get; set; }
         public virtual GnModulo Modulo { get; set; }
-        public virtual SC_EMP001 Empresa { get; set; }
+        public virtual GnEmpresa Empresa { get; set; }
     }
 
 }

@@ -33,7 +33,7 @@ namespace BussinessLayer.Services.SOtros
 
         public async Task<List<SC_IMP001>> GetAllIndex()
         {
-            var data = _context.SC_IMP001.Include(s => s.SC_EMP001);
+            var data = _context.SC_IMP001.Include(s => s.GnEmpresa);
 
             return await data.ToListAsync();
         }

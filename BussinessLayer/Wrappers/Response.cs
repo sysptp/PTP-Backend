@@ -15,7 +15,7 @@
         public Response(string message, int statusCode = 400)
         {
             Succeeded = false;
-            Message = message;
+            Message = null;
             StatusCode = statusCode;
             Errors = new List<string> { message };
         }
@@ -26,17 +26,17 @@
         public List<string>? Errors { get; set; }
         public T? Data { get; set; }
 
-        public static Response<T> Success(T data, string? message = "Operation succeeded.", int statusCode = 200)
+        public static Response<T> Success(T data, string? message = "Operación exitosa.", int statusCode = 200)
         {
             return new Response<T>(data, message, statusCode);
         }
 
-        public static Response<T> Created(T data, string? message = "Resource created successfully.")
+        public static Response<T> Created(T data, string? message = "Recurso creado exitosamente.")
         {
             return new Response<T>(data, message, 201);
         }
 
-        public static Response<T> NoContent(string message = "No content available.")
+        public static Response<T> NoContent(string message = "No hay contenido disponible.")
         {
             return new Response<T>
             {
@@ -53,22 +53,22 @@
                 Succeeded = false,
                 StatusCode = statusCode,
                 Errors = errors,
-                Message = "The request was not send correctly."
+                Message = null
             };
         }
 
-        public static Response<T> NotFound(string message = "Resource not found.")
+        public static Response<T> NotFound(string message = "Recurso no encontrado.")
         {
             return new Response<T>
             {
                 Succeeded = false,
                 StatusCode = 404,
-                Message = message,
+                Message = null,
                 Errors = new List<string> { message }
             };
         }
 
-        public static Response<T> Unauthorized(string message = "Unauthorized access.")
+        public static Response<T> Unauthorized(string message = "No está autorizado.")
         {
             return new Response<T>
             {
@@ -79,7 +79,7 @@
             };
         }
 
-        public static Response<T> Forbidden(string message = "Forbidden access.")
+        public static Response<T> Forbidden(string message = "No posee el permiso para acceder.")
         {
             return new Response<T>
             {
@@ -90,7 +90,7 @@
             };
         }
 
-        public static Response<T> ServerError(string message = "An internal server error occurred.")
+        public static Response<T> ServerError(string message = "Sucedió un error interno.")
         {
             return new Response<T>
             {

@@ -1,16 +1,39 @@
-﻿using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Interfaces.Repository.Seguridad;
+﻿using BussinessLayer.Interfaces.Repository.Configuracion.Menu;
+using BussinessLayer.Interfaces.Repository.Configuracion.Modulo;
+using BussinessLayer.Interfaces.Repository.Empresa;
+using BussinessLayer.Interfaces.Repository.Geografia;
+using BussinessLayer.Repository.RConfiguracion.Menu;
+using BussinessLayer.Repository.RConfiguracion.Modulo;
 using BussinessLayer.Repository.REmpresa;
+using BussinessLayer.Repository.RGeografia;
+using BussinessLayer.Repository.RSeguridad;
+using BussinessLayer.Services.SGeografia;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BussinessLayer.DendeciesInjections
 {
+    //Decorator para inyectar los repositorios
     public static class RepositoryRegistration
     {
         public static void AddRepositoryInjections(this IServiceCollection services)
         {
-            //services.AddTransient<IGnPerfilRepository, IGnPerfilRepository>();
-            services.AddTransient<ISC_EMP001Repository,SC_EMP001Repository>();
+            services.AddTransient<IGnPerfilRepository, GnPerfilRepository>();
+            services.AddTransient<IGnEmpresaRepository,GnEmpresaRepository>();
+            services.AddTransient<IGnSucursalRepository, GnSucursalRepository>();
+
+            #region Geografia
+
+            services.AddTransient<IPaisRepository, PaisRepository>();
+            services.AddTransient<IMunicipioRepository, MunicipioRepository>();
+            services.AddTransient<IRegionRepository, RegionRepository>();
+            services.AddTransient<IProvinciaRepository, ProvinciaRepository>();
+
+            #endregion
+
+            #region Configuracion
+            services.AddTransient<IGnMenuRepository,GnMenuRepository>();
+            services.AddTransient<IGnModuloRepository,GnModuloRepository>();
+            #endregion
         }
     }
 }

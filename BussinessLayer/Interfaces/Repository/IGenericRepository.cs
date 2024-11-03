@@ -8,5 +8,6 @@ namespace BussinessLayer.Interfaces.Repositories
         Task<T> Add(T entity);
         Task Update(T entity);
         Task Delete(int id);
+        Task<IEnumerable<TResult>> ExecuteStoredProcedureAsync<TResult>(string storedProcedure, object parameters = null);
     }
 }

@@ -1,26 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using DataLayer.Models;
+﻿using BussinessLayer.DTOs.Geografia.DProvincia;
+using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.Geografia;
 
 namespace BussinessLayer.Interfaces.IGeografia
 {
-    public interface IProvinciaService
+    public interface IProvinciaService : IGenericService<ProvinceRequest, ProvinceResponse, Provincia>
     {
         Task<IEnumerable<Provincia>> GetProvinciasByRegionId(int regionId);
-
-        Task<IList<Provincia>> GetAllByEmp(long idEMpresa);
-
-        Task Add(Provincia model);
-
         Task<List<Provincia>> GetAllIndex();
-
-        Task Delete(Provincia model);
-
-        Task<List<Provincia>> GetAll();
-
-        Task<Provincia> GetById(int id);
-
-        Task Update(Provincia model);
     }
 }
