@@ -1,47 +1,26 @@
 ﻿using DataLayer.Models.Otros;
+using DataLayer.Models.Productos;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.Models.Productos
+namespace BussinessLayer.DTOs.Productos
 {
-    public class Producto : BaseModel
+    public class CreateProductsDto : BaseModel
     {
-        public Producto()
-        {
-            Descuentos = new HashSet<Descuentos>();
-            FechaModificacion = DateTime.Now;
-            Activo = true;
-        }
-
-        [StringLength(250)]
         public string? Codigo { get; set; }
+
+        public int IdVersion { get; set; }
 
         public int IdSuplidor { get; set; }
 
-        [Required]
-        public int IdVersion { get; set; }
-
-        [ForeignKey("IdVersion")]
-        public virtual Versiones Version { get; set; }
-
-        [Required]
         public int IdEnvase { get; set; }
 
-        [ForeignKey("IdEnvase")]
-        public virtual Envase Envase { get; set; }
-
-        [Required]
         public string? Descripcion { get; set; }
 
         public bool Activo { get; set; }
 
-        public DateTime FechaModificacion { get; set; }
-
         public bool EsLote { get; set; }
 
         public int CantidadLote { get; set; }
-
-        public virtual ICollection<Imagen> Imagenes { get; set; }
 
         public string? Imagen { get; set; }
 
@@ -57,19 +36,12 @@ namespace DataLayer.Models.Productos
 
         public decimal ValorImpuesto { get; set; }
 
-        public virtual ICollection<Descuentos> Descuentos { get; set; }
-
-        [Required]
         public decimal PrecioBase { get; set; }
 
-        [Required]
         public decimal PrecioCompra { get; set; }
 
         public int CantidadMinima { get; set; }
 
-        public virtual List<Precio> Precios { get; set; }
-
-        [StringLength(50),Required]
         public string? CodigoBarra { get; set; }
     }
 }

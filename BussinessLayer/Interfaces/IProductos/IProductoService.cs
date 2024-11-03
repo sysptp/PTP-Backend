@@ -1,34 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BussinessLayer.DTOs.Productos;
-using BussinessLayer.Interface.IOtros;
-using BussinessLayer.ViewModels;
-using DataLayer.Models;
-using DataLayer.Models.Productos;
+﻿using BussinessLayer.DTOs.Productos;
 
 namespace BussinessLayer.Interface.IProductos
 {
-    public interface IProductoService : IBaseService<Producto>
+    public interface IProductoService
     {
-        Task CreateProduct(CrearProductoDto producto);
-
-        //
-        ProductoInfoViewModel GetInfoViewModel(Producto producto, long idEMpresa);
-        Task<List<ProductoInfoViewModel>> GetInfoViewModelList(long idEMpresa);
-        CrearProductoDto GetCreateViewModel(Producto producto, long idEMpresa);
+        Task CreateProduct(CreateProductsDto producto);
+        Task<List<ViewProductsDto>> GetProducts();
+        Task<List<ViewProductsDto>> GetProductByIdCompany(long idCompany);
+        Task<ViewProductsDto> GetProductById(int idProduct);
+        Task<ViewProductsDto> GetProductByCodeInCompany(int idProduct, long idEmpresa);
+        Task DeleteProductById(int id);
+        Task DeleteProductByCodigo(string codigo, long idEmpresa);
         Task<bool> CheckCodeExist(string productCode);
-        Task<Producto> GetProductoByCB(long idEmpresa ,string cb = "");
-        Task<List<Producto>> GetProductoWithPrice(int priceNumber, long idEMpresa);
-        Task<List<ProductoInfoViewModel>> GetProductoBySuplidor(int idSuplidor, long idEMpresa);
-        Producto GetProductoFromViewModel(CrearProductoDto producto, long idEMpresa);
-        Task<List<Producto>> GetProductListById(int[] productsIdList, long idEMpresa);
-        Task<ProductPhotosViewModel> GetPhotoViewModel(int productId, long idEMpresa);
-        Task<bool> SetProductPicture(int productId, string image, long idEMpresa);
-        Task<bool> ChangeProductPicture(int imageId, string image, long idEMpresa);
-        Task DeleteProducto(ProductoInfoViewModel producto, long idEMpresa);
-        Task<List<ProductoInfoViewModel>> GetInfoViewModelListAgotado(long idEMpresa);
-        Task<IList<Producto>> GetAllFacturacion(long idEMpresa);
-        Task<Producto> GetProductoByCBFactura(long idEmpresa, string cb = "");
-        Task<Producto> GetByIdDesc(int id);
+        Task EditProduct(ViewProductsDto producto);
+        Task<List<ViewProductsDto>> GetAllFacturacion(long idEmpresa);
+        Task<ViewProductsDto> GetProductoByBarCode(long idEmpresa, string codigoBarra);
+        Task<ViewProductsDto> GetProductoByBarCodeFactura(long idEmpresa, string codigoBarra);
+        Task<List<ViewProductsDto>> GetProductoWithPrice(int priceNumber);
+        Task<List<ViewProductsDto>> GetAllAgotados(long idEmpresa);
+        Task<List<ViewProductsDto>> GetProductsBySuplidor(int idSuplidor, long idEMpresa);
     }
 }

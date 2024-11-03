@@ -11,12 +11,12 @@ namespace DataLayer.Models.Productos
             FechaModificacion = DateTime.Now;
             Activo = true;
         }
+
         [Required(ErrorMessage = "Descripcion Requerida")]
         public string Descripcion { get; set; }
 
         public bool Activo { get; set; }
 
         public DateTime FechaModificacion { get; set; }
-
     }
 }

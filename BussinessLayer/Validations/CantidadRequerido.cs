@@ -8,7 +8,7 @@ namespace BussinessLayer.Validations
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var product = (CrearProductoDto) validationContext.ObjectInstance;
+            var product = (CreateProductsDto) validationContext.ObjectInstance;
             if (product.EsLote)
             {
                 return value == null || (int)value == 0 ? new ValidationResult("Cantidad por Loto Obligatoria") : ValidationResult.Success;
