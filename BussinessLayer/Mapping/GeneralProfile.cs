@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.Dtos.Account;
+using BussinessLayer.DTOs.Configuracion.Menu;
 using BussinessLayer.DTOs.Empresas;
 using BussinessLayer.DTOs.Geografia.DMunicipio;
 using BussinessLayer.DTOs.Geografia.DPais;
@@ -8,6 +9,7 @@ using BussinessLayer.DTOs.Geografia.DRegion;
 using BussinessLayer.DTOs.Seguridad;
 using DataLayer.Models.Entities;
 using DataLayer.Models.Geografia;
+using DataLayer.Models.MenuApp;
 
 namespace TaskMaster.Core.Application.Mapping
 {
@@ -69,6 +71,18 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom(x => x.Name))
                 .ReverseMap();
 
+            #endregion
+
+            #region Menu
+            CreateMap<GnMenu, GnMenuResponse>()
+                .ForMember(dest => dest.MenuID, opt => opt.MapFrom(src => src.IDMenu))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Menu))
+                .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.Nivel))
+                .ForMember(dest => dest.Order, opt => opt.MapFrom(src => src.Orden))
+                .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.URL))
+                .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.MenuIcon))
+                .ForMember(dest => dest.ModuleID, opt => opt.MapFrom(src => src.IdModulo))
+                .ForMember(dest => dest.SubMenus, opt => opt.Ignore());
             #endregion
             #endregion
 

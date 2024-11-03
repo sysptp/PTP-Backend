@@ -1,7 +1,10 @@
 ﻿using BussinessLayer.Interfaces.Repositories;
+using Dapper;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+
 
 namespace BussinessLayer.Repository.ROtros
 {
@@ -19,7 +22,7 @@ namespace BussinessLayer.Repository.ROtros
         public async Task<T> GetById(int id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
-            if (entity == null) 
+            if (entity == null)
             {
                 return null;
             }
@@ -84,5 +87,19 @@ namespace BussinessLayer.Repository.ROtros
                 }
             }
         }
+
+
+        public async Task<IEnumerable<TResult>> ExecuteStoredProcedureAsync<TResult>(string storedProcedure, object parameters = null)
+        {
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    await connection.OpenAsync();
+
+                var result = await connection.QueryAsync<TResult>(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+                return result;
+            }
+        }
+
     }
 }

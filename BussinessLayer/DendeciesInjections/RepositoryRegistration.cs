@@ -1,5 +1,9 @@
-﻿using BussinessLayer.Interfaces.Repository.Empresa;
+﻿using BussinessLayer.Interfaces.Repository.Configuracion.Menu;
+using BussinessLayer.Interfaces.Repository.Configuracion.Modulo;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using BussinessLayer.Interfaces.Repository.Geografia;
+using BussinessLayer.Repository.RConfiguracion.Menu;
+using BussinessLayer.Repository.RConfiguracion.Modulo;
 using BussinessLayer.Repository.REmpresa;
 using BussinessLayer.Repository.RGeografia;
 using BussinessLayer.Repository.RSeguridad;
@@ -24,6 +28,11 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IRegionRepository, RegionRepository>();
             services.AddTransient<IProvinciaRepository, ProvinciaRepository>();
 
+            #endregion
+
+            #region Configuracion
+            services.AddTransient<IGnMenuRepository,GnMenuRepository>();
+            services.AddTransient<IGnModuloRepository,GnModuloRepository>();
             #endregion
         }
     }

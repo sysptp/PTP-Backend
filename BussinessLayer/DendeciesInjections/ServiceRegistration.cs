@@ -17,6 +17,7 @@ using BussinessLayer.Interfaces.ICentroReporteria;
 using BussinessLayer.Interfaces.ICuentas;
 using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.Interfaces.IGeografia;
+using BussinessLayer.Interfaces.IMenu;
 using BussinessLayer.Interfaces.IOtros;
 using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Interfaces.Repositories;
@@ -34,6 +35,7 @@ using BussinessLayer.Services.SCuentas;
 using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Services.SFacturacion;
 using BussinessLayer.Services.SGeografia;
+using BussinessLayer.Services.SMenu;
 using BussinessLayer.Services.SOtros;
 using BussinessLayer.Services.SPedidos;
 using BussinessLayer.Services.SProductos;
@@ -126,6 +128,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IProvinciaService, ProvinciaService>();
 
             #endregion
+
+            #region Configuracion 
+            services.AddTransient<IGnMenuService,GnMenuService>();
+            #endregion 
         }
     }
 }
