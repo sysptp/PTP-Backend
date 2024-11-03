@@ -5,7 +5,7 @@ using IdentityLayer.Entities;
 
 namespace Identity.Context
 {
-    public class IdentityContext : IdentityDbContext<Usuario, IdentityRole<int>, int>
+    public class IdentityContext : IdentityDbContext<Usuario, GnPerfil, int>
     {
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
 
@@ -23,6 +23,9 @@ namespace Identity.Context
             modelBuilder.Entity<GnPerfil>(entity =>
             {
                 entity.ToTable(name: "GnPerfil");
+                entity.Property(r => r.NormalizedName).IsRequired().HasMaxLength(256);
+                entity.Property(r => r.Name).IsRequired().HasMaxLength(256);
+                entity.HasIndex(r => r.NormalizedName).IsUnique();
             });
 
             modelBuilder.Entity<IdentityUserRole<int>>(entity =>
@@ -36,4 +39,5 @@ namespace Identity.Context
             });
         }
     }
+
 }

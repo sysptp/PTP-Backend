@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Text;
 using BussinessLayer.Settings;
 using Identity.Context;
+using BussinessLayer.Wrappers;
 
 namespace IdentityLayer
 {
@@ -23,9 +24,12 @@ namespace IdentityLayer
             ContextConfiguration(services, configuration);
 
             #region Identity
-            services.AddIdentity<Usuario, IdentityRole<int>>() 
-                .AddEntityFrameworkStores<IdentityContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentity<Usuario, GnPerfil>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            })
+         .AddEntityFrameworkStores<IdentityContext>()
+         .AddDefaultTokenProviders();
 
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
            
@@ -36,7 +40,7 @@ namespace IdentityLayer
             }).AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
-                options.SaveToken = false;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -48,29 +52,37 @@ namespace IdentityLayer
                     ValidAudience = configuration["JWTSettings:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTSettings:Key"]))
                 };
-                options.Events = new JwtBearerEvents()
+                options.Events = new JwtBearerEvents
                 {
-                    OnAuthenticationFailed = c =>
+                    OnAuthenticationFailed = context =>
                     {
-                        c.NoResult();
-                        c.Response.StatusCode = 500;
-                        c.Response.ContentType = "text/plain";
-                        return c.Response.WriteAsync(c.Exception.ToString());
+                        context.NoResult();
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+
+                        var errorDescription = $"Autenticación fallida: {context.Exception.Message}";
+                        var result = JsonConvert.SerializeObject(Response<string>.Unauthorized(errorDescription));
+                        return context.Response.WriteAsync(result);
                     },
-                    OnChallenge = c =>
+                    OnChallenge = context =>
                     {
-                        c.HandleResponse();
-                        c.Response.StatusCode = 401;
-                        c.Response.ContentType = "application/json";
-                        var result = JsonConvert.SerializeObject("You are not Authorized");
-                        return c.Response.WriteAsync(result);
+                        if (!context.Response.HasStarted)
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            context.Response.ContentType = "application/json";
+
+                            var result = JsonConvert.SerializeObject(Response<string>.Unauthorized("No autorizado. Token faltante o inválido."));
+                            return context.Response.WriteAsync(result);
+                        }
+                        return Task.CompletedTask;
                     },
-                    OnForbidden = c =>
+                    OnForbidden = context =>
                     {
-                        c.Response.StatusCode = 403;
-                        c.Response.ContentType = "application/json";
-                        var result = JsonConvert.SerializeObject("You are not Authorized to access this resource");
-                        return c.Response.WriteAsync(result);
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                        context.Response.ContentType = "application/json";
+
+                        var result = JsonConvert.SerializeObject(Response<string>.Forbidden("Acceso prohibido. No tiene los permisos necesarios."));
+                        return context.Response.WriteAsync(result);
                     }
                 };
 
@@ -102,6 +114,7 @@ namespace IdentityLayer
             #region Services
 
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IRoleService, RoleService>();
             #endregion
         }
         #endregion

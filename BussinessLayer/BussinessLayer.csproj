@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Sucursal\" />
     <Folder Include="FluentValidations\Sucursal\" />
   </ItemGroup>
 

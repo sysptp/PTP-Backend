@@ -8,7 +8,6 @@ using IdentityLayer.Entities;
 using BussinessLayer.Dtos.Account;
 using AutoMapper;
 using BussinessLayer.Settings;
-using DataLayer.Enums;
 using System.Security.Cryptography;
 using BussinessLayer.Interface.IAccount;
 
@@ -20,15 +19,18 @@ namespace IdentityLayer.Services
         private readonly SignInManager<Usuario> _signInManager;
         private readonly JWTSettings _jwtSettings;
         private readonly IMapper _mapper;
+        private readonly RoleManager<GnPerfil> _roleManager;
 
         public AccountService(
               UserManager<Usuario> userManager,
               SignInManager<Usuario> signInManager,
+              RoleManager<GnPerfil> roleManager,
               IOptions<JWTSettings> jwtSettings,
               IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
             _mapper = mapper;
         }
@@ -53,7 +55,7 @@ namespace IdentityLayer.Services
             if (user == null)
             {
                 response.HasError = true;
-                response.Error = $"No Accounts registered with {request.UserCredential}";
+                response.Error = $"{request.UserCredential} no tiene cuenta registrada";
                 return response;
             }
 
@@ -61,58 +63,49 @@ namespace IdentityLayer.Services
             if (!signInResult.Succeeded)
             {
                 response.HasError = true;
-                response.Error = $"Invalid credentials for {request.UserCredential}";
+                response.Error = $"Credenciales incorrectas {request.UserCredential}";
                 return response;
             }
 
             response.Id = user.Id;
-            response.Email = user.Email;
+            response.Email = user?.Email;
             response.UserName = user.UserName;
-            //response.Roles = (await _userManager.GetRolesAsync(user)).ToList();
+            response.FullName = $"{user.Nombre} {user.Apellido}";
+            response.RoleId = user.IdPerfil;
             response.IsVerified = user.EmailConfirmed;
 
-            // Incluye los claims adicionales
-            var additionalClaims = new List<Claim>
-            {
-                new Claim("IpUsuario", user.IpAdiccion ?? string.Empty),
-                new Claim("IdEmpresa", user.CodigoEmp.ToString() ?? string.Empty),
-                new Claim("CodigoUsuario", user.Id.ToString() ?? string.Empty),
-                new Claim("NombreUsuario", user.Nombre ?? string.Empty),
-                new Claim("IdPerfilUsuario", user.IdPerfil?.ToString() ?? string.Empty),
-                new Claim("EmailUsuario", user.Email ?? string.Empty),
-                new Claim("PhoneNumber", user.PhoneNumber ?? string.Empty),
-                new Claim("IdSucursal", user.CodigoSuc?.ToString() ?? string.Empty),
-            };
+            response.IPUser = user.IpAdiccion ?? string.Empty;
+            response.CompanyId = user.CodigoEmp;
+            response.UserName = user.Nombre ?? string.Empty;
+            response.Email = user.Email ?? string.Empty;
+            response.PhoneNumber = user.PhoneNumber ?? string.Empty;
+            response.SucursalId = user.CodigoSuc;
 
-            JwtSecurityToken jwtToken = await GenerateJWToken(user, additionalClaims);
+            JwtSecurityToken jwtToken = GenerateJWToken(user);
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-            var refreshToken = GenerateRefreshToken();
-            response.RefreshToken = refreshToken.Token;
+
+            response.RefreshToken = GenerateRefreshToken().Token;
+            response.TokenDurationInMinutes = _jwtSettings.ExpirationInMinutes;
+            response.RequestDate = DateTime.Now;
 
             return response;
         }
 
+
         #region PrivateMethods
 
-        private async Task<JwtSecurityToken> GenerateJWToken(Usuario user, IEnumerable<Claim> additionalClaims)
+        private JwtSecurityToken GenerateJWToken(Usuario user)
         {
-            var userClaims = await _userManager.GetClaimsAsync(user);
-            var roles = await _userManager.GetRolesAsync(user);
-
             var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id.ToString())
-            }
-            .Union(userClaims)
-            //.Union(roles.Select(role => new Claim("roles", role)))
-            .Union(additionalClaims);
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes);
+            var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes); 
+
 
             return new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
@@ -122,50 +115,55 @@ namespace IdentityLayer.Services
                 signingCredentials: creds);
         }
 
-        public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin, string Role)
+        public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin)
         {
-            RegisterResponse response = new()
+            try
             {
-                HasError = false
-            };
+                RegisterResponse response = new()
+                {
+                    HasError = false
+                };
 
-            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
-            if (userWithSameUserName != null)
-            {
-                response.HasError = true;
-                response.Error = $"username '{request.UserName}' is already taken.";
+                var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+                if (userWithSameUserName != null)
+                {
+                    response.HasError = true;
+                    response.Error = $"El nombre de usuario '{request.UserName}' ya está en uso.";
+                    return response;
+                }
+
+                var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+                if (userWithSameEmail != null)
+                {
+                    response.HasError = true;
+                    response.Error = $"El correo electrónico '{request.Email}' ya está registrado.";
+                    return response;
+                }
+
+                var perfil = await _roleManager.FindByIdAsync(request.RoleId.ToString());
+                if (perfil == null)
+                {
+                    response.HasError = true;
+                    response.Error = "El ID de rol especificado no existe.";
+                    return response;
+                }
+
+                var user = MapRegisterRequestToUsuario(request);
+                var result = await _userManager.CreateAsync(user, request.Password);
+                if (!result.Succeeded)
+                {
+                    response.HasError = true;
+                    response.Error = "Ocurrió un error al intentar registrar al usuario.";
+                    return response;
+                }
+
                 return response;
             }
-
-            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
-            if (userWithSameEmail != null)
+            catch (Exception ex)
             {
-                response.HasError = true;
-                response.Error = $"Email '{request.Email}' is already registered.";
-                return response;
+                throw new Exception(ex.Message, ex);
             }
-
-            var user = new Usuario
-            {
-                Email = request.Email,
-                Nombre = request.FirstName,
-                Apellido = request.LastName,
-                UserName = request.UserName,
-                PhoneNumber = request.Phone,
-                EmailConfirmed = true
-            };
-
-            var result = await _userManager.CreateAsync(user, request.Password);
-            if (!result.Succeeded)
-            {
-                response.HasError = true;
-                response.Error = $"An error occurred trying to register the user.";
-                return response;
-            }
-
-            //await _userManager.AddToRoleAsync(user, Roles.Client.ToString());
-
-            return response;
+          
         }
 
         private RefreshToken GenerateRefreshToken()
@@ -186,6 +184,23 @@ namespace IdentityLayer.Services
 
             return BitConverter.ToString(ramdomBytes).Replace("-", "");
         }
+        private Usuario MapRegisterRequestToUsuario(RegisterRequest request)
+        {
+            return new Usuario
+            {
+                Nombre = request.FirstName,
+                Apellido = request.LastName,
+                Email = request.Email,
+                UserName = request.UserName,
+                PhoneNumber = request.Phone,
+                CodigoEmp = request.CompanyId,
+                CodigoSuc = request.SucursalId,
+                IdPerfil = request.RoleId,
+                EmailConfirmed = true,
+                IpAdiccion = request.UserIP
+            };
+        }
+
 
         #endregion
     }

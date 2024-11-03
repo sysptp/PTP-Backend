@@ -6,6 +6,7 @@ using BussinessLayer.Interface.IAccount;
 using System.Net.Mime;
 using BussinessLayer.Wrappers;
 using BussinessLayer.FluentValidations.Account;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PTP_API.Controllers.Autenticacion
 {
@@ -42,13 +43,13 @@ namespace PTP_API.Controllers.Autenticacion
             {
                 var response = await _accountService.AuthenticateAsync(new AuthenticationRequest
                 {
-                    UserCredential = request.Usuario,
+                    UserCredential = request.User,
                     Password = request.Password
                 });
 
                 if (response.HasError)
                 {
-                    return Unauthorized(Response<string>.Unauthorized(response.Error));
+                    return BadRequest(Response<string>.BadRequest(new List<string> {response.Error ?? "Error en el Login"}, 400));
                 }
 
                 return Ok(Response<object>.Success(response, "Autenticación exitosa"));
@@ -78,9 +79,9 @@ namespace PTP_API.Controllers.Autenticacion
                 }
 
                 var origin = Request?.Headers["origin"].ToString() ?? string.Empty;
-                var registrationResponse = await _accountService.RegisterUserAsync(request, origin, "Developer");
+                var registrationResponse = await _accountService.RegisterUserAsync(request, origin);
 
-                return Ok(Response<object>.Created(registrationResponse, "Registro de usuario exitoso"));
+               return Ok(Response<object>.Created(registrationResponse, "Registro de usuario exitoso"));
             }
             catch (Exception ex)
             {

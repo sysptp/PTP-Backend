@@ -55,5 +55,10 @@ namespace BussinessLayer.Dtos.Account
         [SwaggerSchema("The phone number of the user.")]
         [Required(ErrorMessage = "ID is required")]
         public string Phone { get; set; } = null!;
+        public int? RoleId { get; set; } 
+        public long? CompanyId { get; set; }
+        public long? SucursalId { get; set; }
+        public string? UserIP { get; set; }
+
     }
 }

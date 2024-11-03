@@ -9,7 +9,7 @@ namespace DataLayer.Models.Seguridad
     {
         public long CODIGO_EMP { get; set; }
         [ForeignKey("CODIGO_EMP")]
-        public SC_EMP001 SC_EMP001 { get; set; }
+        public GnEmpresa GnEmpresa { get; set; }
 
         [Key]
         public int CODIGO_USUARIO { get; set; }

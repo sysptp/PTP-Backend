@@ -1,15 +1,16 @@
 ﻿namespace BussinessLayer.Interfaces.IOtros
 {
-    public interface IGenericService<SaveDto, Dto, Model>
-        where SaveDto : class
-        where Dto : class
+    public interface IGenericService<Request, Response, Model>
+        where Request : class
+        where Response : class
         where Model : class
     {
-        Task<SaveDto> Add(SaveDto vm);
+        Task<Response> Add(Request vm);
         Task Delete(int id);
-        Task<List<Dto>> GetAllDto();
-        Task<SaveDto> GetByIdSaveDto(int id);
-        Task Update(SaveDto vm, int id);
-        Task<Dto> GetByIdDto(int id);
+        Task<List<Response>> GetAllDto();
+        Task<Request> GetByIdRequest(int id);
+        Task Update(Request vm, int id);
+        Task<Response> GetByIdResponse(int id);
+        Task<bool> PatchUpdateAsync(int id, Dictionary<string, object> updatedProperties);
     }
 }

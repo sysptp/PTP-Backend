@@ -35,7 +35,7 @@ namespace BussinessLayer.Services.SSeguridad
 
         public async Task<List<SC_HORA_X_USR002>> GetAllIndex()
         {
-            var data = _context.SC_HORA_X_USR002.Include(s => s.SC_EMP001);
+            var data = _context.SC_HORA_X_USR002.Include(s => s.GnEmpresa);
 
             return await data.ToListAsync();
         }

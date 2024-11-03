@@ -8,7 +8,7 @@ namespace BussinessLayer.FluentValidations.Account
     {
         public LoginRequestValidator()
         {
-            RuleFor(x => x.Usuario)
+            RuleFor(x => x.User)
                 .NotEmpty().WithMessage("El campo usuario no puede estar vacío.");
 
             RuleFor(x => x.Password)
