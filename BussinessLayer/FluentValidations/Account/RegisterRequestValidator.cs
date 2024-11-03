@@ -1,12 +1,24 @@
 ﻿using BussinessLayer.Dtos.Account;
 using FluentValidation;
+using BussinessLayer.Interfaces.Repository.Empresa;
+using BussinessLayer.Repository.RSeguridad;
 
 namespace BussinessLayer.FluentValidations.Account
 {
     public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {
-        public RegisterRequestValidator()
+        private readonly IGnEmpresaRepository _empresaRepository;
+        private readonly IGnPerfilRepository _gnPerfilRepository;
+        private readonly IGnSucursalRepository _sucursalRepository;
+
+        public RegisterRequestValidator(IGnEmpresaRepository empresaRepository, 
+            IGnPerfilRepository gnPerfilRepository,
+            IGnSucursalRepository sucursalRepository)
         {
+            _empresaRepository = empresaRepository;
+            _gnPerfilRepository = gnPerfilRepository;
+            _sucursalRepository = sucursalRepository;
+
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("El nombre es requerido.");
 
@@ -22,7 +34,6 @@ namespace BussinessLayer.FluentValidations.Account
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("La contraseña es requerida.")
-                .When(x => !string.IsNullOrEmpty(x.Password))
                 .MinimumLength(8).WithMessage("La contraseña debe tener al menos 8 caracteres.")
                 .Matches("[A-Z]").WithMessage("La contraseña debe contener al menos una letra mayúscula.")
                 .Matches("[a-z]").WithMessage("La contraseña debe contener al menos una letra minúscula.")
@@ -34,6 +45,37 @@ namespace BussinessLayer.FluentValidations.Account
 
             RuleFor(x => x.Phone)
                 .NotEmpty().WithMessage("El número de teléfono es requerido.");
+
+            RuleFor(x => x.CompanyId)
+                .MustAsync(async (companyId, cancellation) => await CompanyExists(companyId))
+                .WithMessage("El ID de la compañía no es válido.");
+
+            RuleFor(x => x.RoleId)
+               .MustAsync(async (roleId, cancellation) => await RoleExists(roleId))
+               .WithMessage("El ID del role no es válido.");
+
+            RuleFor(x => x.SucursalId)
+               .MustAsync(async (sucursalId, cancellation) => await SucursalExists(sucursalId))
+               .WithMessage("El ID de la sucursal no es válido.");
+            _gnPerfilRepository = gnPerfilRepository;
+        }
+
+        private async Task<bool> CompanyExists(long companyId)
+        {
+            var company = await _empresaRepository.GetByEmpCode((long)companyId);
+            return company != null;
+        }
+
+        private async Task<bool> RoleExists(int id)
+        {
+            var role = await _gnPerfilRepository.GetById(id);
+            return role != null;
+        }
+
+        private async Task<bool> SucursalExists(long id)
+        {
+            var sucursal = await _sucursalRepository.GetBySucursalCode(id);
+            return sucursal != null;
         }
     }
 }

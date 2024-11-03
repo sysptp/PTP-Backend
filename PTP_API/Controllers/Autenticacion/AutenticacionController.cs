@@ -6,7 +6,6 @@ using BussinessLayer.Interface.IAccount;
 using System.Net.Mime;
 using BussinessLayer.Wrappers;
 using BussinessLayer.FluentValidations.Account;
-using Microsoft.AspNetCore.Authorization;
 
 namespace PTP_API.Controllers.Autenticacion
 {
@@ -16,10 +15,12 @@ namespace PTP_API.Controllers.Autenticacion
     public class AutenticacionController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly RegisterRequestValidator _validator;
 
-        public AutenticacionController(IAccountService accountService)
+        public AutenticacionController(IAccountService accountService, RegisterRequestValidator validator)
         {
             _accountService = accountService;
+            _validator = validator;
         }
 
         [HttpPost("Login")]
@@ -69,8 +70,7 @@ namespace PTP_API.Controllers.Autenticacion
         {
             try
             {
-                var validator = new RegisterRequestValidator();
-                var validationResult = await validator.ValidateAsync(request);
+                var validationResult = await _validator.ValidateAsync(request);
 
                 if (!validationResult.IsValid)
                 {

@@ -12,6 +12,7 @@ builder.Services.AddApiVersioningExtension();
 builder.Services.AddDependenciesRegistration(builder.Configuration);
 builder.Services.AddServiceRegistration();
 builder.Services.AddRepositoryInjections();
+builder.Services.AddValidationInjections();
 builder.Services.AddIdentityLayer(builder.Configuration);
 builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
