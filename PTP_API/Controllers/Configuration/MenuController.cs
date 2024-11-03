@@ -23,7 +23,7 @@ namespace PTP_API.Controllers.Configuration
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener jerarquía de menús", Description = "Obtiene una jerarquía de menús basada en el rol de usuario y la empresa proporcionados.")]
-        public async Task<IActionResult> GetMenuHierarchy([FromQuery] int roleId, [FromQuery] long companyId)
+        public async Task<IActionResult> GetMenuHierarchy([FromQuery] int? roleId, [FromQuery] long? companyId)
         {
             try
             {

@@ -82,7 +82,7 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.URL))
                 .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.MenuIcon))
                 .ForMember(dest => dest.ModuleID, opt => opt.MapFrom(src => src.IdModulo))
-                .ForMember(dest => dest.SubMenus, opt => opt.Ignore());
+                .ForMember(dest => dest.ParentMenuId, opt => opt.MapFrom(src => src.MenuPadre));
             #endregion
             #endregion
 

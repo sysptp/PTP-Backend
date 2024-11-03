@@ -8,32 +8,32 @@ namespace BussinessLayer.FluentValidations.Account
         public RegisterRequestValidator()
         {
             RuleFor(x => x.FirstName)
-                .NotEmpty().WithMessage("First name is required.");
+                .NotEmpty().WithMessage("El nombre es requerido.");
 
             RuleFor(x => x.LastName)
-                .NotEmpty().WithMessage("Last name is required.");
+                .NotEmpty().WithMessage("El apellido es requerido.");
 
             RuleFor(x => x.Email)
-                .NotEmpty().WithMessage("Email is required.")
-                .EmailAddress().WithMessage("Invalid email address.");
+                .NotEmpty().WithMessage("El correo electrónico es requerido.")
+                .EmailAddress().WithMessage("La dirección de correo electrónico no es válida.");
 
             RuleFor(x => x.UserName)
-                .NotEmpty().WithMessage("Username is required.");
+                .NotEmpty().WithMessage("El nombre de usuario es requerido.");
 
             RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required.")
-            .When(x => !string.IsNullOrEmpty(x.Password))
-            .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
-            .Matches("[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
-            .Matches("[a-z]").WithMessage("Password must contain at least one lowercase letter.")
-            .Matches("[0-9]").WithMessage("Password must contain at least one digit.")
-            .Matches("[^a-zA-Z0-9]").WithMessage("Password must contain at least one special character.");
+                .NotEmpty().WithMessage("La contraseña es requerida.")
+                .When(x => !string.IsNullOrEmpty(x.Password))
+                .MinimumLength(8).WithMessage("La contraseña debe tener al menos 8 caracteres.")
+                .Matches("[A-Z]").WithMessage("La contraseña debe contener al menos una letra mayúscula.")
+                .Matches("[a-z]").WithMessage("La contraseña debe contener al menos una letra minúscula.")
+                .Matches("[0-9]").WithMessage("La contraseña debe contener al menos un dígito.")
+                .Matches("[^a-zA-Z0-9]").WithMessage("La contraseña debe contener al menos un carácter especial.");
 
             RuleFor(x => x.ConfirmPassword)
-                .Equal(x => x.Password).WithMessage("Confirm password must match password.");
+                .Equal(x => x.Password).WithMessage("La confirmación de la contraseña debe coincidir con la contraseña.");
 
             RuleFor(x => x.Phone)
-                .NotEmpty().WithMessage("Phone number is required.");
+                .NotEmpty().WithMessage("El número de teléfono es requerido.");
         }
     }
 }

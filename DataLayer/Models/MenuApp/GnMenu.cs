@@ -13,6 +13,6 @@ namespace DataLayer.Models.MenuApp
         public string? URL { get; set; } 
         public string? MenuIcon { get; set; }
         public int IdModulo { get; set; }
-        public int menupadre { get; set; }
+        public int MenuPadre { get; set; }
     }
 }
