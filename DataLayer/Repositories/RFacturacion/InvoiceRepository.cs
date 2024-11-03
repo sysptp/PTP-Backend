@@ -1,5 +1,7 @@
-﻿using DataLayer.Models.Facturas;
+﻿using DataLayer.Data;
+using DataLayer.Models.Facturas;
 using DataLayer.PDbContex;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -13,7 +15,7 @@ namespace BussinessLayer.Repository.RFacturacion
         {
             try
             {
-                await _dbContext.Set<Facturacion>().AddAsync(invoice);
+                await _dbContext.AddAsync(invoice);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -22,27 +24,14 @@ namespace BussinessLayer.Repository.RFacturacion
             }
         }
 
-        public async Task<List<Facturacion>> GetAllAsync(int bussinesId)
+        public Task<List<Facturacion>> GetAllAsync(int bussinesId)
         {
-            try
-            {
-                return await _dbContext.Set<Facturacion>().Where(x => !x.Borrado && x.IdEmpresa == bussinesId).ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException(ex.Message, ex);
-            }
+            throw new NotImplementedException();
         }
-        public async Task<Facturacion> GetByIdAsync(string invoiceNumber)
+
+        public Task<Facturacion> GetByIdAsync(string invoiceNumber)
         {
-            try
-            {
-                return await _dbContext.Set<Facturacion>().FirstOrDefaultAsync(x => !x.Borrado && x.NoFactura == invoiceNumber);
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException(ex.Message, ex);
-            }
+            throw new NotImplementedException();
         }
 
         public Task UpdateAync(Facturacion invoice)
