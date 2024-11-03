@@ -1,13 +1,11 @@
 ﻿using DataLayer.Models.Facturas;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace BussinessLayer.Repository.RFacturacion
 {
-    public class InvoiceRepository(IConfiguration configuration, PDbContext dbContext) : IInvoiceRepository
+    public class InvoiceRepository(PDbContext dbContext) : IInvoiceRepository
     {
-        private readonly IConfiguration _configuration = configuration;
         private readonly PDbContext _dbContext = dbContext;
         public async Task AddAsync(Facturacion invoice)
         {
@@ -37,7 +35,8 @@ namespace BussinessLayer.Repository.RFacturacion
         {
             try
             {
-                return await _dbContext.Set<Facturacion>().FirstOrDefaultAsync(x => !x.Borrado && x.NoFactura == invoiceNumber);
+                return await _dbContext.Set<Facturacion>()
+                    .FirstOrDefaultAsync(x => !x.Borrado && x.NoFactura == invoiceNumber);
             }
             catch (Exception ex)
             {
