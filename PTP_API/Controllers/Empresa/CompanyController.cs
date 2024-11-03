@@ -42,14 +42,14 @@ namespace PTP_API.Controllers.Empresa
                     var empresas = await _scEmp001Service.GetAllDto();
                     if (empresas == null || empresas.Count == 0)
                     {
-                        return Ok(Response<IEnumerable<GnEmpresaResponse>>.NoContent("No hay empresas disponibles."));
+                        return StatusCode(204, Response<IEnumerable<GnEmpresaResponse>>.NoContent("No hay empresas disponibles."));
                     }
                     return Ok(Response<IEnumerable<GnEmpresaResponse>>.Success(empresas, "Empresas obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al obtener las empresas. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener las empresas. Por favor, intente nuevamente."));
             }
         }
 
