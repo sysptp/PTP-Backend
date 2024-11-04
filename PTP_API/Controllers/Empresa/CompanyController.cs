@@ -76,55 +76,55 @@ namespace PTP_API.Controllers.Empresa
             }
         }
 
-        //[HttpPut("{id}")]
-        //[Consumes(MediaTypeNames.Application.Json)]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[SwaggerOperation(Summary = "Actualizar una empresa", Description = "Actualiza la información de una empresa existente.")]
-        //public async Task<IActionResult> Update(int id, [FromBody] SaveGnEmpresaDto saveDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-        //        return BadRequest(Response<string>.BadRequest(errors, 400));
-        //    }
+        [HttpPut("{id}")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Actualizar una empresa", Description = "Actualiza la información de una empresa existente.")]
+        public async Task<IActionResult> Update(long id, [FromBody] GnEmpresaRequest? saveDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
 
-        //    try
-        //    {
-        //        var existingEmpresa = await _scEmp001Service.GetByIdRequest(id);
-        //        if (existingEmpresa == null)
-        //        {
-        //            return NotFound(Response<GnEmpresaDto>.NotFound("Empresa no encontrada."));
-        //        }
+            try
+            {
+                var existingEmpresa = await _scEmp001Service.GetByCodEmp(id);
+                if (existingEmpresa == null)
+                {
+                    return NotFound(Response<GnEmpresaResponse>.NotFound("Empresa no encontrada."));
+                }
 
-        //        await _scEmp001Service.Update(saveDto, id);
-        //        return Ok(Response<string>.Success("Empresa actualizada correctamente."));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Ok(Response<string>.ServerError("Ocurrió un error al actualizar la empresa. Por favor, intente nuevamente."));
-        //    }
-        //}
+                await _scEmp001Service.PatchUpdateAsync((int)id, saveDto);
+                return Ok(Response<string>.Success("Empresa actualizada correctamente."));
+            }
+            catch (Exception ex)
+            {
+                return Ok(Response<string>.ServerError("Ocurrió un error al actualizar la empresa. Por favor, intente nuevamente."));
+            }
+        }
 
-        //[HttpDelete("{id}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[SwaggerOperation(Summary = "Eliminar una empresa", Description = "Elimina una empresa de manera lógica.")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    try
-        //    {
-        //        var empresa = await _scEmp001Service.GetByIdResponse(id);
-        //        if (empresa == null)
-        //        {
-        //            return NotFound(Response<string>.NotFound("Empresa no encontrada."));
-        //        }
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Eliminar una empresa", Description = "Elimina una empresa de manera lógica.")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var empresa = await _scEmp001Service.GetByIdResponse(id);
+                if (empresa == null)
+                {
+                    return NotFound(Response<string>.NotFound("Empresa no encontrada."));
+                }
 
-        //        await _scEmp001Service.Delete(id);
-        //        return Ok(Response<string>.Success("Empresa eliminada correctamente."));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Ok(Response<string>.ServerError("Ocurrió un error al eliminar la empresa. Por favor, intente nuevamente."));
-        //    }
-        //}
+                await _scEmp001Service.Delete(id);
+                return Ok(Response<string>.Success("Empresa eliminada correctamente."));
+            }
+            catch (Exception ex)
+            {
+                return Ok(Response<string>.ServerError("Ocurrió un error al eliminar la empresa. Por favor, intente nuevamente."));
+            }
+        }
     }
 }

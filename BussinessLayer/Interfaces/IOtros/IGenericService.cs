@@ -11,6 +11,6 @@
         Task<Request> GetByIdRequest(int id);
         Task Update(Request vm, int id);
         Task<Response> GetByIdResponse(int id);
-        Task<bool> PatchUpdateAsync(int id, Dictionary<string, object> updatedProperties);
+        Task<bool> PatchUpdateAsync(int id, object updatedPropertiesObject);
     }
 }

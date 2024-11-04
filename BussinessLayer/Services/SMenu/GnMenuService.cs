@@ -19,14 +19,34 @@ namespace BussinessLayer.Services.SMenu
             _mapper = mapper;
         }
 
-        public async Task<List<GnMenuResponse>> GetMenuHierarchy(int? RoleId, long? companyId)
+        public async Task<List<GnMenuResponse>> GetMenuHierarchy(int? RoleId, long? companyId, bool isHierarchy)
         {
             var result = await _menuRepository.ExecuteStoredProcedureAsync<GnMenu>(
                 "sp_GetMenuHierarchy",
                 new { CompanyId = companyId, ProfileId = RoleId }
             );
 
-            return _mapper.Map<List<GnMenuResponse>>(result);
+            return isHierarchy ? BuildMenuHierarchy(result) : _mapper.Map<List<GnMenuResponse>>(result);
+
+        }
+
+        private List<GnMenuResponse> BuildMenuHierarchy(IEnumerable<GnMenu> menus, int? parentId = 0)
+        {
+            return menus
+                .Where(menu => menu.MenuPadre == parentId)
+                .OrderBy(menu => menu.Orden)
+                .Select(menu => new GnMenuResponse
+                {
+                    MenuID = menu.IDMenu,
+                    Name = menu.Menu,
+                    Level = menu.Nivel,
+                    Order = menu.Orden,
+                    Url = menu.URL,
+                    Icon = menu.MenuIcon,
+                    ModuleID = menu.IdModulo,
+                    SubMenus = BuildMenuHierarchy(menus, menu.IDMenu)
+                })
+                .ToList();
         }
 
     }

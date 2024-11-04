@@ -51,14 +51,30 @@ namespace BussinessLayer.Repository.ROtros
             }
         }
 
-        public async Task Update(T entity)
+        public async Task Update(T entity, int id)
         {
             try
             {
+                var oldEntity = await GetById(id);
+                if (oldEntity == null)
+                {
+                    throw new InvalidOperationException("La entidad no existe o ha sido eliminada.");
+                }
+
                 entity.FechaModificacion = DateTime.Now;
                 entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
-                _context.Entry(entity).State = EntityState.Modified;
+                foreach (var property in typeof(T).GetProperties())
+                {
+                    var newValue = property.GetValue(entity);
+                    if (newValue != null)
+                    {
+                        property.SetValue(oldEntity, newValue);
+                    }
+                }
+
+                _context.Entry(oldEntity).State = EntityState.Modified;
+
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
