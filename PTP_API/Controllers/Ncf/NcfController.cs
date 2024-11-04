@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.DTOs.Ncfs;
 using BussinessLayer.Services.SNcfs;
+using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,26 +15,26 @@ namespace PTP_API.Controllers.Ncf
         [HttpPost]
         public async Task<IActionResult> Create(CreateNcfDto createNcfDto)
         {
-            await _ncfService.CreateAsync(createNcfDto);
-            return Ok(createNcfDto);
+            Response<CreateNcfDto> ncf = await _ncfService.CreateAsync(createNcfDto);
+            return ncf.Errors != null ? BadRequest(ncf) : Created("NCF creado con exito", ncf);
         }
         [HttpGet("{bussinesId}")]
         public async Task<IActionResult> Get(int bussinesId)
         {
-            List<NcfDto> ncfDtos = await _ncfService.GetAllAsync(bussinesId);
-            return ncfDtos.Count > 0 ? Ok(ncfDtos) : NoContent();
+            Response<List<NcfDto>> ncfDtos = await _ncfService.GetAllAsync(bussinesId);
+            return ncfDtos.Data != null ? Ok(ncfDtos) : NoContent();
         }
         [HttpGet("{bussinesId}/{ncfType}")]
-        public async Task<IActionResult> Get(int bussinesId,string ncfType)
+        public async Task<IActionResult> Get(int bussinesId, string ncfType)
         {
-            NcfDto ncfDto = await _ncfService.GetByIdAsync(bussinesId, ncfType);
+            Response<NcfDto> ncfDto = await _ncfService.GetByIdAsync(bussinesId, ncfType);
             return ncfDto != null ? Ok(ncfDto) : NoContent();
         }
         [HttpDelete("{bussinesId}/{ncfType}")]
         public async Task<IActionResult> Delete(int bussinesId, string ncfType)
         {
-            await _ncfService.DeleteAsync(bussinesId, ncfType);
-            return Ok();
+            Response<string> ncf = await _ncfService.DeleteAsync(bussinesId, ncfType);
+            return ncf.Errors != null ? BadRequest(ncf) : NoContent();
         }
 
     }

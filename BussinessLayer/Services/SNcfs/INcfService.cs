@@ -1,13 +1,13 @@
 ﻿using BussinessLayer.DTOs.Ncfs;
+using BussinessLayer.Wrappers;
 
 namespace BussinessLayer.Services.SNcfs
 {
     public interface INcfService
     {
-        Task CreateAsync(CreateNcfDto createNcfDto);
-
-        Task<List<NcfDto>> GetAllAsync(int bussines);
-        Task<NcfDto> GetByIdAsync(int bussines,string ncfType);
-        Task DeleteAsync(int bussines,string ncfType);
+        Task<Response<CreateNcfDto>> CreateAsync(CreateNcfDto createNcfDto);
+        Task<Response<List<NcfDto>>> GetAllAsync(int bussines);
+        Task<Response<NcfDto>> GetByIdAsync(int bussines, string ncfType);
+        Task<Response<string>> DeleteAsync(int bussines, string ncfType);
     }
 }
