@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DataLayer.Models.Productos
 {
     public class Descuentos : BaseModel
-   {
+    {
         public int IdProducto { get; set; }
 
         [ForeignKey("IdProducto")]
@@ -24,6 +24,6 @@ namespace DataLayer.Models.Productos
 
         public bool Activo { get; set; }
 
-        public virtual string NombreProducto { get; set; }
+        public virtual string? NombreProducto { get; set; }
     }
 }
