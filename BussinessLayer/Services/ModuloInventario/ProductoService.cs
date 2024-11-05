@@ -55,7 +55,6 @@ namespace BussinessLayer.Services.ModuloInventario
         // Servicio para listar todos los productos por empresa
         public async Task<List<ViewProductsDto>> GetProductByIdCompany(long idCompany)
         {
-
             var list = await _context.Productos
                 .Include(x => x.Version)
                 .Include(x => x.Version.Marca)
@@ -86,6 +85,11 @@ namespace BussinessLayer.Services.ModuloInventario
         public async Task<ViewProductsDto> GetProductByCodeInCompany(string codeProduct, long idEmpresa)
         {
             var product = await _context.Productos
+                .Include(x => x.Version)
+                .Include(x => x.Version.Marca)
+                .Include(x => x.InvProductoImagenes)
+                .Include(x => x.InvProductoImpuestos)
+                .Include(x => x.InvProductoSuplidores)
                 .FirstOrDefaultAsync(x => x.Codigo == codeProduct && x.IdEmpresa == idEmpresa);
 
             return _mapper.Map<ViewProductsDto>(product);

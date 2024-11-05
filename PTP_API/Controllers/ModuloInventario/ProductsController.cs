@@ -15,7 +15,7 @@ namespace PTP_API.Controllers.ModuloInventario
     [ApiController]
     [Route("api/v1/Products")]
     [SwaggerTag("Gestión de Productos")]
-    //[Authorize]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductoService _productoService;
@@ -25,7 +25,6 @@ namespace PTP_API.Controllers.ModuloInventario
         {
             _productoService = productoService;
             _validator = validations;
-
         }
 
         [HttpGet]
