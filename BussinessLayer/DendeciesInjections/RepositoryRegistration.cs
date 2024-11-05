@@ -6,6 +6,7 @@ using BussinessLayer.Repository.RConfiguracion.Menu;
 using BussinessLayer.Repository.RConfiguracion.Modulo;
 using BussinessLayer.Repository.REmpresa;
 using BussinessLayer.Repository.RGeografia;
+using BussinessLayer.Repository.RNcf;
 using BussinessLayer.Repository.RSeguridad;
 using BussinessLayer.Services.SGeografia;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,9 +19,9 @@ namespace BussinessLayer.DendeciesInjections
         public static void AddRepositoryInjections(this IServiceCollection services)
         {
             services.AddTransient<IGnPerfilRepository, GnPerfilRepository>();
-            services.AddTransient<IGnEmpresaRepository,GnEmpresaRepository>();
+            services.AddTransient<IGnEmpresaRepository, GnEmpresaRepository>();
             services.AddTransient<IGnSucursalRepository, GnSucursalRepository>();
-
+            services.AddTransient<INcfRepository, NcfRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

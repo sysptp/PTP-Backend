@@ -35,6 +35,7 @@ using BussinessLayer.Services.SCuentas;
 using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Services.SFacturacion;
 using BussinessLayer.Services.SGeografia;
+using BussinessLayer.Services.SNcfs;
 using BussinessLayer.Services.SMenu;
 using BussinessLayer.Services.SOtros;
 using BussinessLayer.Services.SPedidos;
@@ -112,10 +113,11 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<EntityMapper>();
             services.AddScoped<CsvProcessor>();
             services.AddScoped<IGnPerfilService, GnPerfilService>();
-            services.AddScoped<IGnEmpresaservice, GnEmpresaservice>(); 
+            services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ITokenService, TokenService>();
-            services.AddTransient<IGnSucursalService,  GnSucursalService>();
+            services.AddTransient<IGnSucursalService, GnSucursalService>();
+            services.AddTransient<INcfService, NcfService>();
 
             #region Geografia
 
