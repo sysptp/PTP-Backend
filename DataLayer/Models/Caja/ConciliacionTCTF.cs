@@ -1,5 +1,6 @@
 ﻿using DataLayer.Models.Empresa;
 using DataLayer.Models.Facturas;
+using DataLayer.Models.ModuloInventario;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

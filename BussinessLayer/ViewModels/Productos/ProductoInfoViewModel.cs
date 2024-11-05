@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using DataLayer.Models;
-using DataLayer.Models.Productos;
+using DataLayer.Models.ModuloGeneral;
+using DataLayer.Models.ModuloInventario;
 
-namespace BussinessLayer.ViewModels 
-{ 
+namespace BussinessLayer.ViewModels
+{
     public class ProductoInfoViewModel
     {
         public int Id { get; set; } 

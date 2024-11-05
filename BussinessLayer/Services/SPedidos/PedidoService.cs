@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using BussinessLayer.Interface.IPedido;
 using DataLayer.Models.Pedidos;
-using DataLayer.Models.Productos;
 using DataLayer.PDbContex;
+using DataLayer.Models.ModuloInventario;
 
 namespace BussinessLayer.Services.SPedidos
 {
@@ -59,16 +55,7 @@ namespace BussinessLayer.Services.SPedidos
 
         public async Task<Pedido> GetById(int id, long idEMpresa)
         {
-            var pedido = await _context.Pedidos.Include(x => x.Detalle).Include(x => x.Suplidor)
-                .SingleOrDefaultAsync(x => x.Id.Equals(id));
-            if (pedido == null) return null;
-            foreach (var detallePedido in pedido.Detalle)
-            {
-                detallePedido.NombreProducto =
-                    $"{detallePedido.Producto.Version.Marca.Nombre} {detallePedido.Producto.Version.Nombre}";
-            }
-
-            return pedido;
+            throw new NotImplementedException();
         }
 
         public async Task<IList<Pedido>> GetAll(long idEMpresa)
@@ -99,7 +86,7 @@ namespace BussinessLayer.Services.SPedidos
 
         private void SetProductName(List<DetallePedido> detalles)
         {
-            detalles.ForEach(x => x.NombreProducto = $"{x.Producto.Version.Marca.Nombre} {x.Producto.Version.Nombre}");
+            throw new NotImplementedException();
         }
 
         //Detalles 

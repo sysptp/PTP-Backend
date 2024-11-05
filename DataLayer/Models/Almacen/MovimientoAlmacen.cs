@@ -1,5 +1,5 @@
-﻿using DataLayer.Models.Otros;
-using DataLayer.Models.Suplidor;
+﻿using DataLayer.Models.ModuloInventario;
+using DataLayer.Models.Otros;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

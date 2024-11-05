@@ -8,7 +8,6 @@ using DataLayer.Models.Otros;
 using DataLayer.Models.Geografia;
 using DataLayer.Models.Seguridad;
 using DataLayer.Models.Empresa;
-using DataLayer.Models.Productos;
 using DataLayer.Models.Cotizaciones;
 using DataLayer.Models.Cuentas;
 using DataLayer.Models.Facturas;
@@ -17,10 +16,12 @@ using DataLayer.Models.Almacen;
 using DataLayer.Models.Suplidor;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Models.Entities;
+using DataLayer.Models.ModuloInventario;
+using DataLayer.Models.ModuloGeneral;
 
 namespace DataLayer.PDbContex
 {
-   public class PDbContext : DbContext
+    public class PDbContext : DbContext
     {
         public PDbContext()
         {
@@ -41,6 +42,13 @@ namespace DataLayer.PDbContex
         public DbSet<VariablesReporteria> VariablesReporterias { get; set; }
 
         // 
+
+        public DbSet<InvProductoImagen> InvProductoImagens { get; set; }
+
+        public DbSet<InvProductoImpuesto> InvProductoImpuestos { get; set; }
+
+        public DbSet<InvProductoSuplidor> InvProductoSuplidors { get; set; }
+
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }
@@ -54,8 +62,6 @@ namespace DataLayer.PDbContex
         public DbSet<Imagen> ImagenesProducto { get; set; }
 
         public DbSet<Versiones> Versiones{ get; set; }
-
-        public DbSet<Envase> Envases { get; set; }
 
         public DbSet<Producto> Productos { get; set; }
 
@@ -162,6 +168,7 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
+
         public DbSet<GnPerfil> GnPerfil {get; set; }
 
         #region refactor del Menu

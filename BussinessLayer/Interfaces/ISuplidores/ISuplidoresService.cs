@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.Interface.IOtros;
-using DataLayer.Models.Suplidor;
+using DataLayer.Models.ModuloInventario;
 using System.Threading.Tasks;
 
 namespace BussinessLayer.Interface.ISuplidores

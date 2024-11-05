@@ -1,6 +1,5 @@
-﻿using DataLayer.Models.Otros;
-using DataLayer.Models.Productos;
-using DataLayer.Models.Suplidor;
+﻿using DataLayer.Models.ModuloInventario;
+using DataLayer.Models.Otros;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

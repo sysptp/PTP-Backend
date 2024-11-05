@@ -4,8 +4,8 @@ using BussinessLayer.Interfaces.ICuentas;
 using BussinessLayer.ViewModels;
 using DataLayer.Models.Cuentas;
 using DataLayer.Models.Facturas;
+using DataLayer.Models.ModuloInventario;
 using DataLayer.Models.Otros;
-using DataLayer.Models.Productos;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 using TipoPago = DataLayer.Enums.TipoPago;
@@ -89,7 +89,7 @@ namespace BussinessLayer.Services.SFacturacion
 
                     //Reduccion Inventario y aumento en Servicios
                     Producto p = await _context.Productos.FindAsync(d.ProductoId);
-                    if(p.EsProducto=="S")
+                    if(p.EsProducto == true)
                     { p.CantidadInventario += d.Cantidad; }
                     else { p.CantidadInventario -= d.Cantidad; }
                     
