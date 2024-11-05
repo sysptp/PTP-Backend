@@ -1,4 +1,6 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace BussinessLayer.DTOs.Empresas
 {
     public class GnEmpresaRequest
@@ -14,5 +16,7 @@ namespace BussinessLayer.DTOs.Empresas
         public int SucursalCount { get; set; }
         public int UserCount { get; set; }
         public string? WebsiteUrl { get; set; }
+        [JsonIgnore]
+        public long CODIGO_EMP { get; set; }
     }
 }

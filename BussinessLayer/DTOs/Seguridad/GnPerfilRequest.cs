@@ -7,7 +7,7 @@ namespace BussinessLayer.DTOs.Seguridad
     {
         public string Name { get; set; } = null!;
         public string? Descripcion { get; set; }
-        public long IDEmpresa { get; set; }
+        public long CompanyId { get; set; }
         [JsonIgnore]
         public int Id { get; set; }
     }

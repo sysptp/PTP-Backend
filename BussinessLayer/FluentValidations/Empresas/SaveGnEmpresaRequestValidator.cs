@@ -13,15 +13,15 @@ namespace BussinessLayer.FluentValidations.Empresas
             {
                 RuleFor(x => x.CompanyName)
                     .NotEmpty().WithMessage("El nombre de la empresa es requerido.")
-                    .Length(1, 100).WithMessage("El nombre de la empresa no debe exceder los 100 caracteres.");
+                    .Length(1, 60).WithMessage("El nombre de la empresa no debe exceder los 60 caracteres.");
 
                 RuleFor(x => x.RNC)
                     .NotEmpty().WithMessage("El RNC de la empresa es requerido.")
-                    .Length(1, 15).WithMessage("El RNC no debe exceder los 15 caracteres.");
+                    .Length(1, 11).WithMessage("El RNC no debe exceder los 11 caracteres.");
 
                 RuleFor(x => x.Address)
                     .NotEmpty().WithMessage("La dirección es requerida.")
-                    .Length(1, 300).WithMessage("La dirección no debe exceder los 300 caracteres.");
+                    .Length(1, 200).WithMessage("La dirección no debe exceder los 200 caracteres.");
 
                 RuleFor(x => x.PrimaryPhone)
                     .NotEmpty().WithMessage("El teléfono principal es requerido.")
@@ -40,10 +40,10 @@ namespace BussinessLayer.FluentValidations.Empresas
                     .When(x => !string.IsNullOrEmpty(x.SecondaryExtension));
 
                 RuleFor(x => x.SucursalCount)
-                    .GreaterThanOrEqualTo(0).WithMessage("La cantidad de sucursales debe ser mayor o igual a 0.");
+                    .GreaterThanOrEqualTo(1).WithMessage("La cantidad de sucursales debe ser mayor o igual a 1.");
 
                 RuleFor(x => x.UserCount)
-                    .GreaterThanOrEqualTo(0).WithMessage("La cantidad de usuarios debe ser mayor o igual a 0.");
+                    .GreaterThanOrEqualTo(1).WithMessage("La cantidad de usuarios debe ser mayor o igual a 1.");
             }
         }
     }

@@ -23,6 +23,12 @@ namespace BussinessLayer.Services
             await _repository.Update(entity,id);
         }
 
+        public virtual async Task Update(Request vm, object id)
+        {
+            Model entity = _mapper.Map<Model>(vm);
+            await _repository.Update(entity, id);
+        }
+
         public virtual async Task<Response> Add(Request vm)
         {
             Model entity = _mapper.Map<Model>(vm);
@@ -40,7 +46,21 @@ namespace BussinessLayer.Services
             await _repository.Delete(id);
         }
 
+        public virtual async Task Delete(object id)
+        {
+            var entity = await GetByIdRequest(id);
+            await _repository.Delete(id);
+        }
+
         public virtual async Task<Request> GetByIdRequest(int id)
+        {
+            var entity = await _repository.GetById(id);
+
+            Request vm = _mapper.Map<Request>(entity);
+            return vm;
+        }
+
+        public virtual async Task<Request> GetByIdRequest(object id)
         {
             var entity = await _repository.GetById(id);
 
@@ -56,35 +76,19 @@ namespace BussinessLayer.Services
             return vm;
         }
 
+        public virtual async Task<Response> GetByIdResponse(object id)
+        {
+            var entity = await _repository.GetById(id);
+
+            Response vm = _mapper.Map<Response>(entity);
+            return vm;
+        }
+
         public virtual async Task<List<Response>> GetAllDto()
         {
             var entityList = await _repository.GetAll();
 
             return _mapper.Map<List<Response>>(entityList);
-        }
-
-        public virtual async Task<bool> PatchUpdateAsync(int id, object updatedPropertiesObject)
-        {
-            var entity = await _repository.GetById(id);
-
-            if (entity != null)
-            {
-                var updatedProperties = ConvertObjectToDictionary(updatedPropertiesObject);
-
-                foreach (var prop in updatedProperties)
-                {
-                    var propertyInfo = typeof(Model).GetProperty(prop.Key);
-                    if (propertyInfo != null && propertyInfo.CanWrite)
-                    {
-                        propertyInfo.SetValue(entity, prop.Value);
-                    }
-                }
-
-                await _repository.Update(entity,id);
-                return true;
-            }
-
-            return false;
         }
 
         private Dictionary<string, object> ConvertObjectToDictionary(object obj)

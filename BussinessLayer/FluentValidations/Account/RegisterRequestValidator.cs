@@ -57,12 +57,11 @@ namespace BussinessLayer.FluentValidations.Account
             RuleFor(x => x.SucursalId)
                .MustAsync(async (sucursalId, cancellation) => await SucursalExists(sucursalId))
                .WithMessage("El ID de la sucursal no es válido.");
-            _gnPerfilRepository = gnPerfilRepository;
         }
 
         private async Task<bool> CompanyExists(long companyId)
         {
-            var company = await _empresaRepository.GetByEmpCode((long)companyId);
+            var company = await _empresaRepository.GetById((long)companyId);
             return company != null;
         }
 

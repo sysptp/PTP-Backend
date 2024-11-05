@@ -24,8 +24,8 @@ namespace BussinessLayer.Services.SSeguridad
         {
             try
             {
-                await _roleService.CreateRoleAsync(vm.Name, vm.Descripcion, vm.IDEmpresa);
-                return _mapper.Map<GnPerfilResponse>(vm);
+                var response = await _roleService.CreateRoleAsync(vm.Name, vm.Descripcion, vm.CompanyId);
+                return MapDynamicToPerfilResponse(response);
             }
             catch (ArgumentException ex)
             {
@@ -33,5 +33,17 @@ namespace BussinessLayer.Services.SSeguridad
             }
         }
 
+        public GnPerfilResponse MapDynamicToPerfilResponse(dynamic request)
+        {
+            var perfil = new GnPerfilResponse()
+            {
+                CompanyId = request.IDEmpresa,
+                Name = request.Name,
+                Descripcion = request.Descripcion,
+                IdRole = request.Id,
+            };
+
+            return perfil;
+        }
     }
 }

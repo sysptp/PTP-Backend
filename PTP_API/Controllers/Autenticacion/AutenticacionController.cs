@@ -6,6 +6,7 @@ using BussinessLayer.Interface.IAccount;
 using System.Net.Mime;
 using BussinessLayer.Wrappers;
 using BussinessLayer.FluentValidations.Account;
+using FluentValidation;
 
 namespace PTP_API.Controllers.Autenticacion
 {
@@ -15,11 +16,13 @@ namespace PTP_API.Controllers.Autenticacion
     public class AutenticacionController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly RegisterRequestValidator _validator;
+        private readonly IValidator<RegisterRequest> _validator;
+        private readonly IValidator<LoginRequestDTO> _validatorLogin;
 
-        public AutenticacionController(IAccountService accountService, RegisterRequestValidator validator)
+        public AutenticacionController(IAccountService accountService, IValidator<LoginRequestDTO> validatorLogin, IValidator<RegisterRequest> validator)
         {
             _accountService = accountService;
+            _validatorLogin = validatorLogin;
             _validator = validator;
         }
 
@@ -31,8 +34,8 @@ namespace PTP_API.Controllers.Autenticacion
         [SwaggerOperation(Summary = "Logear empresa", Description = "Devuelve el token de seguridad")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
         {
-            var validator = new LoginRequestValidator();
-            var validationResult = await validator.ValidateAsync(request);
+
+            var validationResult = await _validatorLogin.ValidateAsync(request);
 
             if (!validationResult.IsValid)
             {
@@ -57,7 +60,7 @@ namespace PTP_API.Controllers.Autenticacion
             }
             catch (Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error inesperado durante el proceso de autenticación. Detalle: " + ex.Message));
+                return StatusCode(500,Response<string>.ServerError("Ocurrió un error inesperado durante el proceso de autenticación. Detalle: " + ex.Message));
             }
         }
 
@@ -85,7 +88,7 @@ namespace PTP_API.Controllers.Autenticacion
             }
             catch (Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error inesperado durante el proceso de registro. Detalle: " + ex.Message));
+                return StatusCode(500,Response<string>.ServerError("Ocurrió un error inesperado durante el proceso de registro. Detalle: " + ex.Message));
             }
         }
     }

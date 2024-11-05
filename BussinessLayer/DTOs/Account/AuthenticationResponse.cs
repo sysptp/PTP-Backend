@@ -11,13 +11,16 @@ namespace BussinessLayer.Dtos.Account
         public string PhoneNumber { get; set; } = string.Empty;
         public string FullName { get; set; } = null!;
         public int? RoleId { get; set; }
+        public string RoleName { get; set; } = null!;
         public bool IsVerified { get; set; }
 
         public int TokenDurationInMinutes { get; set; } 
         public DateTime RequestDate { get; set; } 
         public string IPUser { get; set; } = string.Empty;
         public long? CompanyId { get; set; }
+        public string? CompanyName { get; set; }
         public long? SucursalId { get; set; }
+        public string? SucursalName { get; set; }
 
         [JsonIgnore]
         public string? RefreshToken { get; set; }

@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.Interfaces.Repositories;
 using Dapper;
+using DataLayer.Models.Empresa;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,16 @@ namespace BussinessLayer.Repository.ROtros
         }
 
         public async Task<T> GetById(int id)
+        {
+            var entity = await _context.Set<T>().FindAsync(id);
+            if (entity == null)
+            {
+                return null;
+            }
+            return entity.Borrado == true ? null : entity;
+        }
+
+        public async Task<T> GetById(object id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
             if (entity == null)
@@ -51,6 +62,33 @@ namespace BussinessLayer.Repository.ROtros
             }
         }
 
+        public async Task Update(T entity, object id)
+        {
+            try
+            {
+                var oldEntity = await GetById(id);
+                if (oldEntity == null)
+                {
+                    throw new InvalidOperationException("La entidad no existe o ha sido eliminada.");
+                }
+
+                entity.FechaModificacion = DateTime.Now;
+                entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+                entity.FechaAdicion = oldEntity.FechaAdicion;
+                entity.UsuarioAdicion = oldEntity.UsuarioAdicion;
+
+                _context.Entry(oldEntity).CurrentValues.SetValues(entity);
+
+                _context.Entry(oldEntity).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Error al actualizar la entidad", ex);
+            }
+        }
+
         public async Task Update(T entity, int id)
         {
             try
@@ -63,15 +101,10 @@ namespace BussinessLayer.Repository.ROtros
 
                 entity.FechaModificacion = DateTime.Now;
                 entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+                entity.FechaAdicion = oldEntity.FechaAdicion;
+                entity.UsuarioAdicion = oldEntity.UsuarioAdicion;
 
-                foreach (var property in typeof(T).GetProperties())
-                {
-                    var newValue = property.GetValue(entity);
-                    if (newValue != null)
-                    {
-                        property.SetValue(oldEntity, newValue);
-                    }
-                }
+                _context.Entry(oldEntity).CurrentValues.SetValues(entity);
 
                 _context.Entry(oldEntity).State = EntityState.Modified;
 
@@ -84,6 +117,27 @@ namespace BussinessLayer.Repository.ROtros
         }
 
         public async Task Delete(int id)
+        {
+            var entity = await GetById(id);
+            if (entity != null)
+            {
+                try
+                {
+                    entity.Borrado = true;
+                    entity.FechaModificacion = DateTime.Now;
+                    entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+
+                    _context.Entry(entity).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException("Error al eliminar la entidad", ex);
+                }
+            }
+        }
+
+        public async Task Delete(object id)
         {
             var entity = await GetById(id);
             if (entity != null)

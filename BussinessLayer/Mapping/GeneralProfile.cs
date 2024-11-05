@@ -18,18 +18,15 @@ namespace TaskMaster.Core.Application.Mapping
         public GeneralProfile()
         {
             #region AGREGADOS POR Domingo 
-            #region GnPerfil
-            CreateMap<GnPerfil, GnPerfilResponse>().ReverseMap();
-            #endregion
 
             #region GnPefil
             CreateMap<GnPerfil, GnPerfilResponse>()
                .ForMember(dest => dest.IdRole, opt => opt.MapFrom(src => src.Id))
-               .ForMember(dest => dest.IDEmpresa, opt => opt.MapFrom(src => src.IDEmpresa.HasValue ? src.IDEmpresa.Value : 0))
+               .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.IDEmpresa))
                .ReverseMap();
 
-            CreateMap<GnPerfilRequest, GnPerfil>()
-                .ForMember(dest => dest.IDEmpresa, opt => opt.MapFrom(src => (long?)src.IDEmpresa))
+            CreateMap<GnPerfil, GnPerfilRequest>()
+                .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.IDEmpresa))
                 .ReverseMap();
             #endregion
 

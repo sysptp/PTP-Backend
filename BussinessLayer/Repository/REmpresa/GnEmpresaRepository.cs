@@ -3,28 +3,49 @@ using BussinessLayer.Interfaces.Repository.Empresa;
 using BussinessLayer.Repository.ROtros;
 using DataLayer.Models.Empresa;
 using DataLayer.PDbContex;
+using Microsoft.EntityFrameworkCore;
 
 namespace BussinessLayer.Repository.REmpresa
 {
     public class GnEmpresaRepository : GenericRepository<GnEmpresa>, IGnEmpresaRepository
     {
         private readonly PDbContext _dbContext;
+        private readonly ITokenService _tokenService;
         public GnEmpresaRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService) 
         {
            _dbContext = dbContext;
+            _tokenService = tokenService;
         }
 
-        public async Task<GnEmpresa> GetByEmpCode(long empCode)
+        public async Task Update(GnEmpresa entity, long id)
         {
             try
             {
+                var oldEntity = await GetById(id);
+                if (oldEntity == null)
+                {
+                    throw new InvalidOperationException("La entidad no existe o ha sido eliminada.");
+                }
 
-                var entity = await _context.Set<GnEmpresa>().FindAsync(empCode);
-                return entity?.Borrado == true ? null : entity;
+                entity.FechaModificacion = DateTime.Now;
+                entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+
+                foreach (var property in typeof(GnEmpresa).GetProperties())
+                {
+                    var newValue = property.GetValue(entity);
+                    if (newValue != null)
+                    {
+                        property.SetValue(oldEntity, newValue);
+                    }
+                }
+
+                _context.Entry(oldEntity).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                throw new Exception();
+                throw new InvalidOperationException("Error al actualizar la entidad", ex);
             }
         }
     }

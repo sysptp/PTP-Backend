@@ -7,6 +7,5 @@ namespace BussinessLayer.Interfaces.IEmpresa
 {
     public interface IGnEmpresaservice : IGenericService<GnEmpresaRequest, GnEmpresaResponse, GnEmpresa>
     {
-        Task<GnEmpresaResponse> GetByCodEmp(long id);
     }
 }
