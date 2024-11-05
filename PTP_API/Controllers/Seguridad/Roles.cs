@@ -83,56 +83,57 @@ namespace PTP_API.Controllers.Seguridad
             }
         }
 
-        //[HttpPatch("{id}")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[SwaggerOperation(Summary = "Actualizar rol", Description = "Endpoint para actualizar los datos de un rol")]
-        //public async Task<IActionResult> UpdateRole(int id, [FromBody] GnPerfilRequest roleDto)
-        //{
-        //    var validator = new GnPerfilRequestValidator();
-        //    var validationResult = await validator.ValidateAsync(roleDto);
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Summary = "Actualizar rol", Description = "Endpoint para actualizar los datos de un rol")]
+        public async Task<IActionResult> UpdateRole(int id, [FromBody] GnPerfilRequest roleDto)
+        {
+            var validator = new GnPerfilRequestValidator();
+            var validationResult = await validator.ValidateAsync(roleDto);
 
-        //    if (!validationResult.IsValid)
-        //    {
-        //        var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-        //        return BadRequest(Response<string>.BadRequest(errors, 400));
-        //    }
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
 
-        //    try
-        //    {
-        //        var existingRole = await _rolesService.GetByIdRequest(id);
-        //        if (existingRole == null)
-        //            return Ok(Response<string>.NotFound("Rol no encontrado"));
+            try
+            {
+                var existingRole = await _rolesService.GetByIdRequest(id);
+                if (existingRole == null)
+                    return StatusCode(404,Response<string>.NotFound("Rol no encontrado"));
 
-        //        await _rolesService.Update(roleDto, id);
-        //        return NoContent();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el rol. Por favor, intente más tarde."));
-        //    }
-        //}
+                roleDto.Id = id;
+                await _rolesService.Update(roleDto, id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el rol. Por favor, intente más tarde."));
+            }
+        }
 
-        //[HttpDelete("{id}")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[SwaggerOperation(Summary = "Eliminar rol", Description = "Endpoint para eliminar un rol")]
-        //public async Task<IActionResult> DeleteRole(int id)
-        //{
-        //    try
-        //    {
-        //        var existingRole = await _rolesService.GetByIdRequest(id);
-        //        if (existingRole == null)
-        //            return Ok(Response<string>.NotFound("Rol no encontrado"));
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Summary = "Eliminar rol", Description = "Endpoint para eliminar un rol")]
+        public async Task<IActionResult> DeleteRole(int id)
+        {
+            try
+            {
+                var existingRole = await _rolesService.GetByIdRequest(id);
+                if (existingRole == null)
+                    return Ok(Response<string>.NotFound("Rol no encontrado"));
 
-        //        await _rolesService.Delete(id);
-        //        return NoContent();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500,Response<string>.ServerError("Ocurrió un error al eliminar el rol. Por favor, intente más tarde."));
-        //    }
-        //}
+                await _rolesService.Delete(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar el rol. Por favor, intente más tarde."));
+            }
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace BussinessLayer.DTOs.Configuracion.Menu
         public string? Icon { get; set; }
         public int ModuleID { get; set; }
         public int ParentMenuId { get; set; }
+        public List<GnMenuResponse>? SubMenus { get; set; } = new List<GnMenuResponse>();
     }
 
 }

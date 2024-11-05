@@ -82,7 +82,18 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.URL))
                 .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.MenuIcon))
                 .ForMember(dest => dest.ModuleID, opt => opt.MapFrom(src => src.IdModulo))
-                .ForMember(dest => dest.ParentMenuId, opt => opt.MapFrom(src => src.MenuPadre));
+                .ForMember(dest => dest.ParentMenuId, opt => opt.MapFrom(src => src.MenuPadre))
+                .ReverseMap();
+
+            CreateMap<GnMenu, SaveGnMenuRequest>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Menu))
+                .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.Nivel))
+                .ForMember(dest => dest.Order, opt => opt.MapFrom(src => src.Orden))
+                .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.URL))
+                .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.MenuIcon))
+                .ForMember(dest => dest.ModuleID, opt => opt.MapFrom(src => src.IdModulo))
+                .ForMember(dest => dest.ParentMenuId, opt => opt.MapFrom(src => src.MenuPadre))
+                .ReverseMap();
             #endregion
             #endregion
 

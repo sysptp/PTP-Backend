@@ -20,7 +20,7 @@ namespace BussinessLayer.Services
         public virtual async Task Update(Request vm, int id)
         {
             Model entity = _mapper.Map<Model>(vm);
-            await _repository.Update(entity);
+            await _repository.Update(entity,id);
         }
 
         public virtual async Task<Response> Add(Request vm)
@@ -63,12 +63,14 @@ namespace BussinessLayer.Services
             return _mapper.Map<List<Response>>(entityList);
         }
 
-        public async Task<bool> PatchUpdateAsync(int id, Dictionary<string, object> updatedProperties)
+        public virtual async Task<bool> PatchUpdateAsync(int id, object updatedPropertiesObject)
         {
             var entity = await _repository.GetById(id);
 
             if (entity != null)
             {
+                var updatedProperties = ConvertObjectToDictionary(updatedPropertiesObject);
+
                 foreach (var prop in updatedProperties)
                 {
                     var propertyInfo = typeof(Model).GetProperty(prop.Key);
@@ -78,12 +80,20 @@ namespace BussinessLayer.Services
                     }
                 }
 
-                await _repository.Update(entity);
-
+                await _repository.Update(entity,id);
                 return true;
             }
 
             return false;
         }
+
+        private Dictionary<string, object> ConvertObjectToDictionary(object obj)
+        {
+            return obj.GetType()
+                      .GetProperties()
+                      .Where(prop => prop.GetValue(obj) != null) 
+                      .ToDictionary(prop => prop.Name, prop => prop.GetValue(obj)!);
+        }
+
     }
 }
