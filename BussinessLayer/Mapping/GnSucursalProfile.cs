@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Sucursal;
+using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using DataLayer.Models.Empresa;
 
 

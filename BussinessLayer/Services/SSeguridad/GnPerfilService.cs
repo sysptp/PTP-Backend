@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Seguridad;
+using BussinessLayer.DTOs.Configuracion.Seguridad;
 using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Repository.RSeguridad;

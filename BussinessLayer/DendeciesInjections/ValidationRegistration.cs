@@ -1,13 +1,13 @@
-﻿using BussinessLayer.Dtos.Account;
-using BussinessLayer.DTOs.Autenticacion;
-using BussinessLayer.DTOs.Empresas;
-using BussinessLayer.DTOs.Seguridad;
-using BussinessLayer.FluentValidations.Account;
-using BussinessLayer.FluentValidations.Productos;
+﻿using BussinessLayer.FluentValidations.Productos;
 using BussinessLayer.FluentValidations.Empresas.BussinessLayer.FluentValidations.Empresas;
-using BussinessLayer.FluentValidations.Seguridad;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using BussinessLayer.DTOs.ModuloGeneral.Empresas;
+using BussinessLayer.DTOs.Configuracion.Seguridad;
+using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
+using BussinessLayer.DTOs.Configuracion.Account;
+using BussinessLayer.FluentValidations.Configuracion.Seguridad;
+using BussinessLayer.FluentValidations.Configuracion.Account;
 
 namespace BussinessLayer.DendeciesInjections
 {

@@ -1,5 +1,4 @@
-﻿
-using BussinessLayer.DTOs.Empresas;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.Empresa;
 

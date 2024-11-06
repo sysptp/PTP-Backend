@@ -5,12 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using IdentityLayer.Entities;
-using BussinessLayer.Dtos.Account;
 using AutoMapper;
 using BussinessLayer.Settings;
 using System.Security.Cryptography;
 using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.Repository.Empresa;
+using BussinessLayer.DTOs.Configuracion.Account;
 
 namespace IdentityLayer.Services
 {

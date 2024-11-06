@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Seguridad;
+﻿using BussinessLayer.DTOs.Configuracion.Seguridad;
 using BussinessLayer.Interface.IOtros;
 using BussinessLayer.Interfaces.IOtros;
 using BussinessLayer.Services;

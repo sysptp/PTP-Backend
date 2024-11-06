@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Geografia.DProvincia;
+﻿using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
 using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.Geografia;
 

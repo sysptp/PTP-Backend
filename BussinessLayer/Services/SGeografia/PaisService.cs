@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Geografia.DPais;
+using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.Interfaces.Repositories;
 using DataLayer.Models.Geografia;

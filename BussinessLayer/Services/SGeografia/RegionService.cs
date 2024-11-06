@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Geografia.DRegion;
+using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Interfaces.Repository.Geografia;
