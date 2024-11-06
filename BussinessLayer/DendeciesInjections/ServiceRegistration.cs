@@ -43,6 +43,8 @@ using BussinessLayer.Services.SSeguridad;
 using BussinessLayer.Services.SSuplidores;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using BussinessLayer.Interfaces.IModulo;
+using BussinessLayer.Services.SModulo;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -130,6 +132,7 @@ namespace BussinessLayer.DendeciesInjections
 
             #region Configuracion 
             services.AddTransient<IGnMenuService,GnMenuService>();
+            services.AddTransient<IGnModuloService, GnModuloService>();
             #endregion 
         }
     }

@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using BussinessLayer.Dtos.Account;
+using BussinessLayer.DTOs.Configuracion.Geografia.DMunicipio;
+using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
+using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
+using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
 using BussinessLayer.DTOs.Configuracion.Menu;
-using BussinessLayer.DTOs.Empresas;
-using BussinessLayer.DTOs.Geografia.DMunicipio;
-using BussinessLayer.DTOs.Geografia.DPais;
-using BussinessLayer.DTOs.Geografia.DProvincia;
-using BussinessLayer.DTOs.Geografia.DRegion;
-using BussinessLayer.DTOs.Seguridad;
+using BussinessLayer.DTOs.Configuracion.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using DataLayer.Models.Entities;
 using DataLayer.Models.Geografia;
 using DataLayer.Models.MenuApp;
@@ -80,6 +79,10 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.MenuIcon))
                 .ForMember(dest => dest.ModuleID, opt => opt.MapFrom(src => src.IdModulo))
                 .ForMember(dest => dest.ParentMenuId, opt => opt.MapFrom(src => src.MenuPadre))
+                .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Consultar))
+                .ForMember(dest => dest.Create, opt => opt.MapFrom(src => src.Crear))
+                .ForMember(dest => dest.Edit, opt => opt.MapFrom(src => src.Editar))
+                .ForMember(dest => dest.Delete, opt => opt.MapFrom(src => src.Eliminar))
                 .ReverseMap();
 
             CreateMap<GnMenu, SaveGnMenuRequest>()
@@ -90,6 +93,10 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.MenuIcon))
                 .ForMember(dest => dest.ModuleID, opt => opt.MapFrom(src => src.IdModulo))
                 .ForMember(dest => dest.ParentMenuId, opt => opt.MapFrom(src => src.MenuPadre))
+                .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Consultar))
+                .ForMember(dest => dest.Create, opt => opt.MapFrom(src => src.Crear))
+                .ForMember(dest => dest.Edit, opt => opt.MapFrom(src => src.Editar))
+                .ForMember(dest => dest.Delete, opt => opt.MapFrom(src => src.Eliminar))
                 .ReverseMap();
             #endregion
             #endregion

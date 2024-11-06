@@ -15,5 +15,13 @@ namespace DataLayer.Models.MenuApp
         public string? MenuIcon { get; set; }
         public int IdModulo { get; set; }
         public int MenuPadre { get; set; }
+        [NotMapped]
+        public bool Consultar { get; set; }
+        [NotMapped]
+        public bool Crear { get; set; }
+        [NotMapped]
+        public bool Editar { get; set; }
+        [NotMapped]
+        public bool Eliminar { get; set; }
     }
 }

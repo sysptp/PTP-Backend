@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Empresas;
+using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using DataLayer.Models.Empresa;
 
 namespace BussinessLayer.Mapping
