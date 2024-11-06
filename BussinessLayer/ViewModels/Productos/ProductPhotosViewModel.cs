@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DataLayer.Models;
-using DataLayer.Models.Productos;
+using DataLayer.Models.ModuloGeneral;
 
 namespace BussinessLayer.ViewModels
 {

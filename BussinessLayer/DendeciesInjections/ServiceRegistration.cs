@@ -1,12 +1,10 @@
 ﻿using BussinessLayer.Helpers.CargaMasivaHelpers;
 using BussinessLayer.Helpers.CentroReporteriaHelpers;
-using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interface.IAlmacenes;
 using BussinessLayer.Interface.ICotizaciones;
 using BussinessLayer.Interface.IFacturacion;
 using BussinessLayer.Interface.IOtros;
 using BussinessLayer.Interface.IPedido;
-using BussinessLayer.Interface.IProductos;
 using BussinessLayer.Interface.ISuplidores;
 using BussinessLayer.Interfaces.IAutenticacion;
 using BussinessLayer.Interfaces.IBancos;
@@ -20,9 +18,11 @@ using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.Interfaces.IMenu;
 using BussinessLayer.Interfaces.IOtros;
 using BussinessLayer.Interfaces.ISeguridad;
+using BussinessLayer.Interfaces.ModuloInventario;
 using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Repository.ROtros;
 using BussinessLayer.Services;
+using BussinessLayer.Services.ModuloInventario;
 using BussinessLayer.Services.SALmacenes;
 using BussinessLayer.Services.SAutenticacion;
 using BussinessLayer.Services.SBancos;
@@ -39,12 +39,10 @@ using BussinessLayer.Services.SNcfs;
 using BussinessLayer.Services.SMenu;
 using BussinessLayer.Services.SOtros;
 using BussinessLayer.Services.SPedidos;
-using BussinessLayer.Services.SProductos;
 using BussinessLayer.Services.SSeguridad;
 using BussinessLayer.Services.SSuplidores;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.InteropServices;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -70,7 +68,6 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IDetalleFacturacionService, DetalleFacturacionService>();
             services.AddScoped<IDetalleMovimientoAlmacenService, DetalleMovimientoAlmacenService>();
             services.AddScoped<IDgiiNcfService, DgiiNcfService>();
-            services.AddScoped<IEnvaseService, EnvaseService>();
             services.AddScoped<IFacturacionService, FacturacionService>();
             services.AddScoped<IMarcaService, MarcaService>();
             services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();

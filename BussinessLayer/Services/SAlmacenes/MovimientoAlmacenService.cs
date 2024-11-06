@@ -1,12 +1,12 @@
 ﻿using DataLayer.PDbContex;
 using DataLayer.Enums;
 using DataLayer.Models.Almacen;
-using DataLayer.Models.Productos;
 using DataLayer.Models.Cuentas;
 using BussinessLayer.Interface.IAlmacenes;
 using BussinessLayer.Interfaces.ICuentas;
 using BussinessLayer.Interface.IOtros;
 using Microsoft.EntityFrameworkCore;
+using DataLayer.Models.ModuloInventario;
 
 namespace BussinessLayer.Services.SALmacenes
 {

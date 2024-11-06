@@ -23,7 +23,9 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Configuracion\Modulo\" />
+    <Folder Include="DTOs\Productos\" />
     <Folder Include="FluentValidations\Sucursal\" />
+    <Folder Include="Interfaces\IProductos\" />
   </ItemGroup>
 
 </Project>
