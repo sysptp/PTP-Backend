@@ -62,7 +62,8 @@ namespace BussinessLayer.Services.ModuloInventario
                 .Include(x => x.InvProductoImagenes)
                 .Include(x => x.InvProductoImpuestos)
                 .Include(x => x.InvProductoSuplidores)
-                .Where(x => x.IdEmpresa == idCompany).ToListAsync();
+                .Where(x => x.IdEmpresa == idCompany 
+                && x.Borrado == false).ToListAsync();
 
             return _mapper.Map<List<ViewProductsDto>>(list);   
         }
@@ -90,7 +91,9 @@ namespace BussinessLayer.Services.ModuloInventario
                 .Include(x => x.InvProductoImagenes)
                 .Include(x => x.InvProductoImpuestos)
                 .Include(x => x.InvProductoSuplidores)
-                .FirstOrDefaultAsync(x => x.Codigo == codeProduct && x.IdEmpresa == idEmpresa);
+                .FirstOrDefaultAsync(x => x.Codigo == codeProduct
+                && x.IdEmpresa == idEmpresa 
+                && x.Borrado == false);
 
             return _mapper.Map<ViewProductsDto>(product);
         }
@@ -123,10 +126,11 @@ namespace BussinessLayer.Services.ModuloInventario
         }
 
         // Verificar si ya existe un código de producto
-        public async Task<bool> CheckCodeExist(string productCode)
+        public async Task<bool> CheckCodeExist(string productCode, long idEmpresa)
         {
             return await _context.Productos
-                .AnyAsync(x => x.Codigo.Equals(productCode));
+                .AnyAsync(x => x.Codigo.Equals(productCode) 
+                && x.IdEmpresa.Equals(idEmpresa));
         }
 
         // Servicio para editar un producto
@@ -147,6 +151,11 @@ namespace BussinessLayer.Services.ModuloInventario
         public async Task<List<ViewProductsDto>> GetAllFacturacion(long idEmpresa)
         {
             var productos = await _context.Productos
+                .Include(x => x.Version)
+                .Include(x => x.Version.Marca)
+                .Include(x => x.InvProductoImagenes)
+                .Include(x => x.InvProductoImpuestos)
+                .Include(x => x.InvProductoSuplidores)
                 .Where(x => x.Borrado != true && x.IdEmpresa == idEmpresa 
                 && x.HabilitaVenta == true 
                 && (x.CantidadInventario >= 1 || x.EsProducto == true))
@@ -159,8 +168,13 @@ namespace BussinessLayer.Services.ModuloInventario
         public async Task<ViewProductsDto> GetProductoByBarCode(long idEmpresa, string codigoBarra)
         {
             var data = await _context.Productos
+                .Include(x => x.Version)
+                .Include(x => x.Version.Marca)
+                .Include(x => x.InvProductoImagenes)
+                .Include(x => x.InvProductoImpuestos)
+                .Include(x => x.InvProductoSuplidores)
                 .SingleOrDefaultAsync(x => x.CodigoBarra == codigoBarra 
-                && x.IdEmpresa == idEmpresa);
+                && x.IdEmpresa == idEmpresa && x.Borrado == false);
 
             return _mapper.Map<ViewProductsDto>(data);
         }
@@ -169,10 +183,17 @@ namespace BussinessLayer.Services.ModuloInventario
         public async Task<ViewProductsDto> GetProductoByBarCodeFactura(long idEmpresa, string codigoBarra)
         {
             var data = await _context.Productos
+                .Include(x => x.Version)
+                .Include(x => x.Version.Marca)
+                .Include(x => x.InvProductoImagenes)
+                .Include(x => x.InvProductoImpuestos)
+                .Include(x => x.InvProductoSuplidores)
                 .SingleOrDefaultAsync(x => x.CodigoBarra == codigoBarra 
                 && x.IdEmpresa == idEmpresa 
                 && x.HabilitaVenta == true 
-                && (x.CantidadInventario >= 1 || x.EsProducto == true));
+                && (x.CantidadInventario >= 1 
+                || x.EsProducto == true 
+                && x.Borrado == false));
 
             return _mapper.Map<ViewProductsDto>(data);
         }
@@ -181,6 +202,11 @@ namespace BussinessLayer.Services.ModuloInventario
         public async Task<List<ViewProductsDto>> GetAllAgotados(long idEmpresa)
         {
             var productos = await _context.Productos
+                .Include(x => x.Version)
+                .Include(x => x.Version.Marca)
+                .Include(x => x.InvProductoImagenes)
+                .Include(x => x.InvProductoImpuestos)
+                .Include(x => x.InvProductoSuplidores)
                 .Where(x => x.Borrado != true && x.IdEmpresa == idEmpresa 
                     && x.CantidadInventario <= 0 
                     && x.EsProducto == true)

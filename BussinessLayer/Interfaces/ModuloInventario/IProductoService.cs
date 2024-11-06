@@ -11,7 +11,7 @@ namespace BussinessLayer.Interfaces.ModuloInventario
         Task<ViewProductsDto> GetProductByCodeInCompany(string codeProduct, long idEmpresa);
         Task DeleteProductById(int id);
         Task DeleteProductByCodigo(string codigo, long idEmpresa);
-        Task<bool> CheckCodeExist(string productCode);
+        Task<bool> CheckCodeExist(string productCode, long idEmpresa);
         Task EditProduct(ViewProductsDto producto);
         Task<List<ViewProductsDto>> GetAllFacturacion(long idEmpresa);
         Task<ViewProductsDto> GetProductoByBarCode(long idEmpresa, string codigoBarra);
