@@ -79,6 +79,10 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.MenuIcon))
                 .ForMember(dest => dest.ModuleID, opt => opt.MapFrom(src => src.IdModulo))
                 .ForMember(dest => dest.ParentMenuId, opt => opt.MapFrom(src => src.MenuPadre))
+                .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Consultar))
+                .ForMember(dest => dest.Create, opt => opt.MapFrom(src => src.Crear))
+                .ForMember(dest => dest.Edit, opt => opt.MapFrom(src => src.Editar))
+                .ForMember(dest => dest.Delete, opt => opt.MapFrom(src => src.Eliminar))
                 .ReverseMap();
 
             CreateMap<GnMenu, SaveGnMenuRequest>()
@@ -89,6 +93,10 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.MenuIcon))
                 .ForMember(dest => dest.ModuleID, opt => opt.MapFrom(src => src.IdModulo))
                 .ForMember(dest => dest.ParentMenuId, opt => opt.MapFrom(src => src.MenuPadre))
+                .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Consultar))
+                .ForMember(dest => dest.Create, opt => opt.MapFrom(src => src.Crear))
+                .ForMember(dest => dest.Edit, opt => opt.MapFrom(src => src.Editar))
+                .ForMember(dest => dest.Delete, opt => opt.MapFrom(src => src.Eliminar))
                 .ReverseMap();
             #endregion
             #endregion
