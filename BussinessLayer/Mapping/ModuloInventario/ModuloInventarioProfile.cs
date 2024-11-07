@@ -14,7 +14,8 @@ namespace BussinessLayer.Mapping.ModuloInventario
             CreateMap<Precio, ViewPreciosDto>().ReverseMap();
 
             CreateMap<CreateProductsDto, Producto>().ReverseMap();
-            CreateMap<Producto, ViewProductsDto>();
+            CreateMap<EditProductDto, Producto>().ReverseMap();
+            CreateMap<Producto, ViewProductsDto>().ReverseMap();
 
             CreateMap<CreateVersionesDto, Versiones>().ReverseMap();
         }
