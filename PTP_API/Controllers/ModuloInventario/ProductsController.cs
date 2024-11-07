@@ -13,6 +13,7 @@ namespace PTP_API.Controllers.ModuloInventario
     [ApiController]
     [Route("api/v1/Products")]
     [SwaggerTag("Gestión de Productos")]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductoService _productoService;
@@ -276,32 +277,6 @@ namespace PTP_API.Controllers.ModuloInventario
             {
 
                 return Ok(Response<string>.ServerError("Ocurrió un error al editar el prodcuto. Por favor, intente nuevamente."));
-            }
-
-        }
-
-        [HttpDelete("/EliminarProductoId/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Eliminar Producto", Description = "Endpoint para eliminar producto por id")]
-        public async Task<IActionResult> DeleteById(int id)
-        {
-            try
-            {
-                if (id == 0 || id == null)
-                {
-                    return Ok(Response<string>.NotFound("El id no puede ser nulo o 0"));
-
-                }
-
-                await _productoService.DeleteProductById(id);
-
-                return Ok(Response<int>.Success(id));
-
-            }
-            catch
-            {
-
-                return Ok(Response<string>.ServerError("Ocurrió un error al eliminar el producto. Por favor, intente nuevamente."));
             }
 
         }
