@@ -1,7 +1,9 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario;
-using BussinessLayer.FluentValidations.Productos;
+using BussinessLayer.FluentValidations.ModuloInventario;
 using BussinessLayer.Interfaces.ModuloInventario;
 using BussinessLayer.Wrappers;
+using DataLayer.Models.Empresa;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,12 +17,15 @@ namespace PTP_API.Controllers.ModuloInventario
     public class ProductsController : ControllerBase
     {
         private readonly IProductoService _productoService;
-        private readonly ProductosRequestValidator _validator;
+        private readonly CreateProductosRequestValidator _validatorCreate;
+        private readonly EditProductosRequestValidator _validatorEdit;
 
-        public ProductsController(IProductoService productoService, ProductosRequestValidator validations)
+        public ProductsController(IProductoService productoService, CreateProductosRequestValidator validationCreate,
+            EditProductosRequestValidator validatorEdit)
         {
             _productoService = productoService;
-            _validator = validations;
+            _validatorCreate = validationCreate;
+            _validatorEdit = validatorEdit;
         }
 
         [HttpGet("/ObtenerProductos")]
@@ -62,34 +67,6 @@ namespace PTP_API.Controllers.ModuloInventario
             {
                 return Ok(Response<string>.ServerError("Ocurrió un error al obtener los productos. Por favor, intente nuevamente."));
             }
-        }
-
-        [HttpPost("/CrearProducto")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Crear Producto", Description = "Endpoint para crear producto")]
-        public async Task<IActionResult> Add([FromQuery] CreateProductsDto createProducts)
-        {
-            try
-            {
-                var validationResult = await _validator.ValidateAsync(createProducts);
-
-                if (!validationResult.IsValid)
-                {
-                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                    return BadRequest(Response<string>.BadRequest(errors, 400));
-                }
-
-                var createdProdut = await _productoService.CreateProduct(createProducts);
-
-                return Ok(Response<CreateProductsDto>.Created(createdProdut));
-
-            }
-            catch
-            {
-
-                return Ok(Response<string>.ServerError("Ocurrió un error al crear la empresa. Por favor, intente nuevamente."));
-            }
-
         }
 
         [HttpGet("/VerificarProducto")]
@@ -246,6 +223,88 @@ namespace PTP_API.Controllers.ModuloInventario
             {
                 return Ok(Response<string>.ServerError("Ocurrió un error al obtener los productos agotados. Por favor, intente nuevamente."));
             }
+        }
+
+        [HttpPost("/CrearProducto")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Crear Producto", Description = "Endpoint para crear producto")]
+        public async Task<IActionResult> Add([FromQuery] CreateProductsDto createProducts)
+        {
+            try
+            {
+                var validationResult = await _validatorCreate.ValidateAsync(createProducts);
+
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                    return BadRequest(Response<string>.BadRequest(errors, 400));
+                }
+
+                var createdProdut = await _productoService.CreateProduct(createProducts);
+
+                return Ok(Response<CreateProductsDto>.Created(createdProdut));
+
+            }
+            catch
+            {
+
+                return Ok(Response<string>.ServerError("Ocurrió un error al crear la empresa. Por favor, intente nuevamente."));
+            }
+
+        }
+
+        [HttpPost("/EditarProducto")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Editar Producto", Description = "Endpoint para editar producto")]
+        public async Task<IActionResult> EditProduct([FromQuery] EditProductDto editProducts)
+        {
+            try
+            {
+                var validationResult = await _validatorEdit.ValidateAsync(editProducts);
+
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                    return BadRequest(Response<string>.BadRequest(errors, 400));
+                }
+
+                var editProduct = await _productoService.EditProduct(editProducts);
+
+                return Ok(Response<EditProductDto>.Success(editProduct, "Producto editado correctamente"));
+
+            }
+            catch
+            {
+
+                return Ok(Response<string>.ServerError("Ocurrió un error al editar el prodcuto. Por favor, intente nuevamente."));
+            }
+
+        }
+
+        [HttpDelete("/EliminarProductoCodigo/{codigo}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Eliminar Producto", Description = "Endpoint para eliminar producto por codigo")]
+        public async Task<IActionResult> DeleteByCode(string codigo, long idEmpresa)
+        {
+            try
+            {
+                if (codigo == string.Empty || codigo == null)
+                {
+                    return Ok(Response<string>.NotFound("El codigo no puede estar vacio"));
+
+                }
+
+                await _productoService.DeleteProductByCodigo(codigo, idEmpresa);
+
+                return Ok(Response<string>.Success(codigo));
+
+            }
+            catch
+            {
+
+                return Ok(Response<string>.ServerError("Ocurrió un error al eliminar el producto. Por favor, intente nuevamente."));
+            }
+
         }
     }
 }

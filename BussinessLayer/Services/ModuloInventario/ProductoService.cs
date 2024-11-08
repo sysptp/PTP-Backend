@@ -106,7 +106,8 @@ namespace BussinessLayer.Services.ModuloInventario
             if (producto != null)
             {
                 producto.Borrado = true;
-                _context.Update(producto);
+                var updated = _mapper.Map<Producto>(producto);
+                _context.Update(updated);
                 await _context.SaveChangesAsync();
             }
         }
@@ -134,7 +135,7 @@ namespace BussinessLayer.Services.ModuloInventario
         }
 
         // Servicio para editar un producto
-        public async Task EditProduct(ViewProductsDto producto)
+        public async Task<EditProductDto> EditProduct(EditProductDto producto)
         {
             var existingProduct = await _context.Productos
                 .FirstOrDefaultAsync(x => x.Id == producto.Id);
@@ -145,6 +146,8 @@ namespace BussinessLayer.Services.ModuloInventario
                 _context.Productos.Update(existingProduct);
                 await _context.SaveChangesAsync();
             }
+
+            return producto;
         }
 
         // Obtener productos facturados
@@ -214,8 +217,6 @@ namespace BussinessLayer.Services.ModuloInventario
 
             return _mapper.Map<List<ViewProductsDto>>(productos);
         }
-        
-
-        // servicio para obtener productos por suplidores    
+         
     }
 }

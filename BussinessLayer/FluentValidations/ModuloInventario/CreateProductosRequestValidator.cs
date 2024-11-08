@@ -1,11 +1,11 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario;
 using FluentValidation;
 
-namespace BussinessLayer.FluentValidations.Productos
+namespace BussinessLayer.FluentValidations.ModuloInventario
 {
-    public class ProductosRequestValidator : AbstractValidator<CreateProductsDto>
+    public class CreateProductosRequestValidator : AbstractValidator<CreateProductsDto>
     {
-        public ProductosRequestValidator()
+        public CreateProductosRequestValidator()
         {
             RuleFor(x => x.IdEmpresa)
                 .NotNull().WithMessage("IdEmpresa cannot be null.")
@@ -75,13 +75,13 @@ namespace BussinessLayer.FluentValidations.Productos
         private bool BeValidLong(long? value)
         {
             // Since the property is nullable, check if it has a value and then validate it
-            return !value.HasValue || (value.Value.GetType() == typeof(long));
+            return !value.HasValue || value.Value.GetType() == typeof(long);
         }
 
         private bool BeValidInt(int? value)
         {
             // Since the property is nullable, check if it has a value and then validate it
-            return !value.HasValue || (value.Value.GetType() == typeof(int));
+            return !value.HasValue || value.Value.GetType() == typeof(int);
         }
 
         private bool BeValidString(string? value)
@@ -93,7 +93,7 @@ namespace BussinessLayer.FluentValidations.Productos
         private bool BeValidBool(bool? value)
         {
             // Since the property is nullable, check if it has a value and then validate it
-            return !value.HasValue || (value.Value.GetType() == typeof(bool));
+            return !value.HasValue || value.Value.GetType() == typeof(bool);
         }
     }
 

@@ -1,9 +1,6 @@
-﻿using DataLayer.Models.ModuloGeneral;
-using DataLayer.Models.ModuloInventario;
-
-namespace BussinessLayer.DTOs.ModuloInventario
+﻿namespace BussinessLayer.DTOs.ModuloInventario
 {
-    public class ViewProductsDto
+    public class EditProductDto
     {
         public int? Id { get; set; }
 
@@ -11,11 +8,7 @@ namespace BussinessLayer.DTOs.ModuloInventario
 
         public int? IdVersion { get; set; }
 
-        public virtual Versiones? Version { get; set; }
-
         public int? IdTipoProducto { get; set; }
-
-        public virtual GnTipoProducto? TipoProducto { get; set; }
 
         public string? CodigoBarra { get; set; }
 
@@ -31,8 +24,6 @@ namespace BussinessLayer.DTOs.ModuloInventario
 
         public int? CantidadMinima { get; set; }
 
-        public DateTime? FechaCreacion { get; set; }
-
         public DateTime? FechaModificacion { get; set; }
 
         public bool? AdmiteDescuento { get; set; }
@@ -47,18 +38,8 @@ namespace BussinessLayer.DTOs.ModuloInventario
 
         public bool? EsLocal { get; set; }
 
-        public bool? Borrado { get; set; }
-
         public bool? Activo { get; set; }
 
-        public string? UsuarioCreacion { get; set; }
-
         public string? UsuarioModificacion { get; set; }
-
-        public virtual ICollection<InvProductoImpuesto>? InvProductoImpuestos { get; set; }
-
-        public virtual ICollection<InvProductoSuplidor>? InvProductoSuplidores { get; set; }
-
-        public virtual ICollection<InvProductoImagen> InvProductoImagenes { get; set; } = [];
     }
 }

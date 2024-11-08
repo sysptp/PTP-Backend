@@ -1,6 +1,8 @@
 ﻿using BussinessLayer.FluentValidations.Productos;
 using BussinessLayer.FluentValidations.Empresas.BussinessLayer.FluentValidations.Empresas;
 using FluentValidation;
+using BussinessLayer.FluentValidations.Account;
+using BussinessLayer.FluentValidations.ModuloInventario;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using BussinessLayer.DTOs.Configuracion.Seguridad;
@@ -21,6 +23,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped <IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
             services.AddScoped <IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddScoped <IValidator<LoginRequestDTO>, LoginRequestValidator>();
+            services.AddScoped<CreateProductosRequestValidator>();
+            services.AddScoped<EditProductosRequestValidator>();
         }
     }
 }
