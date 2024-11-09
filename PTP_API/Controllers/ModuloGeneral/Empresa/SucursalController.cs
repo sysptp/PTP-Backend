@@ -35,7 +35,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
                     {
                         return NotFound(Response<GnSucursalResponse>.NotFound("Sucursal no encontrada."));
                     }
-                    return Ok(Response<GnSucursalResponse>.Success(sucursal, "Sucursal encontrada."));
+                    return Ok(Response<List<GnSucursalResponse>>.Success(new List<GnSucursalResponse> { sucursal }, "Sucursal encontrada."));
                 }
                 else
                 {

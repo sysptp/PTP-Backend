@@ -19,9 +19,9 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
         private readonly IValidator<GnEmpresaRequest> _validator;
 
 
-        public CompanyController(IGnEmpresaservice scEmp001Service, IValidator<GnEmpresaRequest> validator)
+        public CompanyController(IGnEmpresaservice empresaService, IValidator<GnEmpresaRequest> validator)
         {
-            _empresaService = scEmp001Service;
+            _empresaService = empresaService;
             _validator = validator;
         }
 
@@ -44,7 +44,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
                     {
                         return NotFound(Response<GnEmpresaResponse>.NotFound("Empresa no encontrada."));
                     }
-                    return Ok(Response<GnEmpresaResponse>.Success(empresa, "Empresa encontrada."));
+                    return Ok(Response<List<GnEmpresaResponse>>.Success(new List<GnEmpresaResponse> { empresa }, "Empresa encontrada."));
                 }
                 else
                 {
