@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FluentValidations\Sucursal\**" />
+    <Compile Remove="Interfaces\IProductos\**" />
+    <EmbeddedResource Remove="FluentValidations\Sucursal\**" />
+    <EmbeddedResource Remove="Interfaces\IProductos\**" />
+    <None Remove="FluentValidations\Sucursal\**" />
+    <None Remove="Interfaces\IProductos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="FluentValidation" Version="11.10.0" />
@@ -22,9 +31,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Productos\" />
-    <Folder Include="FluentValidations\Sucursal\" />
-    <Folder Include="Interfaces\IProductos\" />
+    <Folder Include="FluentValidations\ModuloInventario\Marcas\" />
+    <Folder Include="FluentValidations\ModuloInventario\Almacenes\" />
+    <Folder Include="FluentValidations\ModuloInventario\Descuentos\" />
+    <Folder Include="FluentValidations\ModuloInventario\Impuestos\" />
+    <Folder Include="FluentValidations\ModuloInventario\Versiones\" />
+    <Folder Include="FluentValidations\ModuloInventario\Suplidores\" />
+    <Folder Include="ViewModels\Bancos\" />
+    <Folder Include="ViewModels\Boveda\" />
+    <Folder Include="ViewModels\Caja\" />
+    <Folder Include="ViewModels\Cuentas\" />
+    <Folder Include="ViewModels\Empresa\" />
+    <Folder Include="ViewModels\Geografia\" />
+    <Folder Include="ViewModels\Otros\" />
+    <Folder Include="ViewModels\Pedidos\" />
+    <Folder Include="ViewModels\Seguridad\" />
   </ItemGroup>
 
 </Project>

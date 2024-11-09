@@ -4,7 +4,7 @@ using BussinessLayer.Interfaces.ICuentas;
 using BussinessLayer.ViewModels;
 using DataLayer.Models.Cuentas;
 using DataLayer.Models.Facturas;
-using DataLayer.Models.ModuloInventario;
+using DataLayer.Models.ModuloInventario.Productos;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

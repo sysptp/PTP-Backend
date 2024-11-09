@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.ModuloInventario;
+﻿using DataLayer.Models.ModuloInventario.Productos;
 using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Productos\**" />
     <Compile Remove="Settings\**" />
+    <EmbeddedResource Remove="Models\Productos\**" />
     <EmbeddedResource Remove="Settings\**" />
+    <None Remove="Models\Productos\**" />
     <None Remove="Settings\**" />
   </ItemGroup>
 
@@ -19,10 +22,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Productos\" />
   </ItemGroup>
 
 </Project>
