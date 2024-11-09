@@ -1,11 +1,8 @@
 ﻿using BussinessLayer.Helpers.CargaMasivaHelpers;
 using BussinessLayer.Helpers.CentroReporteriaHelpers;
-using BussinessLayer.Interface.IAlmacenes;
 using BussinessLayer.Interface.ICotizaciones;
 using BussinessLayer.Interface.IFacturacion;
 using BussinessLayer.Interface.IOtros;
-using BussinessLayer.Interface.IPedido;
-using BussinessLayer.Interface.ISuplidores;
 using BussinessLayer.Interfaces.IAutenticacion;
 using BussinessLayer.Interfaces.IBancos;
 using BussinessLayer.Interfaces.IBoveda;
@@ -18,12 +15,9 @@ using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.Interfaces.IMenu;
 using BussinessLayer.Interfaces.IOtros;
 using BussinessLayer.Interfaces.ISeguridad;
-using BussinessLayer.Interfaces.ModuloInventario;
 using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Repository.ROtros;
 using BussinessLayer.Services;
-using BussinessLayer.Services.ModuloInventario;
-using BussinessLayer.Services.SALmacenes;
 using BussinessLayer.Services.SAutenticacion;
 using BussinessLayer.Services.SBancos;
 using BussinessLayer.Services.SBoveda;
@@ -38,102 +32,105 @@ using BussinessLayer.Services.SGeografia;
 using BussinessLayer.Services.SNcfs;
 using BussinessLayer.Services.SMenu;
 using BussinessLayer.Services.SOtros;
-using BussinessLayer.Services.SPedidos;
 using BussinessLayer.Services.SSeguridad;
-using BussinessLayer.Services.SSuplidores;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.Interfaces.IModulo;
 using BussinessLayer.Services.SModulo;
+using BussinessLayer.Interfaces.ModuloInventario.Precios;
+using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
+using BussinessLayer.Services.ModuloInventario.Suplidores;
+using BussinessLayer.Services.ModuloInventario.Impuesto;
+using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
 
-namespace BussinessLayer.DendeciesInjections
+
+public static class ServiceRegistration
 {
-    public static class ServiceRegistration
+    public static void AddServiceRegistration(this IServiceCollection services)
     {
-        public static void AddServiceRegistration(this IServiceCollection services)
-        {
 
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
-            services.AddScoped<IRepositorySection, RepositorySection>();
-            services.AddScoped<IReporteriaService, ReporteriaService>();
-            services.AddScoped<IAlmacenesService, AlmacenesService>();
-            services.AddScoped<IClientesService, ClienteService>();
-            services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
-            services.AddScoped<ICotizacionService, CotizacionService>();
-            services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
-            services.AddScoped<ICuentasPorCobrar, CuentaPorCobrarService>();
-            services.AddScoped<IDescuentoService, DescuentoService>();
-            services.AddScoped<IDetalleCotizacionService, DetalleCotizacionService>();
-            services.AddScoped<IDetalleCuentaPorPagar, DetalleCuentaPorPagarService>();
-            services.AddScoped<IDetalleCuentasPorCobrar, DetalleCuentaPorCobrarService>();
-            services.AddScoped<IDetalleFacturacionService, DetalleFacturacionService>();
-            services.AddScoped<IDetalleMovimientoAlmacenService, DetalleMovimientoAlmacenService>();
-            services.AddScoped<IDgiiNcfService, DgiiNcfService>();
-            services.AddScoped<IFacturacionService, FacturacionService>();
-            services.AddScoped<IMarcaService, MarcaService>();
-            services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
-            services.AddScoped<IPedidoService, PedidoService>();
-            services.AddScoped<IPrecioService, PrecioService>();
-            services.AddScoped<IProductoService, ProductoService>();
-            services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
-            services.AddScoped<ISuplidoresService, SuplidoresService>();
-            services.AddScoped<ITipoMovimientoService, TipoMovimientoService>();
-            services.AddScoped<ITipoPagoService, TipoPagoService>();
-            services.AddScoped<ITipoTransaccionService, TipoTransaccionService>();
-            services.AddScoped<IVersionService, VersionService>();
-            services.AddScoped<IAutenticacionService, AutenticacionService>();
-            services.AddScoped<IClaimsService, ClaimsService>();
-            services.AddScoped<ICargaMasivaService, CargaMasivaService>();
-            services.AddScoped<IAperturaCierreCajasService, AperturaCierreCajasService>();
-            services.AddScoped<ISC_USUAR001Service, SC_USUAR001Service>();
-            services.AddScoped<IGnSucursalService, GnSucursalService>();
-            services.AddScoped<ICajaService, CajaService>();
-            services.AddScoped<ITipoMovimientoBancoService, TipoMovimientoBancoService>();
-            services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
-            services.AddScoped<ISC_PAIS001Service, SC_PAIS001Service>();
-            services.AddScoped<ISC_REG001Service, SC_REG001Service>();
-            services.AddScoped<ISC_PROV001Service, SC_PROV001Service>();
-            services.AddScoped<ISC_MUNIC001Service, SC_MUNIC001Service>();
-            services.AddScoped<IGn_PerfilService, Gn_PerfilService>();
-            services.AddScoped<ICiudades_X_PaisesService, Ciudades_X_PaisesService>();
-            services.AddScoped<ISC_IPSYS001Service, SC_IPSYS001Service>();
-            services.AddScoped<ISC_IMP001Service, SC_IMP001Service>();
-            services.AddScoped<ISC_HORARIO001Service, SC_HORARIO001Service>();
-            services.AddScoped<ISC_HORAGROUP002Service, SC_HORAGROUP002Service>();
-            services.AddScoped<ISC_HORA_X_USR002Service, SC_HORA_X_USR002Service>();
-            services.AddScoped<IMovimientoBancoesService, MovimientoBancoesService>();
-            services.AddScoped<IMonedasService, MonedasService>();
-            services.AddScoped<ICuentaBancosService, CuentaBancosService>();
-            services.AddScoped<IConciliacionTCTFsService, ConciliacionTCTFsService>();
-            services.AddScoped<IBovedaMovimientoesService, BovedaMovimientoesService>();
-            services.AddScoped<IBovedaCajasService, BovedaCajasService>();
-            services.AddScoped<IBovedaCajaDesglosesService, BovedaCajaDesglosesService>();
-            services.AddScoped<IBilletes_MonedaService, Billetes_MonedaService>();
-            services.AddScoped<IBancosService, BancosService>();
-            services.AddScoped<DeserializadorCrearReporte>();
-            services.AddScoped<EntityMapper>();
-            services.AddScoped<CsvProcessor>();
-            services.AddScoped<IGnPerfilService, GnPerfilService>();
-            services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddTransient<IGnSucursalService, GnSucursalService>();
-            services.AddTransient<INcfService, NcfService>();
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
+        services.AddScoped<IRepositorySection, RepositorySection>();
+        services.AddScoped<IReporteriaService, ReporteriaService>();
+        services.AddScoped<IAlmacenesService, AlmacenesService>();
+        services.AddScoped<IClientesService, ClienteService>();
+        services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
+        services.AddScoped<ICotizacionService, CotizacionService>();
+        services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
+        services.AddScoped<ICuentasPorCobrar, CuentaPorCobrarService>();
+        services.AddScoped<IDescuentoService, DescuentoService>();
+        services.AddScoped<IDetalleCotizacionService, DetalleCotizacionService>();
+        services.AddScoped<IDetalleCuentaPorPagar, DetalleCuentaPorPagarService>();
+        services.AddScoped<IDetalleCuentasPorCobrar, DetalleCuentaPorCobrarService>();
+        services.AddScoped<IDetalleFacturacionService, DetalleFacturacionService>();
+        services.AddScoped<IDetalleMovimientoAlmacenService, DetalleMovimientoAlmacenService>();
+        services.AddScoped<IDgiiNcfService, DgiiNcfService>();
+        services.AddScoped<IFacturacionService, FacturacionService>();
+        services.AddScoped<IMarcaService, MarcaService>();
+        services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
+        services.AddScoped<IPedidoService, PedidoService>();
+        services.AddScoped<IPrecioService, PrecioService>();
+        services.AddScoped<IProductoService, ProductoService>();
+        services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
+        services.AddScoped<ISuplidoresService, SuplidoresService>();
+        services.AddScoped<ITipoMovimientoService, TipoMovimientoService>();
+        services.AddScoped<ITipoPagoService, TipoPagoService>();
+        services.AddScoped<ITipoTransaccionService, TipoTransaccionService>();
+        services.AddScoped<IVersionService, VersionService>();
+        services.AddScoped<IAutenticacionService, AutenticacionService>();
+        services.AddScoped<IClaimsService, ClaimsService>();
+        services.AddScoped<ICargaMasivaService, CargaMasivaService>();
+        services.AddScoped<IAperturaCierreCajasService, AperturaCierreCajasService>();
+        services.AddScoped<ISC_USUAR001Service, SC_USUAR001Service>();
+        services.AddScoped<IGnSucursalService, GnSucursalService>();
+        services.AddScoped<ICajaService, CajaService>();
+        services.AddScoped<ITipoMovimientoBancoService, TipoMovimientoBancoService>();
+        services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
+        services.AddScoped<ISC_PAIS001Service, SC_PAIS001Service>();
+        services.AddScoped<ISC_REG001Service, SC_REG001Service>();
+        services.AddScoped<ISC_PROV001Service, SC_PROV001Service>();
+        services.AddScoped<ISC_MUNIC001Service, SC_MUNIC001Service>();
+        services.AddScoped<IGn_PerfilService, Gn_PerfilService>();
+        services.AddScoped<ICiudades_X_PaisesService, Ciudades_X_PaisesService>();
+        services.AddScoped<ISC_IPSYS001Service, SC_IPSYS001Service>();
+        services.AddScoped<ISC_IMP001Service, SC_IMP001Service>();
+        services.AddScoped<ISC_HORARIO001Service, SC_HORARIO001Service>();
+        services.AddScoped<ISC_HORAGROUP002Service, SC_HORAGROUP002Service>();
+        services.AddScoped<ISC_HORA_X_USR002Service, SC_HORA_X_USR002Service>();
+        services.AddScoped<IMovimientoBancoesService, MovimientoBancoesService>();
+        services.AddScoped<IMonedasService, MonedasService>();
+        services.AddScoped<ICuentaBancosService, CuentaBancosService>();
+        services.AddScoped<IConciliacionTCTFsService, ConciliacionTCTFsService>();
+        services.AddScoped<IBovedaMovimientoesService, BovedaMovimientoesService>();
+        services.AddScoped<IBovedaCajasService, BovedaCajasService>();
+        services.AddScoped<IBovedaCajaDesglosesService, BovedaCajaDesglosesService>();
+        services.AddScoped<IBilletes_MonedaService, Billetes_MonedaService>();
+        services.AddScoped<IBancosService, BancosService>();
+        services.AddScoped<DeserializadorCrearReporte>();
+        services.AddScoped<EntityMapper>();
+        services.AddScoped<CsvProcessor>();
+        services.AddScoped<IGnPerfilService, GnPerfilService>();
+        services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddTransient<IGnSucursalService, GnSucursalService>();
+        services.AddTransient<INcfService, NcfService>();
 
-            #region Geografia
+        #region Geografia
 
-            services.AddTransient<IPaisService, PaisService>();
-            services.AddTransient<IMunicipioService, MunicipioService>();
-            services.AddTransient<IRegionService, RegionService>();
-            services.AddTransient<IProvinciaService, ProvinciaService>();
+        services.AddTransient<IPaisService, PaisService>();
+        services.AddTransient<IMunicipioService, MunicipioService>();
+        services.AddTransient<IRegionService, RegionService>();
+        services.AddTransient<IProvinciaService, ProvinciaService>();
 
-            #endregion
+        #endregion
 
-            #region Configuracion 
-            services.AddTransient<IGnMenuService,GnMenuService>();
-            services.AddTransient<IGnModuloService, GnModuloService>();
-            #endregion 
-        }
+        #region Configuracion 
+        services.AddTransient<IGnMenuService,GnMenuService>();
+        services.AddTransient<IGnModuloService, GnModuloService>();
+        #endregion 
     }
 }
+
