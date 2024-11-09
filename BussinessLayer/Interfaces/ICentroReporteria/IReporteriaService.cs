@@ -1,10 +1,7 @@
-﻿using BussinessLayer.DTOs.CentroReporteria;
-using BussinessLayer.DTOs.CentroReporteriaDTOs;
+﻿using BussinessLayer.DTOs.CentroReporteriaDTOs;
 using BussinessLayer.ViewModels;
 using DataLayer.Models.Reporteria;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.Interfaces.ICentroReporteria
 {

@@ -1,5 +1,5 @@
 ﻿using DataLayer.Models.Empresa;
-using DataLayer.Models.ModuloInventario;
+using DataLayer.Models.ModuloInventario.Monedas;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

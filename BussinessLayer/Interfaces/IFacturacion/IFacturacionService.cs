@@ -1,21 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BussinessLayer.ViewModels;
+﻿using BussinessLayer.ViewModels;
 using DataLayer.Models.Facturas;
 
-namespace BussinessLayer.Interface.IFacturacion
+public interface IFacturacionService 
 {
-    public interface IFacturacionService 
-    {
-        Task Create(FacturacionViewModel vm);
+    Task Create(FacturacionViewModel vm);
 
-        Task<IList<Facturacion>> GetAll();
+    Task<IList<Facturacion>> GetAll();
 
-        Task Delete(Facturacion model);
+    Task Delete(Facturacion model);
 
-        Task<Facturacion> GetById(int id);
+    Task<Facturacion> GetById(int id);
 
-        Task Update(Facturacion model);
+    Task Update(Facturacion model);
 
-    }
 }
+
