@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Dtos.Account;
+﻿using BussinessLayer.DTOs.Configuracion.Account;
 
 namespace BussinessLayer.Interface.IAccount
 {

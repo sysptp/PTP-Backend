@@ -11,6 +11,10 @@ namespace BussinessLayer.DTOs.Configuracion.Menu
         public string? Icon { get; set; }
         public int ModuleID { get; set; }
         public int ParentMenuId { get; set; }
+        public bool Query { get; set; }
+        public bool Create { get; set; }
+        public bool Edit { get; set; }
+        public bool Delete { get; set; }
         public List<GnMenuResponse>? SubMenus { get; set; } = new List<GnMenuResponse>();
     }
 

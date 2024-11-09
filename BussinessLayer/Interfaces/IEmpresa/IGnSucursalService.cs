@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Sucursal;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models;
 using DataLayer.Models.Empresa;

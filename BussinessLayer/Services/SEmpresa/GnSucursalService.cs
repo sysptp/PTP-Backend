@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Sucursal;
+using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Interfaces.Repository.Empresa;

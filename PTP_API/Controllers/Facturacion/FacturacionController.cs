@@ -8,10 +8,10 @@ namespace PTP_API.Controllers.Facturacion
     [ApiController]
     public class FacturacionController : ControllerBase
     {
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateInvoiceDto createInvoiceDto)
-        {
-            return Ok();
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Create(CreateInvoiceDto createInvoiceDto)
+        //{
+        //    return Ok();
+        //}
     }
 }

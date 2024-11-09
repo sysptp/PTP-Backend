@@ -5,11 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using IdentityLayer.Entities;
-using BussinessLayer.Dtos.Account;
 using AutoMapper;
 using BussinessLayer.Settings;
 using System.Security.Cryptography;
 using BussinessLayer.Interface.IAccount;
+using BussinessLayer.Interfaces.Repository.Empresa;
+using BussinessLayer.DTOs.Configuracion.Account;
 
 namespace IdentityLayer.Services
 {
@@ -20,19 +21,25 @@ namespace IdentityLayer.Services
         private readonly JWTSettings _jwtSettings;
         private readonly IMapper _mapper;
         private readonly RoleManager<GnPerfil> _roleManager;
+        private readonly IGnSucursalRepository _sucursalRepository;
+        private readonly IGnEmpresaRepository _empresaRepository;
 
         public AccountService(
               UserManager<Usuario> userManager,
               SignInManager<Usuario> signInManager,
               RoleManager<GnPerfil> roleManager,
               IOptions<JWTSettings> jwtSettings,
-              IMapper mapper)
+              IMapper mapper,
+              IGnSucursalRepository sucursalRepository,
+              IGnEmpresaRepository empresaRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
             _mapper = mapper;
+            _sucursalRepository = sucursalRepository;
+            _empresaRepository = empresaRepository;
         }
 
         public async Task<bool> VerifyUser(string UserName)
@@ -80,6 +87,12 @@ namespace IdentityLayer.Services
             response.Email = user.Email ?? string.Empty;
             response.PhoneNumber = user.PhoneNumber ?? string.Empty;
             response.SucursalId = user.CodigoSuc;
+            var role = await _roleManager.FindByIdAsync(response.RoleId.ToString());
+            var sucursal = await _sucursalRepository.GetBySucursalCode(response.SucursalId);
+            var company = await _empresaRepository.GetById((long)response.CompanyId);
+            response.RoleName = role.Name;
+            response.CompanyName = company.NOMBRE_EMP;
+            response.SucursalName = sucursal.NombreSuc;
 
             JwtSecurityToken jwtToken = GenerateJWToken(user);
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
@@ -158,6 +171,7 @@ namespace IdentityLayer.Services
                 }
 
                 return response;
+
             }
             catch (Exception ex)
             {
