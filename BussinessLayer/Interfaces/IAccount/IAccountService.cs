@@ -7,5 +7,6 @@ namespace BussinessLayer.Interface.IAccount
         Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request);
         Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin);
         Task<bool> VerifyUser(string UserName);
+        Task<bool> VerifyUserById(int userId);
     }
 }

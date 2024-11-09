@@ -52,6 +52,13 @@ namespace IdentityLayer.Services
             return true;
         }
 
+        public async Task<bool> VerifyUserById(int userId)
+        {
+            var user = await _userManager.FindByIdAsync(Convert.ToString(userId));
+           
+            return user != null;
+        }
+
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         {
             var response = new AuthenticationResponse();

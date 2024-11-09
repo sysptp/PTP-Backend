@@ -5,7 +5,7 @@
         public long CompanyId { get; set; }
         public string SucursalName { get; set; } = null!;
         public string? Phone { get; set; }
-        public int? ResponsibleUserId { get; set; }
+        public int ResponsibleUserId { get; set; }
         public int CountryId { get; set; }
         public int RegionId { get; set; }
         public int ProvinceId { get; set; }
