@@ -31,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\HelpDesk\" />
     <Folder Include="FluentValidations\ModuloInventario\Marcas\" />
     <Folder Include="FluentValidations\ModuloInventario\Almacenes\" />
     <Folder Include="FluentValidations\ModuloInventario\Descuentos\" />
