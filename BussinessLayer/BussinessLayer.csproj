@@ -31,12 +31,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs\HelpDesk\" />
     <Folder Include="FluentValidations\ModuloInventario\Marcas\" />
     <Folder Include="FluentValidations\ModuloInventario\Almacenes\" />
     <Folder Include="FluentValidations\ModuloInventario\Descuentos\" />
     <Folder Include="FluentValidations\ModuloInventario\Impuestos\" />
     <Folder Include="FluentValidations\ModuloInventario\Versiones\" />
     <Folder Include="FluentValidations\ModuloInventario\Suplidores\" />
+    <Folder Include="Interfaces\IHelpDesk\" />
+    <Folder Include="Interfaces\Repository\HelpDesk\" />
+    <Folder Include="Mapping\HeplDesk\" />
+    <Folder Include="Repository\HelpDesk\" />
     <Folder Include="ViewModels\Bancos\" />
     <Folder Include="ViewModels\Boveda\" />
     <Folder Include="ViewModels\Caja\" />
