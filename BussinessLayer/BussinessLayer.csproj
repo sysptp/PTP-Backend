@@ -40,7 +40,6 @@
     <Folder Include="FluentValidations\ModuloInventario\Suplidores\" />
     <Folder Include="Interfaces\IHelpDesk\" />
     <Folder Include="Mapping\HeplDesk\" />
-    <Folder Include="Repository\HelpDesk\" />
     <Folder Include="ViewModels\Bancos\" />
     <Folder Include="ViewModels\Boveda\" />
     <Folder Include="ViewModels\Caja\" />
