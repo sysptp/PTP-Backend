@@ -4,6 +4,7 @@ using Identity.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdentityLayer.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20241110130414_alterUser")]
+    partial class alterUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,7 +114,7 @@ namespace IdentityLayer.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("FechaAdicion")
+                    b.Property<DateTime>("FechaAdicion")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaModificacion")
@@ -186,7 +189,7 @@ namespace IdentityLayer.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("UsuarioAdicion")
+                    b.Property<string>("UsuarioAdiccion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UsuarioModificacion")

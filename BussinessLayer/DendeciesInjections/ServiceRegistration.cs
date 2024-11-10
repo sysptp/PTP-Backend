@@ -43,6 +43,9 @@ using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
 using BussinessLayer.Services.ModuloInventario.Suplidores;
 using BussinessLayer.Services.ModuloInventario.Impuesto;
 using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
+using BussinessLayer.Services.SSeguridad.Perfil;
+using BussinessLayer.Services.SSeguridad.SUsuario;
+using BussinessLayer.Services.SSeguridad.Permiso;
 
 
 public static class ServiceRegistration
@@ -117,6 +120,8 @@ public static class ServiceRegistration
         services.AddScoped<ITokenService, TokenService>();
         services.AddTransient<IGnSucursalService, GnSucursalService>();
         services.AddTransient<INcfService, NcfService>();
+        services.AddTransient<IUsuarioService, UsuarioService>();
+        services.AddTransient<IGnPermisoService, GnPermisoService>();
 
         #region Geografia
 
