@@ -39,7 +39,6 @@
     <Folder Include="FluentValidations\ModuloInventario\Versiones\" />
     <Folder Include="FluentValidations\ModuloInventario\Suplidores\" />
     <Folder Include="Interfaces\IHelpDesk\" />
-    <Folder Include="Interfaces\Repository\HelpDesk\" />
     <Folder Include="Mapping\HeplDesk\" />
     <Folder Include="Repository\HelpDesk\" />
     <Folder Include="ViewModels\Bancos\" />
