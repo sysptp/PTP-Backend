@@ -44,7 +44,7 @@ namespace PTP_API.Controllers.Configuration.Seguridad
                     {
                         return NotFound(Response<GnPerfilResponse>.NotFound("Perfil no encontrado."));
                     }
-                    return Ok(Response<GnPerfilResponse>.Success(perfil, "Perfil encontrado."));
+                    return Ok(Response<List<GnPerfilResponse>>.Success(new List<GnPerfilResponse> { perfil }, "Perfil encontrado."));
                 }
                 else
                 {

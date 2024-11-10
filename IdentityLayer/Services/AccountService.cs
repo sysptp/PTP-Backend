@@ -52,12 +52,30 @@ namespace IdentityLayer.Services
             return true;
         }
 
+        public async Task<bool> VerifyUserById(int userId)
+        {
+            var user = await _userManager.FindByIdAsync(Convert.ToString(userId));
+           
+            return user != null;
+        }
+
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         {
             var response = new AuthenticationResponse();
 
+            try
+            {
+                var user1 = await _userManager.FindByEmailAsync(request.UserCredential) ??
+                    await _userManager.FindByNameAsync(request.UserCredential);
+
+            }
+            catch (Exception ex)
+            
+            { 
+                throw new Exception(ex.Message,ex);
+            }
             var user = await _userManager.FindByEmailAsync(request.UserCredential) ??
-                       await _userManager.FindByNameAsync(request.UserCredential);
+                    await _userManager.FindByNameAsync(request.UserCredential);
 
             if (user == null)
             {

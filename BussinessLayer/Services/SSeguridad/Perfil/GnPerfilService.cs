@@ -5,9 +5,9 @@ using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Repository.RSeguridad;
 using DataLayer.Models.Entities;
 
-namespace BussinessLayer.Services.SSeguridad
+namespace BussinessLayer.Services.SSeguridad.Perfil
 {
-    public class GnPerfilService : GenericService<GnPerfilRequest,GnPerfilResponse,GnPerfil>, IGnPerfilService
+    public class GnPerfilService : GenericService<GnPerfilRequest, GnPerfilResponse, GnPerfil>, IGnPerfilService
     {
         private readonly IGnPerfilRepository _repository;
         private readonly IMapper _mapper;

@@ -29,6 +29,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<NumbersRequestValidator>();
             services.AddScoped<StringsRequestValidator>();
 
+            services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
+            services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
         }
     }
 }

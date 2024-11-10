@@ -16,13 +16,14 @@ namespace IdentityLayer.Entities
         public long? CodigoSuc { get; set; }
         public string? IpAdiccion { get; set; }
         public string? IpModificacion { get; set; }
-        public int UsuarioAdiccion { get; set; }
-        public DateTime FechaAdicion { get; set; } = DateTime.Now;
-        public int? UsuarioModificacion { get; set; }
+        public string? UsuarioAdicion { get; set; }
+        public DateTime? FechaAdicion { get; set; } = DateTime.Now;
+        public string? UsuarioModificacion { get; set; }
         public DateTime? FechaModificacion { get; set; }
         public string Longitud { get; set; } = "0";
         public string Latitud { get; set; } = "0";
 
         public bool Activo = false;
+        public bool Borrado { get; set; }
     }
 }

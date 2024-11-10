@@ -5,6 +5,7 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
+using FluentValidation;
 
 namespace PTP_API.Controllers.ModuloGeneral.Empresa
 {
@@ -15,10 +16,12 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
     public class SucursalController : ControllerBase
     {
         private readonly IGnSucursalService _sucursalService;
+        private readonly IValidator<GnSucursalRequest> _validator;
 
-        public SucursalController(IGnSucursalService sucursalService)
+        public SucursalController(IGnSucursalService sucursalService, IValidator<GnSucursalRequest> validator)
         {
             _sucursalService = sucursalService;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -35,7 +38,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
                     {
                         return NotFound(Response<GnSucursalResponse>.NotFound("Sucursal no encontrada."));
                     }
-                    return Ok(Response<GnSucursalResponse>.Success(sucursal, "Sucursal encontrada."));
+                    return Ok(Response<List<GnSucursalResponse>>.Success(new List<GnSucursalResponse> { sucursal }, "Sucursal encontrada."));
                 }
                 else
                 {
@@ -60,9 +63,11 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
         [SwaggerOperation(Summary = "Crear una nueva sucursal", Description = "Crea una nueva sucursal en el sistema.")]
         public async Task<IActionResult> Add([FromBody] GnSucursalRequest request)
         {
-            if (!ModelState.IsValid)
+            var validationResult = await _validator.ValidateAsync(request);
+          
+            if (!validationResult.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 

@@ -65,6 +65,7 @@ namespace TaskMaster.Core.Application.Mapping
                .ReverseMap();
             CreateMap<ProvinceResponse, Provincia>()
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom(x => x.Name))
+                .ForMember(dest => dest.IdRegion, opt => opt.MapFrom(x => x.RegionId))
                 .ReverseMap();
 
             #endregion
