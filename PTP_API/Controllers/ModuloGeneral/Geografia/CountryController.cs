@@ -5,6 +5,7 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
+using FluentValidation;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -15,10 +16,12 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     public class CountryController : ControllerBase
     {
         private readonly IPaisService _countryService;
+        private readonly IValidator<CountryRequest> _validator;
 
-        public CountryController(IPaisService countryService)
+        public CountryController(IPaisService countryService, IValidator<CountryRequest> validator)
         {
             _countryService = countryService;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -59,9 +62,11 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         [SwaggerOperation(Summary = "Crear un nuevo país", Description = "Crea un nuevo país en el sistema.")]
         public async Task<IActionResult> Add([FromBody] CountryRequest request)
         {
-            if (!ModelState.IsValid)
+            var validationResult = await _validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
@@ -75,5 +80,60 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
                 return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear el país. Por favor, intente nuevamente."));
             }
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Actualizar país", Description = "Endpoint para actualizar los datos de un país")]
+        public async Task<IActionResult> UpdateCountry(int id, [FromBody] CountryRequest request)
+        {
+            var validationResult = await _validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
+
+            try
+            {
+                var existingCountry = await _countryService.GetByIdRequest(id);
+                if (existingCountry == null)
+                    return NotFound(Response<string>.NotFound("País no encontrado"));
+
+                request.Id = id;
+                await _countryService.Update(request, id);
+                return Ok(Response<string>.Success(null, "País actualizado correctamente"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el país. Por favor, intente nuevamente."));
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Eliminar país", Description = "Endpoint para eliminar un país")]
+        public async Task<IActionResult> DeleteCountry(int id)
+        {
+            try
+            {
+                var existingCountry = await _countryService.GetByIdRequest(id);
+                if (existingCountry == null)
+                    return NotFound(Response<string>.NotFound("País no encontrado"));
+
+                await _countryService.Delete(id);
+                return Ok(Response<string>.Success(null, "País eliminado correctamente"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar el país. Por favor, intente nuevamente."));
+            }
+        }
+
     }
 }

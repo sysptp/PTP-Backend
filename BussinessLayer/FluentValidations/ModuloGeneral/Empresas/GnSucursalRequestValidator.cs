@@ -16,7 +16,6 @@ namespace BussinessLayer.FluentValidations.ModuloGeneral.Empresas
         private readonly IAccountService _accountService;
         private readonly IGnSucursalRepository _grnSucursalRepository;
 
-
         public GnSucursalRequestValidator(
             IGnEmpresaRepository empresaRepository,
             IPaisRepository paisRepository, IProvinciaRepository provinciaRepository,

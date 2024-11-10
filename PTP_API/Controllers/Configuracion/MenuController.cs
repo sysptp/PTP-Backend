@@ -31,7 +31,7 @@ namespace PTP_API.Controllers.Configuration
 
                 if (menus == null || !menus.Any())
                 {
-                    return StatusCode(204, Response<IEnumerable<GnMenuResponse>>.NoContent("No hay menús disponibles para este rol y empresa."));
+                    return NoContent();
                 }
 
                 return Ok(Response<IEnumerable<GnMenuResponse>>.Success(menus, "Menús obtenidos correctamente."));
@@ -67,7 +67,7 @@ namespace PTP_API.Controllers.Configuration
 
                 menuRequest.IDMenu = id;
                 await _menuService.Update(menuRequest, id);
-                return Ok(Response<string>.Success("Menú actualizado correctamente."));
+                return Ok(Response<string>.Success(null,"Menú actualizado correctamente."));
             }
             catch (Exception ex)
             {
@@ -79,6 +79,7 @@ namespace PTP_API.Controllers.Configuration
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Crear un nuevo menú", Description = "Endpoint para crear un nuevo menú.")]
         public async Task<IActionResult> Add([FromBody] SaveGnMenuRequest menuRequest)
         {
@@ -100,8 +101,9 @@ namespace PTP_API.Controllers.Configuration
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Eliminar menú", Description = "Endpoint para eliminar un menú.")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -114,7 +116,7 @@ namespace PTP_API.Controllers.Configuration
                 }
 
                 await _menuService.Delete(id);
-                return NoContent();
+                return Ok(Response<string>.Success(null,"Menú eliminado satisfactoriamente"));
             }
             catch (Exception ex)
             {

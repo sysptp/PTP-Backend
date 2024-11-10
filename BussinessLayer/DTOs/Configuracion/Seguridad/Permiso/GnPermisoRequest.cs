@@ -13,6 +13,6 @@ namespace BussinessLayer.DTOs.Configuracion.Seguridad.Permiso
         public bool Edit { get; set; }
         public bool Query { get; set; }
         [JsonIgnore]
-        public int IDPermiso { get; set; }
+        public long IDPermiso { get; set; }
     }
 }

@@ -98,10 +98,6 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.MenuIcon))
                 .ForMember(dest => dest.ModuleID, opt => opt.MapFrom(src => src.IdModulo))
                 .ForMember(dest => dest.ParentMenuId, opt => opt.MapFrom(src => src.MenuPadre))
-                .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Consultar))
-                .ForMember(dest => dest.Create, opt => opt.MapFrom(src => src.Crear))
-                .ForMember(dest => dest.Edit, opt => opt.MapFrom(src => src.Editar))
-                .ForMember(dest => dest.Delete, opt => opt.MapFrom(src => src.Eliminar))
                 .ReverseMap();
 
             #endregion
@@ -119,7 +115,8 @@ namespace TaskMaster.Core.Application.Mapping
            .ForMember(dest => dest.IsUserOnline, opt => opt.MapFrom(src => src.OnlineUsuario))
            .ForMember(dest => dest.SucursalId, opt => opt.MapFrom(src => src.CodigoSuc ?? 0))
            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Nombre))
-           .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telefono));
+           .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telefono))
+           .ReverseMap();
 
             #endregion
 
@@ -134,7 +131,8 @@ namespace TaskMaster.Core.Application.Mapping
            .ForMember(dest => dest.Create, opt => opt.MapFrom(src => src.Crear))
            .ForMember(dest => dest.Delete, opt => opt.MapFrom(src => src.Eliminar))
            .ForMember(dest => dest.Edit, opt => opt.MapFrom(src => src.Editar))
-           .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Consultar));
+           .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Consultar))
+           .ReverseMap();
 
             CreateMap<GnPermisoRequest, GnPermiso>()
                 .ForMember(dest => dest.IDPerfil, opt => opt.MapFrom(src => src.RoleId))
@@ -144,7 +142,7 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Eliminar, opt => opt.MapFrom(src => src.Delete))
                 .ForMember(dest => dest.Editar, opt => opt.MapFrom(src => src.Edit))
                 .ForMember(dest => dest.Consultar, opt => opt.MapFrom(src => src.Query))
-                .ForMember(dest => dest.IDPermiso, opt => opt.Ignore());
+                .ReverseMap();
             #endregion 
             #endregion
 
