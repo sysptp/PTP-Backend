@@ -9,9 +9,9 @@ using System.Net.Mime;
 
 namespace PTP_API.Controllers.Configuracion.Seguridad
 {
-    [Route("api/[controller]")]
     [ApiController]
     [SwaggerTag("Servicio de manejo de permisos")]
+    [Route("api/v1/[controller]")]
     [Authorize]
 
     public class PermisoController : ControllerBase

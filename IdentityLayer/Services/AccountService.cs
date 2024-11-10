@@ -63,19 +63,8 @@ namespace IdentityLayer.Services
         {
             var response = new AuthenticationResponse();
 
-            try
-            {
-                var user1 = await _userManager.FindByEmailAsync(request.UserCredential) ??
-                    await _userManager.FindByNameAsync(request.UserCredential);
-
-            }
-            catch (Exception ex)
-            
-            { 
-                throw new Exception(ex.Message,ex);
-            }
             var user = await _userManager.FindByEmailAsync(request.UserCredential) ??
-                    await _userManager.FindByNameAsync(request.UserCredential);
+                       await _userManager.FindByNameAsync(request.UserCredential);
 
             if (user == null)
             {

@@ -1,18 +1,20 @@
 ﻿using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
 using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace PTP_API.Controllers.Configuracion.Seguridad
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
+    [Authorize]
     [ApiController]
-    public class UsuarioController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UserController(IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
         }
