@@ -4,7 +4,7 @@ namespace BussinessLayer.Interfaces.ModuloInventario.Productos
 {
     public interface IProductoService
     {
-        Task<CreateProductsDto> CreateProduct(CreateProductsDto producto);
+        Task<int?> CreateProduct(CreateProductsDto producto);
         Task<List<ViewProductsDto>> GetProducts();
         Task<List<ViewProductsDto>> GetProductByIdCompany(long idCompany);
         Task<ViewProductsDto> GetProductById(int idProduct);
@@ -12,7 +12,7 @@ namespace BussinessLayer.Interfaces.ModuloInventario.Productos
         Task DeleteProductById(int id);
         Task DeleteProductByCodigo(string codigo, long idEmpresa);
         Task<bool> CheckCodeExist(string productCode, long idEmpresa);
-        Task<EditProductDto> EditProduct(EditProductDto producto);
+        Task EditProduct(EditProductDto producto);
         Task<List<ViewProductsDto>> GetAllFacturacion(long idEmpresa);
         Task<ViewProductsDto> GetProductoByBarCode(long idEmpresa, string codigoBarra);
         Task<ViewProductsDto> GetProductoByBarCodeFactura(long idEmpresa, string codigoBarra);

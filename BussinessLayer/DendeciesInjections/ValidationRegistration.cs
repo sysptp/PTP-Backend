@@ -9,6 +9,7 @@ using BussinessLayer.FluentValidations.Configuracion.Seguridad;
 using BussinessLayer.FluentValidations.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloInventario.Precios;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
+using BussinessLayer.FluentValidations;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -16,15 +17,18 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddValidationInjections(this IServiceCollection services)
         {
-            services.AddScoped<RegisterRequestValidator>();
             services.AddTransient<IValidator<GnEmpresaRequest>, SaveGnEmpresaRequestValidator>();
-            services.AddScoped <IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
-            services.AddScoped <IValidator<RegisterRequest>, RegisterRequestValidator>();
-            services.AddScoped <IValidator<LoginRequestDTO>, LoginRequestValidator>();
+            services.AddScoped<IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
+            services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
+            services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
+            services.AddScoped<RegisterRequestValidator>();
             services.AddScoped<CreateProductosRequestValidator>();
             services.AddScoped<EditProductosRequestValidator>();
             services.AddScoped<CreatePreciosRequestValidator>();
             services.AddScoped<EditPreciosRequestValidator>();
+            services.AddScoped<NumbersRequestValidator>();
+            services.AddScoped<StringsRequestValidator>();
+
         }
     }
 }

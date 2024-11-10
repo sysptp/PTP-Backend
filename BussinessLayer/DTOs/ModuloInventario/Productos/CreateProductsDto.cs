@@ -7,8 +7,6 @@ namespace BussinessLayer.DTOs.ModuloInventario.Productos
 {
     public class CreateProductsDto
     {
-        public int? Id { get; set; }
-
         public long? IdEmpresa { get; set; }
 
         public int? IdVersion { get; set; }

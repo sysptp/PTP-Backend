@@ -18,6 +18,5 @@ namespace BussinessLayer.DTOs.ModuloInventario.Precios
 
         public decimal PrecioValor { get; set; }
 
-        public bool? HabilitarVenta { get; set; }
     }
 }
