@@ -89,7 +89,7 @@ namespace BussinessLayer.FluentValidations.ModuloGeneral.Empresas
         {
             var sucursales = await _grnSucursalRepository.GetAll();
             var sucursalPrincipal = sucursales.Where(x => x.Principal == true && x.CodigoEmp == companyId);
-            return sucursalPrincipal != null;
+            return sucursalPrincipal == null;
         }
         public async Task<bool> CountryExists(int countryId)
         {

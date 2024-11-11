@@ -26,7 +26,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Usuarios", Description = "Devuelve una lista de usuarios o un usuario específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] int? id)
+        public async Task<IActionResult> GetAllUsers([FromQuery] int? id, long? companyId, long? sucursalId, int roleId)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
                 }
                 else
                 {
-                    var users = await _usuarioService.GetAllDto();
+                    var users = await _usuarioService.GetAllWithFilters(companyId,sucursalId,roleId);
                     if (users == null || !users.Any())
                     {
                         return NoContent();
