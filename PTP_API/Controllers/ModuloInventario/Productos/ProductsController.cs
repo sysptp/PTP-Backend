@@ -1,9 +1,7 @@
-﻿using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using BussinessLayer.DTOs.ModuloInventario.Productos;
+﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
-using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -140,7 +138,7 @@ public class ProductsController : ControllerBase
     [HttpGet("api/v1/[controller]/ProductosCodigoBarra")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(Summary = "Obtener producto por codigo de barra", Description = "Obtiene un producto por codigo de barra y su empresa")]
-    public async Task<IActionResult> ProductByBarCode([FromQuery] string? barCodeProduct, long idCompany)
+    public async Task<IActionResult> ProductByBarCode([FromQuery] string barCodeProduct, long idCompany)
     {
         try
         {

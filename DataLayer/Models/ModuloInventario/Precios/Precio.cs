@@ -36,10 +36,11 @@ namespace DataLayer.Models.ModuloInventario.Precios
 
         [Required]
         public string? UsuarioCreacion { get; set; }
+
         public string? UsuarioModificacion { get; set; }
 
         // Relación: Un `Precio` está asociado a un `Producto`
-        [ForeignKey("ProductoId")]
+        [ForeignKey("IdProducto")]
         public virtual Producto? Producto { get; set; }
 
         // Relación: Un `Precio` está asociado a una `Moneda`

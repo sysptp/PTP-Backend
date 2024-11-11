@@ -6,8 +6,6 @@ namespace BussinessLayer.DTOs.ModuloInventario.Precios
 {
     public class CreatePreciosDto
     {
-        public int? Id { get; set; }
-
         public int? IdProducto { get; set; }
 
         public long? IdEmpresa { get; set; }

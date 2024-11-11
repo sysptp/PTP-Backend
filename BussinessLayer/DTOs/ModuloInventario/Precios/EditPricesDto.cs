@@ -8,7 +8,7 @@ namespace BussinessLayer.DTOs.ModuloInventario.Precios
 {
     public class EditPricesDto
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         public int? IdProducto { get; set; }
 
