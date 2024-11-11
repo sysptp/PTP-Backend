@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloInventario.Precios;
 using BussinessLayer.Interfaces.ModuloInventario.Precios;
+using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +11,19 @@ public class PrecioService : IPrecioService
     #region Propiedades
     private readonly PDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IProductoService _productoService;
     private readonly ITokenService _tokenService;
 
     public PrecioService(
         PDbContext dbContext,
         IMapper mapper,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IProductoService productoService)
     {
         _context = dbContext;
         _mapper = mapper;
         _tokenService = tokenService;
+        _productoService = productoService;
     }
     #endregion
 
@@ -56,6 +60,7 @@ public class PrecioService : IPrecioService
         newPrice.FechaCreacion = DateTime.Now;
         newPrice.Borrado = false;
         newPrice.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+        newPrice.HabilitarVenta = false;
 
         _context.Precios.Add(newPrice);
         await _context.SaveChangesAsync();
@@ -100,9 +105,27 @@ public class PrecioService : IPrecioService
         if (precio != null)
         {
             precio.Borrado = true;
+            precio.HabilitarVenta = false;
             var updated = _mapper.Map<Precio>(precio);
             _context.Update(updated);
             await _context.SaveChangesAsync();
         }
     }
+
+    //// Servicio activar precio producto
+    //public async Task ActivatePriceOfProduct(int idProduct, int idPrice, long idCompany)
+    //{
+    //    var productos = await _context.Productos.Where(x => x.Id == idProduct);
+
+
+
+
+
+    //    precio.Borrado = true;
+    //    precio.HabilitarVenta = false;
+    //    var updated = _mapper.Map<Precio>(precio);
+    //    _context.Update(updated);
+    //    await _context.SaveChangesAsync();
+        
+    //}
 }

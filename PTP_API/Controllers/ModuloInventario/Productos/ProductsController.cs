@@ -1,10 +1,14 @@
-﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Empresas;
+using BussinessLayer.DTOs.ModuloInventario.Productos;
+using BussinessLayer.FluentValidations;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net.Mime;
 
 
 [ApiController]
@@ -16,50 +20,54 @@ public class ProductsController : ControllerBase
     private readonly IProductoService _productoService;
     private readonly CreateProductosRequestValidator _validatorCreate;
     private readonly EditProductosRequestValidator _validatorEdit;
+    private readonly NumbersRequestValidator _validateNumbers;
+    private readonly StringsRequestValidator _validateString;
 
-    public ProductsController(IProductoService productoService, CreateProductosRequestValidator validationCreate,
-        EditProductosRequestValidator validatorEdit)
+    public ProductsController(IProductoService productoService, 
+        CreateProductosRequestValidator validationCreate,
+        EditProductosRequestValidator validatorEdit,
+        StringsRequestValidator validateString,
+        NumbersRequestValidator validateNumbers
+        )
     {
         _productoService = productoService;
         _validatorCreate = validationCreate;
         _validatorEdit = validatorEdit;
+        _validateString = validateString;
+        _validateNumbers = validateNumbers;
     }
     #endregion
 
-    [HttpGet("api/v1/[controller]/ObtenerProductos")]
+    [HttpGet("api/v1/[controller]/ObtenerProducto")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(Summary = "Obtener productos", Description = "Obtiene una lista de todos los productos " +
-        "dentro de una empresa o un producto específico de una empresa si se proporciona un codigo de producto.")]
-    public async Task<IActionResult> Get([FromQuery] string? codeProduct, long idCompany)
+    [SwaggerOperation(Summary = "Obtener producto", Description = "Obtiene el producto especifico por su codigo dentro de una empresa.")]
+    public async Task<IActionResult> Get([FromQuery] string codeProduct, long idCompany)
     {
         try
         {
-            if (idCompany == 0 || idCompany == null)
-            {
-                return Ok(Response<string>.NotFound("El id de la empresa no puede ser nulo o 0"));
 
+            var validationResult = await _validateNumbers.ValidateAsync(idCompany);
+            var validationResult2 = await _validateString.ValidateAsync(codeProduct);
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
-            if (codeProduct != null)
+            if (!validationResult2.IsValid)
             {
-                var producto = await _productoService.GetProductByCodeInCompany(codeProduct, idCompany);
-                if (producto == null)
-                {
-                    return NotFound(Response<ViewProductsDto>.NotFound("Producto no encontrado."));
-                }
-
-                return Ok(Response<ViewProductsDto>.Success(producto, "Producto encontrado."));
+                var errors = validationResult2.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
             }
-            else
+
+            var producto = await _productoService.GetProductByCodeInCompany(codeProduct, idCompany);
+            if (producto == null)
             {
-                var productos = await _productoService.GetProductByIdCompany(idCompany);
-                if (productos == null || productos.Count == 0)
-                {
-                    return Ok(Response<List<ViewProductsDto>>.NoContent("No hay Productos disponibles."));
-                }
-
-                return Ok(Response<List<ViewProductsDto>>.Success(productos, "Productos obtenidos correctamente."));
+                return NotFound(Response<ViewProductsDto>.NotFound("Producto no encontrado."));
             }
+
+            return Ok(Response<ViewProductsDto>.Success(producto, "Producto encontrado."));
         }
         catch
         {
@@ -67,29 +75,29 @@ public class ProductsController : ControllerBase
         }
     }
 
-    [HttpGet("api/v1/[controller]/VerificarProducto")]
+    [HttpGet("api/v1/[controller]/ObtenerProductos")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(Summary = "Verificar producto", Description = "Verifica si un producto existe por su codigo y la empresa")]
-    public async Task<IActionResult> CheckCode([FromQuery] string productCode, long idEmpresa)
+    [SwaggerOperation(Summary = "Obtener productos", Description = "Obtiene todos los productos de una empresa.")]
+    public async Task<IActionResult> GetAllProductsByComp([FromQuery] long idCompany)
     {
         try
         {
-            if (productCode == null || idEmpresa == null || idEmpresa == 0)
+            var validationResult = await _validateNumbers.ValidateAsync(idCompany);
+
+            if (!validationResult.IsValid)
             {
-                return Ok(Response<bool>.NotFound("Los parametros no pueden ser nulos."));
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
-            var producto = await _productoService.CheckCodeExist(productCode, idEmpresa);
-
-            if (producto)
+            var productos = await _productoService.GetProductByIdCompany(idCompany);
+            if (productos == null || productos.Count == 0)
             {
-                return Ok(Response<bool>.Success(producto, "Producto encontrado."));
-            }
-            else
-            {
-                return Ok(Response<bool>.Success(producto, "Producto no encontrado."));
+                return Ok(Response<List<ViewProductsDto>>.NoContent("No hay Productos disponibles."));
             }
 
+            return Ok(Response<List<ViewProductsDto>>.Success(productos, "Productos obtenidos correctamente."));
+            
         }
         catch
         {
@@ -99,15 +107,17 @@ public class ProductsController : ControllerBase
 
     [HttpGet("api/v1/[controller]/ProductosFacturados")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(Summary = "Obtener Facturacion de productos", Description = "Obtiene facturacion de productos por empresa")]
+    [SwaggerOperation(Summary = "Obtener Facturacion de productos", Description = "Obtiene todos los productos vendidos por una empresa")]
     public async Task<IActionResult> AllFacturacion([FromQuery] long idEmpresa)
     {
         try
         {
-            if (idEmpresa == 0 || idEmpresa == null)
-            {
-                return Ok(Response<string>.NotFound("El id de la empresa no puede ser nulo o 0"));
+            var validationResult = await _validateNumbers.ValidateAsync(idEmpresa);
 
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
             var producto = await _productoService.GetAllFacturacion(idEmpresa);
@@ -134,9 +144,19 @@ public class ProductsController : ControllerBase
     {
         try
         {
-            if (barCodeProduct == null || idCompany == null || idCompany == 0)
+            var validationResult = await _validateNumbers.ValidateAsync(idCompany);
+            var validationResult2 = await _validateString.ValidateAsync(barCodeProduct);
+
+            if (!validationResult.IsValid)
             {
-                return Ok(Response<bool>.NotFound("Los parametros no pueden ser nulos."));
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
+
+            if (!validationResult2.IsValid)
+            {
+                var errors = validationResult2.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
             var producto = await _productoService.GetProductoByBarCode(idCompany, barCodeProduct);
@@ -159,39 +179,6 @@ public class ProductsController : ControllerBase
         }
     }
 
-    [HttpGet("api/v1/[controller]/ProductosFactura")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(Summary = "Obtener producto por codigo de barra factura", Description = "Servicio para obtener productos por el código de barra de la factura")]
-    public async Task<IActionResult> ProductByBarCodeFactura([FromQuery] string? barCodefactura, long idCompany)
-    {
-        try
-        {
-            if (barCodefactura == null || idCompany == null || idCompany == 0)
-            {
-                return Ok(Response<bool>.NotFound("Los parametros no pueden ser nulos."));
-            }
-
-            var producto = await _productoService.GetProductoByBarCodeFactura(idCompany, barCodefactura);
-
-            if (producto != null)
-            {
-
-
-                return Ok(Response<ViewProductsDto>.Success(producto, "Producto encontrado."));
-            }
-            else
-            {
-                return Ok(Response<ViewProductsDto>.NoContent("Producto no encontrado."));
-
-            }
-
-        }
-        catch
-        {
-            return Ok(Response<string>.ServerError("Ocurrió un error al obtener los productos. Por favor, intente nuevamente."));
-        }
-    }
-
     [HttpGet("api/v1/[controller]/ProductosAgotados")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(Summary = "Obtener productos agotados", Description = "Servicio para obtener todos los productos agotados")]
@@ -199,10 +186,12 @@ public class ProductsController : ControllerBase
     {
         try
         {
-            if (idEmpresa == 0 || idEmpresa == null)
-            {
-                return Ok(Response<string>.NotFound("El id de la empresa no puede ser nulo o 0"));
+            var validationResult = await _validateNumbers.ValidateAsync(idEmpresa);
 
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
             var producto = await _productoService.GetAllAgotados(idEmpresa);
@@ -226,7 +215,7 @@ public class ProductsController : ControllerBase
     [HttpPost("api/v1/[controller]/CrearProducto")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(Summary = "Crear Producto", Description = "Endpoint para crear producto")]
-    public async Task<IActionResult> Add([FromQuery] CreateProductsDto createProducts)
+    public async Task<IActionResult> Add(CreateProductsDto createProducts)
     {
         try
         {
@@ -240,21 +229,26 @@ public class ProductsController : ControllerBase
 
             var createdProdut = await _productoService.CreateProduct(createProducts);
 
-            return Ok(Response<CreateProductsDto>.Created(createdProdut));
+            return Ok(Response<int?>.Created(createdProdut));
 
         }
-        catch
+        catch(Exception ex)
         {
+            Console.WriteLine(ex.ToString());
 
             return Ok(Response<string>.ServerError("Ocurrió un error al crear la empresa. Por favor, intente nuevamente."));
         }
 
     }
 
-    [HttpPost("api/v1/[controller]/EditarProducto")]
+    [HttpPut("api/v1/[controller]/EditarProducto")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerOperation(Summary = "Editar Producto", Description = "Endpoint para editar producto")]
-    public async Task<IActionResult> EditProduct([FromQuery] EditProductDto editProducts)
+    public async Task<IActionResult> EditProduct([FromBody] EditProductDto editProducts)
     {
         try
         {
@@ -266,15 +260,21 @@ public class ProductsController : ControllerBase
                 return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
-            var editProduct = await _productoService.EditProduct(editProducts);
+            var existingProducts = await _productoService.GetProductById(editProducts.Id);
+            if (existingProducts == null)
+            {
+                return NotFound(Response<string>.NotFound("Producto no encontrado."));
+            }
 
-            return Ok(Response<EditProductDto>.Success(editProduct, "Producto editado correctamente"));
+            await _productoService.EditProduct(editProducts);
+
+            return Ok(Response<string>.Success("Producto editado correctamente"));
 
         }
         catch
         {
 
-            return Ok(Response<string>.ServerError("Ocurrió un error al editar el prodcuto. Por favor, intente nuevamente."));
+            return Ok(Response<string>.ServerError("Ocurrió un error al editar el producto. Por favor, intente nuevamente."));
         }
 
     }
@@ -286,10 +286,19 @@ public class ProductsController : ControllerBase
     {
         try
         {
-            if (codigo == string.Empty || codigo == null)
-            {
-                return Ok(Response<string>.NotFound("El codigo no puede estar vacio"));
+            var validationResult = await _validateNumbers.ValidateAsync(idEmpresa);
+            var validationResult2 = await _validateString.ValidateAsync(codigo);
 
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
+
+            if (!validationResult2.IsValid)
+            {
+                var errors = validationResult2.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
             await _productoService.DeleteProductByCodigo(codigo, idEmpresa);
@@ -304,5 +313,73 @@ public class ProductsController : ControllerBase
         }
 
     }
+
+    //[ApiExplorerSettings(IgnoreApi = true)]
+    //[HttpGet("api/v1/[controller]/ProductosFactura")]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //[SwaggerOperation(Summary = "Obtener producto por codigo de barra factura", Description = "Servicio para obtener productos por el código de barra de la factura")]
+    //public async Task<IActionResult> ProductByBarCodeFactura([FromQuery] string? barCodefactura, long idCompany)
+    //{
+    //    try
+    //    {
+    //        if (barCodefactura == null || idCompany == null || idCompany == 0)
+    //        {
+    //            return Ok(Response<bool>.NotFound("Los parametros no pueden ser nulos."));
+    //        }
+
+    //        var producto = await _productoService.GetProductoByBarCodeFactura(idCompany, barCodefactura);
+
+    //        if (producto != null)
+    //        {
+
+
+    //            return Ok(Response<ViewProductsDto>.Success(producto, "Producto encontrado."));
+    //        }
+    //        else
+    //        {
+    //            return Ok(Response<ViewProductsDto>.NoContent("Producto no encontrado."));
+
+    //        }
+
+    //    }
+    //    catch
+    //    {
+    //        return Ok(Response<string>.ServerError("Ocurrió un error al obtener los productos. Por favor, intente nuevamente."));
+    //    }
+    //}
+
+    //[ApiExplorerSettings(IgnoreApi = true)]
+    //[HttpGet("api/v1/[controller]/VerificarProducto")]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //[SwaggerOperation(Summary = "Verificar producto", Description = "Verifica si un producto existe por su codigo y la empresa")]
+    //public async Task<IActionResult> CheckCode([FromQuery] string productCode, long idEmpresa)
+    //{
+    //    try
+    //    {
+    //        if (productCode == null || idEmpresa == null || idEmpresa == 0)
+    //        {
+    //            return Ok(Response<bool>.NotFound("Los parametros no pueden ser nulos."));
+    //        }
+
+    //        var producto = await _productoService.CheckCodeExist(productCode, idEmpresa);
+
+    //        if (producto)
+    //        {
+    //            return Ok(Response<bool>.Success(producto, "Producto encontrado."));
+    //        }
+    //        else
+    //        {
+    //            return Ok(Response<bool>.Success(producto, "Producto no encontrado."));
+    //        }
+
+    //    }
+    //    catch
+    //    {
+    //        return Ok(Response<string>.ServerError("Ocurrió un error al obtener los productos. Por favor, intente nuevamente."));
+    //    }
+    //}
 }
+
+
+
 

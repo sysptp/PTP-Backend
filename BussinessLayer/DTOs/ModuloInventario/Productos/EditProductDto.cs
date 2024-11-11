@@ -2,7 +2,7 @@
 {
     public class EditProductDto
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         public long? IdEmpresa { get; set; }
 
@@ -19,8 +19,6 @@
         public string? Descripcion { get; set; }
 
         public int? CantidadLote { get; set; }
-
-        public int? CantidadInventario { get; set; }
 
         public int? CantidadMinima { get; set; }
 

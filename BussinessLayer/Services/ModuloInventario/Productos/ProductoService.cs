@@ -22,7 +22,7 @@ public class ProductoService : IProductoService
     #endregion
 
     // Servicio para crear un producto
-    public async Task<CreateProductsDto> CreateProduct(CreateProductsDto producto)
+    public async Task<int?> CreateProduct(CreateProductsDto producto)
     {
         var newProduct = _mapper.Map<Producto>(producto);
 
@@ -30,14 +30,12 @@ public class ProductoService : IProductoService
         newProduct.Borrado = false;
         newProduct.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
         newProduct.Activo = true;
+        newProduct.CantidadInventario = 0;
 
         _context.Productos.Add(newProduct);
         await _context.SaveChangesAsync();
 
-        // Asignar el Id generado al DTO de respuesta
-        producto.Id = newProduct.Id;
-
-        return producto;
+        return newProduct.Id;
     }
 
     // Servicio para listar todos los productos
@@ -123,6 +121,9 @@ public class ProductoService : IProductoService
         if (producto != null)
         {
             producto.Borrado = true;
+            producto.Activo = false;
+            producto.HabilitaVenta = false;
+
             _context.Update(producto);
             await _context.SaveChangesAsync();
         }
@@ -137,7 +138,7 @@ public class ProductoService : IProductoService
     }
 
     // Servicio para editar un producto
-    public async Task<EditProductDto> EditProduct(EditProductDto producto)
+    public async Task EditProduct(EditProductDto producto)
     {
         var existingProduct = await _context.Productos
             .FirstOrDefaultAsync(x => x.Id == producto.Id);
@@ -150,8 +151,6 @@ public class ProductoService : IProductoService
             _context.Productos.Update(existingProduct);
             await _context.SaveChangesAsync();
         }
-
-        return producto;
     }
 
     // Obtener productos facturados
