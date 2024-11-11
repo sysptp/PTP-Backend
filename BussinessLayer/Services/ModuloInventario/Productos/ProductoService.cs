@@ -143,11 +143,14 @@ public class ProductoService : IProductoService
         var existingProduct = await _context.Productos
             .FirstOrDefaultAsync(x => x.Id == producto.Id);
 
+        var activox = existingProduct.Activo;
+
         if (existingProduct != null)
         {
             _mapper.Map(producto, existingProduct);
             existingProduct.FechaModificacion = DateTime.Now;
             existingProduct.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+            existingProduct.Activo = activox;
             _context.Productos.Update(existingProduct);
             await _context.SaveChangesAsync();
         }
