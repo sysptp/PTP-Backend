@@ -1,11 +1,14 @@
-﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Empresas;
+using BussinessLayer.DTOs.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net.Mime;
 
 
 [ApiController]
@@ -35,15 +38,50 @@ public class ProductsController : ControllerBase
     }
     #endregion
 
-    [HttpGet("api/v1/[controller]/ObtenerProductos")]
+    [HttpGet("api/v1/[controller]/ObtenerProducto")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [SwaggerOperation(Summary = "Obtener productos", Description = "Obtiene una lista de todos los productos " +
-        "dentro de una empresa o un producto específico de una empresa si se proporciona un codigo de producto.")]
-    public async Task<IActionResult> Get([FromQuery] string? codeProduct, long idCompany)
+    [SwaggerOperation(Summary = "Obtener producto", Description = "Obtiene el producto especifico por su codigo dentro de una empresa.")]
+    public async Task<IActionResult> Get([FromQuery] string codeProduct, long idCompany)
     {
         try
         {
 
+            var validationResult = await _validateNumbers.ValidateAsync(idCompany);
+            var validationResult2 = await _validateString.ValidateAsync(codeProduct);
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
+
+            if (!validationResult2.IsValid)
+            {
+                var errors = validationResult2.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
+
+            var producto = await _productoService.GetProductByCodeInCompany(codeProduct, idCompany);
+            if (producto == null)
+            {
+                return NotFound(Response<ViewProductsDto>.NotFound("Producto no encontrado."));
+            }
+
+            return Ok(Response<ViewProductsDto>.Success(producto, "Producto encontrado."));
+        }
+        catch
+        {
+            return Ok(Response<string>.ServerError("Ocurrió un error al obtener los productos. Por favor, intente nuevamente."));
+        }
+    }
+
+    [HttpGet("api/v1/[controller]/ObtenerProductos")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [SwaggerOperation(Summary = "Obtener productos", Description = "Obtiene todos los productos de una empresa.")]
+    public async Task<IActionResult> GetAllProductsByComp([FromQuery] long idCompany)
+    {
+        try
+        {
             var validationResult = await _validateNumbers.ValidateAsync(idCompany);
 
             if (!validationResult.IsValid)
@@ -52,26 +90,14 @@ public class ProductsController : ControllerBase
                 return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
-            if (codeProduct != null)
+            var productos = await _productoService.GetProductByIdCompany(idCompany);
+            if (productos == null || productos.Count == 0)
             {
-                var producto = await _productoService.GetProductByCodeInCompany(codeProduct, idCompany);
-                if (producto == null)
-                {
-                    return NotFound(Response<ViewProductsDto>.NotFound("Producto no encontrado."));
-                }
-
-                return Ok(Response<ViewProductsDto>.Success(producto, "Producto encontrado."));
+                return Ok(Response<List<ViewProductsDto>>.NoContent("No hay Productos disponibles."));
             }
-            else
-            {
-                var productos = await _productoService.GetProductByIdCompany(idCompany);
-                if (productos == null || productos.Count == 0)
-                {
-                    return Ok(Response<List<ViewProductsDto>>.NoContent("No hay Productos disponibles."));
-                }
 
-                return Ok(Response<List<ViewProductsDto>>.Success(productos, "Productos obtenidos correctamente."));
-            }
+            return Ok(Response<List<ViewProductsDto>>.Success(productos, "Productos obtenidos correctamente."));
+            
         }
         catch
         {
@@ -189,7 +215,7 @@ public class ProductsController : ControllerBase
     [HttpPost("api/v1/[controller]/CrearProducto")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(Summary = "Crear Producto", Description = "Endpoint para crear producto")]
-    public async Task<IActionResult> Add([FromQuery] CreateProductsDto createProducts)
+    public async Task<IActionResult> Add(CreateProductsDto createProducts)
     {
         try
         {
@@ -215,10 +241,14 @@ public class ProductsController : ControllerBase
 
     }
 
-    [HttpPost("api/v1/[controller]/EditarProducto")]
+    [HttpPut("api/v1/[controller]/EditarProducto")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerOperation(Summary = "Editar Producto", Description = "Endpoint para editar producto")]
-    public async Task<IActionResult> EditProduct([FromQuery] EditProductDto editProducts)
+    public async Task<IActionResult> EditProduct([FromBody] EditProductDto editProducts)
     {
         try
         {
@@ -230,6 +260,12 @@ public class ProductsController : ControllerBase
                 return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
+            var existingProducts = await _productoService.GetProductById(editProducts.Id);
+            if (existingProducts == null)
+            {
+                return NotFound(Response<string>.NotFound("Producto no encontrado."));
+            }
+
             await _productoService.EditProduct(editProducts);
 
             return Ok(Response<string>.Success("Producto editado correctamente"));
@@ -238,7 +274,7 @@ public class ProductsController : ControllerBase
         catch
         {
 
-            return Ok(Response<string>.ServerError("Ocurrió un error al editar el prodcuto. Por favor, intente nuevamente."));
+            return Ok(Response<string>.ServerError("Ocurrió un error al editar el producto. Por favor, intente nuevamente."));
         }
 
     }

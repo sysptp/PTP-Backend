@@ -11,9 +11,8 @@ namespace BussinessLayer.FluentValidations
                 .WithMessage("El valor no puede ser nulo.");
 
             RuleFor(x => x)
-                .GreaterThanOrEqualTo(0)
-                .WithMessage("El valor debe ser un número positivo.");
-
+                .GreaterThan(0)  
+                .WithMessage("El valor debe ser un número mayor que cero.");
         }
     }
 }

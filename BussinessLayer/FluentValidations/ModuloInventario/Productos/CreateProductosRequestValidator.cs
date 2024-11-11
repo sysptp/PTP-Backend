@@ -40,10 +40,6 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Productos
                 .NotNull().WithMessage("CantidadLote cannot be null.")
                 .Must(BeValidInt).WithMessage("CantidadLote must be a valid integer.");
 
-            RuleFor(x => x.CantidadInventario)
-                .NotNull().WithMessage("CantidadInventario cannot be null.")
-                .Must(BeValidInt).WithMessage("CantidadInventario must be a valid integer.");
-
             RuleFor(x => x.CantidadMinima)
                 .NotNull().WithMessage("CantidadMinima cannot be null.")
                 .Must(BeValidInt).WithMessage("CantidadMinima must be a valid integer.");

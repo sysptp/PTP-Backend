@@ -30,6 +30,7 @@ public class ProductoService : IProductoService
         newProduct.Borrado = false;
         newProduct.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
         newProduct.Activo = true;
+        newProduct.CantidadInventario = 0;
 
         _context.Productos.Add(newProduct);
         await _context.SaveChangesAsync();
@@ -120,6 +121,9 @@ public class ProductoService : IProductoService
         if (producto != null)
         {
             producto.Borrado = true;
+            producto.Activo = false;
+            producto.HabilitaVenta = false;
+
             _context.Update(producto);
             await _context.SaveChangesAsync();
         }

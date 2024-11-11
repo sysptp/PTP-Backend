@@ -10,6 +10,9 @@ using BussinessLayer.FluentValidations.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloInventario.Precios;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
+using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
+using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
+using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
 
 namespace BussinessLayer.DendeciesInjections
 {

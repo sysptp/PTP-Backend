@@ -21,7 +21,7 @@ namespace BussinessLayer.FluentValidations
             // Validar que solo contenga caracteres alfabéticos o numéricos (sin caracteres especiales)
             RuleFor(x => x)
                 .Matches("^[a-zA-Z0-9]+$")
-                .WithMessage("El campo solo debe contener caracteres alfanuméricos (sin caracteres especiales).");
+                .WithMessage("El campo solo debe contener numeros y letras, no se permiten caracteres especiales.");
         }
     }
 }

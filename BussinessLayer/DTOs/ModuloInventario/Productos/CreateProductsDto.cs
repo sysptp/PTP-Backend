@@ -23,8 +23,6 @@ namespace BussinessLayer.DTOs.ModuloInventario.Productos
 
         public int? CantidadLote { get; set; }
 
-        public int? CantidadInventario { get; set; }
-
         public int? CantidadMinima { get; set; }
 
         public bool? AdmiteDescuento { get; set; }
