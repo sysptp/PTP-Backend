@@ -51,6 +51,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IHdkSubCategoryRepository, HdkSubCategoryRepository>();
             services.AddTransient<IHdkTicketsRepository, HdkTicketsRepository>();
             services.AddTransient<IHdkTypeTicketRepository, HdkTypeTicketRepository>();
+
             #endregion
         }
     }

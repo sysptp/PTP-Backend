@@ -1,16 +1,16 @@
 ﻿using DataLayer.Models.HelpDesk;
 using BussinessLayer.Interfaces.IHelpDesk;
 using BussinessLayer.DTOs.HelpDesk;
-using BussinessLayer.Repository.HelpDesk;
 using AutoMapper;
+using BussinessLayer.Interfaces.Repository.HelpDesk;
 
 namespace BussinessLayer.Services.SHelpDesk
 {
     public class HdkNoteTicketService : GenericService<HdkNoteTicketRequest, HdkNoteTicketReponse, HdkNoteTicket>, IHdkNoteTicketService
     {
-        private readonly HdkNoteTicketRepository _repository;
+        private readonly IHdkNoteTicketRepository _repository;
         private readonly IMapper _mapper;
-        public HdkNoteTicketService (HdkNoteTicketRepository repository, IMapper mapper) : base(repository, mapper)
+        public HdkNoteTicketService (IHdkNoteTicketRepository repository, IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
