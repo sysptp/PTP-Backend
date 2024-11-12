@@ -29,7 +29,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener sucursales", Description = "Obtiene una lista de todas las sucursales o una sucursal específica si se proporciona un ID.")]
-        public async Task<IActionResult> Get([FromQuery] long? id)
+        public async Task<IActionResult> Get([FromQuery] long? id, long? companyId)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
                     {
                         return StatusCode(204, Response<IEnumerable<GnSucursalResponse>>.NoContent("No hay sucursales disponibles."));
                     }
-                    return Ok(Response<IEnumerable<GnSucursalResponse>>.Success(sucursales, "Sucursales obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<GnSucursalResponse>>.Success(companyId == null ? sucursales : sucursales.Where(x => x.CompanyId == companyId), "Sucursales obtenidas correctamente."));
                 }
             }
             catch (Exception ex)

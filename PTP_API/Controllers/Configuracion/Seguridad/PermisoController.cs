@@ -31,7 +31,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener permisos", Description = "Devuelve una lista de permisos o un permiso específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAllPermissions([FromQuery] long? id)
+        public async Task<IActionResult> GetAllPermissions([FromQuery] long? id, long? companyId, int? roleId, int? menuId)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
                 }
                 else
                 {
-                    var permisos = await _gnPermisoService.GetAllDto();
+                    var permisos = await _gnPermisoService.GetAllPermisosByFilter(companyId,roleId,menuId);
                     if (permisos == null || !permisos.Any())
                     {
                         return NoContent();
