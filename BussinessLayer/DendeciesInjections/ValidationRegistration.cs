@@ -43,6 +43,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<RegionRequest>, RegionRequestValidator>();
             services.AddScoped<IValidator<ProvinceRequest>, ProvinceRequestValidator>();
             services.AddScoped<IValidator<MunicipioRequest>, MunicipalityRequestValidator>();
+            services.AddScoped<IValidator<string>, StringsRequestValidator>();
+            services.AddScoped<IValidator<long>, NumbersRequestValidator>();
+
+
         }
     }
 }

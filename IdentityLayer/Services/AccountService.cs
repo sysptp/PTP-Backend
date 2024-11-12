@@ -96,7 +96,7 @@ namespace IdentityLayer.Services
             response.PhoneNumber = user.PhoneNumber ?? string.Empty;
             response.SucursalId = user.CodigoSuc;
             var role = await _roleManager.FindByIdAsync(response.RoleId.ToString());
-            var sucursal = await _sucursalRepository.GetBySucursalCode(response.SucursalId);
+            var sucursal = await _sucursalRepository.GetById(response.SucursalId);
             var company = await _empresaRepository.GetById((long)response.CompanyId);
             response.RoleName = role.Name;
             response.CompanyName = company.NOMBRE_EMP;
@@ -124,7 +124,7 @@ namespace IdentityLayer.Services
                      : null;
 
                 var sucursal = user.CodigoSuc.HasValue
-                    ? await _sucursalRepository.GetBySucursalCode(user.CodigoSuc.Value)
+                    ? await _sucursalRepository.GetById(user.CodigoSuc.Value)
                     : null;
 
                 var company = user.CodigoEmp.HasValue

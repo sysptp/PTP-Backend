@@ -73,7 +73,7 @@ namespace BussinessLayer.FluentValidations.ModuloGeneral.Empresas
                 {
                     if (!isPrincipal) return true; 
 
-                    return await VerifyIsOnlyOneSucursal(sucursal.CompanyId);
+                    return await VerifyIsOnlyOneSucursal(sucursal.CompanyId, sucursal.CodigoSuc);
                 })
                 .WithMessage("Ya existe una sucursal principal para esta compañía.");
 
@@ -85,10 +85,10 @@ namespace BussinessLayer.FluentValidations.ModuloGeneral.Empresas
             return company != null;
         }
 
-        public async Task<bool> VerifyIsOnlyOneSucursal(long companyId)
+        public async Task<bool> VerifyIsOnlyOneSucursal(long companyId, long sucursalId)
         {
             var sucursales = await _grnSucursalRepository.GetAll();
-            var sucursalPrincipal = sucursales.Where(x => x.Principal == true && x.CodigoEmp == companyId);
+            var sucursalPrincipal = sucursales.Where(x => x.Principal == true && x.CodigoEmp == companyId && x.CodigoSuc == sucursalId);
             return sucursalPrincipal == null;
         }
         public async Task<bool> CountryExists(int countryId)

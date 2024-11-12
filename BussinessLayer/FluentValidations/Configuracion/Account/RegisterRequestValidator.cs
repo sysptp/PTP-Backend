@@ -73,7 +73,7 @@ namespace BussinessLayer.FluentValidations.Configuracion.Account
 
         private async Task<bool> SucursalExists(long id)
         {
-            var sucursal = await _sucursalRepository.GetBySucursalCode(id);
+            var sucursal = await _sucursalRepository.GetById(id);
             return sucursal != null;
         }
     }
