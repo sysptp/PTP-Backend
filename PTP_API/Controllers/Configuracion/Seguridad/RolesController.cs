@@ -18,8 +18,6 @@ namespace PTP_API.Controllers.Configuration.Seguridad
         private readonly IGnPerfilService _rolesService;
         private readonly IValidator<GnPerfilRequest> _validator;
 
-
-
         public RolesController(IGnPerfilService rolesService, IValidator<GnPerfilRequest> validator)
         {
             _rolesService = rolesService;

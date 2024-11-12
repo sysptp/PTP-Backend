@@ -43,6 +43,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
                 else
                 {
                     var regions = await _regionService.GetAllDto();
+                    
                     if (regions == null || !regions.Any())
                     {
                         return StatusCode(204, Response<IEnumerable<RegionResponse>>.NoContent("No hay regiones disponibles."));

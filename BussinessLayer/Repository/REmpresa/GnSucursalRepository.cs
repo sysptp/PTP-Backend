@@ -18,10 +18,5 @@ namespace BussinessLayer.Repository.REmpresa
             _dbContext = dbContext;
         }
 
-        public async Task<GnSucursal> GetBySucursalCode(long? id)
-        {
-            var entity = await _dbContext.GnSucursal.FindAsync(id);
-            return entity;
-        }
     }
 }

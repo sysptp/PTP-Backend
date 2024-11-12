@@ -17,7 +17,7 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Sucursal
         public string? UserIp { get; set; }
         public bool IsPrincipal { get; set; }
         [JsonIgnore]
-        public long SucursalId { get; set; }
+        public long CodigoSuc { get; set; }
 
     }
 
