@@ -177,7 +177,11 @@ namespace DataLayer.PDbContex
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
 
+        #region Seguridad
         public DbSet<GnPerfil> GnPerfil {get; set; }
+        public DbSet<GnPermiso> GnPermiso { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
+        #endregion
 
         #region refactor del Menu
         public DbSet<GnModulo> GNModulos { get; set; }

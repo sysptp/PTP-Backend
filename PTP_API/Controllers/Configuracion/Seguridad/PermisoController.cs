@@ -9,9 +9,9 @@ using System.Net.Mime;
 
 namespace PTP_API.Controllers.Configuracion.Seguridad
 {
-    [Route("api/[controller]")]
     [ApiController]
     [SwaggerTag("Servicio de manejo de permisos")]
+    [Route("api/v1/[controller]")]
     [Authorize]
 
     public class PermisoController : ControllerBase
@@ -31,7 +31,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener permisos", Description = "Devuelve una lista de permisos o un permiso específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAllPermissions([FromQuery] int? id)
+        public async Task<IActionResult> GetAllPermissions([FromQuery] long? id)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Actualizar permiso", Description = "Endpoint para actualizar los datos de un permiso")]
-        public async Task<IActionResult> UpdatePermission(int id, [FromBody] GnPermisoRequest permisoDto)
+        public async Task<IActionResult> UpdatePermission(long id, [FromBody] GnPermisoRequest permisoDto)
         {
             var validationResult = await _validator.ValidateAsync(permisoDto);
 
@@ -124,7 +124,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Eliminar permiso", Description = "Endpoint para eliminar un permiso")]
-        public async Task<IActionResult> DeletePermission(int id)
+        public async Task<IActionResult> DeletePermission(long id)
         {
             try
             {

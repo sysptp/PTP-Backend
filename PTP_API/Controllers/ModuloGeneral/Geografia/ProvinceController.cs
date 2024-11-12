@@ -5,6 +5,8 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
+using FluentValidation;
+using BussinessLayer.Repository.RGeografia;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -15,10 +17,12 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     public class ProvinceController : ControllerBase
     {
         private readonly IProvinciaService _provinceService;
+        private readonly IValidator<ProvinceRequest> _validator;
 
-        public ProvinceController(IProvinciaService provinceService)
+        public ProvinceController(IProvinciaService provinceService, IValidator<ProvinceRequest> validator)
         {
             _provinceService = provinceService;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -60,9 +64,11 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         [SwaggerOperation(Summary = "Crear una nueva provincia", Description = "Crea una nueva provincia en el sistema.")]
         public async Task<IActionResult> Add([FromBody] ProvinceRequest request)
         {
-            if (!ModelState.IsValid)
+            var validationResult = await _validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
@@ -76,5 +82,60 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
                 return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear la provincia. Por favor, intente nuevamente."));
             }
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Actualizar provincia", Description = "Endpoint para actualizar los datos de una provincia")]
+        public async Task<IActionResult> UpdateProvince(int id, [FromBody] ProvinceRequest request)
+        {
+            var validationResult = await _validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
+
+            try
+            {
+                var existingProvince = await _provinceService.GetByIdRequest(id);
+                if (existingProvince == null)
+                    return NotFound(Response<string>.NotFound("Provincia no encontrada"));
+
+                request.Id = id;
+                await _provinceService.Update(request, id);
+                return Ok(Response<string>.Success(null, "Provincia actualizada correctamente"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar la provincia. Por favor, intente nuevamente."));
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Eliminar provincia", Description = "Endpoint para eliminar una provincia")]
+        public async Task<IActionResult> DeleteProvince(int id)
+        {
+            try
+            {
+                var existingProvince = await _provinceService.GetByIdRequest(id);
+                if (existingProvince == null)
+                    return NotFound(Response<string>.NotFound("Provincia no encontrada"));
+
+                await _provinceService.Delete(id);
+                return Ok(Response<string>.Success(null, "Provincia eliminada correctamente"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar la provincia. Por favor, intente nuevamente."));
+            }
+        }
+
     }
 }

@@ -1,9 +1,11 @@
 ﻿using DataLayer.Models.Otros;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.Seguridad
 {
     public class GnPermiso : AuditableEntities
     {
+        [Key]
         public long IDPermiso { get; set; }
         public int IDPerfil { get; set; }
         public int IDMenu { get; set; }

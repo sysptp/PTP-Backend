@@ -1,7 +1,11 @@
-﻿namespace BussinessLayer.DTOs.Configuracion.Geografia.DPais
+﻿using System.Text.Json.Serialization;
+
+namespace BussinessLayer.DTOs.Configuracion.Geografia.DPais
 {
     public class CountryRequest
     {
+        [JsonIgnore]
+        public int Id { get; set; }
         public string Name { get; set; } = null!;
     }
 }

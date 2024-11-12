@@ -1,6 +1,7 @@
 using IdentityLayer;
 using BussinessLayer.DendeciesInjections;
 using PTP_API.Extensions;
+using PTP_API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,11 +25,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+
 var app = builder.Build();
 
 app.UseCors(policy => policy.AllowAnyHeader()
                              .AllowAnyMethod()
                              .AllowAnyOrigin());
+
+app.UseMiddleware<SqlInjectionProtectionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

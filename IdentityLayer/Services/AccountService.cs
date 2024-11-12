@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.Repository.Empresa;
 using BussinessLayer.DTOs.Configuracion.Account;
+using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
 
 namespace IdentityLayer.Services
 {
@@ -55,7 +56,7 @@ namespace IdentityLayer.Services
         public async Task<bool> VerifyUserById(int userId)
         {
             var user = await _userManager.FindByIdAsync(Convert.ToString(userId));
-           
+
             return user != null;
         }
 
@@ -63,19 +64,8 @@ namespace IdentityLayer.Services
         {
             var response = new AuthenticationResponse();
 
-            try
-            {
-                var user1 = await _userManager.FindByEmailAsync(request.UserCredential) ??
-                    await _userManager.FindByNameAsync(request.UserCredential);
-
-            }
-            catch (Exception ex)
-            
-            { 
-                throw new Exception(ex.Message,ex);
-            }
             var user = await _userManager.FindByEmailAsync(request.UserCredential) ??
-                    await _userManager.FindByNameAsync(request.UserCredential);
+                       await _userManager.FindByNameAsync(request.UserCredential);
 
             if (user == null)
             {
@@ -122,6 +112,51 @@ namespace IdentityLayer.Services
             return response;
         }
 
+        public async Task<List<UserResponse>> GetAllUsers()
+        {
+            var users = _userManager.Users.ToList();
+            var userResponseList = new List<UserResponse>();
+
+            foreach (var user in users)
+            {
+                var role = user.IdPerfil.HasValue
+                     ? await _roleManager.FindByIdAsync(user.IdPerfil.Value.ToString())
+                     : null;
+
+                var sucursal = user.CodigoSuc.HasValue
+                    ? await _sucursalRepository.GetBySucursalCode(user.CodigoSuc.Value)
+                    : null;
+
+                var company = user.CodigoEmp.HasValue
+                    ? await _empresaRepository.GetById(user.CodigoEmp.Value)
+                    : null;
+
+                var userResponse = new UserResponse
+                {
+                    Id = user.Id,
+                    CompanyId = user.CodigoEmp ?? 0,
+                    ScheduleId = user.IdHorario,
+                    RoleId = user.IdPerfil ?? 0,
+                    FirstName = user.Nombre,
+                    LastName = user.Apellido,
+                    UserImage = user.ImagenUsuario,
+                    PersonalPhone = user.TelefonoPersonal,
+                    IsUserOnline = user.OnlineUsuario,
+                    SucursalId = user.CodigoSuc ?? 0,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    SucursalName = sucursal?.NombreSuc,
+                    RoleName = role?.Name,
+                    CompanyName = company?.NOMBRE_EMP
+                };
+
+                userResponseList.Add(userResponse);
+            }
+
+            return userResponseList;
+        }
+
 
         #region PrivateMethods
 
@@ -135,7 +170,7 @@ namespace IdentityLayer.Services
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes); 
+            var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes);
 
 
             return new JwtSecurityToken(
@@ -195,7 +230,7 @@ namespace IdentityLayer.Services
             {
                 throw new Exception(ex.Message, ex);
             }
-          
+
         }
 
         private RefreshToken GenerateRefreshToken()

@@ -13,6 +13,11 @@ using BussinessLayer.FluentValidations;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
 using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
+using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
+using BussinessLayer.FluentValidations.ModuloGeneral.Geografia;
+using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
+using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
+using BussinessLayer.DTOs.Configuracion.Geografia.DMunicipio;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -35,6 +40,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<CreateProductsTypeRequestValidator>();
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
             services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
+            services.AddScoped<IValidator<CountryRequest>, CountryRequestValidator>();
+            services.AddScoped<IValidator<RegionRequest>, RegionRequestValidator>();
+            services.AddScoped<IValidator<ProvinceRequest>, ProvinceRequestValidator>();
+            services.AddScoped<IValidator<MunicipioRequest>, MunicipalityRequestValidator>();
         }
     }
 }

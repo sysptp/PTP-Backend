@@ -16,7 +16,6 @@ namespace BussinessLayer.FluentValidations.ModuloGeneral.Empresas
         private readonly IAccountService _accountService;
         private readonly IGnSucursalRepository _grnSucursalRepository;
 
-
         public GnSucursalRequestValidator(
             IGnEmpresaRepository empresaRepository,
             IPaisRepository paisRepository, IProvinciaRepository provinciaRepository,
@@ -90,7 +89,7 @@ namespace BussinessLayer.FluentValidations.ModuloGeneral.Empresas
         {
             var sucursales = await _grnSucursalRepository.GetAll();
             var sucursalPrincipal = sucursales.Where(x => x.Principal == true && x.CodigoEmp == companyId);
-            return sucursalPrincipal != null;
+            return sucursalPrincipal == null;
         }
         public async Task<bool> CountryExists(int countryId)
         {
