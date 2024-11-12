@@ -43,9 +43,12 @@ using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
 using BussinessLayer.Services.ModuloInventario.Suplidores;
 using BussinessLayer.Services.ModuloInventario.Impuesto;
 using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
+using BussinessLayer.Interfaces.IHelpDesk;
+using BussinessLayer.Services.SHelpDesk;
 using BussinessLayer.Services.SSeguridad.Perfil;
 using BussinessLayer.Services.SSeguridad.SUsuario;
 using BussinessLayer.Services.SSeguridad.Permiso;
+using BussinessLayer.Services.ModuloInventario.Productos;
 
 
 public static class ServiceRegistration
@@ -111,6 +114,7 @@ public static class ServiceRegistration
         services.AddScoped<IBovedaCajaDesglosesService, BovedaCajaDesglosesService>();
         services.AddScoped<IBilletes_MonedaService, Billetes_MonedaService>();
         services.AddScoped<IBancosService, BancosService>();
+        services.AddScoped<ITipoProductoService, TipoProductoService>();
         services.AddScoped<DeserializadorCrearReporte>();
         services.AddScoped<EntityMapper>();
         services.AddScoped<CsvProcessor>();
@@ -135,7 +139,23 @@ public static class ServiceRegistration
         #region Configuracion 
         services.AddTransient<IGnMenuService,GnMenuService>();
         services.AddTransient<IGnModuloService, GnModuloService>();
-        #endregion 
+        #endregion
+
+        #region HelpDesk
+        services.AddTransient<IHdkCategoryTicketService, HdkCategoryTicketService>();
+        services.AddTransient<IHdkDepartamentsService, HdkDepartamentsService>();
+        services.AddTransient<IHdkDepartXUsuarioService, HdkDepartXUsuarioService>();
+        services.AddTransient<IHdkErrorSubCategoryService, HdkErrorSubCategoryService>();
+        services.AddTransient<IHdkFileEvidenceTicketService, HdkFileEvidenceTicketService>();
+        services.AddTransient<IHdkNoteTicketService, HdkNoteTicketService>();
+        services.AddTransient<IHdkPrioridadTicketService, HdkPrioridadTicketService>();
+        services.AddTransient<IHdkSolutionTicketService, HdkSolutionTicketService>();
+        services.AddTransient<IHdkStatusTicketService, HdkStatusTicketService>();
+        services.AddTransient<IHdkSubCategoryService, HdkSubCategoryService>();
+        services.AddTransient<IHdkTicketsService, HdkTicketsService>();
+        services.AddTransient<IHdkTypeTicketService, HdkTypeTicketService>();
+        #endregion
+
     }
 }
 

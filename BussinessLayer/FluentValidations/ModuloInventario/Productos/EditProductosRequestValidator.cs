@@ -9,9 +9,6 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Productos
 
         public EditProductosRequestValidator()
         {
-            RuleFor(x => x.IdEmpresa)
-                .NotNull().WithMessage("IdEmpresa cannot be null.")
-                .Must(BeValidLong).WithMessage("IdEmpresa must be a valid long.");
 
             RuleFor(x => x.IdVersion)
                 .NotNull().WithMessage("IdVersion cannot be null.")

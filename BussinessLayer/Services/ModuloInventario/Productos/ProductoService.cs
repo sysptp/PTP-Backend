@@ -29,7 +29,7 @@ public class ProductoService : IProductoService
         newProduct.FechaCreacion = DateTime.Now;
         newProduct.Borrado = false;
         newProduct.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
-        newProduct.Activo = true;
+        newProduct.Activo = false;
         newProduct.CantidadInventario = 0;
 
         _context.Productos.Add(newProduct);

@@ -23,7 +23,7 @@ namespace DataLayer.Models.ModuloInventario.Productos
         public int? IdTipoProducto { get; set; }
 
         [ForeignKey("IdTipoProducto")]
-        public virtual GnTipoProducto? TipoProducto { get; set; }
+        public virtual InvTipoProducto? TipoProducto { get; set; }
 
         [MaxLength(50)]
         public string? CodigoBarra { get; set; }
