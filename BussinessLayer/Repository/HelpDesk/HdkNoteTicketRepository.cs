@@ -5,7 +5,7 @@ using DataLayer.PDbContex;
 
 namespace BussinessLayer.Repository.HelpDesk
 {
-    internal class HdkNoteTicketRepository : GenericRepository<HdkNoteTicket>, IHdkNoteTicketRepository
+    public class HdkNoteTicketRepository : GenericRepository<HdkNoteTicket>, IHdkNoteTicketRepository
     {
         private readonly PDbContext _dbContext;
         private readonly ITokenService _tokenService;

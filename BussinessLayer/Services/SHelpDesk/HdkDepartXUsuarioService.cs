@@ -6,12 +6,12 @@ using BussinessLayer.DTOs.HelpDesk;
 
 namespace BussinessLayer.Services.SHelpDesk
 {
-    public class HdkCategoryTicketService : GenericService<HdkCategoryTicketRequest, HdkCategoryTicketReponse, HdkCategoryTicket>, IHdkCategoryTicketService
+    public class HdkDepartXUsuarioService : GenericService<HdkDepartXUsuarioRequest, HdkDepartXUsuarioReponse, HdkDepartXUsuario>, IHdkDepartXUsuarioService
     {
-        private readonly IHdkCategoryTicketRepository _repository;
+        private readonly IHdkDepartXUsuarioRepository _repository;
         private readonly IMapper _mapper;
 
-        public HdkCategoryTicketService (IHdkCategoryTicketRepository repository, IMapper mapper) : base(repository, mapper)
+        public HdkDepartXUsuarioService(IHdkDepartXUsuarioRepository repository, IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
