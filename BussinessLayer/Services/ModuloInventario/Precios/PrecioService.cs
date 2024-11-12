@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloInventario.Precios;
 using BussinessLayer.Interfaces.ModuloInventario.Precios;
+using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +11,19 @@ public class PrecioService : IPrecioService
     #region Propiedades
     private readonly PDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IProductoService _productoService;
     private readonly ITokenService _tokenService;
 
     public PrecioService(
         PDbContext dbContext,
         IMapper mapper,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IProductoService productoService)
     {
         _context = dbContext;
         _mapper = mapper;
         _tokenService = tokenService;
+        _productoService = productoService;
     }
     #endregion
 
@@ -50,36 +54,33 @@ public class PrecioService : IPrecioService
     }
 
     // Crear un nuevo precio
-    public async Task<CreatePreciosDto> CreatePrices(CreatePreciosDto productosPrecio)
+    public async Task<int?> CreatePrices(CreatePreciosDto productosPrecio)
     {
         var newPrice = _mapper.Map<Precio>(productosPrecio);
         newPrice.FechaCreacion = DateTime.Now;
         newPrice.Borrado = false;
         newPrice.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+        newPrice.HabilitarVenta = false;
 
         _context.Precios.Add(newPrice);
         await _context.SaveChangesAsync();
 
-        productosPrecio.Id = newPrice.Id;
-
-        return productosPrecio;
+        return newPrice.Id;
     }
 
     // Editar precio existente
-    public async Task<EditPricesDto> EditPrice(EditPricesDto price)
+    public async Task EditPrice(EditPricesDto price)
     {
         var existingPrice = await _context.Precios.FirstOrDefaultAsync(x => x.Id == price.Id);
 
         if (existingPrice != null)
         {
             _mapper.Map(price, existingPrice);
-            existingPrice.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+            existingPrice.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
             existingPrice.FechaModificacion = DateTime.Now;
             _context.Precios.Update(existingPrice);
             await _context.SaveChangesAsync();
         }
-
-        return price;
     }
 
     // Establecer el mismo valor de precio para una lista de precios
@@ -100,6 +101,7 @@ public class PrecioService : IPrecioService
         if (precio != null)
         {
             precio.Borrado = true;
+            precio.HabilitarVenta = false;
             var updated = _mapper.Map<Precio>(precio);
             _context.Update(updated);
             await _context.SaveChangesAsync();

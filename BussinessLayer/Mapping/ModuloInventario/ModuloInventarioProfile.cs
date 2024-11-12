@@ -21,6 +21,10 @@ public class ModuloInventarioProfile : Profile
         CreateMap<Producto, ViewProductsDto>().ReverseMap();
 
         CreateMap<CreateVersionesDto, Versiones>().ReverseMap();
+
+        CreateMap<CreateTipoProductoDto, InvTipoProducto>().ReverseMap();
+        CreateMap<ViewProductTypeDto, InvTipoProducto>().ReverseMap();
+        CreateMap<EditProductTypeDto, InvTipoProducto>().ReverseMap();
     }
 }
 

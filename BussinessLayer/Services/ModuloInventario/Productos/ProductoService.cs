@@ -22,22 +22,20 @@ public class ProductoService : IProductoService
     #endregion
 
     // Servicio para crear un producto
-    public async Task<CreateProductsDto> CreateProduct(CreateProductsDto producto)
+    public async Task<int?> CreateProduct(CreateProductsDto producto)
     {
         var newProduct = _mapper.Map<Producto>(producto);
 
         newProduct.FechaCreacion = DateTime.Now;
         newProduct.Borrado = false;
         newProduct.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
-        newProduct.Activo = true;
+        newProduct.Activo = false;
+        newProduct.CantidadInventario = 0;
 
         _context.Productos.Add(newProduct);
         await _context.SaveChangesAsync();
 
-        // Asignar el Id generado al DTO de respuesta
-        producto.Id = newProduct.Id;
-
-        return producto;
+        return newProduct.Id;
     }
 
     // Servicio para listar todos los productos
@@ -123,6 +121,9 @@ public class ProductoService : IProductoService
         if (producto != null)
         {
             producto.Borrado = true;
+            producto.Activo = false;
+            producto.HabilitaVenta = false;
+
             _context.Update(producto);
             await _context.SaveChangesAsync();
         }
@@ -137,21 +138,22 @@ public class ProductoService : IProductoService
     }
 
     // Servicio para editar un producto
-    public async Task<EditProductDto> EditProduct(EditProductDto producto)
+    public async Task EditProduct(EditProductDto producto)
     {
         var existingProduct = await _context.Productos
             .FirstOrDefaultAsync(x => x.Id == producto.Id);
+
+        var activox = existingProduct.Activo;
 
         if (existingProduct != null)
         {
             _mapper.Map(producto, existingProduct);
             existingProduct.FechaModificacion = DateTime.Now;
             existingProduct.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+            existingProduct.Activo = activox;
             _context.Productos.Update(existingProduct);
             await _context.SaveChangesAsync();
         }
-
-        return producto;
     }
 
     // Obtener productos facturados

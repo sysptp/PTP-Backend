@@ -1,4 +1,6 @@
-﻿namespace BussinessLayer.DTOs.ModuloGeneral.Sucursal
+﻿using System.Text.Json.Serialization;
+
+namespace BussinessLayer.DTOs.ModuloGeneral.Sucursal
 {
     public class GnSucursalRequest
     {
@@ -14,6 +16,8 @@
         public bool SucursalStatus { get; set; }
         public string? UserIp { get; set; }
         public bool IsPrincipal { get; set; }
+        [JsonIgnore]
+        public long CodigoSuc { get; set; }
 
     }
 

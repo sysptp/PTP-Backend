@@ -5,6 +5,7 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
+using FluentValidation;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -15,16 +16,18 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     public class RegionController : ControllerBase
     {
         private readonly IRegionService _regionService;
+        private readonly IValidator<RegionRequest> _validator;
 
-        public RegionController(IRegionService regionService)
+        public RegionController(IRegionService regionService, IValidator<RegionRequest> validator)
         {
             _regionService = regionService;
+            _validator = validator;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener regiones", Description = "Obtiene una lista de todas las regiones o una región específica si se proporciona un ID.")]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, int? countryId)
         {
             try
             {
@@ -40,11 +43,12 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
                 else
                 {
                     var regions = await _regionService.GetAllDto();
+                    
                     if (regions == null || !regions.Any())
                     {
                         return StatusCode(204, Response<IEnumerable<RegionResponse>>.NoContent("No hay regiones disponibles."));
                     }
-                    return Ok(Response<IEnumerable<RegionResponse>>.Success(regions, "Regiones obtenidas correctamente."));
+                   return Ok(Response<IEnumerable<RegionResponse>>.Success(countryId == null ? regions : regions.Where(x => x.CountryId == countryId), "Regiones obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
@@ -59,9 +63,11 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         [SwaggerOperation(Summary = "Crear una nueva región", Description = "Crea una nueva región en el sistema.")]
         public async Task<IActionResult> Add([FromBody] RegionRequest request)
         {
-            if (!ModelState.IsValid)
+            var validationResult = await _validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
@@ -75,5 +81,60 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
                 return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear la región. Por favor, intente nuevamente."));
             }
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Actualizar región", Description = "Endpoint para actualizar los datos de una región")]
+        public async Task<IActionResult> UpdateRegion(int id, [FromBody] RegionRequest request)
+        {
+            var validationResult = await _validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
+
+            try
+            {
+                var existingRegion = await _regionService.GetByIdRequest(id);
+                if (existingRegion == null)
+                    return NotFound(Response<string>.NotFound("Región no encontrada"));
+
+                request.Id = id;
+                await _regionService.Update(request, id);
+                return Ok(Response<string>.Success(null, "Región actualizada correctamente"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar la región. Por favor, intente nuevamente."));
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Eliminar región", Description = "Endpoint para eliminar una región")]
+        public async Task<IActionResult> DeleteRegion(int id)
+        {
+            try
+            {
+                var existingRegion = await _regionService.GetByIdRequest(id);
+                if (existingRegion == null)
+                    return NotFound(Response<string>.NotFound("Región no encontrada"));
+
+                await _regionService.Delete(id);
+                return Ok(Response<string>.Success(null, "Región eliminada correctamente"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar la región. Por favor, intente nuevamente."));
+            }
+        }
+
     }
 }

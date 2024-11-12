@@ -18,8 +18,6 @@ namespace PTP_API.Controllers.Configuration.Seguridad
         private readonly IGnPerfilService _rolesService;
         private readonly IValidator<GnPerfilRequest> _validator;
 
-
-
         public RolesController(IGnPerfilService rolesService, IValidator<GnPerfilRequest> validator)
         {
             _rolesService = rolesService;
@@ -33,7 +31,7 @@ namespace PTP_API.Controllers.Configuration.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener perfiles", Description = "Devuelve una lista de perfiles o un perfil específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAllRoles([FromQuery] int? id)
+        public async Task<IActionResult> GetAllRoles([FromQuery] int? id, int? companyId)
         {
             try
             {
@@ -53,7 +51,7 @@ namespace PTP_API.Controllers.Configuration.Seguridad
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<GnPerfilResponse>>.Success(perfiles, "Lista de perfiles obtenida correctamente."));
+                    return Ok(Response<IEnumerable<GnPerfilResponse>>.Success(companyId == null ? perfiles : perfiles.Where(x => x.CompanyId == companyId), "Lista de perfiles obtenida correctamente."));
                 }
             }
             catch (Exception ex)

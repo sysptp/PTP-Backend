@@ -28,10 +28,6 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Precios
                 .Must(x => x is decimal).WithMessage("PrecioValor debe ser un número decimal.")
                 .GreaterThan(0).WithMessage("PrecioValor debe ser mayor que cero.");
 
-            // HabilitarVenta: campo requerido
-            RuleFor(x => x.HabilitarVenta)
-                .NotNull().WithMessage("HabilitarVenta es requerido.")
-                .Must(x => x is bool).WithMessage("HabilitarVenta debe ser de tipo booleano.");
         }
     }
 }

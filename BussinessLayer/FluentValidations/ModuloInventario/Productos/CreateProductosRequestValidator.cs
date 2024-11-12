@@ -1,4 +1,5 @@
-﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
+﻿using System.Text.RegularExpressions;
+using BussinessLayer.DTOs.ModuloInventario.Productos;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Productos
@@ -21,27 +22,23 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Productos
 
             RuleFor(x => x.CodigoBarra)
                 .NotEmpty().WithMessage("CodigoBarra cannot be empty.")
-                .Must(BeValidString).WithMessage("CodigoBarra must be a valid string.");
+                .Must(BeValidString).WithMessage("CodigoBarra must be a valid string without special characters.");
 
             RuleFor(x => x.Codigo)
                 .NotEmpty().WithMessage("Codigo cannot be empty.")
-                .Must(BeValidString).WithMessage("Codigo must be a valid string.");
+                .Must(BeValidString).WithMessage("Codigo must be a valid string without special characters.");
 
             RuleFor(x => x.NombreProducto)
                 .NotEmpty().WithMessage("NombreProducto cannot be empty.")
-                .Must(BeValidString).WithMessage("NombreProducto must be a valid string.");
+                .Must(BeValidString).WithMessage("NombreProducto must be a valid string without special characters.");
 
             RuleFor(x => x.Descripcion)
                 .NotEmpty().WithMessage("Descripcion cannot be empty.")
-                .Must(BeValidString).WithMessage("Descripcion must be a valid string.");
+                .Must(BeValidString).WithMessage("Descripcion must be a valid string without special characters.");
 
             RuleFor(x => x.CantidadLote)
                 .NotNull().WithMessage("CantidadLote cannot be null.")
                 .Must(BeValidInt).WithMessage("CantidadLote must be a valid integer.");
-
-            RuleFor(x => x.CantidadInventario)
-                .NotNull().WithMessage("CantidadInventario cannot be null.")
-                .Must(BeValidInt).WithMessage("CantidadInventario must be a valid integer.");
 
             RuleFor(x => x.CantidadMinima)
                 .NotNull().WithMessage("CantidadMinima cannot be null.")
@@ -74,28 +71,23 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Productos
 
         private bool BeValidLong(long? value)
         {
-            // Since the property is nullable, check if it has a value and then validate it
             return !value.HasValue || value.Value.GetType() == typeof(long);
         }
 
         private bool BeValidInt(int? value)
         {
-            // Since the property is nullable, check if it has a value and then validate it
             return !value.HasValue || value.Value.GetType() == typeof(int);
         }
 
         private bool BeValidString(string? value)
         {
-            // Check if the string is null, or if it is a valid string (non-empty)
-            return value != null; // This will ensure it's not null, empty strings are handled by NotEmpty
+            // Check if the string is not null and does not contain special characters.
+            return value != null && Regex.IsMatch(value, @"^[a-zA-Z0-9\s]+$");
         }
 
         private bool BeValidBool(bool? value)
         {
-            // Since the property is nullable, check if it has a value and then validate it
             return !value.HasValue || value.Value.GetType() == typeof(bool);
         }
     }
-
 }
-

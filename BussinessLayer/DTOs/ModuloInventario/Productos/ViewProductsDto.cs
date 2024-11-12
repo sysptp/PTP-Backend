@@ -13,7 +13,7 @@ public class ViewProductsDto
 
     public int? IdTipoProducto { get; set; }
 
-    public virtual GnTipoProducto? TipoProducto { get; set; }
+    public virtual InvTipoProducto? TipoProducto { get; set; }
 
     public string? CodigoBarra { get; set; }
 

@@ -56,6 +56,8 @@ namespace DataLayer.PDbContex
 
         public DbSet<InvProductoSuplidor> InvProductoSuplidors { get; set; }
 
+        public DbSet<InvTipoProducto> InvTipoProductos { get; set; }
+
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }
@@ -176,7 +178,11 @@ namespace DataLayer.PDbContex
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
 
+        #region Seguridad
         public DbSet<GnPerfil> GnPerfil {get; set; }
+        public DbSet<GnPermiso> GnPermiso { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
+        #endregion
 
         #region refactor del Menu
         public DbSet<GnModulo> GNModulos { get; set; }
