@@ -145,15 +145,15 @@ public static class ServiceRegistration
         services.AddTransient<IHdkCategoryTicketService, HdkCategoryTicketService>();
         services.AddTransient<IHdkDepartamentsService, HdkDepartamentsService>();
         services.AddTransient<IHdkDepartXUsuarioService, HdkDepartXUsuarioService>();
-        services.AddTransient<IHdkErrorSubCategoryService, HdkErrorSubCategoryService>();
-        services.AddTransient<IHdkFileEvidenceTicketService, HdkFileEvidenceTicketService>();
-        services.AddTransient<IHdkNoteTicketService, HdkNoteTicketService>();
-        services.AddTransient<IHdkPrioridadTicketService, HdkPrioridadTicketService>();
-        services.AddTransient<IHdkSolutionTicketService, HdkSolutionTicketService>();
-        services.AddTransient<IHdkStatusTicketService, HdkStatusTicketService>();
-        services.AddTransient<IHdkSubCategoryService, HdkSubCategoryService>();
-        services.AddTransient<IHdkTicketsService, HdkTicketsService>();
-        services.AddTransient<IHdkTypeTicketService, HdkTypeTicketService>();
+        //services.AddTransient<IHdkErrorSubCategoryService, HdkErrorSubCategoryService>();
+        //services.AddTransient<IHdkFileEvidenceTicketService, HdkFileEvidenceTicketService>();
+        //services.AddTransient<IHdkNoteTicketService, HdkNoteTicketService>();
+        //services.AddTransient<IHdkPrioridadTicketService, HdkPrioridadTicketService>();
+        //services.AddTransient<IHdkSolutionTicketService, HdkSolutionTicketService>();
+        //services.AddTransient<IHdkStatusTicketService, HdkStatusTicketService>();
+        //services.AddTransient<IHdkSubCategoryService, HdkSubCategoryService>();
+        //services.AddTransient<IHdkTicketsService, HdkTicketsService>();
+        //services.AddTransient<IHdkTypeTicketService, HdkTypeTicketService>();
         #endregion
 
     }
