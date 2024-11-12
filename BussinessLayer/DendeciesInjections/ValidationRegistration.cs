@@ -11,6 +11,8 @@ using BussinessLayer.FluentValidations.ModuloInventario.Precios;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
+using BussinessLayer.FluentValidations.HelpDesk;
+using BussinessLayer.DTOs.HelpDesk;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -28,6 +30,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<CreatePreciosRequestValidator>();
             services.AddScoped<EditPreciosRequestValidator>();
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
+            services.AddScoped<IValidator<HdkCategoryTicketRequest>, HdkCategoryTicketRequestValidator>();
+            
         }
     }
 }

@@ -1,8 +1,12 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace BussinessLayer.DTOs.HelpDesk
 {
     public class HdkTicketsRequest
     {
+        [JsonIgnore]
+        public int IdTicket { get; set; }
         public string Titulo { get; set; }
         public string Descripcion { get; set; }
         public int IdUsuarioAsignado { get; set; }
