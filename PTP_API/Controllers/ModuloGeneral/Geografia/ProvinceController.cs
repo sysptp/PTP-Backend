@@ -28,7 +28,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener provincias", Description = "Obtiene una lista de todas las provincias o una provincia específica si se proporciona un ID.")]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, int? regionId)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
                     {
                         return StatusCode(204, Response<IEnumerable<ProvinceResponse>>.NoContent("No hay provincias disponibles."));
                     }
-                    return Ok(Response<IEnumerable<ProvinceResponse>>.Success(provinces, "Provincias obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<ProvinceResponse>>.Success(regionId == null ? provinces : provinces.Where(x => x.RegionId == regionId), "Provincias obtenidas correctamente."));
                 }
             }
             catch (Exception ex)

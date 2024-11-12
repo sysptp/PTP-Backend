@@ -27,7 +27,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener municipios", Description = "Obtiene una lista de todos los municipios o un municipio específico si se proporciona un ID.")]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id,int? provinceId)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
                     {
                         return StatusCode(204, Response<IEnumerable<MunicipioResponse>>.NoContent("No hay municipios disponibles."));
                     }
-                    return Ok(Response<IEnumerable<MunicipioResponse>>.Success(municipalities, "Municipios obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<MunicipioResponse>>.Success(provinceId == null ? municipalities : municipalities.Where(x => x.ProvinceId == provinceId), "Municipios obtenidos correctamente."));
                 }
             }
             catch (Exception ex)

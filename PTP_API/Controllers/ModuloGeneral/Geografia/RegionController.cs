@@ -27,7 +27,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener regiones", Description = "Obtiene una lista de todas las regiones o una región específica si se proporciona un ID.")]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, int? countryId)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
                     {
                         return StatusCode(204, Response<IEnumerable<RegionResponse>>.NoContent("No hay regiones disponibles."));
                     }
-                    return Ok(Response<IEnumerable<RegionResponse>>.Success(regions, "Regiones obtenidas correctamente."));
+                   return Ok(Response<IEnumerable<RegionResponse>>.Success(countryId == null ? regions : regions.Where(x => x.CountryId == countryId), "Regiones obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
