@@ -24,6 +24,7 @@ using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
+using DataLayer.Models.HelpDesk;
 
 namespace DataLayer.PDbContex
 {
@@ -188,6 +189,22 @@ namespace DataLayer.PDbContex
         public DbSet<GnSubMenu> GNSubMenus { get; set; }
         public DbSet<GnEmpresaXModulo> GnEmpresaXModulos { get; set; }
         public DbSet<GnEmpresaXPerfilXSubMenu> GnEmpresaXPerfilXSubMenus { get; set; }
+        #endregion
+
+        #region HelpDesk
+        public DbSet<HdkCategoryTicket> HdkCategoryTicket { get; set; }
+        public DbSet<HdkDepartaments> HdkDepartaments { get; set; }
+        public DbSet<HdkDepartXUsuario> HdkDepartXUsuario { get; set; }
+        public DbSet<HdkErrorSubCategory> HdkErrorSubCategory { get; set; }
+        public DbSet<HdkFileEvidenceTicket> HdkFileEvidenceTicket { get; set; }
+        public DbSet<HdkNoteTicket> HdkNoteTicket { get; set; }
+        public DbSet<HdkPrioridadTicket> HdkPrioridadTicket { get; set; }
+        public DbSet<HdkSolutionTicket> HdkSolutionTicket { get; set; }
+        public DbSet<HdkStatusTicket> HdkStatusTicket { get; set; }
+        public DbSet<HdkSubCategory> HdkSubCategory { get; set; }
+        public DbSet<HdkTickets> HdkTickets { get; set; }
+        public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
+
         #endregion
     }
 }

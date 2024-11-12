@@ -12,6 +12,8 @@ using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
+using BussinessLayer.FluentValidations.HelpDesk;
+using BussinessLayer.DTOs.HelpDesk;
 using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
 using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
 using BussinessLayer.FluentValidations.ModuloGeneral.Geografia;
@@ -44,6 +46,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<RegionRequest>, RegionRequestValidator>();
             services.AddScoped<IValidator<ProvinceRequest>, ProvinceRequestValidator>();
             services.AddScoped<IValidator<MunicipioRequest>, MunicipalityRequestValidator>();
+            services.AddScoped<IValidator<HdkCategoryTicketRequest>, HdkCategoryTicketRequestValidator>();
+            
         }
     }
 }
