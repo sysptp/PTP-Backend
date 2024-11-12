@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public long? IdEmpresa { get; set; }
+        //public long? IdEmpresa { get; set; }
 
         public int? IdVersion { get; set; }
 

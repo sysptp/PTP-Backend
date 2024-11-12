@@ -55,6 +55,8 @@ namespace DataLayer.PDbContex
 
         public DbSet<InvProductoSuplidor> InvProductoSuplidors { get; set; }
 
+        public DbSet<InvTipoProducto> InvTipoProductos { get; set; }
+
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }

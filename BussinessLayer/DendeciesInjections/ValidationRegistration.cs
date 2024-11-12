@@ -31,7 +31,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<EditPreciosRequestValidator>();
             services.AddScoped<NumbersRequestValidator>();
             services.AddScoped<StringsRequestValidator>();
-
+            services.AddScoped<EditProductsTypeRequestValidator>();
+            services.AddScoped<CreateProductsTypeRequestValidator>();
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
             services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
         }

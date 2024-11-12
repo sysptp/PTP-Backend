@@ -12,7 +12,7 @@ namespace BussinessLayer.DTOs.ModuloInventario.Precios
 
         public int? IdProducto { get; set; }
 
-        public long? IdEmpresa { get; set; }
+       // public long? IdEmpresa { get; set; }
 
         public int? IdMoneda { get; set; }
 
