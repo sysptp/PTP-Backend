@@ -171,5 +171,15 @@ namespace BussinessLayer.Repository.ROtros
             }
         }
 
+        public virtual async Task<List<T>> GetAllWithIncludeAsync(List<string> properties)
+        {
+            var query = _context.Set<T>().AsQueryable();
+            foreach (string property in properties)
+            {
+                query = query.Include(property);
+            }
+            return await query.ToListAsync();
+        }
+
     }
 }

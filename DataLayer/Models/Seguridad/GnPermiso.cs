@@ -1,5 +1,9 @@
-﻿using DataLayer.Models.Otros;
+﻿using DataLayer.Models.Empresa;
+using DataLayer.Models.Entities;
+using DataLayer.Models.MenuApp;
+using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.Seguridad
 {
@@ -14,5 +18,11 @@ namespace DataLayer.Models.Seguridad
         public bool Eliminar { get; set; }
         public bool Editar { get; set; }
         public bool Consultar { get; set; }
+        [ForeignKey("Codigo_EMP")]
+        public virtual GnEmpresa? GnEmpresa { get; set; }
+        [ForeignKey("IDPerfil")]
+        public virtual GnPerfil? GnPerfil { get; set; }
+        [ForeignKey("IDMenu")]
+        public virtual GnMenu? GnMenu { get; set; }
     }
 }

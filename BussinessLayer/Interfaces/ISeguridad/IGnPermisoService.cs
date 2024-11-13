@@ -7,5 +7,6 @@ namespace BussinessLayer.Interfaces.ISeguridad
     public interface IGnPermisoService : IGenericService<GnPermisoRequest, GnPermisoResponse,GnPermiso>
     {
         Task<List<GnPermisoResponse>> GetAllPermisosByFilter(long? companyId, int? roleId, int? menuId);
+
     }
 }
