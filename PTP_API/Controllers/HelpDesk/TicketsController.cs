@@ -79,8 +79,8 @@ namespace PTP_API.Controllers.HelpDesk
 
             try
             {
-                var departamentoXusuarioTicket = await _ticketsService.Add(request);
-                return StatusCode(201, Response<HdkTicketsReponse>.Created(departamentoXusuarioTicket, "Ticket creado correctamente."));
+                var ticket = await _ticketsService.Add(request);
+                return StatusCode(201, Response<HdkTicketsReponse>.Created(ticket, "Ticket creado correctamente."));
             }
             catch (Exception ex)
             {
