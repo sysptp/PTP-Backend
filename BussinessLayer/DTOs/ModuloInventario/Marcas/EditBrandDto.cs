@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace BussinessLayer.DTOs.ModuloInventario.Marcas
 {
-    public class CreateMarcasDto
+    public class EditBrandDto
     {
-        public long? IdEmpresa { get; set; }
+        public int Id { get; set; }
 
         public string? Nombre { get; set; }
 
+        public bool? Activo { get; set; }
     }
 }

@@ -43,11 +43,12 @@ namespace BussinessLayer.Services.ModuloInventario.Productos
 
         public async Task DeleteProductTypeById(int id)
         {
-            var type = await GetProductTypeById(id);
+            var type = await _context.InvTipoProductos.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if (type != null)
             {
                 type.Borrado = true;
+                type.Activo = false;
                 var updated = _mapper.Map<InvTipoProducto>(type);
                 _context.Update(updated);
                 await _context.SaveChangesAsync();

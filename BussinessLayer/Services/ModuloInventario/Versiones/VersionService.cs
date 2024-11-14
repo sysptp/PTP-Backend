@@ -1,83 +1,89 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataLayer.PDbContex;
-using DataLayer.Models.ModuloInventario.Version;
+using AutoMapper;
+using BussinessLayer.DTOs.ModuloInventario.Marcas;
+using DataLayer.Models.ModuloInventario.Marcas;
+using BussinessLayer.DTOs.ModuloInventario.Versiones;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class VersionService : IVersionService
 {
     private readonly PDbContext _context;
+    private readonly IMapper _mapper;
+    private readonly ITokenService _tokenService;
 
-    public VersionService(PDbContext dbContext)
+    public VersionService(PDbContext dbContext,
+        IMapper mapper,
+        ITokenService tokenService)
     {
         _context = dbContext;
+        _mapper = mapper;
+        _tokenService = tokenService;
     }
 
-    public async Task Add(Versiones entity)
+    // Obtener data por su id
+    public async Task<ViewVersionsDto> GetVersionById(int id)
     {
-        try
-        {
-            _context.Versiones.Add(entity);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        var data = await _context.Versiones
+            .Include(x => x.Marca)
+            .Where(x => x.Id == id && x.Borrado == false)
+            .FirstOrDefaultAsync();
+        return _mapper.Map<ViewVersionsDto>(data);
     }
 
-    public async Task Edit(Versiones entity)
+    // Obtener data por su empresa
+    public async Task<List<ViewVersionsDto>> GetVersionByCompany(int id)
     {
-        try
-        {
-            var oldVersion = await _context.Versiones.FindAsync(entity.Id);
-            if (oldVersion == null) return;
+        var data = await _context.Versiones
+            .Include(x => x.Marca)
+            .Where(x => x.IdEmpresa == id && x.Borrado == false)
+            .ToListAsync();
 
-            oldVersion.Nombre = entity.Nombre;
-            oldVersion.Activo = entity.Activo;
-            oldVersion.FechaModificacion = DateTime.Now;
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        return _mapper.Map<List<ViewVersionsDto>>(data);
     }
 
-    public async Task<Versiones> GetById(int id, long idEMpresa)
+    // Crear un nuevo 
+    public async Task<int?> CreateVersion(CreateVersionsDto create)
     {
-        return await _context.Versiones.Include(x => x.Marca.IdEmpresa == idEMpresa).SingleOrDefaultAsync(x => x.Id.Equals(id));
+        var newObject = _mapper.Map<Versiones>(create);
+        newObject.FechaCreacion = DateTime.Now;
+        newObject.Activo = false;
+        newObject.Borrado = false;
+        newObject.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
-    }
-
-    public async Task<IList<Versiones>> GetAll(long idEMpresa)
-    {
-        try
-        {
-            return await _context.Versiones.Include(x => x.Marca).Where(x => x.Borrado != true && x.IdEmpresa == idEMpresa).ToListAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
-
-    public async Task Delete(int id, long idEMpresa)
-    {
-        var version = await _context.Versiones.Where(x => x.IdEmpresa == idEMpresa && x.Id == id).FirstOrDefaultAsync();
-        if (version == null) return;
-
-        version.Borrado = true;
+        _context.Versiones.Add(newObject);
         await _context.SaveChangesAsync();
+
+        return newObject.Id;
     }
 
-    public async Task<IList<Versiones>> GetVersionesByMarca(int? id, long idempresa)
+    // Editar existente
+    public async Task EditVersion(EditVersionsDto edit)
     {
-        if (id == null) return new List<Versiones>();
-        return await _context.Versiones.Include(x => x.Marca).Where(x => x.IdMarca == id && x.IdEmpresa == idempresa)
-            .OrderBy(x => x.Nombre).ToListAsync();
+        var existing = await _context.Versiones.FirstOrDefaultAsync(x => x.Id == edit.Id);
 
+        if (existing != null)
+        {
+            _mapper.Map(edit, existing);
+            existing.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+            existing.FechaModificacion = DateTime.Now;
+            _context.Versiones.Update(existing);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    // Servicio para eliminar por id unico
+    public async Task DeleteVersionById(int id)
+    {
+        var data = await _context.Versiones.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+        if (data != null)
+        {
+            data.Borrado = true;
+            data.Activo = false;
+            _context.Update(data);
+            await _context.SaveChangesAsync();
+        }
     }
 }
 

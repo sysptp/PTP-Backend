@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using BussinessLayer.DTOs.ModuloInventario.Marcas;
 using BussinessLayer.DTOs.ModuloInventario.Precios;
 using BussinessLayer.DTOs.ModuloInventario.Productos;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
+using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.Models.ModuloInventario.Productos;
-using DataLayer.Models.ModuloInventario.Version;
 
 public class ModuloInventarioProfile : Profile
 {
@@ -15,16 +16,20 @@ public class ModuloInventarioProfile : Profile
         CreateMap<Precio, ViewPreciosDto>().ReverseMap();
         CreateMap<EditPricesDto, Precio>().ReverseMap();
 
-
         CreateMap<CreateProductsDto, Producto>().ReverseMap();
         CreateMap<EditProductDto, Producto>().ReverseMap();
         CreateMap<Producto, ViewProductsDto>().ReverseMap();
 
-        CreateMap<CreateVersionesDto, Versiones>().ReverseMap();
-
         CreateMap<CreateTipoProductoDto, InvTipoProducto>().ReverseMap();
         CreateMap<ViewProductTypeDto, InvTipoProducto>().ReverseMap();
         CreateMap<EditProductTypeDto, InvTipoProducto>().ReverseMap();
+
+        CreateMap<CreateBrandDto, Marca>().ReverseMap();
+        CreateMap<ViewBrandDto, Marca>().ReverseMap();
+        CreateMap<EditBrandDto, Marca>().ReverseMap();
+
+        CreateMap<CreateVersionsDto, Versiones>().ReverseMap();
+        CreateMap<EditVersionsDto, Versiones>().ReverseMap();
+        CreateMap<ViewVersionsDto, Versiones>().ReverseMap();
     }
 }
-

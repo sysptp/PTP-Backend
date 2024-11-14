@@ -20,6 +20,8 @@ using BussinessLayer.FluentValidations.ModuloGeneral.Geografia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
 using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DMunicipio;
+using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
+using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -40,6 +42,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<StringsRequestValidator>();
             services.AddScoped<EditProductsTypeRequestValidator>();
             services.AddScoped<CreateProductsTypeRequestValidator>();
+            services.AddScoped<CreateBrandRequestValidation>();
+            services.AddScoped<EditBrandRequestValidation>();
+            services.AddScoped<EditVersionRequestValidation>();
+            services.AddScoped<CreateVersionRequestValidation>();
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
             services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
             services.AddScoped<IValidator<CountryRequest>, CountryRequestValidator>();
@@ -48,8 +54,6 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<MunicipioRequest>, MunicipalityRequestValidator>();
             services.AddScoped<IValidator<string>, StringsRequestValidator>();
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
-
-
             services.AddScoped<IValidator<HdkCategoryTicketRequest>, HdkCategoryTicketRequestValidator>();
             
         }
