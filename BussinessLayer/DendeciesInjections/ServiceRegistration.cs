@@ -94,10 +94,6 @@ public static class ServiceRegistration
         services.AddScoped<ICajaService, CajaService>();
         services.AddScoped<ITipoMovimientoBancoService, TipoMovimientoBancoService>();
         services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
-        services.AddScoped<ISC_PAIS001Service, SC_PAIS001Service>();
-        services.AddScoped<ISC_REG001Service, SC_REG001Service>();
-        services.AddScoped<ISC_PROV001Service, SC_PROV001Service>();
-        services.AddScoped<ISC_MUNIC001Service, SC_MUNIC001Service>();
         services.AddScoped<IGn_PerfilService, Gn_PerfilService>();
         services.AddScoped<ICiudades_X_PaisesService, Ciudades_X_PaisesService>();
         services.AddScoped<ISC_IPSYS001Service, SC_IPSYS001Service>();

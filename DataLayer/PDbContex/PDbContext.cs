@@ -140,14 +140,6 @@ namespace DataLayer.PDbContex
 
         public DbSet<SC_IPSYS001> SC_IPSYS001 { get; set; }
 
-        public DbSet<SC_MUNIC001> SC_MUNIC001 { get; set; }
-
-        public DbSet<SC_PAIS001> SC_PAIS001 { get; set; }
-
-        public DbSet<SC_PROV001> SC_PROV001 { get; set; }
-
-        public DbSet<SC_REG001> SC_REG001 { get; set; }
-
         public DbSet<SC_USUAR001> SC_USUAR001 { get; set; }
 
         public DbSet<Ciudades_X_Paises> Ciudades_X_Paises { get; set; }
