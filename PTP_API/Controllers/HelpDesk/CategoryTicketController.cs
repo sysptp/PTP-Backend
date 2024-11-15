@@ -6,9 +6,7 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
 using BussinessLayer.DTOs.HelpDesk;
-using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using BussinessLayer.Interfaces.IEmpresa;
-using BussinessLayer.Services.SEmpresa;
+
 
 namespace PTP_API.Controllers.HelpDesk
 {
@@ -33,7 +31,7 @@ namespace PTP_API.Controllers.HelpDesk
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Obtener empresas", Description = "Obtiene una lista de todas las empresas o una empresa específica si se proporciona un ID.")]
+        [SwaggerOperation(Summary = "Obtener categoria de ticket", Description = "Obtiene una lista de todas las categoria de ticket o una categoria específica si se proporciona un ID.")]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

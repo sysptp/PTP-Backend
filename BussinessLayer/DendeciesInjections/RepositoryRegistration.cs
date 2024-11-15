@@ -45,15 +45,16 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IHdkCategoryTicketRepository, HdkCategoryTicketRepository>();
             services.AddTransient<IHdkDepartamentsRepository, HdkDepartamentsRepository>();
             services.AddTransient<IHdkDepartXUsuarioRepository, HdkDepartXUsuarioRepository>();
-            //services.AddTransient<IHdkErrorSubCategoryRepository, HdkErrorSubCategoryRepository>();
-            //services.AddTransient<IHdkFileEvidenceTicketRepository, HdkFileEvidenceTicketRepository>();
-            //services.AddTransient<IHdkNoteTicketRepository, HdkNoteTicketRepository>();
-            //services.AddTransient<IHdkPrioridadTicketRepository, HdkPrioridadTicketRepository>();
-            //services.AddTransient<IHdkSolutionTicketRepository, HdkSolutionTicketRepository>();
-            //services.AddTransient<IHdkStatusTicketRepository, HdkStatusTicketRepository>();
-            //services.AddTransient<IHdkSubCategoryRepository, HdkSubCategoryRepository>();
-            //services.AddTransient<IHdkTicketsRepository, HdkTicketsRepository>();
-            //services.AddTransient<IHdkTypeTicketRepository, HdkTypeTicketRepository>();
+            services.AddTransient<IHdkErrorSubCategoryRepository, HdkErrorSubCategoryRepository>();
+            services.AddTransient<IHdkFileEvidenceTicketRepository, HdkFileEvidenceTicketRepository>();
+            services.AddTransient<IHdkNoteTicketRepository, HdkNoteTicketRepository>();
+            services.AddTransient<IHdkPrioridadTicketRepository, HdkPrioridadTicketRepository>();
+            services.AddTransient<IHdkSolutionTicketRepository, HdkSolutionTicketRepository>();
+            services.AddTransient<IHdkStatusTicketRepository, HdkStatusTicketRepository>();
+            services.AddTransient<IHdkSubCategoryRepository, HdkSubCategoryRepository>();
+            services.AddTransient<IHdkTicketsRepository, HdkTicketsRepository>();
+            services.AddTransient<IHdkTypeTicketRepository, HdkTypeTicketRepository>();
+
             #endregion
         }
     }
