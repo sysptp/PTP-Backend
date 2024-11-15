@@ -97,7 +97,7 @@ public static class ServiceRegistration
         services.AddScoped<IGn_PerfilService, Gn_PerfilService>();
         services.AddScoped<ICiudades_X_PaisesService, Ciudades_X_PaisesService>();
         services.AddScoped<ISC_IPSYS001Service, SC_IPSYS001Service>();
-        services.AddScoped<ISC_IMP001Service, SC_IMP001Service>();
+        services.AddScoped<IImpuestosService, ImpuestosService>();
         services.AddScoped<ISC_HORARIO001Service, SC_HORARIO001Service>();
         services.AddScoped<ISC_HORAGROUP002Service, SC_HORAGROUP002Service>();
         services.AddScoped<ISC_HORA_X_USR002Service, SC_HORA_X_USR002Service>();

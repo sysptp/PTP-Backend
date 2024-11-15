@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.ModuloInventario.Productos;
-using DataLayer.Models.ModuloInventario.Version;
 
 public class ViewProductsDto
 {

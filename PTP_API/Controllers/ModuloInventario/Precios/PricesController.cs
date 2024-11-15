@@ -60,7 +60,7 @@ public class PricesController : Controller
                 return Ok(Response<ViewPreciosDto>.NotFound("No se han encontrado el precio."));
             }
         }
-        catch
+        catch(Exception ex)
         {
             return Ok(Response<string>.ServerError("Ocurrió un error al obtener el precio. Por favor, intente nuevamente."));
         }
@@ -102,7 +102,7 @@ public class PricesController : Controller
     [HttpPost("api/v1/[controller]/CrearPrecio")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(Summary = "Crear Precio", Description = "Endpoint para crear precio")]
-    public async Task<IActionResult> Add([FromQuery] CreatePreciosDto createPrecios)
+    public async Task<IActionResult> Add(CreatePreciosDto createPrecios)
     {
         try
         {
@@ -123,46 +123,6 @@ public class PricesController : Controller
         {
 
             return Ok(Response<string>.ServerError("Ocurrió un error al crear el precio. Por favor, intente nuevamente."));
-        }
-    }
-
-    [HttpPut("api/v1/[controller]/SetSamePrice")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerOperation(Summary = "Asignar mismo precio", Description = "Endpoint para asignar el mismo precio a una lista de productos")]
-    public async Task<IActionResult> SamePrice([FromBody] List<EditPricesDto> editPrecios, [FromQuery] decimal newPrice)
-    {
-        try
-        {
-            var validationNumber = await _validateNumbers.ValidateAsync(long.Parse(newPrice.ToString()));
-            if (!validationNumber.IsValid)
-            {
-                var errors = validationNumber.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(Response<string>.BadRequest(errors, 400));
-            }
-
-            var allErrors = new List<string>();
-            foreach (EditPricesDto price in editPrecios)
-            {
-                var validationResult = await _validationsEdit.ValidateAsync(price);
-                if (!validationResult.IsValid)
-                {
-                    allErrors.AddRange(validationResult.Errors.Select(e => e.ErrorMessage));
-                }
-            }
-
-            if (allErrors.Any())
-            {
-                return BadRequest(Response<string>.BadRequest(allErrors, 400));
-            }
-
-            await _precioService.SetSamePrice(editPrecios, newPrice);
-            return Ok(Response<string>.Success("Precios actualizados correctamente"));
-        }
-        catch (Exception)
-        {
-            return Ok(Response<string>.ServerError("Ocurrió un error al editar el precio. Por favor, intente nuevamente."));
         }
     }
 
@@ -230,5 +190,46 @@ public class PricesController : Controller
         }
 
     }
+
+    //[HttpPost("api/v1/[controller]/SetSamePrice")]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+    //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    //[SwaggerOperation(Summary = "Asignar mismo precio", Description = "Endpoint para asignar el mismo precio a una lista de productos")]
+    //public async Task<IActionResult> SamePrice([FromBody] List<EditPricesDto> editPrecios, [FromQuery] decimal newPrice)
+    //{
+    //    try
+    //    {
+    //        var validationNumber = await _validateNumbers.ValidateAsync(long.Parse(newPrice.ToString()));
+    //        if (!validationNumber.IsValid)
+    //        {
+    //            var errors = validationNumber.Errors.Select(e => e.ErrorMessage).ToList();
+    //            return BadRequest(Response<string>.BadRequest(errors, 400));
+    //        }
+
+    //        var allErrors = new List<string>();
+    //        foreach (EditPricesDto price in editPrecios)
+    //        {
+    //            var validationResult = await _validationsEdit.ValidateAsync(price);
+    //            if (!validationResult.IsValid)
+    //            {
+    //                allErrors.AddRange(validationResult.Errors.Select(e => e.ErrorMessage));
+    //            }
+    //        }
+
+    //        if (allErrors.Any())
+    //        {
+    //            return BadRequest(Response<string>.BadRequest(allErrors, 400));
+    //        }
+
+    //        await _precioService.SetSamePrice(editPrecios, newPrice);
+
+    //        return Ok(Response<string>.Success("Precios actualizados correctamente"));
+    //    }
+    //    catch (Exception)
+    //    {
+    //        return Ok(Response<string>.ServerError("Ocurrió un error al editar el precio. Por favor, intente nuevamente."));
+    //    }
+    //}
 }
 

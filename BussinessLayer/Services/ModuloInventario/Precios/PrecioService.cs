@@ -31,12 +31,10 @@ public class PrecioService : IPrecioService
     public async Task<ViewPreciosDto> GetPriceById(int id)
     {
         var data = await _context.Precios
-            .Where(x => x.Id == id)
             .Include(x => x.Producto)
             .Include(x => x.Moneda)
-            .Where(x => x.Borrado == false)
+            .Where(x => x.Id == id && x.Borrado == false)
             .FirstOrDefaultAsync();
-
         return _mapper.Map<ViewPreciosDto>(data);
     }
 
@@ -96,14 +94,14 @@ public class PrecioService : IPrecioService
     // Servicio para eliminar precio por id unico
     public async Task DeletePriceById(int id)
     {
-        var precio = await GetPriceById(id);
+        var precio = await _context.Precios.Where(x => x.Id == id).FirstOrDefaultAsync();
 
         if (precio != null)
         {
             precio.Borrado = true;
             precio.HabilitarVenta = false;
-            var updated = _mapper.Map<Precio>(precio);
-            _context.Update(updated);
+            //var updated = _mapper.Map<Precio>(precio);
+            _context.Update(precio);
             await _context.SaveChangesAsync();
         }
     }

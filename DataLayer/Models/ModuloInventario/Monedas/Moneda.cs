@@ -47,6 +47,6 @@ namespace DataLayer.Models.ModuloInventario.Monedas
 
         public virtual ICollection<InvProductoSuplidor>? ProductoSuplidores { get; set; }
 
-        public virtual ICollection<SC_IMP001>? Impuestos { get; set; }
+        public virtual ICollection<InvImpuestos>? Impuestos { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DataLayer.Models.ModuloInventario.Version;
 
 namespace DataLayer.Models.ModuloInventario.Productos
 {
