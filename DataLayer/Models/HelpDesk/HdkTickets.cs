@@ -17,8 +17,8 @@ namespace DataLayer.Models.HelpDesk
         public int idTicketPadre { get; set; }
         public string ReferenciasTicketExterno { get; set; }
         public string Solucion { get; set; }
-        public DateTime? FechaVencimiento { get; set; } = null;
-        public DateTime? FechaCierre { get; set; } =null;
+        public DateTime? FechaVencimiento { get; set; } 
+        public DateTime? FechaCierre { get; set; } 
         public int IdTipoTicket { get; set; }
         public int IdDepartamentos { get; set; }
         public int IdCategoria { get; set; }
