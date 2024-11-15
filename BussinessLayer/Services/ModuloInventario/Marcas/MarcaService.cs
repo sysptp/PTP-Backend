@@ -43,7 +43,7 @@ public class MarcaService : IMarcaService
     // Crear un nuevo 
     public async Task<int?> CreateBrand(CreateBrandDto create)
     {
-        var newObject = _mapper.Map<Marca>(create);
+        var newObject = _mapper.Map<InvMarcas>(create);
         newObject.Activo = false;
         newObject.FechaCreacion = DateTime.Now;
         newObject.Borrado = false;

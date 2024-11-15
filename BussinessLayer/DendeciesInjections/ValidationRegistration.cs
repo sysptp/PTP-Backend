@@ -22,6 +22,8 @@ using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DMunicipio;
 using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
 using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
+using BussinessLayer.FluentValidations.ModuloInventario.Impuestos;
+using BussinessLayer.FluentValidations.ModuloInventario.Descuentos;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -46,6 +48,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<EditBrandRequestValidation>();
             services.AddScoped<EditVersionRequestValidation>();
             services.AddScoped<CreateVersionRequestValidation>();
+            services.AddScoped<EditTaxRequestValidation>();
+            services.AddScoped<CreateTaxRequestValidation>();
+            services.AddScoped<EditDiscountRequestValidation>();
+            services.AddScoped<CreateDiscountRequestValidation>();
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
             services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
             services.AddScoped<IValidator<CountryRequest>, CountryRequestValidator>();

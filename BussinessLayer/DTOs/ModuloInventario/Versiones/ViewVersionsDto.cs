@@ -32,7 +32,7 @@ namespace BussinessLayer.DTOs.ModuloInventario.Versiones
 
         public string? UsuarioModificacion { get; set; }
 
-        public virtual Marca? Marca { get; set; }
+        public virtual InvMarcas? Marca { get; set; }
 
         public virtual ICollection<Producto>? Productos { get; set; }
     }

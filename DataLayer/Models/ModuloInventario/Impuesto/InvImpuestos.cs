@@ -5,8 +5,8 @@ using DataLayer.Models.ModuloInventario.Productos;
 
 namespace DataLayer.Models.ModuloInventario.Impuesto
 {
-    [Table("SC_IMP001")]
-    public class SC_IMP001
+    [Table("InvImpuestos")]
+    public class InvImpuestos
     {
         [Key]
         public int? Id { get; set; }

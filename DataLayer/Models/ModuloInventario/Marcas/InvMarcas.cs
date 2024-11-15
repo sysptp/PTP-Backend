@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.ModuloInventario.Marcas
 {
-    [Table("Marca")]
-    public class Marca
+    [Table("InvMarcas")]
+    public class InvMarcas
     {
         [Key]
         public int? Id { get; set; }

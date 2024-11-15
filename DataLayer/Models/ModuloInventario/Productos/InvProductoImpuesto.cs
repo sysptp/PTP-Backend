@@ -19,7 +19,7 @@ namespace DataLayer.Models.ModuloInventario.Productos
         public virtual Producto? Producto { get; set; }
 
         [ForeignKey("ImpuestoId")]
-        public virtual SC_IMP001? Impuesto { get; set; }
+        public virtual InvImpuestos? Impuesto { get; set; }
     }
 
 }

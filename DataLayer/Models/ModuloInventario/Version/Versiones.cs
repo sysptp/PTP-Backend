@@ -37,7 +37,7 @@ public class Versiones
 
     // Relación con Marca (muchos a uno)
     [ForeignKey("IdMarca")]
-    public virtual Marca? Marca { get; set; }
+    public virtual InvMarcas? Marca { get; set; }
 
     // Relación con Producto (uno a muchos)
     public virtual ICollection<Producto>? Productos { get; set; }

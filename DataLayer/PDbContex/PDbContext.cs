@@ -40,14 +40,12 @@ namespace DataLayer.PDbContex
         }
 
 
-        // Reporteria
-        // CREADO POR MANUEL 3/10/2024
         public DbSet<CentroReporteria> CentroReporterias { get; set; }
-
-        // CREADO POR MANUEL 3/10/2024
         public DbSet<VariablesReporteria> VariablesReporterias { get; set; }
 
-        // 
+
+
+        // INVENTARIO
 
         public DbSet<InvProductoImagen> InvProductoImagens { get; set; }
 
@@ -57,6 +55,36 @@ namespace DataLayer.PDbContex
 
         public DbSet<InvTipoProducto> InvTipoProductos { get; set; }
 
+        public DbSet<InvMarcas> Marcas { get; set; }
+
+        public DbSet<Versiones> Versiones { get; set; }
+
+        public DbSet<Producto> Productos { get; set; }
+
+        public DbSet<Descuentos> Descuentos { get; set; }
+
+        public DbSet<Almacenes> Almacenes { get; set; }
+
+        public DbSet<MovimientoAlmacen> MovimientoAlmacenes { get; set; }
+
+        public DbSet<DetalleMovimientoAlmacen> DetalleMovimientoAlmacenes { get; set; }
+
+        public DbSet<Suplidores> Suplidores { get; set; }
+
+        public DbSet<ContactosSuplidores> ContactosSuplidores { get; set; }
+
+        public DbSet<InvImpuestos> Impuestos { get; set; }
+
+
+
+
+
+
+
+
+
+
+
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }
@@ -65,25 +93,22 @@ namespace DataLayer.PDbContex
 
         public DbSet<Municipio> Municipio { get; set; }
 
-        public DbSet<Marca> Marcas { get; set; }
+        public DbSet<Imagen> Imagenes { get; set; }
 
-        public DbSet<Imagen> ImagenesProducto { get; set; }
+        public DbSet<Precio> Precios { get; set; }
 
-        public DbSet<Versiones> Versiones{ get; set; }
 
-        public DbSet<Producto> Productos { get; set; }
 
-        public DbSet<Descuentos> Descuentos { get; set; }
-        
-        public DbSet<Almacenes> Almacenes { get; set; }
+
+
+
+
 
         public DbSet<TipoMovimiento> TipoMovimientos { get; set; }
 
         public DbSet<TipoPago> TipoPagos { get; set; }
 
-        public DbSet<MovimientoAlmacen> MovimientoAlmacenes { get; set; }
 
-        public DbSet<DetalleMovimientoAlmacen> DetalleMovimientoAlmacenes { get; set; }
 
         public DbSet<CuentasPorPagar> CuentasPorPagar { get; set; }
 
@@ -91,15 +116,13 @@ namespace DataLayer.PDbContex
 
         public DbSet<Cliente> Clientes { get; set; }
 
-        public DbSet<Suplidores> Suplidores { get; set; }
 
-        public DbSet<ContactosSuplidores> ContactosSuplidores { get; set; }
 
         public DbSet<DgiiNcfSecuencia> DgiiNcfSecuencia { get; set; }
 
         public DbSet<DgiiNcf> DgiiNcf { get; set; }
 
-        public DbSet<Precio> Precios { get; set; }
+
 
         public DbSet<Pedido> Pedidos { get; set; }
 
@@ -134,8 +157,6 @@ namespace DataLayer.PDbContex
         public DbSet<SC_HORAGROUP002> SC_HORAGROUP002 { get; set; }
 
         public DbSet<SC_HORARIO001> SC_HORARIO001 { get; set; }
-
-        public DbSet<SC_IMP001> SC_IMP001 { get; set; }
 
         public DbSet<SC_IPSYS001> SC_IPSYS001 { get; set; }
 
