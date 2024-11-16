@@ -3,7 +3,7 @@ using BussinessLayer.ViewModels;
 using DataLayer.Models.Reporteria;
 using System.Data.Common;
 
-namespace BussinessLayer.Interfaces.ICentroReporteria
+namespace BussinessLayer.Interfaces.ModuloReporteria
 {
     // CREADO POR MANUEL 3/10/2024 - INTERFAZ PARA EL MANEJO DE LA REPORTERIA
     public interface IReporteriaService

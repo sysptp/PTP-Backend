@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.ModuloInventario.Precios
 {
-    [Table("Precio")]
+    [Table("InvPrecio")]
     public class Precio
     {
         [Key]

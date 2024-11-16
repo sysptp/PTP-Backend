@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Productos;
 
-[Table("Versiones")]
+[Table("InvVersiones")]
 public class Versiones
 {
     [Key]

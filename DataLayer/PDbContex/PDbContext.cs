@@ -39,14 +39,12 @@ namespace DataLayer.PDbContex
 
         }
 
-
+        #region Reporteria
         public DbSet<CentroReporteria> CentroReporterias { get; set; }
         public DbSet<VariablesReporteria> VariablesReporterias { get; set; }
+        #endregion
 
-
-
-        // INVENTARIO
-
+        #region Inventario
         public DbSet<InvProductoImagen> InvProductoImagens { get; set; }
 
         public DbSet<InvProductoImpuesto> InvProductoImpuestos { get; set; }
@@ -75,15 +73,40 @@ namespace DataLayer.PDbContex
 
         public DbSet<InvImpuestos> Impuestos { get; set; }
 
+        public DbSet<Precio> Precios { get; set; }
 
+        public DbSet<Pedido> Pedidos { get; set; }
 
+        #endregion
 
+        #region Seguridad
+        public DbSet<GnPerfil> GnPerfil {get; set; }
+        public DbSet<GnPermiso> GnPermiso { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
+        #endregion
 
+        #region Refactor del Menu
+        public DbSet<GnModulo> GNModulos { get; set; }
+        public DbSet<GnSubMenu> GNSubMenus { get; set; }
+        public DbSet<GnEmpresaXModulo> GnEmpresaXModulos { get; set; }
+        public DbSet<GnEmpresaXPerfilXSubMenu> GnEmpresaXPerfilXSubMenus { get; set; }
+        #endregion
 
+        #region HelpDesk
+        public DbSet<HdkCategoryTicket> HdkCategoryTicket { get; set; }
+        public DbSet<HdkDepartaments> HdkDepartaments { get; set; }
+        public DbSet<HdkDepartXUsuario> HdkDepartXUsuario { get; set; }
+        public DbSet<HdkErrorSubCategory> HdkErrorSubCategory { get; set; }
+        public DbSet<HdkFileEvidenceTicket> HdkFileEvidenceTicket { get; set; }
+        public DbSet<HdkNoteTicket> HdkNoteTicket { get; set; }
+        public DbSet<HdkPrioridadTicket> HdkPrioridadTicket { get; set; }
+        public DbSet<HdkSolutionTicket> HdkSolutionTicket { get; set; }
+        public DbSet<HdkStatusTicket> HdkStatusTicket { get; set; }
+        public DbSet<HdkSubCategory> HdkSubCategory { get; set; }
+        public DbSet<HdkTickets> HdkTickets { get; set; }
+        public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
 
-
-
-
+        #endregion
 
         public DbSet<Pais> Pais { get; set; }
 
@@ -95,20 +118,9 @@ namespace DataLayer.PDbContex
 
         public DbSet<Imagen> Imagenes { get; set; }
 
-        public DbSet<Precio> Precios { get; set; }
-
-
-
-
-
-
-
-
         public DbSet<TipoMovimiento> TipoMovimientos { get; set; }
 
         public DbSet<TipoPago> TipoPagos { get; set; }
-
-
 
         public DbSet<CuentasPorPagar> CuentasPorPagar { get; set; }
 
@@ -116,15 +128,9 @@ namespace DataLayer.PDbContex
 
         public DbSet<Cliente> Clientes { get; set; }
 
-
-
         public DbSet<DgiiNcfSecuencia> DgiiNcfSecuencia { get; set; }
 
         public DbSet<DgiiNcf> DgiiNcf { get; set; }
-
-
-
-        public DbSet<Pedido> Pedidos { get; set; }
 
         public DbSet<DetallePedido> DetallePedido { get; set; }
 
@@ -148,7 +154,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<GnMenu> GnMenu { get; set; }
 
-        public DbSet<GnEmpresa> GnEmpresa  { get; set; }
+        public DbSet<GnEmpresa> GnEmpresa { get; set; }
 
         public DbSet<GnSucursal> GnSucursal { get; set; }
 
@@ -189,34 +195,5 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
-
-        #region Seguridad
-        public DbSet<GnPerfil> GnPerfil {get; set; }
-        public DbSet<GnPermiso> GnPermiso { get; set; }
-        public DbSet<Usuario> Usuario { get; set; }
-        #endregion
-
-        #region refactor del Menu
-        public DbSet<GnModulo> GNModulos { get; set; }
-        public DbSet<GnSubMenu> GNSubMenus { get; set; }
-        public DbSet<GnEmpresaXModulo> GnEmpresaXModulos { get; set; }
-        public DbSet<GnEmpresaXPerfilXSubMenu> GnEmpresaXPerfilXSubMenus { get; set; }
-        #endregion
-
-        #region HelpDesk
-        public DbSet<HdkCategoryTicket> HdkCategoryTicket { get; set; }
-        public DbSet<HdkDepartaments> HdkDepartaments { get; set; }
-        public DbSet<HdkDepartXUsuario> HdkDepartXUsuario { get; set; }
-        public DbSet<HdkErrorSubCategory> HdkErrorSubCategory { get; set; }
-        public DbSet<HdkFileEvidenceTicket> HdkFileEvidenceTicket { get; set; }
-        public DbSet<HdkNoteTicket> HdkNoteTicket { get; set; }
-        public DbSet<HdkPrioridadTicket> HdkPrioridadTicket { get; set; }
-        public DbSet<HdkSolutionTicket> HdkSolutionTicket { get; set; }
-        public DbSet<HdkStatusTicket> HdkStatusTicket { get; set; }
-        public DbSet<HdkSubCategory> HdkSubCategory { get; set; }
-        public DbSet<HdkTickets> HdkTickets { get; set; }
-        public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
-
-        #endregion
     }
 }

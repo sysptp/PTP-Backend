@@ -1,75 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using DataLayer.PDbContex;
-using DataLayer.Models.ModuloInventario;
-using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
-using DataLayer.Models.ModuloInventario.Suplidor;
-
+using AutoMapper;
+using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 
 public class SuplidoresService : ISuplidoresService
 {
     private readonly PDbContext _context;
+    private readonly IMapper _mapper;
+    private readonly ITokenService _tokenService;
 
-    public SuplidoresService(PDbContext dbContext)
+    public SuplidoresService(PDbContext dbContext,
+        IMapper mapper,
+        ITokenService tokenService)
     {
         _context = dbContext;
+        _mapper = mapper;
+        _tokenService = tokenService;
     }
 
-    public async Task AddSuplidores(Suplidores entity)
+    // Obtener data por su id
+    public async Task<ViewSuppliersDto> GetById(int id)
     {
-        try
-        {
-            _context.Suplidores.Add(entity);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        var data = await _context.Suplidores
+            .Include(x => x.Pedidos)
+            .Include(x => x.ProductoSuplidores)
+            .Where(x => x.Id == id && x.Borrado == false)
+            .FirstOrDefaultAsync();
+        return _mapper.Map<ViewSuppliersDto>(data);
     }
 
-    public async Task Edit(Suplidores entity)
+    // Obtener data por su empresa
+    public async Task<List<ViewSuppliersDto>> GetByCompany(int id)
     {
-        try
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        var data = await _context.Suplidores
+            .Include(x => x.Pedidos)
+            .Include(x => x.ProductoSuplidores)
+            .Where(x => x.IdEmpresa == id && x.Borrado == false)
+            .ToListAsync();
+
+        return _mapper.Map<List<ViewSuppliersDto>>(data);
     }
 
-    public async Task<Suplidores> GetById(int id, long idEMpresa)
+    // Crear un nuevo 
+    public async Task<int?> Create(CreateSuppliersDto create)
     {
-        return await _context.Suplidores.Where(x => x.Id == id && x.IdEmpresa == idEMpresa).FirstOrDefaultAsync();
-    }
+        var newObject = _mapper.Map<Suplidores>(create);
+        newObject.FechaCreacion = DateTime.Now;
+        newObject.Borrado = false;
+        //newObject.Activo = false;
+        newObject.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
-    public async Task<IList<Suplidores>> GetAll(long idEMpresa)
-    {
-        return await _context.Suplidores.Where(x => x.Borrado != true && x.IdEmpresa == idEMpresa).ToListAsync();
-    }
-
-    public async Task Delete(int id, long idEMpresa)
-    {
-
-        var cl = await _context.Suplidores.FindAsync(id);
-        if (cl == null) return;
-
-        cl.Borrado = true;
+        _context.Suplidores.Add(newObject);
         await _context.SaveChangesAsync();
 
+        return newObject.Id;
     }
 
-    public Task Add(Suplidores entity)
+    // Editar existente
+    public async Task Edit(EditSuppliersDto edit)
     {
-        throw new NotImplementedException();
+        var existing = await _context.Suplidores.FirstOrDefaultAsync(x => x.Id == edit.Id);
+        //var activox = existing?.Activo;
+        if (existing != null)
+        {
+            _mapper.Map(edit, existing);
+            existing.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+            existing.FechaModificacion = DateTime.Now;
+           // existing.Activo = activox;
+            _context.Suplidores.Update(existing);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    // Servicio para eliminar por id unico
+    public async Task DeleteById(int id)
+    {
+        var data = await _context.Suplidores.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+        if (data != null)
+        {
+            data.Borrado = true;
+            _context.Suplidores.Update(data);
+            await _context.SaveChangesAsync();
+        }
     }
 }
 
