@@ -8,7 +8,6 @@ using BussinessLayer.Interfaces.IBancos;
 using BussinessLayer.Interfaces.IBoveda;
 using BussinessLayer.Interfaces.ICaja;
 using BussinessLayer.Interfaces.ICargaMasiva;
-using BussinessLayer.Interfaces.ICentroReporteria;
 using BussinessLayer.Interfaces.ICuentas;
 using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.Interfaces.IGeografia;
@@ -23,7 +22,6 @@ using BussinessLayer.Services.SBancos;
 using BussinessLayer.Services.SBoveda;
 using BussinessLayer.Services.SCaja;
 using BussinessLayer.Services.SCargaMasiva;
-using BussinessLayer.Services.SCentroReporteria;
 using BussinessLayer.Services.SCotizaciones;
 using BussinessLayer.Services.SCuentas;
 using BussinessLayer.Services.SEmpresa;
@@ -49,6 +47,8 @@ using BussinessLayer.Services.SSeguridad.Perfil;
 using BussinessLayer.Services.SSeguridad.SUsuario;
 using BussinessLayer.Services.SSeguridad.Permiso;
 using BussinessLayer.Services.ModuloInventario.Productos;
+using BussinessLayer.Services.ModuloReporteria;
+using BussinessLayer.Interfaces.ModuloReporteria;
 
 
 public static class ServiceRegistration

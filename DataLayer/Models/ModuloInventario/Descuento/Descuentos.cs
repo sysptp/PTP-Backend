@@ -4,7 +4,7 @@ using DataLayer.Models.ModuloInventario.Productos;
 
 namespace DataLayer.Models.ModuloInventario.Descuento
 {
-    [Table("Descuentos")]
+    [Table("InvDescuentos")]
     public class Descuentos
     {
         [Key]
