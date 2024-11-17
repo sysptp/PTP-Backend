@@ -1,8 +1,6 @@
 ﻿using DataLayer.Models.Empresa;
 using DataLayer.Models.Otros;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.MenuApp
@@ -12,9 +10,13 @@ namespace DataLayer.Models.MenuApp
     {
         public long Codigo_EMP { get; set; }
         public int IDModulo { get; set; }
-        public bool Borrado { get; set; }
-        public virtual GnModulo Modulo { get; set; }
-        public virtual GnEmpresa Empresa { get; set; }
+        public int IDMenu { get; set; }
+        [ForeignKey("IDMenu")]
+        public virtual GnMenu? Menu { get; set; }
+        [ForeignKey("IDModulo")]
+        public virtual GnModulo? Modulo { get; set; }
+        [ForeignKey("Codigo_EMP")]
+        public virtual GnEmpresa? Empresa { get; set; }
     }
 
 }
