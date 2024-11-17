@@ -178,7 +178,7 @@ namespace BussinessLayer.Repository.ROtros
             {
                 query = query.Include(property);
             }
-            return await query.ToListAsync();
+            return await query.Where(x => x.Borrado != true).ToListAsync();
         }
 
     }

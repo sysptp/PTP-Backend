@@ -68,8 +68,10 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var createdPermission = await _gnPermisoService.Add(permisoDto);
-                return CreatedAtAction(nameof(GetAllPermissions), new { id = createdPermission }, Response<object>.Success(createdPermission, "Permiso creado exitosamente"));
+                var response = await _gnPermisoService.AddOrUpdatePermissionAsync(permisoDto);
+
+                return CreatedAtAction(nameof(GetAllPermissions), new { id = response.Data }, response);
+
             }
             catch (Exception ex)
             {

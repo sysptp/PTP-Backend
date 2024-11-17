@@ -2,14 +2,17 @@
 using BussinessLayer.DTOs.ModuloInventario.Descuentos;
 using BussinessLayer.DTOs.ModuloInventario.Impuestos;
 using BussinessLayer.DTOs.ModuloInventario.Marcas;
+using BussinessLayer.DTOs.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Precios;
 using BussinessLayer.DTOs.ModuloInventario.Productos;
+using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.Models.ModuloInventario.Productos;
+using DataLayer.Models.ModuloInventario.Suplidor;
 
 public class ModuloInventarioProfile : Profile
 {
@@ -43,5 +46,13 @@ public class ModuloInventarioProfile : Profile
         CreateMap<CreateDiscountDto, Descuentos>().ReverseMap();
         CreateMap<EditDiscountDto, Descuentos>().ReverseMap();
         CreateMap<ViewDiscountDto, Descuentos>().ReverseMap();
+
+        CreateMap<CreateOrderDto, Pedido>().ReverseMap();
+        CreateMap<EditOrderDto, Pedido>().ReverseMap();
+        CreateMap<ViewOrderDto, Pedido>().ReverseMap();
+
+        CreateMap<CreateSuppliersDto, Suplidores>().ReverseMap();
+        CreateMap<EditSuppliersDto, Suplidores>().ReverseMap();
+        CreateMap<ViewSuppliersDto, Suplidores>().ReverseMap();
     }
 }

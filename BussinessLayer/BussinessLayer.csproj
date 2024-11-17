@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="FluentValidations\ModuloInventario\Almacenes\" />
-    <Folder Include="FluentValidations\ModuloInventario\Suplidores\" />
     <Folder Include="ViewModels\Bancos\" />
     <Folder Include="ViewModels\Boveda\" />
     <Folder Include="ViewModels\Caja\" />

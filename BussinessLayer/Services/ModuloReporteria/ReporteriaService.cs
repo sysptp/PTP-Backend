@@ -4,11 +4,11 @@ using DataLayer.Models.Reporteria;
 using DataLayer.PDbContex;
 using System.Data.Common;
 using DataLayer.Data;
-using BussinessLayer.Interfaces.ICentroReporteria;
 using Microsoft.EntityFrameworkCore;
 using Dapper;
+using BussinessLayer.Interfaces.ModuloReporteria;
 
-namespace BussinessLayer.Services.SCentroReporteria
+namespace BussinessLayer.Services.ModuloReporteria
 {
     public class ReporteriaService : IReporteriaService
     {
@@ -145,8 +145,8 @@ namespace BussinessLayer.Services.SCentroReporteria
 
         public async Task<ReporteriaViewModel> GetById(int id, int idEmpresa)
         {
-            var result = await _context.CentroReporterias.Where(x => x.NumQuery == id 
-            && x.IdEmpresa == idEmpresa 
+            var result = await _context.CentroReporterias.Where(x => x.NumQuery == id
+            && x.IdEmpresa == idEmpresa
             && x.Estado == "A").FirstOrDefaultAsync();
 
             var data = new ReporteriaViewModel
@@ -154,10 +154,10 @@ namespace BussinessLayer.Services.SCentroReporteria
                 Id = result.Id,
                 NumQuery = result.NumQuery,
                 AdicionadoPor = result.AdicionadoPor,
-                DescripcionReporte= result.DescripcionReporte,
+                DescripcionReporte = result.DescripcionReporte,
                 Estado = result.Estado.ToString(),
-                FechaAdicion= result.FechaAdicion,
-                NombreReporte= result.NombreReporte,
+                FechaAdicion = result.FechaAdicion,
+                NombreReporte = result.NombreReporte,
                 EsPesado = (bool)result.EsPesado,
                 EsSubquery = (bool)result.EsSubquery,
                 QueryCommand = result.QueryCommand,
@@ -205,7 +205,7 @@ namespace BussinessLayer.Services.SCentroReporteria
         public async Task<List<JsonVariables>> GetVariableById(int idReporteria, int idEmpresa)
         {
             var result = await _context.VariablesReporterias
-                .Where(x => x.IdCentroReporteria == idReporteria 
+                .Where(x => x.IdCentroReporteria == idReporteria
                 && x.IdEmpresa == idEmpresa
                 && x.Estado == "A")
                 .ToListAsync();

@@ -24,6 +24,8 @@ using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
 using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
 using BussinessLayer.FluentValidations.ModuloInventario.Impuestos;
 using BussinessLayer.FluentValidations.ModuloInventario.Descuentos;
+using BussinessLayer.FluentValidations.ModuloInventario.Suplidores;
+using BussinessLayer.FluentValidations.ModuloInventario.Pedidos;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -35,6 +37,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
+
             services.AddScoped<RegisterRequestValidator>();
             services.AddScoped<CreateProductosRequestValidator>();
             services.AddScoped<EditProductosRequestValidator>();
@@ -52,6 +55,11 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<CreateTaxRequestValidation>();
             services.AddScoped<EditDiscountRequestValidation>();
             services.AddScoped<CreateDiscountRequestValidation>();
+            services.AddScoped<EditSuppliersRequestValidation>();
+            services.AddScoped<CreateSuppliersRequestValidation>();
+            services.AddScoped<EditOrderRequestValidator>();
+            services.AddScoped<CreateOrderRequestValidator>();
+
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
             services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
             services.AddScoped<IValidator<CountryRequest>, CountryRequestValidator>();
