@@ -1,7 +1,7 @@
 ﻿
 namespace BussinessLayer.DTOs.Auditoria
 {
-    public class AleLogsReponse
+    public class AleLogsReponse:AuditableEntitiesReponse
     {
         public long IdLogs { get; set; }
         public string Logs { get; set; }

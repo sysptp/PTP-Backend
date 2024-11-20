@@ -2,7 +2,7 @@
 
 namespace BussinessLayer.DTOs.Auditoria
 {
-    public class AleLoginReponse
+    public class AleLoginReponse:AuditableEntitiesReponse
     {
         
         public long IdLogin { get; set; }

@@ -1,7 +1,7 @@
 ﻿
 namespace BussinessLayer.DTOs.Auditoria
 {
-    public class AlePrintReponse
+    public class AlePrintReponse:AuditableEntitiesReponse
     {
         public long IdPrint { get; set; }
         public string Reporte { get; set; }
