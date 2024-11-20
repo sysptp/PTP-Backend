@@ -49,6 +49,8 @@ using BussinessLayer.Services.SSeguridad.Perfil;
 using BussinessLayer.Services.SSeguridad.SUsuario;
 using BussinessLayer.Services.SSeguridad.Permiso;
 using BussinessLayer.Services.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.IAuditoria;
+using BussinessLayer.Services.SAuditoria;
 
 
 public static class ServiceRegistration
@@ -150,6 +152,13 @@ public static class ServiceRegistration
         services.AddTransient<IHdkSubCategoryService, HdkSubCategoryService>();
         services.AddTransient<IHdkTicketsService, HdkTicketsService>();
         services.AddTransient<IHdkTypeTicketService, HdkTypeTicketService>();
+        #endregion
+
+        #region Auditoria
+        services.AddTransient<IAleAuditoriaService, AleAuditoriaService>();
+        services.AddTransient<IAleLogsService, AleLogsService>();
+        services.AddTransient<IAleLoginService, AleLoginService>();
+        services.AddTransient<IAlePrintService, AlePrintService>();
         #endregion
 
     }

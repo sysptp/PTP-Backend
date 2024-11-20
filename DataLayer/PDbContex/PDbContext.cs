@@ -24,6 +24,7 @@ using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
 using DataLayer.Models.HelpDesk;
+using DataLayer.Models.Auditoria;
 
 namespace DataLayer.PDbContex
 {
@@ -217,6 +218,13 @@ namespace DataLayer.PDbContex
         public DbSet<HdkTickets> HdkTickets { get; set; }
         public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
 
+        #endregion
+
+        #region Auditoria
+        public DbSet<AleAuditoria> AleAuditoria { get; set; }
+        public DbSet<AleLogin> AleLogin { get; set; }
+        public DbSet<AleLogs> AleLogs { get; set; }
+        public DbSet<AlePrint> AlePrint { get; set; }
         #endregion
     }
 }
