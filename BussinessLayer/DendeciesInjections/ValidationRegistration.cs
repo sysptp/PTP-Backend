@@ -24,6 +24,9 @@ using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
 using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
 using BussinessLayer.FluentValidations.ModuloInventario.Impuestos;
 using BussinessLayer.FluentValidations.ModuloInventario.Descuentos;
+using BussinessLayer.FluentValidations.Auditoria;
+using BussinessLayer.DTOs.Auditoria;
+using Azure.Core;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -78,6 +81,12 @@ namespace BussinessLayer.DendeciesInjections
 
             #endregion
 
+            #region Auditoria
+            services.AddScoped<IValidator<AleAuditoriaRequest>, AleAuditoriaRequestValidator>();
+            services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
+            services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
+            services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
+            #endregion
 
         }
     }

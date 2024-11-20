@@ -1,11 +1,12 @@
 ﻿
+using BussinessLayer.DTOs.Otros;
+
 namespace BussinessLayer.DTOs.Auditoria
 {
     public class AlePrintReponse:AuditableEntitiesReponse
     {
         public long IdPrint { get; set; }
         public string Reporte { get; set; }
-        public string IdUsuario { get; set; }
         public DateTime FechaPint { get; set; }
         public string RolUsuario { get; set; }
         public string EstadoUsuario { get; set; }

@@ -1,4 +1,6 @@
 ﻿
+using BussinessLayer.DTOs.Otros;
+
 namespace BussinessLayer.DTOs.Auditoria
 {
     public class AleLogsReponse:AuditableEntitiesReponse
