@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataLayer.PDbContex;
 using AutoMapper;
-using BussinessLayer.DTOs.ModuloInventario.Impuestos;
-using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using BussinessLayer.DTOs.ModuloInventario.Descuentos;
 

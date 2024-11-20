@@ -11,8 +11,8 @@ namespace BussinessLayer.DTOs.ModuloInventario.Versiones
     {
         public string? Nombre { get; set; }
 
-        public int? IdMarca { get; set; }
+        public int IdMarca { get; set; }
 
-        public long? IdEmpresa { get; set; }
+        public long IdEmpresa { get; set; }
     }
 }

@@ -1,24 +1,44 @@
 ﻿using System.Text.RegularExpressions;
 using BussinessLayer.DTOs.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Productos
 {
     public class CreateProductosRequestValidator : AbstractValidator<CreateProductsDto>
     {
-        public CreateProductosRequestValidator()
+        private readonly ITipoProductoService _tipoProductoService;
+        private readonly IVersionService _versionService;
+        private readonly IGnEmpresaRepository _empresaRepository;
+
+        public CreateProductosRequestValidator(
+            ITipoProductoService tipoProductoService,
+            IVersionService versionService, 
+            IGnEmpresaRepository gnEmpresaRepository)
         {
+            _tipoProductoService = tipoProductoService;
+            _versionService = versionService;
+            _empresaRepository = gnEmpresaRepository;
+
+            // Validar que IdEmpresa no sea nulo y sea mayor que 0
             RuleFor(x => x.IdEmpresa)
-                .NotNull().WithMessage("IdEmpresa no puede ser nulo.")
-                .Must(BeValidLong).WithMessage("IdEmpresa debe ser un número válido de tipo long.");
+                .NotNull().WithMessage("El Id de la empresa no puede ser nulo.")
+                .GreaterThan(0).WithMessage("El Id de la empresa debe ser mayor que 0.")
+                .MustAsync(async (idEmpresa, cancellation) => await CompanyExits(idEmpresa))
+                .WithMessage("La empresa especificada no existe.");
 
             RuleFor(x => x.IdVersion)
                 .NotNull().WithMessage("IdVersion no puede ser nulo.")
-                .Must(BeValidInt).WithMessage("IdVersion debe ser un número entero válido.");
+                .GreaterThan(0).WithMessage("El Id de la version debe ser mayor que 0.")
+                .MustAsync(async (idVersion, cancellation) => await VersionExits(idVersion))
+                .WithMessage("La version especificada no existe.");
 
             RuleFor(x => x.IdTipoProducto)
                 .NotNull().WithMessage("IdTipoProducto no puede ser nulo.")
-                .Must(BeValidInt).WithMessage("IdTipoProducto debe ser un número entero válido.");
+                .GreaterThan(0).WithMessage("El Id de la TipoProducto debe ser mayor que 0.")
+                .MustAsync(async (idTipoProducto, cancellation) => await ProductTypeExits(idTipoProducto))
+                .WithMessage("El TipoProducto especificada no existe.");
 
             RuleFor(x => x.CodigoBarra)
                 .NotEmpty().WithMessage("CodigoBarra no puede estar vacío.")
@@ -69,9 +89,22 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Productos
                 .Must(BeValidBool).WithMessage("EsLocal debe ser un valor booleano válido.");
         }
 
-        private bool BeValidLong(long? value)
+        public async Task<bool> CompanyExits(long companyId)
         {
-            return !value.HasValue || value.Value.GetType() == typeof(long);
+            var company = await _empresaRepository.GetById(companyId);
+            return company != null;
+        }
+
+        public async Task<bool> VersionExits(int versionId)
+        {
+            var data = await _versionService.GetVersionById(versionId);
+            return data != null;
+        }
+
+        public async Task<bool> ProductTypeExits(int id)
+        {
+            var data = await _tipoProductoService.GetProductTypeById(id);
+            return data != null;
         }
 
         private bool BeValidInt(int? value)

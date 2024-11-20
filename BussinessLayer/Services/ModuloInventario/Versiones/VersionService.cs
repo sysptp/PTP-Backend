@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataLayer.PDbContex;
 using AutoMapper;
-using BussinessLayer.DTOs.ModuloInventario.Marcas;
-using DataLayer.Models.ModuloInventario.Marcas;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class VersionService : IVersionService
 {

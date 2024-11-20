@@ -4,7 +4,7 @@
     {
         public string? NombreTipoProducto { get; set; }
 
-        public int? IdEmpresa { get; set; }
+        public int IdEmpresa { get; set; }
 
     }
 }
