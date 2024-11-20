@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models
 {
-    public class Cliente : BaseModel
+    public class Clientes : BaseModel
     {
         [StringLength(40),Required]
         public string Nombre { get; set; }

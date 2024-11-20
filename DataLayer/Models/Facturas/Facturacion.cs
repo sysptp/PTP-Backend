@@ -24,7 +24,7 @@ namespace DataLayer.Models.Facturas
         public int ClienteId { get; set; }
 
         [ForeignKey("ClienteId")]
-        public virtual Cliente Cliente { get; set; }
+        public virtual Clientes Cliente { get; set; }
 
         public string NoFactura { get; set; }
 

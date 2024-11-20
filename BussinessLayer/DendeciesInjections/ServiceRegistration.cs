@@ -45,6 +45,7 @@ using BussinessLayer.Services.SSuplidores;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.InteropServices;
+using BussinessLayer.Repository.RClient;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -58,7 +59,6 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IRepositorySection, RepositorySection>();
             services.AddScoped<IReporteriaService, ReporteriaService>();
             services.AddScoped<IAlmacenesService, AlmacenesService>();
-            services.AddScoped<IClientesService, ClienteService>();
             services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
             services.AddScoped<ICotizacionService, CotizacionService>();
             services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
@@ -121,6 +121,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ITokenService, TokenService>();
             services.AddTransient<IGnSucursalService, GnSucursalService>();
             services.AddTransient<INcfService, NcfService>();
+            services.AddTransient<IClientRepository,ClientRepository>();
 
             #region Geografia
 
