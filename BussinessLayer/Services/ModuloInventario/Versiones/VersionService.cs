@@ -22,7 +22,6 @@ public class VersionService : IVersionService
     public async Task<ViewVersionsDto> GetVersionById(int id)
     {
         var data = await _context.Versiones
-            .Include(x => x.Marca)
             .Where(x => x.Id == id && x.Borrado == false)
             .FirstOrDefaultAsync();
         return _mapper.Map<ViewVersionsDto>(data);
@@ -32,7 +31,6 @@ public class VersionService : IVersionService
     public async Task<List<ViewVersionsDto>> GetVersionByCompany(int id)
     {
         var data = await _context.Versiones
-            .Include(x => x.Marca)
             .Where(x => x.IdEmpresa == id && x.Borrado == false)
             .ToListAsync();
 

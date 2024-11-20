@@ -2,12 +2,12 @@
 using BussinessLayer.FluentValidations;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.DTOs.ModuloInventario.Productos;
 using System.Net.Mime;
 using BussinessLayer.Wrappers;
+using FluentValidation;
 
 namespace PTP_API.Controllers.ModuloInventario.Productos
 {
@@ -18,16 +18,16 @@ namespace PTP_API.Controllers.ModuloInventario.Productos
     {
         #region Propiedades
         private readonly ITipoProductoService _tipoProductosService;
-        private readonly CreateProductsTypeRequestValidator _validatorCreate;
-        private readonly EditProductsTypeRequestValidator _validatorEdit;
-        private readonly NumbersRequestValidator _validateNumbers;
-        private readonly StringsRequestValidator _validateString;
+        private readonly IValidator<CreateTipoProductoDto> _validatorCreate;
+        private readonly IValidator<EditProductTypeDto> _validatorEdit;
+        private readonly IValidator<long> _validateNumbers;
+        private readonly IValidator<string> _validateString;
 
         public ProductTypesController(ITipoProductoService tipoProductosService,
-            CreateProductsTypeRequestValidator validationCreate,
-            EditProductsTypeRequestValidator validatorEdit,
-            StringsRequestValidator validateString,
-            NumbersRequestValidator validateNumbers
+            IValidator<CreateTipoProductoDto> validationCreate,
+            IValidator<EditProductTypeDto> validatorEdit,
+            IValidator<string> validateString,
+            IValidator<long> validateNumbers
             )
         {
             _tipoProductosService = tipoProductosService;

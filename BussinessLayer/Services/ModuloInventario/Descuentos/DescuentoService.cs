@@ -23,7 +23,6 @@ public class DescuentoService : IDescuentoService
     public async Task<ViewDiscountDto> GetDiscountById(int id)
     {
         var data = await _context.Descuentos
-            .Include(x => x.Producto)
             .Where(x => x.Id == id && x.Borrado == false)
             .FirstOrDefaultAsync();
         return _mapper.Map<ViewDiscountDto>(data);
@@ -33,7 +32,6 @@ public class DescuentoService : IDescuentoService
     public async Task<List<ViewDiscountDto>> GetDiscountByCompany(int id)
     {
         var data = await _context.Descuentos
-            .Include(x => x.Producto)
             .Where(x => x.IdEmpresa == id && x.Borrado == false)
             .ToListAsync();
 
@@ -52,7 +50,7 @@ public class DescuentoService : IDescuentoService
         _context.Descuentos.Add(newObject);
         await _context.SaveChangesAsync();
 
-        return newObject.Id;
+        return newObject.Id;    
     }
 
     // Editar existente

@@ -1,13 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Versiones;
-using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Repository.REmpresa;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Versiones
 {

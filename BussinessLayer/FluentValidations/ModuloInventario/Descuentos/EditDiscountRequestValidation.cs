@@ -1,21 +1,31 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Descuentos;
+using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Descuentos
 {
     public class EditDiscountRequestValidation : AbstractValidator<EditDiscountDto>
     {
-        public EditDiscountRequestValidation() {
+        private readonly IGnEmpresaRepository _empresaRepository;
+        private readonly IProductoService _productoService;
 
-            // Validar que Id no sea nulo y sea mayor que 0 (si se requiere)
+        public EditDiscountRequestValidation(IGnEmpresaRepository gnEmpresaRepository,
+            IProductoService productoService)
+        {
+            _empresaRepository = gnEmpresaRepository;
+            _productoService = productoService;
+
+            // Validar que Id no sea nulo y sea mayor que 0
             RuleFor(x => x.Id)
-                .NotNull().WithMessage("El Id no puede ser nulo.")
                 .GreaterThan(0).WithMessage("El Id debe ser mayor que 0.");
 
             // Validar que IdProducto no sea nulo y sea mayor que 0
             RuleFor(x => x.IdProducto)
                 .NotNull().WithMessage("El Id del producto no puede ser nulo.")
-                .GreaterThan(0).WithMessage("El Id del producto debe ser mayor que 0.");
+                .GreaterThan(0).WithMessage("El Id del producto debe ser mayor que 0.")
+                .MustAsync(async (idProducto, cancellation) => await ProductExits(idProducto))
+                .WithMessage("El producto especificado no existe.");
 
             // Validar que EsPorcentaje no sea nulo
             RuleFor(x => x.EsPorcentaje)
@@ -36,6 +46,30 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Descuentos
             // Validar que Activo no sea nulo
             RuleFor(x => x.Activo)
                 .NotNull().WithMessage("Activo no puede ser nulo.");
+
+            // Validar FechaInicio
+            RuleFor(x => x.FechaInicio)
+                .NotNull().WithMessage("La FechaInicio no puede ser nula.")
+                .LessThanOrEqualTo(DateTime.Now).WithMessage("La FechaInicio no puede ser en el futuro.");
+
+            // Validar FechaFin
+            RuleFor(x => x.FechaFin)
+                .NotNull().WithMessage("La FechaFin no puede ser nula.")
+                .GreaterThanOrEqualTo(x => x.FechaInicio)
+                .WithMessage("La FechaFin debe ser igual o posterior a la FechaInicio.")
+                .When(x => x.FechaInicio != null);
+        }
+
+        public async Task<bool> CompanyExits(long companyId)
+        {
+            var company = await _empresaRepository.GetById(companyId);
+            return company != null;
+        }
+
+        public async Task<bool> ProductExits(int productId)
+        {
+            var product = await _productoService.GetProductById(productId);
+            return product != null;
         }
     }
 }

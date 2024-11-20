@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public int? IdProducto { get; set; }
+        public int IdProducto { get; set; }
 
         public bool? EsPorcentaje { get; set; }
 
@@ -13,6 +13,10 @@
         public bool? EsPermanente { get; set; }
 
         public bool? Activo { get; set; }
+
+        public DateTime? FechaInicio { get; set; }
+
+        public DateTime? FechaFin { get; set; }
 
     }
 }

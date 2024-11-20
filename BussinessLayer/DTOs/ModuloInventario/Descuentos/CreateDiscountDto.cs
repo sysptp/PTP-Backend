@@ -1,4 +1,6 @@
-﻿namespace BussinessLayer.DTOs.ModuloInventario.Descuentos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BussinessLayer.DTOs.ModuloInventario.Descuentos
 {
     public class CreateDiscountDto
     {
@@ -13,5 +15,9 @@
         public bool? EsPermanente { get; set; }
 
         public bool? Activo { get; set; }
+
+        public DateTime? FechaInicio { get; set; }
+
+        public DateTime? FechaFin { get; set; }
     }
 }

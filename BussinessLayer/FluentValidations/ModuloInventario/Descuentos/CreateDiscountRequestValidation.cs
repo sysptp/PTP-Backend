@@ -10,9 +10,9 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Descuentos
         private readonly IGnEmpresaRepository _empresaRepository;
         private readonly IProductoService _productoService;
 
-        public CreateDiscountRequestValidation(IGnEmpresaRepository gnEmpresaRepository, 
-            IProductoService productoService) {
-
+        public CreateDiscountRequestValidation(IGnEmpresaRepository gnEmpresaRepository,
+            IProductoService productoService)
+        {
             _empresaRepository = gnEmpresaRepository;
             _productoService = productoService;
 
@@ -21,7 +21,7 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Descuentos
                 .NotNull().WithMessage("El Id del producto no puede ser nulo.")
                 .GreaterThan(0).WithMessage("El Id del producto debe ser mayor que 0.")
                 .MustAsync(async (idProducto, cancellation) => await ProductExits(idProducto))
-                .WithMessage("El producto especificada no existe.");
+                .WithMessage("El producto especificado no existe.");
 
             // Validar que IdEmpresa no sea nulo y sea mayor que 0
             RuleFor(x => x.IdEmpresa)
@@ -49,6 +49,18 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Descuentos
             // Validar que Activo no sea nulo
             RuleFor(x => x.Activo)
                 .NotNull().WithMessage("Activo no puede ser nulo.");
+
+            // Validar FechaInicio
+            RuleFor(x => x.FechaInicio)
+                .NotNull().WithMessage("La FechaInicio no puede ser nula.")
+                .LessThanOrEqualTo(DateTime.Now).WithMessage("La FechaInicio no puede ser en el futuro.");
+
+            // Validar FechaFin
+            RuleFor(x => x.FechaFin)
+                .NotNull().WithMessage("La FechaFin no puede ser nula.")
+                .GreaterThanOrEqualTo(x => x.FechaInicio)
+                .WithMessage("La FechaFin debe ser igual o posterior a la FechaInicio.")
+                .When(x => x.FechaInicio != null);
         }
 
         public async Task<bool> CompanyExits(long companyId)

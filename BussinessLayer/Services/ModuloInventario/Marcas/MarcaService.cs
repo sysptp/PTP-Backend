@@ -23,7 +23,6 @@ public class MarcaService : IMarcaService
     public async Task<ViewBrandDto> GetBrandById(int id)
     {
         var data = await _context.Marcas
-            .Include(x => x.Versiones)
             .Where(x => x.Id == id && x.Borrado == false)
             .FirstOrDefaultAsync();
         return _mapper.Map<ViewBrandDto>(data);
@@ -33,7 +32,6 @@ public class MarcaService : IMarcaService
     public async Task<List<ViewBrandDto>> GetBrandsByCompany(int id)
     {
         var data = await _context.Marcas
-            .Include(x => x.Versiones)
             .Where(x => x.IdEmpresa == id && x.Borrado == false)
             .ToListAsync();
 
