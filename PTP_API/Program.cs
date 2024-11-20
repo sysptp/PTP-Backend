@@ -1,10 +1,15 @@
 using IdentityLayer;
 using BussinessLayer.DendeciesInjections;
 using PTP_API.Extensions;
+using PTP_API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerExtension();
@@ -20,11 +25,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+
 var app = builder.Build();
 
 app.UseCors(policy => policy.AllowAnyHeader()
                              .AllowAnyMethod()
                              .AllowAnyOrigin());
+
+app.UseMiddleware<SqlInjectionProtectionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

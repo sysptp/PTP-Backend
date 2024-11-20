@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Productos\**" />
     <Compile Remove="Settings\**" />
+    <EmbeddedResource Remove="Models\Productos\**" />
     <EmbeddedResource Remove="Settings\**" />
+    <None Remove="Models\Productos\**" />
     <None Remove="Settings\**" />
   </ItemGroup>
 

@@ -2,6 +2,9 @@
 using BussinessLayer.Interfaces.Repository.Configuracion.Modulo;
 using BussinessLayer.Interfaces.Repository.Empresa;
 using BussinessLayer.Interfaces.Repository.Geografia;
+using BussinessLayer.Interfaces.Repository.HelpDesk;
+using BussinessLayer.Repository.HelpDesk;
+using BussinessLayer.Interfaces.Repository.Seguridad;
 using BussinessLayer.Repository.RConfiguracion.Menu;
 using BussinessLayer.Repository.RConfiguracion.Modulo;
 using BussinessLayer.Repository.REmpresa;
@@ -34,6 +37,24 @@ namespace BussinessLayer.DendeciesInjections
             #region Configuracion
             services.AddTransient<IGnMenuRepository,GnMenuRepository>();
             services.AddTransient<IGnModuloRepository,GnModuloRepository>();
+            services.AddTransient<IGnPermisoRepository, GnPermisoRepository>();
+            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+            #endregion
+
+            #region HelpDesk
+            services.AddTransient<IHdkCategoryTicketRepository, HdkCategoryTicketRepository>();
+            services.AddTransient<IHdkDepartamentsRepository, HdkDepartamentsRepository>();
+            services.AddTransient<IHdkDepartXUsuarioRepository, HdkDepartXUsuarioRepository>();
+            services.AddTransient<IHdkErrorSubCategoryRepository, HdkErrorSubCategoryRepository>();
+            services.AddTransient<IHdkFileEvidenceTicketRepository, HdkFileEvidenceTicketRepository>();
+            services.AddTransient<IHdkNoteTicketRepository, HdkNoteTicketRepository>();
+            services.AddTransient<IHdkPrioridadTicketRepository, HdkPrioridadTicketRepository>();
+            services.AddTransient<IHdkSolutionTicketRepository, HdkSolutionTicketRepository>();
+            services.AddTransient<IHdkStatusTicketRepository, HdkStatusTicketRepository>();
+            services.AddTransient<IHdkSubCategoryRepository, HdkSubCategoryRepository>();
+            services.AddTransient<IHdkTicketsRepository, HdkTicketsRepository>();
+            services.AddTransient<IHdkTypeTicketRepository, HdkTypeTicketRepository>();
+
             #endregion
         }
     }

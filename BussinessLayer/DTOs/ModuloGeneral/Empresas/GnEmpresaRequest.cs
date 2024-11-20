@@ -1,0 +1,22 @@
+﻿
+using System.Text.Json.Serialization;
+
+namespace BussinessLayer.DTOs.ModuloGeneral.Empresas
+{
+    public class GnEmpresaRequest
+    {
+        public string CompanyName { get; set; } = null!;
+        public string? Logo { get; set; }
+        public string RNC { get; set; } = null!;
+        public string Address { get; set; } = null!;
+        public string PrimaryPhone { get; set; } = null!;
+        public string? SecondaryPhone { get; set; }
+        public string? PrimaryExtension { get; set; }
+        public string? SecondaryExtension { get; set; }
+        public int SucursalCount { get; set; }
+        public int UserCount { get; set; }
+        public string? WebsiteUrl { get; set; }
+        [JsonIgnore]
+        public long CODIGO_EMP { get; set; }
+    }
+}

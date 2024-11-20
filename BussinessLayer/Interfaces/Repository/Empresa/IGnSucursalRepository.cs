@@ -5,6 +5,5 @@ namespace BussinessLayer.Interfaces.Repository.Empresa
 {
     public interface IGnSucursalRepository : IGenericRepository<GnSucursal>
     {
-        Task<GnSucursal> GetBySucursalCode(long? id);
     }
 }

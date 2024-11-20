@@ -44,6 +44,10 @@ namespace BussinessLayer.Services.SMenu
                     Url = menu.URL,
                     Icon = menu.MenuIcon,
                     ModuleID = menu.IdModulo,
+                    Query = menu.Consultar,
+                    Create = menu.Crear,
+                    Edit = menu.Editar,
+                    Delete = menu.Eliminar,
                     SubMenus = BuildMenuHierarchy(menus, menu.IDMenu)
                 })
                 .ToList();

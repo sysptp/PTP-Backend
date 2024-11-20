@@ -91,6 +91,9 @@ namespace IdentityLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Borrado")
+                        .HasColumnType("bit");
+
                     b.Property<long?>("CodigoEmp")
                         .HasColumnType("bigint");
 
@@ -108,7 +111,7 @@ namespace IdentityLayer.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("FechaAdicion")
+                    b.Property<DateTime?>("FechaAdicion")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("FechaModificacion")
@@ -183,11 +186,11 @@ namespace IdentityLayer.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("UsuarioAdiccion")
-                        .HasColumnType("int");
+                    b.Property<string>("UsuarioAdicion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UsuarioModificacion")
-                        .HasColumnType("int");
+                    b.Property<string>("UsuarioModificacion")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

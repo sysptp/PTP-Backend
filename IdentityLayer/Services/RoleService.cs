@@ -13,13 +13,10 @@ namespace IdentityLayer.Services
             _roleManager = roleManager;
         }
 
-        public async Task<bool> CreateRoleAsync(string roleName, string descripcion, long? idEmpresa)
+        public async Task<dynamic> CreateRoleAsync(string roleName, string descripcion, long? idEmpresa)
         {
             try
             {
-                if (await _roleManager.RoleExistsAsync(roleName))
-                    return false;
-
                 var role = new GnPerfil
                 {
                     Name = roleName,
@@ -30,19 +27,16 @@ namespace IdentityLayer.Services
                     UsuarioAdicion = "System"
                 };
 
-                var result = await _roleManager.CreateAsync(role);
-                return result.Succeeded;
+                await _roleManager.CreateAsync(role);
+                var result = await _roleManager.FindByNameAsync(roleName);
+                role.Id = result.Id;
+                return role;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw new ArgumentException(ex.Message, ex);
             }
-          
-        }
 
-        public async Task<bool> RoleExistsAsync(string roleName)
-        {
-            return await _roleManager.RoleExistsAsync(roleName);
         }
     }
 }
