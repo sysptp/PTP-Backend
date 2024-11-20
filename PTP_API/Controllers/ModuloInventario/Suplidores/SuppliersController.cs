@@ -6,6 +6,8 @@ using System.Net.Mime;
 using BussinessLayer.FluentValidations.ModuloInventario.Suplidores;
 using BussinessLayer.Wrappers;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
+using FluentValidation;
+using BussinessLayer.DTOs.ModuloInventario.Productos;
 
 namespace PTP_API.Controllers.ModuloInventario.Suplidores
 {
@@ -15,18 +17,18 @@ namespace PTP_API.Controllers.ModuloInventario.Suplidores
     public class SuppliersController : ControllerBase
     {
         #region Propiedades
-        private readonly CreateSuppliersRequestValidation _validatorCreate;
-        private readonly EditSuppliersRequestValidation _validationsEdit;
-        private readonly NumbersRequestValidator _validateNumbers;
-        private readonly StringsRequestValidator _validateString;
+        private readonly IValidator<CreateSuppliersDto> _validatorCreate;
+        private readonly IValidator<EditSuppliersDto> _validationsEdit;
+        private readonly IValidator<long> _validateNumbers;
+        private readonly IValidator<string> _validateString;
         private readonly ISuplidoresService _suplidoresService;
 
         public SuppliersController(
             ISuplidoresService suplidoresService,
-            CreateSuppliersRequestValidation validationRules,
-            EditSuppliersRequestValidation validations,
-            StringsRequestValidator validateString,
-            NumbersRequestValidator validateNumbers)
+            IValidator<CreateSuppliersDto> validationRules,
+            IValidator<EditSuppliersDto> validations,
+            IValidator<string> validateString,
+            IValidator<long> validateNumbers)
         {
             _validatorCreate = validationRules;
             _validationsEdit = validations;

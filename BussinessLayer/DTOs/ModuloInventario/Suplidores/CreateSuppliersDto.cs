@@ -2,7 +2,7 @@
 {
     public class CreateSuppliersDto
     {
-        public long? IdEmpresa { get; set; }
+        public long IdEmpresa { get; set; }
 
         public int? TipoIdentificacion { get; set; }
 

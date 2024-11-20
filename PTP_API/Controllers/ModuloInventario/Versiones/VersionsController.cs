@@ -6,6 +6,8 @@ using System.Net.Mime;
 using BussinessLayer.Wrappers;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
 using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
+using FluentValidation;
+using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 
 namespace PTP_API.Controllers.ModuloInventario.Versiones
 {
@@ -15,18 +17,18 @@ namespace PTP_API.Controllers.ModuloInventario.Versiones
     public class VersionsController : ControllerBase
     {
         #region Propiedades
-        private readonly CreateVersionRequestValidation _validatorCreate;
-        private readonly EditVersionRequestValidation _validationsEdit;
-        private readonly NumbersRequestValidator _validateNumbers;
-        private readonly StringsRequestValidator _validateString;
+        private readonly IValidator<CreateVersionsDto> _validatorCreate;
+        private readonly IValidator<EditVersionsDto> _validationsEdit;
+        private readonly IValidator<long> _validateNumbers;
+        private readonly IValidator<string> _validateString;
         private readonly IVersionService _versionService;
 
         public VersionsController(
             IVersionService versionService,
-            CreateVersionRequestValidation validationRules,
-            EditVersionRequestValidation validations,
-            StringsRequestValidator validateString,
-            NumbersRequestValidator validateNumbers)
+            IValidator<CreateVersionsDto> validationRules,
+            IValidator<EditVersionsDto> validations,
+            IValidator<string> validateString,
+            IValidator<long> validateNumbers)
         {
             _validatorCreate = validationRules;
             _validationsEdit = validations;
