@@ -61,7 +61,6 @@ public static class ServiceRegistration
         services.AddScoped<IRepositorySection, RepositorySection>();
         services.AddScoped<IReporteriaService, ReporteriaService>();
         services.AddScoped<IAlmacenesService, AlmacenesService>();
-        services.AddScoped<IClientesService, ClienteService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
         services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();

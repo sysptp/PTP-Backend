@@ -126,7 +126,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<DetalleCuentaPorPagar> DetalleCuentaPorPagar { get; set; }
 
-        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Clientes> Clientes { get; set; }
 
         public DbSet<DgiiNcfSecuencia> DgiiNcfSecuencia { get; set; }
 
