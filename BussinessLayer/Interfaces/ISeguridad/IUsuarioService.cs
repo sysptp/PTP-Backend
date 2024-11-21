@@ -8,5 +8,6 @@ namespace BussinessLayer.Interfaces.ISeguridad
     public interface IUsuarioService : IGenericService<RegisterRequest, UserResponse, Usuario>
     {
         Task<List<UserResponse>> GetAllWithFilters(long? companyId, long? sucursalId, int? roleId);
+        Task UpdateUser(UpdateUserRequest request);
     }
 }

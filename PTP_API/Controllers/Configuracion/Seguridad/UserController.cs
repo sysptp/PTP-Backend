@@ -1,5 +1,8 @@
-﻿using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
+﻿using BussinessLayer.DTOs.Configuracion.Account;
+using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
+using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
 using BussinessLayer.Interfaces.ISeguridad;
+using BussinessLayer.Services.SSeguridad.Permiso;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,5 +57,39 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
                 return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener los usuarios. Por favor, intente nuevamente."));
             }
         }
+
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Actualizar Usuario", Description = "Endpoint para actualizar los datos de un usuario")]
+        public async Task<IActionResult> UpdatePermission(int id, [FromBody] UpdateUserRequest userRequest)
+        {
+            //var validationResult = await _validator.ValidateAsync(permisoDto);
+
+            //if (!validationResult.IsValid)
+            //{
+            //    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+            //    return BadRequest(Response<string>.BadRequest(errors, 400));
+            //}
+
+            try
+            {
+                var existingPermission = await _usuarioService.GetByIdRequest(id);
+                if (existingPermission == null)
+                    return NotFound(Response<string>.NotFound("Permiso no encontrado"));
+
+                userRequest.Id = id;
+                await _usuarioService.UpdateUser(userRequest);
+                return Ok(Response<string>.Success(null, "Permiso actualizado correctamente"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el permiso. Por favor, intente más tarde."));
+            }
+        }
+
     }
 }
