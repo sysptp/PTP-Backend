@@ -24,8 +24,8 @@ namespace PTP_API.Controllers.ModuloInventario.Marcas
 
         public BrandsController(
             IMarcaService marcaService,
-            CreateBrandRequestValidation validationRules,
-            EditBrandRequestValidation validations,
+            IValidator<CreateBrandDto> validationRules,
+            IValidator<EditBrandDto> validations,
             IValidator<string> validateString,
             IValidator<long> validateNumbers)
         {
