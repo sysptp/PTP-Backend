@@ -16,7 +16,7 @@ namespace BussinessLayer.DTOs.ModuloInventario.Versiones
 
         public bool? Activo { get; set; }
 
-        public int? IdMarca { get; set; }
+        public int IdMarca { get; set; }
 
     }
 }

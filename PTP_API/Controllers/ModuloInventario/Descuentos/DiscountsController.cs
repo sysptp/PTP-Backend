@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.FluentValidations.ModuloInventario.Descuentos;
 using BussinessLayer.Wrappers;
 using BussinessLayer.DTOs.ModuloInventario.Descuentos;
+using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
+using FluentValidation;
 
 namespace PTP_API.Controllers.ModuloInventario.Descuentos
 {
@@ -19,18 +21,19 @@ namespace PTP_API.Controllers.ModuloInventario.Descuentos
     public class DiscountsController : ControllerBase
     {
         #region Propiedades
-        private readonly CreateDiscountRequestValidation _validatorCreate;
-        private readonly EditDiscountRequestValidation _validationsEdit;
-        private readonly NumbersRequestValidator _validateNumbers;
-        private readonly StringsRequestValidator _validateString;
+
+        private readonly IValidator<CreateDiscountDto> _validatorCreate;
+        private readonly IValidator<EditDiscountDto> _validationsEdit;
+        private readonly IValidator<long> _validateNumbers;
+        private readonly IValidator<string> _validateString;
         private readonly IDescuentoService _descuentosService;
 
         public DiscountsController(
             IDescuentoService descuentosService,
-            CreateDiscountRequestValidation validationRules,
-            EditDiscountRequestValidation validations,
-            StringsRequestValidator validateString,
-            NumbersRequestValidator validateNumbers)
+            IValidator<CreateDiscountDto> validationRules,
+            IValidator<EditDiscountDto> validations,
+            IValidator<string> validateString,
+            IValidator<long> validateNumbers)
         {
             _validatorCreate = validationRules;
             _validationsEdit = validations;
@@ -126,7 +129,7 @@ namespace PTP_API.Controllers.ModuloInventario.Descuentos
                 return Ok(Response<int?>.Created(created));
 
             }
-            catch
+            catch(Exception ex)
             {
 
                 return Ok(Response<string>.ServerError("Ocurrió un error al crear el descuento. Por favor, intente nuevamente."));

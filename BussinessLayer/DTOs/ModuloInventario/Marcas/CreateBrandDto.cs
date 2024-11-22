@@ -2,7 +2,7 @@
 {
     public class CreateBrandDto
     {
-        public long? IdEmpresa { get; set; }
+        public long IdEmpresa { get; set; }
 
         public string? Nombre { get; set; }
     }

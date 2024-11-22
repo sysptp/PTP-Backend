@@ -10,9 +10,9 @@ namespace BussinessLayer.DTOs.ModuloInventario.Impuestos
     {
         public int Id { get; set; }
 
-        public int? IdEmpresa { get; set; }
+        public int IdEmpresa { get; set; }
 
-        public int? IdMoneda { get; set; }
+        public int IdMoneda { get; set; }
 
         public bool? EsPorcentaje { get; set; }
 

@@ -3,6 +3,7 @@ using BussinessLayer.FluentValidations;
 using BussinessLayer.FluentValidations.ModuloInventario.Precios;
 using BussinessLayer.Interfaces.ModuloInventario.Precios;
 using BussinessLayer.Wrappers;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,16 +16,16 @@ public class PricesController : Controller
 {
     #region Propiedades
     private readonly IPrecioService _precioService;
-    private readonly CreatePreciosRequestValidator _validatorCreate;
-    private readonly EditPreciosRequestValidator _validationsEdit;
-    private readonly NumbersRequestValidator _validateNumbers;
-    private readonly StringsRequestValidator _validateString;
+    private readonly IValidator<CreatePreciosDto> _validatorCreate;
+    private readonly IValidator<EditPricesDto> _validationsEdit;
+    private readonly IValidator<long> _validateNumbers;
+    private readonly IValidator<string> _validateString;
 
     public PricesController(IPrecioService precioService,
-        CreatePreciosRequestValidator validationRules, 
-        EditPreciosRequestValidator validations,
-        StringsRequestValidator validateString,
-        NumbersRequestValidator validateNumbers) {
+        IValidator<CreatePreciosDto> validationRules,
+        IValidator<EditPricesDto> validations,
+        IValidator<string> validateString,
+        IValidator<long> validateNumbers) {
         _precioService = precioService; 
         _validatorCreate = validationRules;
         _validationsEdit = validations;

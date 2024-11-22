@@ -22,8 +22,6 @@ public class PedidoService : IPedidoService
     public async Task<ViewOrderDto> GetById(int id)
     {
         var data = await _context.Pedidos
-            .Include(x => x.Suplidor)
-            .Include(x => x.Detalle)
             .Where(x => x.Id == id && x.Borrado == false)
             .FirstOrDefaultAsync();
         return _mapper.Map<ViewOrderDto>(data);
@@ -33,8 +31,6 @@ public class PedidoService : IPedidoService
     public async Task<List<ViewOrderDto>> GetByCompany(int id)
     {
         var data = await _context.Pedidos
-            .Include(x => x.Suplidor)
-            .Include(x => x.Detalle)
             .Where(x => x.IdEmpresa == id && x.Borrado == false)
             .ToListAsync();
 

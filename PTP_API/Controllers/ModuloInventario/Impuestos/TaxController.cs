@@ -1,15 +1,14 @@
-﻿using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
-using BussinessLayer.FluentValidations;
+﻿using BussinessLayer.FluentValidations;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
 using BussinessLayer.FluentValidations.ModuloInventario.Impuestos;
-using BussinessLayer.DTOs.ModuloInventario.Versiones;
 using System.Net.Mime;
 using BussinessLayer.Wrappers;
 using BussinessLayer.DTOs.ModuloInventario.Impuestos;
+using BussinessLayer.DTOs.ModuloInventario.Descuentos;
+using FluentValidation;
 
 namespace PTP_API.Controllers.ModuloInventario.Impuestos
 {
@@ -19,18 +18,18 @@ namespace PTP_API.Controllers.ModuloInventario.Impuestos
     public class TaxController : ControllerBase
     {
         #region Propiedades
-        private readonly CreateTaxRequestValidation _validatorCreate;
-        private readonly EditTaxRequestValidation _validationsEdit;
-        private readonly NumbersRequestValidator _validateNumbers;
-        private readonly StringsRequestValidator _validateString;
+        private readonly IValidator<CreateTaxDto> _validatorCreate;
+        private readonly IValidator<EditTaxDto> _validationsEdit;
+        private readonly IValidator<long> _validateNumbers;
+        private readonly IValidator<string> _validateString;
         private readonly IImpuestosService _impuestosService;
 
         public TaxController(
             IImpuestosService impuestosService,
-            CreateTaxRequestValidation validationRules,
-            EditTaxRequestValidation validations,
-            StringsRequestValidator validateString,
-            NumbersRequestValidator validateNumbers)
+            IValidator<CreateTaxDto> validationRules,
+            IValidator<EditTaxDto> validations,
+            IValidator<string> validateString,
+            IValidator<long> validateNumbers)
         {
             _validatorCreate = validationRules;
             _validationsEdit = validations;

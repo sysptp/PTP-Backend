@@ -1,4 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Productos
     public class EditProductsTypeRequestValidator : AbstractValidator<EditProductTypeDto>
     {
 
-        public EditProductsTypeRequestValidator() {
-            // Validation for Id
-            RuleFor(x => x.Id)
-                .GreaterThan(0).WithMessage("El ID debe ser un número positivo y mayor a cero.");
+        private readonly IGnEmpresaRepository _empresaRepository;
+
+        public EditProductsTypeRequestValidator(IGnEmpresaRepository gnEmpresaRepository)
+        {
+
+            _empresaRepository = gnEmpresaRepository;
 
             // Validation for NombreTipoProducto
             RuleFor(x => x.NombreTipoProducto)
@@ -22,9 +25,15 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Productos
                 .NotNull().WithMessage("El nombre del tipo de producto es obligatorio.")
                 .Matches("^[a-zA-Z0-9 ]*$").WithMessage("El nombre del tipo de producto no debe contener caracteres especiales.");
 
-            // Validation for Activo
-            RuleFor(x => x.Activo)
-                .NotNull().WithMessage("El campo Activo es obligatorio.");
+            // Validar que Id sea mayor que 0
+            RuleFor(x => x.Id)
+                .GreaterThan(0).WithMessage("El Id debe ser mayor que 0.");
+        }
+
+        public async Task<bool> CompanyExits(long companyId)
+        {
+            var company = await _empresaRepository.GetById(companyId);
+            return company != null;
         }
     }
 }

@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BussinessLayer.DTOs.ModuloInventario.Descuentos
 {
     public class CreateDiscountDto
     {
-        public int? Id { get; set; }
+        public int IdProducto { get; set; }
 
-        public int? IdProducto { get; set; }
-
-        public long? IdEmpresa { get; set; }
+        public long IdEmpresa { get; set; }
 
         public bool? EsPorcentaje { get; set; }
 
@@ -21,5 +15,9 @@ namespace BussinessLayer.DTOs.ModuloInventario.Descuentos
         public bool? EsPermanente { get; set; }
 
         public bool? Activo { get; set; }
+
+        public DateTime? FechaInicio { get; set; }
+
+        public DateTime? FechaFin { get; set; }
     }
 }

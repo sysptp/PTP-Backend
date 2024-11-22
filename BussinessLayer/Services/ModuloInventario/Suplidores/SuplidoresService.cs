@@ -22,8 +22,6 @@ public class SuplidoresService : ISuplidoresService
     public async Task<ViewSuppliersDto> GetById(int id)
     {
         var data = await _context.Suplidores
-            .Include(x => x.Pedidos)
-            .Include(x => x.ProductoSuplidores)
             .Where(x => x.Id == id && x.Borrado == false)
             .FirstOrDefaultAsync();
         return _mapper.Map<ViewSuppliersDto>(data);
@@ -33,8 +31,6 @@ public class SuplidoresService : ISuplidoresService
     public async Task<List<ViewSuppliersDto>> GetByCompany(int id)
     {
         var data = await _context.Suplidores
-            .Include(x => x.Pedidos)
-            .Include(x => x.ProductoSuplidores)
             .Where(x => x.IdEmpresa == id && x.Borrado == false)
             .ToListAsync();
 

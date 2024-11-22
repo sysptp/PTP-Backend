@@ -1,16 +1,16 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Impuestos;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Impuestos
 {
     public class EditTaxRequestValidation : AbstractValidator<EditTaxDto>
     {
-        public EditTaxRequestValidation() {
+        private readonly IGnEmpresaRepository _empresaRepository;
+        public EditTaxRequestValidation(IGnEmpresaRepository gnEmpresaRepository)
+        {
+
+            _empresaRepository = gnEmpresaRepository;
 
             // Validar que Id no sea nulo y sea mayor que 0
             RuleFor(x => x.Id)
@@ -19,7 +19,9 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Impuestos
             // Validar que IdEmpresa no sea nulo y sea mayor que 0
             RuleFor(x => x.IdEmpresa)
                 .NotNull().WithMessage("El Id de la empresa no puede ser nulo.")
-                .GreaterThan(0).WithMessage("El Id de la empresa debe ser mayor que 0.");
+                .GreaterThan(0).WithMessage("El Id de la empresa debe ser mayor que 0.")
+                .MustAsync(async (idEmpresa, cancellation) => await CompanyExits(idEmpresa))
+                .WithMessage("La empresa especificada no existe.");
 
             // Validar que IdMoneda no sea nulo y sea mayor que 0
             RuleFor(x => x.IdMoneda)
@@ -43,6 +45,12 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Impuestos
                 .NotEmpty().WithMessage("El NombreImpuesto no puede estar vacío.")
                 .Matches("^[a-zA-Z0-9 ]*$").WithMessage("El NombreImpuesto contiene caracteres no permitidos.")
                 .MaximumLength(50).WithMessage("El NombreImpuesto no debe exceder los 50 caracteres.");
+        }
+
+        public async Task<bool> CompanyExits(long companyId)
+        {
+            var company = await _empresaRepository.GetById(companyId);
+            return company != null;
         }
     }
 }
