@@ -3,7 +3,6 @@ using BussinessLayer.DTOs.Configuracion.Account;
 using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
 using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.ISeguridad;
-using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Interfaces.Repository.Seguridad;
 using DataLayer.Models.Seguridad;
 

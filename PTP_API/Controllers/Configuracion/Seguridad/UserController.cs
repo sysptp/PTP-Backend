@@ -79,15 +79,15 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
             {
                 var existingPermission = await _usuarioService.GetByIdRequest(id);
                 if (existingPermission == null)
-                    return NotFound(Response<string>.NotFound("Permiso no encontrado"));
+                    return NotFound(Response<string>.NotFound("usuario no encontrado"));
 
                 userRequest.Id = id;
                 await _usuarioService.UpdateUser(userRequest);
-                return Ok(Response<string>.Success(null, "Permiso actualizado correctamente"));
+                return Ok(Response<string>.Success(null, "usuario actualizado correctamente"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el permiso. Por favor, intente más tarde."));
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el usuario. Por favor, intente más tarde."));
             }
         }
 

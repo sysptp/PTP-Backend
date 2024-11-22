@@ -12,9 +12,10 @@ namespace BussinessLayer.DTOs.Configuracion.Seguridad.Usuario
         public int RoleId { get; set; }
         public long CompanyId { get; set; }
         public long SucursalId { get; set; }
-        public int SheduleId { get; set; }
+        public int ScheduleId { get; set; }
         public string? UserIP { get; set; }
         public bool IsActive { get; set; }
+        public string? UserImage {  get; set; }
         [JsonIgnore]
         public int Id { get; set; }
     }

@@ -118,6 +118,16 @@ namespace TaskMaster.Core.Application.Mapping
            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telefono))
            .ReverseMap();
 
+
+            CreateMap<Usuario, UpdateUserRequest>()
+           .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.CodigoEmp ?? 0))
+           .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.IdHorario))
+           .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.IdPerfil ?? 0))
+           .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Nombre))
+           .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Apellido))
+           .ForMember(dest => dest.UserImage, opt => opt.MapFrom(src => src.ImagenUsuario))
+           .ForMember(dest => dest.SucursalId, opt => opt.MapFrom(src => src.CodigoSuc ?? 0))
+           .ReverseMap();
             #endregion
 
 
