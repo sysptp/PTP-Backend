@@ -21,7 +21,7 @@ namespace BussinessLayer.Services.SSeguridad.SUsuario
             _repository = repository;
         }
 
-        public async Task<List<UserResponse>> GetAllWithFilters(long? companyId, long? sucursalId, int? roleId)
+        public async Task<List<UserResponse>> GetAllWithFilters(long? companyId, long? sucursalId, int? roleId, bool? areActive)
         {
            var users = await _accountService.GetAllUsers();
 
@@ -38,6 +38,11 @@ namespace BussinessLayer.Services.SSeguridad.SUsuario
             if (roleId != null && roleId != 0)
             {
                 users = users.Where(x => x.RoleId == roleId).ToList();
+            }
+
+            if (areActive != null)
+            {
+                users = users.Where(x => x.IsActive == areActive).ToList();
             }
 
             return users;

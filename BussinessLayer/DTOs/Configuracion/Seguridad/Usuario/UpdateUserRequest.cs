@@ -8,7 +8,7 @@ namespace BussinessLayer.DTOs.Configuracion.Seguridad.Usuario
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string Email { get; set; } = null!;
-        public string Phone { get; set; } = null!;
+        public string? Phone { get; set; } = null!;
         public int RoleId { get; set; }
         public long CompanyId { get; set; }
         public long SucursalId { get; set; }

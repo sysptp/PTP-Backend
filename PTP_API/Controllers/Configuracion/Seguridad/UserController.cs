@@ -29,7 +29,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Usuarios", Description = "Devuelve una lista de usuarios o un usuario específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] int? id, long? companyId, long? sucursalId, int roleId)
+        public async Task<IActionResult> GetAllUsers([FromQuery] int? id, long? companyId, long? sucursalId, int? roleId, bool? areActive)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
                 }
                 else
                 {
-                    var users = await _usuarioService.GetAllWithFilters(companyId,sucursalId,roleId);
+                    var users = await _usuarioService.GetAllWithFilters(companyId,sucursalId,roleId,areActive);
                     if (users == null || !users.Any())
                     {
                         return NoContent();
@@ -77,8 +77,8 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
 
             try
             {
-                var existingPermission = await _usuarioService.GetByIdRequest(id);
-                if (existingPermission == null)
+                var existingUser = await _usuarioService.GetByIdResponse(id);
+                if (existingUser == null)
                     return NotFound(Response<string>.NotFound("usuario no encontrado"));
 
                 userRequest.Id = id;
