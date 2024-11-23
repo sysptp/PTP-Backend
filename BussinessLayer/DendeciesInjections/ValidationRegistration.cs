@@ -34,6 +34,9 @@ using BussinessLayer.DTOs.ModuloInventario.Marcas;
 using BussinessLayer.DTOs.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
+using BussinessLayer.FluentValidations.Auditoria;
+using BussinessLayer.DTOs.Auditoria;
+using Azure.Core;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -91,6 +94,12 @@ namespace BussinessLayer.DendeciesInjections
 
             #endregion
 
+            #region Auditoria
+            services.AddScoped<IValidator<AleAuditoriaRequest>, AleAuditoriaRequestValidator>();
+            services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
+            services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
+            services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
+            #endregion
 
         }
     }
