@@ -30,8 +30,8 @@ namespace PTP_API.Controllers.Auditoria
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Obtener Auditoria del Login", Description = "Obtiene una lista de todas las Auditoria del Login o una Auditoria del Login específica si se proporciona un ID.")]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        [SwaggerOperation(Summary = "Obtener Auditoria del Log", Description = "Obtiene una lista de todas las Auditoria del Login o una Auditoria del Log específica si se proporciona un ID.")]
+        public async Task<IActionResult> Get([FromQuery] long? id)
         {
             try
             {
@@ -40,9 +40,9 @@ namespace PTP_API.Controllers.Auditoria
                     var AleLogs = await _AleLogsService.GetByIdResponse(id);
                     if (AleLogs == null)
                     {
-                        return NotFound(Response<AleLogsReponse>.NotFound("Auditoria del Login no encontrada."));
+                        return NotFound(Response<AleLogsReponse>.NotFound("Auditoria del Log no encontrada."));
                     }
-                    return Ok(Response<List<AleLogsReponse>>.Success(new List<AleLogsReponse> { AleLogs }, "Auditoria del Login encontrada."));
+                    return Ok(Response<List<AleLogsReponse>>.Success(new List<AleLogsReponse> { AleLogs }, "Auditoria del Log encontrada."));
                 }
                 else
                 {
@@ -51,12 +51,12 @@ namespace PTP_API.Controllers.Auditoria
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<AleLogsReponse>>.Success(AleLogss, "Auditoria del Login obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<AleLogsReponse>>.Success(AleLogss, "Auditoria del Log obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener las Auditoria del Logins. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener las Auditoria del Log. Por favor, intente nuevamente."));
             }
         }
 
@@ -65,7 +65,7 @@ namespace PTP_API.Controllers.Auditoria
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Crear una nueva Auditoria del Login", Description = "Crea una nueva Auditoria del Login en el sistema.")]
+        [SwaggerOperation(Summary = "Crear una nueva Auditoria del Log", Description = "Crea una nueva Auditoria del Log en el sistema.")]
         public async Task<IActionResult> Add([FromBody] AleLogsRequest request)
         {
             var validationResult = await _validator.ValidateAsync(request);
@@ -79,69 +79,14 @@ namespace PTP_API.Controllers.Auditoria
             try
             {
                 var AleLogs = await _AleLogsService.Add(request);
-                return StatusCode(201, Response<AleLogsReponse>.Created(AleLogs, "Auditoria del Login creada correctamente."));
+                return StatusCode(201, Response<AleLogsReponse>.Created(AleLogs, "Auditoria del Log creada correctamente."));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear la Auditoria del Login. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear la Auditoria del Log. Por favor, intente nuevamente."));
             }
         }
 
-        [HttpPut("{id}")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Actualizar una Auditoria del Login", Description = "Actualiza la información de una Auditoria del Login existente.")]
-        public async Task<IActionResult> Update(int id, [FromBody] AleLogsRequest saveDto)
-        {
-            var validationResult = await _validator.ValidateAsync(saveDto);
-
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(Response<string>.BadRequest(errors, 400));
-            }
-
-            try
-            {
-                var existingEmpresa = await _AleLogsService.GetByIdResponse(id);
-                if (existingEmpresa == null)
-                {
-                    return NotFound(Response<AleLogsReponse>.NotFound("Auditoria del Login no encontrada."));
-                }
-                saveDto.IdLogs = id;
-                await _AleLogsService.Update(saveDto, id);
-                return Ok(Response<string>.Success(null, "Auditoria del Login actualizada correctamente"));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar la Auditoria del Login. Por favor, intente nuevamente."));
-            }
-        }
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Eliminar una Auditoria del Login", Description = "Elimina una Auditoria del Login de manera lógica.")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                var AleLogs = await _AleLogsService.GetByIdResponse(id);
-                if (AleLogs == null)
-                {
-                    return NotFound(Response<string>.NotFound("Auditoria del Login no encontrada."));
-                }
-
-                await _AleLogsService.Delete(id);
-                return Ok(Response<string>.Success(null, "Auditoria del Login eliminada correctamente"));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar la Auditoria del Login. Por favor, intente nuevamente."));
-            }
-        }
+        
     }
 }

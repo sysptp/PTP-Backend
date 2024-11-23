@@ -7,15 +7,9 @@ namespace BussinessLayer.DTOs.Auditoria
         [JsonIgnore]
         public long IdLogin { get; set; }
         public bool EsEntrada { get; set; }
-        public DateTime FechaEntrada { get; set; }
-        public DateTime FechaSalida { get; set; }
+        public DateTime? FechaEntrada { get; set; }
+        public DateTime? FechaSalida { get; set; }
         public string Usuario { get; set; }
-        public int Ano { get; set; }
-        public int Mes { get; set; }
-        public int Dia { get; set; }
-        public int Hora { get; set; }
-        public int Minutos { get; set; }
-        public int Segundos { get; set; }
         public string IP { get; set; }
         public decimal Longitud { get; set; }
         public decimal Latitud { get; set; }

@@ -19,12 +19,12 @@ namespace DataLayer.Models.Auditoria
         public DateTime FechaAdicion { get; set; }
         public string RolUsuario { get; set; }
         public string EstadoRol { get; set; }
-        public int Ano { get; set; }
-        public int Mes { get; set; }
-        public int Dia { get; set; }
-        public int Hora { get; set; }
-        public int Minutos { get; set; }
-        public int Segundos { get; set; }
+        public int Ano { get; set; } = DateTime.Now.Year;
+        public int Mes { get; set; } = DateTime.Now.Month;
+        public int Dia { get; set; } = DateTime.Now.Day;
+        public int Hora { get; set; } = DateTime.Now.Hour;
+        public int Minutos { get; set; } = DateTime.Now.Minute;
+        public int Segundos { get; set; } = DateTime.Now.Second;
         public string IP { get; set; }
         public decimal Latitud { get; set; }
         public decimal Logitud { get; set; }

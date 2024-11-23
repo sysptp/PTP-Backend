@@ -10,6 +10,7 @@ namespace BussinessLayer.DTOs.Auditoria
         public string Acccion { get; set; }
         public int Ano { get; set; }
         public int Mes { get; set; }
+        public int Minutos { get; set; }
         public int Dia { get; set; }
         public int Hora { get; set; }
         public int Segundos { get; set; }

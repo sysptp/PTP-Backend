@@ -9,11 +9,12 @@ namespace DataLayer.Models.Auditoria
         public long IdAuditoria { get; set; }
         public string Modulo { get; set; }
         public string Acccion { get; set; }
-        public int Ano { get; set; }
-        public int Mes { get; set; }
-        public int Dia { get; set; }
-        public int Hora { get; set; }
-        public int Segundos { get; set; }
+        public int Ano { get; set; } = DateTime.Now.Year;
+        public int Mes { get; set; } = DateTime.Now.Month;
+        public int Dia { get; set; } = DateTime.Now.Day;
+        public int Hora { get; set; }=DateTime.Now.Hour;
+        public int Minutos { get; set; } = DateTime.Now.Minute;
+        public int Segundos { get; set; } = DateTime.Now.Second;
         public string Request { get; set; }
         public string Response { get; set; }
         public string IP { get; set; }
