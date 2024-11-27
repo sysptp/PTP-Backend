@@ -21,6 +21,8 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Monedas
 
         public string? Simbolo { get; set; }
 
+        public bool? Activo { get; set; }
+
         public bool? EsLocal { get; set; }
 
         public decimal? TasaCambio { get; set; }

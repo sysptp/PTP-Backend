@@ -23,6 +23,10 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Monedas
 
         public decimal? TasaCambio { get; set; }
 
+        public bool? Borrado { get; set; }
+
+        public bool? Activo { get; set; }
+
         public DateTime? FechaCreacion { get; set; }
 
         public DateTime? FechaModificacion { get; set; }

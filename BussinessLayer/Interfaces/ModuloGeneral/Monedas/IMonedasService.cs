@@ -3,7 +3,7 @@ using DataLayer.Models.ModuloGeneral.Monedas;
 
 public interface IMonedasService
 {
-    Task Add(CreateCurrencyDTO model);
+    Task<int> Add(CreateCurrencyDTO model);
 
     Task Delete(int model);
 
@@ -12,5 +12,7 @@ public interface IMonedasService
     Task<ViewCurrencyDTO> GetById(int id);
 
     Task Update(EditCurrencyDTO model);
+
+    Task<List<ViewCurrencyDTO>> GetByCompany(int idEmpresa);
 }
 

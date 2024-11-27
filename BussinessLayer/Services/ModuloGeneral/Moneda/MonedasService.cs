@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using BussinessLayer.DTOs.ModuloGeneral.Monedas;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 public class MonedasService : IMonedasService
 {
@@ -18,21 +18,39 @@ public class MonedasService : IMonedasService
         _tokenService = tokenService;
     }
 
-    public async Task Add(Moneda model)
+    public async Task<int> Add(CreateCurrencyDTO model)
     {
-        _context.Monedas.Add(model);
+        var newDta = _mapper.Map<Moneda>(model);
+
+        newDta.FechaCreacion = DateTime.Now;
+        newDta.Borrado = false;
+        newDta.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+        newDta.Activo = false;
+
+        _context.Monedas.Add(newDta);
         await _context.SaveChangesAsync();
+
+        return newDta.Id;
     }
 
-    public async Task Delete(Moneda model)
+    public async Task Delete(int Id)
     {
-        _context.Monedas.Remove(model);
-        await _context.SaveChangesAsync();
+        var producto = await _context.Monedas
+            .FirstOrDefaultAsync(x => x.Id == Id 
+            && x.Borrado == false);
+
+        if (producto != null)
+        {
+            producto.Borrado = true;
+            _context.Update(producto);
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task<List<ViewCurrencyDTO>> GetAll()
     {
         var list = await _context.Monedas
+            .Where(x => x.Borrado == false)
             .ToListAsync();
 
         return _mapper.Map<List<ViewCurrencyDTO>>(list);
@@ -41,15 +59,38 @@ public class MonedasService : IMonedasService
     public async Task<ViewCurrencyDTO> GetById(int id)
     {
         var product = await _context.Monedas
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id 
+            && x.Borrado == false);
 
         return _mapper.Map<ViewCurrencyDTO>(product);
     }
 
-    public async Task Update(Moneda model)
+    public async Task<List<ViewCurrencyDTO>> GetByCompany(int idEmpresa)
     {
-        _context.Entry(model).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        var product = await _context.Monedas
+            .FirstOrDefaultAsync(x => x.Borrado == false 
+            && x.IdEmpresa == idEmpresa);
+
+        return _mapper.Map<List<ViewCurrencyDTO>>(product);
+    }
+
+    public async Task Update(EditCurrencyDTO model)
+    {
+        var existing = await _context.Monedas
+            .FirstOrDefaultAsync(x => x.Id == model.Id 
+            && x.Borrado == false);
+
+        var activox = existing.Activo;
+
+        if (existing != null)
+        {
+            //_mapper.Map(producto, existing);
+            existing.FechaModificacion = DateTime.Now;
+            existing.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+            existing.Activo = activox;
+            _context.Monedas.Update(existing);
+            await _context.SaveChangesAsync();
+        }
     }
 }
 

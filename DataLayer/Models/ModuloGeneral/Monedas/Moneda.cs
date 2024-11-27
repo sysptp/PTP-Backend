@@ -10,13 +10,13 @@ namespace DataLayer.Models.ModuloGeneral.Monedas
     public class Moneda
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public int? IdPais { get; set; }
+        public int IdPais { get; set; }
 
         [Required]
-        public long? IdEmpresa { get; set; }
+        public long IdEmpresa { get; set; }
 
         [Required, MaxLength(100)]
         public string? Descripcion { get; set; }
@@ -31,6 +31,12 @@ namespace DataLayer.Models.ModuloGeneral.Monedas
         public bool? EsLocal { get; set; }
 
         public decimal? TasaCambio { get; set; }
+
+        [Required]
+        public bool? Borrado { get; set; }
+
+        [Required]
+        public bool? Activo { get; set; }
 
         [Required]
         public DateTime? FechaCreacion { get; set; }
