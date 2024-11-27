@@ -8,18 +8,21 @@ public class DetalleMovimientoAlmacenService : IDetalleMovimientoAlmacenService
 
     public DetalleMovimientoAlmacenService(PDbContext dbContext)
     {
+
         _context = dbContext;
     }
 
-    public async Task Add(DetalleMovimientoAlmacen[] entity)
+    public async Task Add(List<DetalleMovimientoAlmacen> entities)
     {
         try
         {
-            foreach (var d in entity)
+            if (entities == null || !entities.Any())
             {
-                _context.DetalleMovimientoAlmacenes.Add(d);
-                await _context.SaveChangesAsync();
+                throw new ArgumentException("La lista de registro no puede estar null.");
             }
+
+            await _context.DetalleMovimientoAlmacenes.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
         }
         catch (Exception e)
         {
@@ -32,6 +35,11 @@ public class DetalleMovimientoAlmacenService : IDetalleMovimientoAlmacenService
     {
         try
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), "El registro no puede estar null");
+            }
+
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
@@ -42,11 +50,14 @@ public class DetalleMovimientoAlmacenService : IDetalleMovimientoAlmacenService
         }
     }
 
-    public async Task<DetalleMovimientoAlmacen> GetById(int id, long idEMpresa)
+    public async Task<DetalleMovimientoAlmacen> GetById(int id, long idEmpresa)
     {
         try
         {
-            return await _context.DetalleMovimientoAlmacenes.FindAsync(id);
+            var data = await _context.DetalleMovimientoAlmacenes
+                .FirstOrDefaultAsync(x => x.Id == id && x.IdEmpresa == idEmpresa);
+
+            return data ?? throw new KeyNotFoundException("Registro no encontrado.");
         }
         catch (Exception e)
         {
@@ -55,29 +66,56 @@ public class DetalleMovimientoAlmacenService : IDetalleMovimientoAlmacenService
         }
     }
 
-    public async Task<IList<DetalleMovimientoAlmacen>> GetAll(long idEMpresa)
+    public async Task<List<DetalleMovimientoAlmacen>> GetAll()
     {
-        return await _context.DetalleMovimientoAlmacenes.Where(x => x.Borrado != true).ToListAsync();
-    }
-
-    public async Task Delete(int id, long idEMpresa)
-    {
-        var entity = await _context.DetalleMovimientoAlmacenes.FindAsync(id);
-        if (entity != null)
+        try
         {
-            entity.Borrado = true;
-            await _context.SaveChangesAsync();
+            return await _context.DetalleMovimientoAlmacenes
+                .Where(x => !x.Borrado)
+                .ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 
-    public Task Add(DetalleMovimientoAlmacen entity)
+    public async Task Delete(int id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var entity = await _context.DetalleMovimientoAlmacenes.FindAsync(id);
+
+            if (entity == null)
+            {
+                throw new KeyNotFoundException("Registro no encontrado.");
+            }
+
+            entity.Borrado = true;
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
-    public async Task<IEnumerable<DetalleMovimientoAlmacen>> GetDetalleMovimientoByMovimientoId(int id, long idEmpresa)
+    public async Task<List<DetalleMovimientoAlmacen>> GetDetalleMovimientoByMovimientoId(int idMovimiento, long idEmpresa)
     {
-        return await _context.DetalleMovimientoAlmacenes.Where(x => x.IdMovimiento == id && x.IdEmpresa == idEmpresa).ToListAsync();
+        try
+        {
+            return await _context.DetalleMovimientoAlmacenes
+                .Where(x => x.IdMovimiento == idMovimiento && x.IdEmpresa == idEmpresa && !x.Borrado)
+                .ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
+
 }
 

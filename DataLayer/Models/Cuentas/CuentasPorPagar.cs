@@ -28,7 +28,7 @@ public class CuentasPorPagar : BaseModel
     public int IdMovimientoAlmacen { get; set; }
 
     [ForeignKey("IdMovimientoAlmacen")]
-    public MovimientoAlmacen MovimientoAlmacen { get; set; }
+    public MovimientoAlmacen? MovimientoAlmacen { get; set; }
 
     [NotMapped]
     public ICollection<DetalleCuentaPorPagar> DetalleCuentasPorPagar { get; set; } = null;

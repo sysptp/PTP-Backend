@@ -4,9 +4,9 @@ using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.Models.ModuloInventario.Productos;
 
-namespace DataLayer.Models.ModuloInventario.Monedas
+namespace DataLayer.Models.ModuloGeneral.Monedas
 {
-    [Table("Moneda")]
+    [Table("GnMoneda")]
     public class Moneda
     {
         [Key]

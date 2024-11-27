@@ -1,6 +1,5 @@
 ﻿using DataLayer.PDbContex;
 using DataLayer.Enums;
-using DataLayer.Models.Cuentas;
 using BussinessLayer.Interfaces.ICuentas;
 using BussinessLayer.Interface.IOtros;
 using Microsoft.EntityFrameworkCore;
@@ -14,8 +13,11 @@ public class MovimientoAlmacenService : IMovimientoAlmacenService
     private readonly ITipoPagoService _tipoPagoService;
     private readonly ITipoMovimientoService _tipoMovimientoService;
 
-    public MovimientoAlmacenService(PDbContext dbContext, ICuentaPorPagarService cuentaPorPagarService,
-        ITipoPagoService tipoPagoService, ITipoMovimientoService tipoMovimientoService)
+    public MovimientoAlmacenService(
+        PDbContext dbContext, 
+        ICuentaPorPagarService cuentaPorPagarService,
+        ITipoPagoService tipoPagoService, 
+        ITipoMovimientoService tipoMovimientoService)
     {
         _context = dbContext;
         _cppService = cuentaPorPagarService;
@@ -23,10 +25,6 @@ public class MovimientoAlmacenService : IMovimientoAlmacenService
         _tipoPagoService = tipoPagoService;
     }
 
-    public async Task Create(MovimientoAlmacen mov, List<DetalleMovimientoAlmacen> dma, string fechaLimite, decimal montoInicial)
-    {
-        await Add(mov, dma, fechaLimite, montoInicial);
-    }
 
     public async Task Add(MovimientoAlmacen entity, List<DetalleMovimientoAlmacen> dma, string fechaLimite, decimal montoInicial)
     {
@@ -35,7 +33,7 @@ public class MovimientoAlmacenService : IMovimientoAlmacenService
             _context.MovimientoAlmacenes.Add(entity);
             await _context.SaveChangesAsync();
             int maxId = GetMaxIdMovimientoAlmacen();
-            var tp = await _tipoPagoService.GetById(entity.IdTipoPago, entity.IdEmpresa);
+            var tp = await _tipoPagoService.GetById(entity.IdMetodoPago, entity.IdEmpresa);
             var tpm = await _tipoMovimientoService.GetById(entity.IdTipoMovimiento, entity.IdEmpresa);
 
             if ((TipoPago)int.Parse(tp.IN_OUT.ToString()) == TipoPago.Credito)
@@ -142,7 +140,7 @@ public class MovimientoAlmacenService : IMovimientoAlmacenService
         }
     }
 
-    public async Task<IList<MovimientoAlmacen>> GetAll(long idEMpresa)
+    public async Task<List<MovimientoAlmacen>> GetAll(long idEMpresa)
     {
         return await _context.MovimientoAlmacenes.Where(x => x.Borrado != true && x.IdEmpresa == idEMpresa).ToListAsync();
     }
@@ -163,14 +161,5 @@ public class MovimientoAlmacenService : IMovimientoAlmacenService
         return maxID;
     }
 
-    public Task Create()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task Add(MovimientoAlmacen entity)
-    {
-        throw new NotImplementedException();
-    }
 }
 

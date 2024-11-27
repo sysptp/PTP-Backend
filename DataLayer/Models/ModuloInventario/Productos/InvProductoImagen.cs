@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using DataLayer.Models.ModuloGeneral;
-using Microsoft.EntityFrameworkCore;
+using DataLayer.Models.ModuloGeneral.Imagen;
 
 namespace DataLayer.Models.ModuloInventario.Productos
 {
@@ -12,6 +11,7 @@ namespace DataLayer.Models.ModuloInventario.Productos
         public int? Id { get; set; }
 
         public int? ProductoId { get; set; }
+
         public int? ImagenId { get; set; }
 
         [ForeignKey("ProductoId")]

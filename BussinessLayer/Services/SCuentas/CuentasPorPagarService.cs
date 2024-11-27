@@ -116,7 +116,8 @@ namespace BussinessLayer.Services.SCuentas
 
         public async Task<CuentasPorPagar> GetById(int id, long idEMpresa)
         {
-            return await _context.CuentasPorPagar.Include(x=> x.MovimientoAlmacen).Include(x=> x.MovimientoAlmacen.Suplidor).SingleOrDefaultAsync(x=> x.Id == id);
+            //.Include(x=> x.MovimientoAlmacen.Suplidor)
+            return await _context.CuentasPorPagar.Include(x=> x.MovimientoAlmacen).SingleOrDefaultAsync(x=> x.Id == id);
         }
     }
 }

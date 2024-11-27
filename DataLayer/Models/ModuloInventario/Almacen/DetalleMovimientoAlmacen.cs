@@ -1,20 +1,49 @@
 ﻿using DataLayer.Models.ModuloInventario.Productos;
-using DataLayer.Models.Otros;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.ModuloInventario.Almacen
 {
-    public class DetalleMovimientoAlmacen : BaseModel
+    [Table("InvMovimientoAlmacenDetalle")]
+    public class DetalleMovimientoAlmacen
     {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
         public int IdMovimiento { get; set; }
-        [ForeignKey("IdMovimiento")]
-        public virtual MovimientoAlmacen MovimientoAlmacen { get; set; }
 
+        [Required]
         public int IdProducto { get; set; }
-        [ForeignKey("IdProducto")]
-        public virtual Producto Producto { get; set; }
 
+        public long? IdEmpresa { get; set; }
+
+        [Required]
         public int Cantidad { get; set; }
+
+        [Required]
+        public bool Borrado { get; set; }
+
+        [Required]
+        public bool EsVencimiento { get; set; }
+
+        public DateTime? FechaVencimiento { get; set; }
+
+        public DateTime? FechaModificacion { get; set; }
+
+        [MaxLength(50)]
+        public string? UsuarioModificacion { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string? UsuarioCreacion { get; set; }
+
+        [Required]
+        public DateTime FechaCreacion { get; set; }
+
+        // Navigation Property
+        [ForeignKey("IdProducto")]
+        public virtual Producto? Producto { get; set; }
 
     }
 }

@@ -2,7 +2,6 @@
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 
-
 public class AlmacenesService : IAlmacenesService
 {
     private readonly PDbContext _context;
@@ -16,51 +15,86 @@ public class AlmacenesService : IAlmacenesService
     {
         try
         {
-            _context.Almacenes.Add(entity);
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), "El registro no puede estar vacio.");
+            }
+
+            await _context.Almacenes.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
         catch (Exception e)
         {
-            Console.Write(e.Message);
+            Console.WriteLine(e.Message);
             throw;
         }
     }
 
     public async Task<Almacenes> GetById(int id, long idEmpresa)
     {
-
-        return await _context.Almacenes.Where(x => x.Id == id && x.IDEmpresa == idEmpresa).FirstOrDefaultAsync();
-    }
-
-    public async Task<IList<Almacenes>> GetPrincipal(long idEmpresa)
-    {
-
-        return await _context.Almacenes.Where(x => x.Borrado != true && x.AlmacenPrincipal == "S" && x.IDEmpresa == idEmpresa).ToListAsync();
-    }
-
-    public async Task<IList<Almacenes>> GetAll(long idEmpresa)
-    {
-
         try
         {
+            var almacen = await _context.Almacenes
+                .FirstOrDefaultAsync(x => x.Id == id && x.IdEmpresa == idEmpresa);
 
-            return await _context.Almacenes.Where(x => x.Borrado != true && x.IDEmpresa == idEmpresa).ToListAsync();
+            return almacen ?? throw new KeyNotFoundException("Almacén not found.");
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
+
+    public async Task<List<Almacenes>> GetPrincipal(long idEmpresa)
+    {
+        try
+        {
+            return await _context.Almacenes
+                .Where(x => !x.Borrado && x.EsPrincipal && x.IdEmpresa == idEmpresa)
+                .ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
+
+    public async Task<List<Almacenes>> GetAll(long idEmpresa)
+    {
+        try
+        {
+            return await _context.Almacenes
+                .Where(x => !x.Borrado && x.IdEmpresa == idEmpresa)
+                .ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
             throw;
         }
     }
 
     public async Task Delete(int id, long idEmpresa)
     {
-
-        Almacenes alm = await _context.Almacenes.Where(x => x.Id == id && x.IDEmpresa == idEmpresa).FirstOrDefaultAsync();
-        if (alm != null)
+        try
         {
+            var alm = await _context.Almacenes
+                .FirstOrDefaultAsync(x => x.Id == id && x.IdEmpresa == idEmpresa);
+
+            if (alm == null)
+            {
+                throw new KeyNotFoundException("Almacén not found.");
+            }
+
             alm.Borrado = true;
             await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
         }
     }
 
@@ -68,12 +102,17 @@ public class AlmacenesService : IAlmacenesService
     {
         try
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), "El registro no puede estar vacio.");
+            }
+
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine(e.Message);
             throw;
         }
     }
