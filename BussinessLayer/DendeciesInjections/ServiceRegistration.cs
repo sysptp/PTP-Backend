@@ -51,6 +51,8 @@ using BussinessLayer.Interfaces.IAuditoria;
 using BussinessLayer.Services.SAuditoria;
 using BussinessLayer.Services.ModuloReporteria;
 using BussinessLayer.Interfaces.ModuloReporteria;
+using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
+using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
 
 
 public static class ServiceRegistration
@@ -136,6 +138,7 @@ public static class ServiceRegistration
         #region Configuracion 
         services.AddTransient<IGnMenuService,GnMenuService>();
         services.AddTransient<IGnModuloService, GnModuloService>();
+        services.AddTransient<IGnParametrosGeneralesService, GnParametrosGeneralesService>();
         #endregion
 
         #region HelpDesk
