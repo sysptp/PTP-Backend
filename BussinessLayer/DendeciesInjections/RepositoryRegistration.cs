@@ -13,6 +13,8 @@ using BussinessLayer.Repository.RNcf;
 using BussinessLayer.Repository.RSeguridad;
 using BussinessLayer.Services.SGeografia;
 using Microsoft.Extensions.DependencyInjection;
+using BussinessLayer.Interfaces.Repository.Auditoria;
+using BussinessLayer.Repository.Auditoria;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -54,6 +56,14 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IHdkSubCategoryRepository, HdkSubCategoryRepository>();
             services.AddTransient<IHdkTicketsRepository, HdkTicketsRepository>();
             services.AddTransient<IHdkTypeTicketRepository, HdkTypeTicketRepository>();
+
+            #endregion
+
+            #region Auditoria
+            services.AddTransient<IAleAuditoriaRepository, AleAuditoriaRepository>();
+            services.AddTransient<IAleLoginRepository, AleLoginRepository>();
+            services.AddTransient<IAleLogsRepository, AleLogsRepository>();
+            services.AddTransient<IAlePrintRepository, AlePrintRepository>();
 
             #endregion
         }

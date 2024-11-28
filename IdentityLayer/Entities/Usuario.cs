@@ -22,8 +22,7 @@ namespace IdentityLayer.Entities
         public DateTime? FechaModificacion { get; set; }
         public string Longitud { get; set; } = "0";
         public string Latitud { get; set; } = "0";
-
-        public bool Activo = false;
+        public bool IsActive = true;
         public bool Borrado { get; set; }
     }
 }

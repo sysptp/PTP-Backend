@@ -47,7 +47,7 @@ namespace PTP_API.Controllers.HelpDesk
                 }
                 else
                 {
-                    var categoryTickets = await _categoryTicketService.GetAllDto();
+                    var categoryTickets = await _categoryTicketService.GetAllWithInclude();
                     if (categoryTickets == null || categoryTickets.Count == 0)
                     {
                         return NoContent();

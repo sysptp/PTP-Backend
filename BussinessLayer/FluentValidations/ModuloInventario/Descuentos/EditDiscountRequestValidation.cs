@@ -49,15 +49,12 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Descuentos
 
             // Validar FechaInicio
             RuleFor(x => x.FechaInicio)
-                .NotNull().WithMessage("La FechaInicio no puede ser nula.")
-                .LessThanOrEqualTo(DateTime.Now).WithMessage("La FechaInicio no puede ser en el futuro.");
+                .NotNull().WithMessage("La FechaInicio no puede ser nula.");
 
             // Validar FechaFin
             RuleFor(x => x.FechaFin)
-                .NotNull().WithMessage("La FechaFin no puede ser nula.")
-                .GreaterThanOrEqualTo(x => x.FechaInicio)
-                .WithMessage("La FechaFin debe ser igual o posterior a la FechaInicio.")
-                .When(x => x.FechaInicio != null);
+                .NotNull().WithMessage("La FechaFin no puede ser nula.");
+                
         }
 
         public async Task<bool> CompanyExits(long companyId)

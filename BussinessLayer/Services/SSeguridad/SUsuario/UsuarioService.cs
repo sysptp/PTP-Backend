@@ -3,7 +3,7 @@ using BussinessLayer.DTOs.Configuracion.Account;
 using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
 using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.ISeguridad;
-using BussinessLayer.Interfaces.Repositories;
+using BussinessLayer.Interfaces.Repository.Seguridad;
 using DataLayer.Models.Seguridad;
 
 namespace BussinessLayer.Services.SSeguridad.SUsuario
@@ -11,13 +11,17 @@ namespace BussinessLayer.Services.SSeguridad.SUsuario
     public class UsuarioService : GenericService<RegisterRequest, UserResponse, Usuario>, IUsuarioService
     {
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
+        private readonly IUsuarioRepository _repository;
 
-        public UsuarioService(IGenericRepository<Usuario> repository, IMapper mapper, IAccountService accountService) : base(repository, mapper)
+        public UsuarioService(IUsuarioRepository repository, IMapper mapper, IAccountService accountService) : base(repository, mapper)
         {
             _accountService = accountService;
+            _mapper = mapper;
+            _repository = repository;
         }
 
-        public async Task<List<UserResponse>> GetAllWithFilters(long? companyId, long? sucursalId, int? roleId)
+        public async Task<List<UserResponse>> GetAllWithFilters(long? companyId, long? sucursalId, int? roleId, bool? areActive)
         {
            var users = await _accountService.GetAllUsers();
 
@@ -36,6 +40,11 @@ namespace BussinessLayer.Services.SSeguridad.SUsuario
                 users = users.Where(x => x.RoleId == roleId).ToList();
             }
 
+            if (areActive != null)
+            {
+                users = users.Where(x => x.IsActive == areActive).ToList();
+            }
+
             return users;
         }
 
@@ -43,6 +52,12 @@ namespace BussinessLayer.Services.SSeguridad.SUsuario
         {
             var users = await _accountService.GetAllUsers();
             return users.FirstOrDefault(x => x.Id == id);
+        }
+
+        public async Task UpdateUser(UpdateUserRequest request)
+        {
+            var user = _mapper.Map<Usuario>(request);
+            await _repository.Update(user,user.Id);
         }
     }
 }

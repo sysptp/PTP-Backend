@@ -6,6 +6,7 @@ using FluentValidation;
 using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.Configuracion.Account;
 using BussinessLayer.Wrappers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PTP_API.Controllers.Configuration.Seguridad
 {
@@ -83,7 +84,8 @@ namespace PTP_API.Controllers.Configuration.Seguridad
                 var origin = Request?.Headers["origin"].ToString() ?? string.Empty;
                 var registrationResponse = await _accountService.RegisterUserAsync(request, origin);
 
-                return Ok(Response<object>.Created(registrationResponse, "Registro de usuario exitoso"));
+                return registrationResponse.HasError ? BadRequest(Response<string>.BadRequest(new List<string> { registrationResponse?.Error }, 400)) 
+                    : Ok(Response<object>.Created(registrationResponse, "Registro de usuario exitoso"));
             }
             catch (Exception ex)
             {
