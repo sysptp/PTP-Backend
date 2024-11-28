@@ -1,8 +1,10 @@
-﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
+﻿using BussinessLayer.DTOs.ModuloInventario.Precios;
+using BussinessLayer.DTOs.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using BussinessLayer.Wrappers;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -16,16 +18,16 @@ public class ProductsController : ControllerBase
 {
     #region Propiedades
     private readonly IProductoService _productoService;
-    private readonly CreateProductosRequestValidator _validatorCreate;
-    private readonly EditProductosRequestValidator _validatorEdit;
-    private readonly NumbersRequestValidator _validateNumbers;
-    private readonly StringsRequestValidator _validateString;
+    private readonly IValidator<CreateProductsDto> _validatorCreate;
+    private readonly IValidator<EditProductDto> _validatorEdit;
+    private readonly IValidator<long> _validateNumbers;
+    private readonly IValidator<string> _validateString;
 
-    public ProductsController(IProductoService productoService, 
-        CreateProductosRequestValidator validationCreate,
-        EditProductosRequestValidator validatorEdit,
-        StringsRequestValidator validateString,
-        NumbersRequestValidator validateNumbers
+    public ProductsController(IProductoService productoService,
+        IValidator<CreateProductsDto> validationCreate,
+        IValidator<EditProductDto> validatorEdit,
+        IValidator<string> validateString,
+        IValidator<long> validateNumbers
         )
     {
         _productoService = productoService;

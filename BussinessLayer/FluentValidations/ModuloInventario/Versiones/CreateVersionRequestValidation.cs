@@ -1,17 +1,20 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Versiones;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Versiones
 {
     public class CreateVersionRequestValidation  : AbstractValidator<CreateVersionsDto>
     {
+        private readonly IGnEmpresaRepository _empresaRepository;
+        private readonly IMarcaService _marcaService;
 
-        public CreateVersionRequestValidation() {
+        public CreateVersionRequestValidation(IGnEmpresaRepository gnEmpresaRepository,
+            IMarcaService marcaService)
+        {
+
+            _empresaRepository = gnEmpresaRepository;
+            _marcaService = marcaService;
 
             // Validar que Nombre no sea nulo, no esté vacío y no contenga caracteres especiales peligrosos
             RuleFor(x => x.Nombre)
@@ -23,12 +26,29 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Versiones
             // Validar que IdMarca no sea nulo y sea mayor que 0
             RuleFor(x => x.IdMarca)
                 .NotNull().WithMessage("El Id de la marca no puede ser nulo.")
-                .GreaterThan(0).WithMessage("El Id de la marca debe ser mayor que 0.");
+                .GreaterThan(0).WithMessage("El Id de la marca debe ser mayor que 0.")
+                .MustAsync(async (idMarca, cancellation) => await BrandExits(idMarca))
+                .WithMessage("La marca especificada no existe.");
 
             // Validar que IdEmpresa no sea nulo y sea mayor que 0
             RuleFor(x => x.IdEmpresa)
                 .NotNull().WithMessage("El Id de la empresa no puede ser nulo.")
-                .GreaterThan(0).WithMessage("El Id de la empresa debe ser mayor que 0.");
+                .GreaterThan(0).WithMessage("El Id de la empresa debe ser mayor que 0.")
+                .MustAsync(async (idEmpresa, cancellation) => await CompanyExits(idEmpresa))
+                .WithMessage("La empresa especificada no existe.");
+
+        }
+
+        public async Task<bool> CompanyExits(long companyId)
+        {
+            var company = await _empresaRepository.GetById(companyId);
+            return company != null;
+        }
+
+        public async Task<bool> BrandExits(int brandId)
+        {
+            var data = await _marcaService.GetBrandById(brandId);
+            return data != null;
         }
     }
     

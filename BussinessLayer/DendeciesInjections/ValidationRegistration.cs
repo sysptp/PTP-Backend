@@ -26,6 +26,17 @@ using BussinessLayer.FluentValidations.ModuloInventario.Impuestos;
 using BussinessLayer.FluentValidations.ModuloInventario.Descuentos;
 using BussinessLayer.FluentValidations.ModuloInventario.Suplidores;
 using BussinessLayer.FluentValidations.ModuloInventario.Pedidos;
+using BussinessLayer.DTOs.ModuloInventario.Productos;
+using BussinessLayer.DTOs.ModuloInventario.Precios;
+using BussinessLayer.DTOs.ModuloInventario.Descuentos;
+using BussinessLayer.DTOs.ModuloInventario.Impuestos;
+using BussinessLayer.DTOs.ModuloInventario.Marcas;
+using BussinessLayer.DTOs.ModuloInventario.Pedidos;
+using BussinessLayer.DTOs.ModuloInventario.Suplidores;
+using BussinessLayer.DTOs.ModuloInventario.Versiones;
+using BussinessLayer.FluentValidations.Auditoria;
+using BussinessLayer.DTOs.Auditoria;
+using Azure.Core;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -38,27 +49,24 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
 
-            services.AddScoped<RegisterRequestValidator>();
-            services.AddScoped<CreateProductosRequestValidator>();
-            services.AddScoped<EditProductosRequestValidator>();
-            services.AddScoped<CreatePreciosRequestValidator>();
-            services.AddScoped<EditPreciosRequestValidator>();
-            services.AddScoped<NumbersRequestValidator>();
-            services.AddScoped<StringsRequestValidator>();
-            services.AddScoped<EditProductsTypeRequestValidator>();
-            services.AddScoped<CreateProductsTypeRequestValidator>();
-            services.AddScoped<CreateBrandRequestValidation>();
-            services.AddScoped<EditBrandRequestValidation>();
-            services.AddScoped<EditVersionRequestValidation>();
-            services.AddScoped<CreateVersionRequestValidation>();
-            services.AddScoped<EditTaxRequestValidation>();
-            services.AddScoped<CreateTaxRequestValidation>();
-            services.AddScoped<EditDiscountRequestValidation>();
-            services.AddScoped<CreateDiscountRequestValidation>();
-            services.AddScoped<EditSuppliersRequestValidation>();
-            services.AddScoped<CreateSuppliersRequestValidation>();
-            services.AddScoped<EditOrderRequestValidator>();
-            services.AddScoped<CreateOrderRequestValidator>();
+            services.AddScoped<IValidator<CreateProductsDto>,CreateProductosRequestValidator>();
+            services.AddScoped<IValidator<EditProductDto>, EditProductosRequestValidator>();
+            services.AddScoped<IValidator<CreatePreciosDto>, CreatePreciosRequestValidator>();
+            services.AddScoped<IValidator<EditPricesDto>, EditPreciosRequestValidator>();
+            services.AddScoped<IValidator<EditProductTypeDto>, EditProductsTypeRequestValidator>();
+            services.AddScoped<IValidator<CreateTipoProductoDto>, CreateProductsTypeRequestValidator>();
+            services.AddScoped<IValidator<CreateBrandDto>, CreateBrandRequestValidation>();
+            services.AddScoped<IValidator<EditBrandDto>, EditBrandRequestValidation>();
+            services.AddScoped<IValidator<EditVersionsDto>, EditVersionRequestValidation>();
+            services.AddScoped<IValidator<CreateVersionsDto>, CreateVersionRequestValidation>();
+            services.AddScoped<IValidator<EditTaxDto>, EditTaxRequestValidation>();
+            services.AddScoped<IValidator<CreateTaxDto>, CreateTaxRequestValidation>();
+            services.AddScoped<IValidator<EditDiscountDto>, EditDiscountRequestValidation>();
+            services.AddScoped<IValidator<CreateDiscountDto>, CreateDiscountRequestValidation>();
+            services.AddScoped<IValidator<EditSuppliersDto>, EditSuppliersRequestValidation>();
+            services.AddScoped<IValidator<CreateSuppliersDto>, CreateSuppliersRequestValidation>();
+            services.AddScoped<IValidator<EditOrderDto>, EditOrderRequestValidator>();
+            services.AddScoped<IValidator<CreateOrderDto>, CreateOrderRequestValidator>();
 
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
             services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
@@ -86,6 +94,12 @@ namespace BussinessLayer.DendeciesInjections
 
             #endregion
 
+            #region Auditoria
+            services.AddScoped<IValidator<AleAuditoriaRequest>, AleAuditoriaRequestValidator>();
+            services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
+            services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
+            services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
+            #endregion
 
         }
     }

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BussinessLayer.DTOs.ModuloInventario.Pedidos
+﻿namespace BussinessLayer.DTOs.ModuloInventario.Pedidos
 {
     public class CreateOrderDto
     {
 
-        public long? IdEmpresa { get; set; }
+        public long IdEmpresa { get; set; }
 
         public int? IdSuplidor { get; set; }
 

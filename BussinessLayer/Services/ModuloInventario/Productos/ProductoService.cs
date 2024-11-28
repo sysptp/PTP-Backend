@@ -42,11 +42,6 @@ public class ProductoService : IProductoService
     public async Task<List<ViewProductsDto>> GetProducts()
     {
         var list = await _context.Productos
-            .Include(x => x.Version)
-            .Include(x => x.Version.Marca)
-            .Include(x => x.InvProductoImagenes)
-            .Include(x => x.InvProductoImpuestos)
-            .Include(x => x.InvProductoSuplidores)
             .ToListAsync();
 
         return _mapper.Map<List<ViewProductsDto>>(list);
@@ -56,12 +51,6 @@ public class ProductoService : IProductoService
     public async Task<List<ViewProductsDto>> GetProductByIdCompany(long idCompany)
     {
         var list = await _context.Productos
-            .Include(x => x.Version)
-            .Include(x => x.Version.Marca)
-            .Include(x => x.TipoProducto)
-            .Include(x => x.InvProductoImagenes)
-            .Include(x => x.InvProductoImpuestos)
-            .Include(x => x.InvProductoSuplidores)
             .Where(x => x.IdEmpresa == idCompany
             && x.Borrado == false).ToListAsync();
 
@@ -72,11 +61,6 @@ public class ProductoService : IProductoService
     public async Task<ViewProductsDto> GetProductById(int idProduct)
     {
         var product = await _context.Productos
-            .Include(x => x.Version)
-            .Include(x => x.Version.Marca)
-            .Include(x => x.InvProductoImagenes)
-            .Include(x => x.InvProductoImpuestos)
-            .Include(x => x.InvProductoSuplidores)
             .FirstOrDefaultAsync(x => x.Id == idProduct);
 
         return _mapper.Map<ViewProductsDto>(product);
@@ -160,11 +144,6 @@ public class ProductoService : IProductoService
     public async Task<List<ViewProductsDto>> GetAllFacturacion(long idEmpresa)
     {
         var productos = await _context.Productos
-            .Include(x => x.Version)
-            .Include(x => x.Version.Marca)
-            .Include(x => x.InvProductoImagenes)
-            .Include(x => x.InvProductoImpuestos)
-            .Include(x => x.InvProductoSuplidores)
             .Where(x => x.Borrado != true && x.IdEmpresa == idEmpresa
             && x.HabilitaVenta == true
             && (x.CantidadInventario >= 1 || x.EsProducto == true))
@@ -177,11 +156,6 @@ public class ProductoService : IProductoService
     public async Task<ViewProductsDto> GetProductoByBarCode(long idEmpresa, string codigoBarra)
     {
         var data = await _context.Productos
-            .Include(x => x.Version)
-            .Include(x => x.Version.Marca)
-            .Include(x => x.InvProductoImagenes)
-            .Include(x => x.InvProductoImpuestos)
-            .Include(x => x.InvProductoSuplidores)
             .SingleOrDefaultAsync(x => x.CodigoBarra == codigoBarra
             && x.IdEmpresa == idEmpresa && x.Borrado == false);
 
@@ -192,11 +166,6 @@ public class ProductoService : IProductoService
     public async Task<ViewProductsDto> GetProductoByBarCodeFactura(long idEmpresa, string codigoBarra)
     {
         var data = await _context.Productos
-            .Include(x => x.Version)
-            .Include(x => x.Version.Marca)
-            .Include(x => x.InvProductoImagenes)
-            .Include(x => x.InvProductoImpuestos)
-            .Include(x => x.InvProductoSuplidores)
             .SingleOrDefaultAsync(x => x.CodigoBarra == codigoBarra
             && x.IdEmpresa == idEmpresa
             && x.HabilitaVenta == true
@@ -211,11 +180,6 @@ public class ProductoService : IProductoService
     public async Task<List<ViewProductsDto>> GetAllAgotados(long idEmpresa)
     {
         var productos = await _context.Productos
-            .Include(x => x.Version)
-            .Include(x => x.Version.Marca)
-            .Include(x => x.InvProductoImagenes)
-            .Include(x => x.InvProductoImpuestos)
-            .Include(x => x.InvProductoSuplidores)
             .Where(x => x.Borrado != true && x.IdEmpresa == idEmpresa
                 && x.CantidadInventario <= 0
                 && x.EsProducto == true)

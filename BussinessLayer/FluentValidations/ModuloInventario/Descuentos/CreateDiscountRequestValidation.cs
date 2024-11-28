@@ -1,25 +1,34 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Descuentos;
+using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Descuentos
 {
     public class CreateDiscountRequestValidation : AbstractValidator<CreateDiscountDto>
     {
-        public CreateDiscountRequestValidation() {
-            // Validar que Id no sea nulo y sea mayor que 0 (si se requiere)
-            RuleFor(x => x.Id)
-                .NotNull().WithMessage("El Id no puede ser nulo.")
-                .GreaterThan(0).WithMessage("El Id debe ser mayor que 0.");
+        private readonly IGnEmpresaRepository _empresaRepository;
+        private readonly IProductoService _productoService;
+
+        public CreateDiscountRequestValidation(IGnEmpresaRepository gnEmpresaRepository,
+            IProductoService productoService)
+        {
+            _empresaRepository = gnEmpresaRepository;
+            _productoService = productoService;
 
             // Validar que IdProducto no sea nulo y sea mayor que 0
             RuleFor(x => x.IdProducto)
                 .NotNull().WithMessage("El Id del producto no puede ser nulo.")
-                .GreaterThan(0).WithMessage("El Id del producto debe ser mayor que 0.");
+                .GreaterThan(0).WithMessage("El Id del producto debe ser mayor que 0.")
+                .MustAsync(async (idProducto, cancellation) => await ProductExits(idProducto))
+                .WithMessage("El producto especificado no existe.");
 
             // Validar que IdEmpresa no sea nulo y sea mayor que 0
             RuleFor(x => x.IdEmpresa)
                 .NotNull().WithMessage("El Id de la empresa no puede ser nulo.")
-                .GreaterThan(0).WithMessage("El Id de la empresa debe ser mayor que 0.");
+                .GreaterThan(0).WithMessage("El Id de la empresa debe ser mayor que 0.")
+                .MustAsync(async (idEmpresa, cancellation) => await CompanyExits(idEmpresa))
+                .WithMessage("La empresa especificada no existe.");
 
             // Validar que EsPorcentaje no sea nulo
             RuleFor(x => x.EsPorcentaje)
@@ -40,6 +49,26 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Descuentos
             // Validar que Activo no sea nulo
             RuleFor(x => x.Activo)
                 .NotNull().WithMessage("Activo no puede ser nulo.");
+
+            // Validar FechaInicio
+            RuleFor(x => x.FechaInicio)
+                .NotNull().WithMessage("La FechaInicio no puede ser nula.");
+
+            // Validar FechaFin
+            RuleFor(x => x.FechaFin)
+                .NotNull().WithMessage("La FechaFin no puede ser nula.");
+        }
+
+        public async Task<bool> CompanyExits(long companyId)
+        {
+            var company = await _empresaRepository.GetById(companyId);
+            return company != null;
+        }
+
+        public async Task<bool> ProductExits(int productId)
+        {
+            var product = await _productoService.GetProductById(productId);
+            return product != null;
         }
     }
 }

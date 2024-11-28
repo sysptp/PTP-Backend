@@ -1,21 +1,23 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Suplidores;
+using BussinessLayer.Interfaces.Repository.Empresa;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Suplidores
 {
     public class CreateSuppliersRequestValidation : AbstractValidator<CreateSuppliersDto>
     {
-        public CreateSuppliersRequestValidation() {
+        private readonly IGnEmpresaRepository _empresaRepository;
+
+        public CreateSuppliersRequestValidation(IGnEmpresaRepository gnEmpresaRepository) {
+
+            _empresaRepository = gnEmpresaRepository;
 
             // Validar que IdEmpresa no sea nulo y sea mayor que 0
             RuleFor(x => x.IdEmpresa)
                 .NotNull().WithMessage("El Id de la empresa no puede ser nulo.")
-                .GreaterThan(0).WithMessage("El Id de la empresa debe ser mayor que 0.");
+                .GreaterThan(0).WithMessage("El Id de la empresa debe ser mayor que 0.")
+                .MustAsync(async (idEmpresa, cancellation) => await CompanyExits(idEmpresa))
+                .WithMessage("La empresa especificada no existe.");
 
             // Validar que TipoIdentificacion no sea nulo y esté dentro de un rango permitido
             RuleFor(x => x.TipoIdentificacion)
@@ -68,6 +70,12 @@ namespace BussinessLayer.FluentValidations.ModuloInventario.Suplidores
             // Validar que Descripcion tenga una longitud razonable
             RuleFor(x => x.Descripcion)
                 .MaximumLength(200).WithMessage("El campo Descripcion no debe exceder los 200 caracteres.");
+        }
+
+        public async Task<bool> CompanyExits(long companyId)
+        {
+            var company = await _empresaRepository.GetById(companyId);
+            return company != null;
         }
     }
 }

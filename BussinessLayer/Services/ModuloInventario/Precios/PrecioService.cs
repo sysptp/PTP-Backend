@@ -31,8 +31,6 @@ public class PrecioService : IPrecioService
     public async Task<ViewPreciosDto> GetPriceById(int id)
     {
         var data = await _context.Precios
-            .Include(x => x.Producto)
-            .Include(x => x.Moneda)
             .Where(x => x.Id == id && x.Borrado == false)
             .FirstOrDefaultAsync();
         return _mapper.Map<ViewPreciosDto>(data);

@@ -6,9 +6,9 @@
 
         //public long? IdEmpresa { get; set; }
 
-        public int? IdVersion { get; set; }
+        public int IdVersion { get; set; }
 
-        public int? IdTipoProducto { get; set; }
+        public int IdTipoProducto { get; set; }
 
         public string? CodigoBarra { get; set; }
 

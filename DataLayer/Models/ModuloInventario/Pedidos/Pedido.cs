@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.ModuloInventario.Pedidos;
-using DataLayer.Models.ModuloInventario.Suplidor;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

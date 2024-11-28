@@ -26,7 +26,6 @@ namespace BussinessLayer.Services.ModuloInventario.Impuesto
         public async Task<ViewTaxDto> GetTaxById(int id)
         {
             var data = await _context.Impuestos
-                .Include(x => x.Moneda)
                 .Where(x => x.Id == id && x.Borrado == false)
                 .FirstOrDefaultAsync();
             return _mapper.Map<ViewTaxDto>(data);
@@ -36,7 +35,6 @@ namespace BussinessLayer.Services.ModuloInventario.Impuesto
         public async Task<List<ViewTaxDto>> GetTaxByCompany(int id)
         {
             var data = await _context.Impuestos
-                .Include(x => x.Moneda)
                 .Where(x => x.IdEmpresa == id && x.Borrado == false)
                 .ToListAsync();
 

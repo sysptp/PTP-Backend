@@ -6,6 +6,7 @@ using System.Net.Mime;
 using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
 using BussinessLayer.Wrappers;
 using BussinessLayer.DTOs.ModuloInventario.Marcas;
+using FluentValidation;
 
 namespace PTP_API.Controllers.ModuloInventario.Marcas
 {
@@ -15,18 +16,18 @@ namespace PTP_API.Controllers.ModuloInventario.Marcas
     public class BrandsController : ControllerBase
     {
         #region Propiedades
-        private readonly CreateBrandRequestValidation _validatorCreate;
-        private readonly EditBrandRequestValidation _validationsEdit;
-        private readonly NumbersRequestValidator _validateNumbers;
-        private readonly StringsRequestValidator _validateString;
+        private readonly IValidator<CreateBrandDto> _validatorCreate;
+        private readonly IValidator<EditBrandDto> _validationsEdit;
+        private readonly IValidator<long> _validateNumbers;
+        private readonly IValidator<string> _validateString;
         private readonly IMarcaService _marcaService;
 
         public BrandsController(
             IMarcaService marcaService,
-            CreateBrandRequestValidation validationRules,
-            EditBrandRequestValidation validations,
-            StringsRequestValidator validateString,
-            NumbersRequestValidator validateNumbers)
+            IValidator<CreateBrandDto> validationRules,
+            IValidator<EditBrandDto> validations,
+            IValidator<string> validateString,
+            IValidator<long> validateNumbers)
         {
             _validatorCreate = validationRules;
             _validationsEdit = validations;

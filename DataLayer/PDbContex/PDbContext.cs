@@ -24,6 +24,7 @@ using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
 using DataLayer.Models.HelpDesk;
+using DataLayer.Models.Auditoria;
 
 namespace DataLayer.PDbContex
 {
@@ -126,7 +127,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<DetalleCuentaPorPagar> DetalleCuentaPorPagar { get; set; }
 
-        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Clientes> Clientes { get; set; }
 
         public DbSet<DgiiNcfSecuencia> DgiiNcfSecuencia { get; set; }
 
@@ -195,5 +196,41 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
+
+        #region Seguridad
+        public DbSet<GnPerfil> GnPerfil {get; set; }
+        public DbSet<GnPermiso> GnPermiso { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
+        #endregion
+
+        #region refactor del Menu
+        public DbSet<GnModulo> GNModulos { get; set; }
+        public DbSet<GnSubMenu> GNSubMenus { get; set; }
+        public DbSet<GnEmpresaXModulo> GnEmpresaXModulos { get; set; }
+        public DbSet<GnEmpresaXPerfilXSubMenu> GnEmpresaXPerfilXSubMenus { get; set; }
+        #endregion
+
+        #region HelpDesk
+        public DbSet<HdkCategoryTicket> HdkCategoryTicket { get; set; }
+        public DbSet<HdkDepartaments> HdkDepartaments { get; set; }
+        public DbSet<HdkDepartXUsuario> HdkDepartXUsuario { get; set; }
+        public DbSet<HdkErrorSubCategory> HdkErrorSubCategory { get; set; }
+        public DbSet<HdkFileEvidenceTicket> HdkFileEvidenceTicket { get; set; }
+        public DbSet<HdkNoteTicket> HdkNoteTicket { get; set; }
+        public DbSet<HdkPrioridadTicket> HdkPrioridadTicket { get; set; }
+        public DbSet<HdkSolutionTicket> HdkSolutionTicket { get; set; }
+        public DbSet<HdkStatusTicket> HdkStatusTicket { get; set; }
+        public DbSet<HdkSubCategory> HdkSubCategory { get; set; }
+        public DbSet<HdkTickets> HdkTickets { get; set; }
+        public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
+
+        #endregion
+
+        #region Auditoria
+        public DbSet<AleAuditoria> AleAuditoria { get; set; }
+        public DbSet<AleLogin> AleLogin { get; set; }
+        public DbSet<AleLogs> AleLogs { get; set; }
+        public DbSet<AlePrint> AlePrint { get; set; }
+        #endregion
     }
 }

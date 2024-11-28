@@ -6,6 +6,8 @@ using System.Net.Mime;
 using BussinessLayer.Wrappers;
 using BussinessLayer.FluentValidations.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Pedidos;
+using FluentValidation;
+using BussinessLayer.DTOs.ModuloInventario.Marcas;
 
 namespace PTP_API.Controllers.ModuloInventario.Pedidos
 {
@@ -15,18 +17,18 @@ namespace PTP_API.Controllers.ModuloInventario.Pedidos
     public class OrdersController : ControllerBase
     {
         #region Propiedades
-        private readonly CreateOrderRequestValidator _validatorCreate;
-        private readonly EditOrderRequestValidator _validationsEdit;
-        private readonly NumbersRequestValidator _validateNumbers;
-        private readonly StringsRequestValidator _validateString;
+        private readonly IValidator<CreateOrderDto> _validatorCreate;
+        private readonly IValidator<EditOrderDto> _validationsEdit;
+        private readonly IValidator<long> _validateNumbers;
+        private readonly IValidator<string> _validateString;
         private readonly IPedidoService _pedidoService;
 
         public OrdersController(
             IPedidoService pedidoService,
-            CreateOrderRequestValidator validationRules,
-            EditOrderRequestValidator validations,
-            StringsRequestValidator validateString,
-            NumbersRequestValidator validateNumbers)
+            IValidator<CreateOrderDto> validationRules,
+            IValidator<EditOrderDto> validations,
+            IValidator<string> validateString,
+            IValidator<long> validateNumbers)
         {
             _validatorCreate = validationRules;
             _validationsEdit = validations;

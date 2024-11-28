@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
-using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.Models.ModuloInventario.Productos;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.Services.ModuloInventario.Productos
 {
@@ -84,8 +78,7 @@ namespace BussinessLayer.Services.ModuloInventario.Productos
         public async Task<ViewProductTypeDto> GetProductTypeById(int id)
         {
             var data = await _context.InvTipoProductos
-            .Where(x => x.Id == id)
-            .Where(x => x.Borrado == false)
+            .Where(x => x.Id == id && x.Borrado == false)
             .FirstOrDefaultAsync();
 
             return _mapper.Map<ViewProductTypeDto>(data);
