@@ -51,6 +51,8 @@ using BussinessLayer.Interfaces.IAuditoria;
 using BussinessLayer.Services.SAuditoria;
 using BussinessLayer.Services.ModuloReporteria;
 using BussinessLayer.Interfaces.ModuloReporteria;
+using BussinessLayer.Interfaces.Helpers;
+using BussinessLayer.Services.Helper;
 
 
 public static class ServiceRegistration
@@ -117,12 +119,11 @@ public static class ServiceRegistration
         services.AddScoped<CsvProcessor>();
         services.AddScoped<IGnPerfilService, GnPerfilService>();
         services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<ITokenService, TokenService>();
-        services.AddTransient<IGnSucursalService, GnSucursalService>();
-        services.AddTransient<INcfService, NcfService>();
-        services.AddTransient<IUsuarioService, UsuarioService>();
-        services.AddTransient<IGnPermisoService, GnPermisoService>();
+        services.AddScoped<IGnSucursalService, GnSucursalService>();
+        services.AddScoped<INcfService, NcfService>();
+        services.AddScoped<IUsuarioService, UsuarioService>();
+        services.AddScoped<IGnPermisoService, GnPermisoService>();
 
         #region Geografia
 
@@ -154,12 +155,15 @@ public static class ServiceRegistration
         #endregion
 
         #region Auditoria
-        services.AddTransient<IAleAuditoriaService, AleAuditoriaService>();
+        services.AddScoped<IAleAuditoriaService, AleAuditoriaService>();
         services.AddTransient<IAleLogsService, AleLogsService>();
         services.AddTransient<IAleLoginService, AleLoginService>();
         services.AddTransient<IAlePrintService, AlePrintService>();
         #endregion
 
+        #region Geocalizacion 
+        services.AddTransient<IIpGeolocalitationService, IpWhoisService>();
+        #endregion
     }
 }
 

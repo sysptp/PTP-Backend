@@ -7,7 +7,7 @@ namespace BussinessLayer.DTOs.Auditoria
     {
         [JsonIgnore]
         public long IdAuditoria { get; set; }
-        public string Modulo { get; set; }
+        public string Modulo { get; set; } 
         public string Acccion { get; set; }
         
         public string Request { get; set; }
@@ -18,5 +18,7 @@ namespace BussinessLayer.DTOs.Auditoria
         public string RolUsuario { get; set; }
         public long IdEmpresa { get; set; }
         public long IdSucursal { get; set; }
+        [JsonIgnore]
+        public string? UserName { get; set; }
     }
 }

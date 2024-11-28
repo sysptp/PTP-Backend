@@ -14,5 +14,21 @@ namespace BussinessLayer.Repository.Auditoria
             _dbContext = dbContext;
             _tokenService = tokenService;
         }
+
+        public override async Task<AleAuditoria> Add(AleAuditoria entity)
+        {
+            try
+            {
+                entity.FechaAdicion = DateTime.Now;
+
+                _context.Set<AleAuditoria>().Add(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Error al agregar la entidad", ex);
+            }
+        }
     }
 }

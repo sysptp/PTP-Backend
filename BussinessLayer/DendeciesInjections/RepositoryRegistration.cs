@@ -40,7 +40,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IGnMenuRepository,GnMenuRepository>();
             services.AddTransient<IGnModuloRepository,GnModuloRepository>();
             services.AddTransient<IGnPermisoRepository, GnPermisoRepository>();
-            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             #endregion
 
             #region HelpDesk
@@ -60,7 +60,7 @@ namespace BussinessLayer.DendeciesInjections
             #endregion
 
             #region Auditoria
-            services.AddTransient<IAleAuditoriaRepository, AleAuditoriaRepository>();
+            services.AddScoped<IAleAuditoriaRepository, AleAuditoriaRepository>();
             services.AddTransient<IAleLoginRepository, AleLoginRepository>();
             services.AddTransient<IAleLogsRepository, AleLogsRepository>();
             services.AddTransient<IAlePrintRepository, AlePrintRepository>();

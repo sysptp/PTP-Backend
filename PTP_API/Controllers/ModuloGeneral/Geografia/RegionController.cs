@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
 using FluentValidation;
+using BussinessLayer.Atributes;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -25,6 +26,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         }
 
         [HttpGet]
+        [EnableAuditing]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener regiones", Description = "Obtiene una lista de todas las regiones o una región específica si se proporciona un ID.")]
         public async Task<IActionResult> Get([FromQuery] int? id, int? countryId)

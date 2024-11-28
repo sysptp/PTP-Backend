@@ -7,5 +7,6 @@ namespace BussinessLayer.Interfaces.IAuditoria
 {
     public interface IAleAuditoriaService : IGenericService<AleAuditoriaRequest, AleAuditoriaReponse, AleAuditoria>
     {
+        Task AddAuditoria(AleAuditoriaRequest vm);
     }
 }
