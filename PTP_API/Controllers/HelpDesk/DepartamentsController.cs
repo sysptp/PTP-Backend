@@ -6,6 +6,7 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
 using BussinessLayer.DTOs.HelpDesk;
+using BussinessLayer.Atributes;
 
 namespace PTP_API.Controllers.HelpDesk
 {
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.HelpDesk
     [ApiController]
     [SwaggerTag("Gestión de Departamentos de Ticket")]
     [Authorize]
+    [EnableAuditing]
     public class DepartamentsController : ControllerBase
     {
         private readonly IHdkDepartamentsService _departamentsService;
@@ -31,6 +33,7 @@ namespace PTP_API.Controllers.HelpDesk
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Departamento de ticket", Description = "Obtiene una lista de todos los departamento de ticket o un departamento específico si se proporciona un ID.")]
+        [DisableAuditing]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

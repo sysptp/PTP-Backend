@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
 using FluentValidation;
+using BussinessLayer.Atributes;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     [Route("api/v1/Province")]
     [SwaggerTag("Gestión de Provincias")]
     [Authorize]
+    [EnableAuditing]
     public class ProvinceController : ControllerBase
     {
         private readonly IProvinciaService _provinceService;
