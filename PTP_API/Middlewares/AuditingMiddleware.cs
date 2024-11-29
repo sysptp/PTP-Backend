@@ -18,16 +18,12 @@ namespace PTP_API.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Path.StartsWithSegments("/api/v1/Auditoria"))
-            {
-                await _next(context);
-                return;
-            }
 
             var endpoint = context.GetEndpoint();
             var isAuditable = endpoint?.Metadata.GetMetadata<EnableAuditingAttribute>() != null;
+            var isDisableAuditing = endpoint?.Metadata.GetMetadata<DisableAuditingAttribute>() != null;
 
-            if (!isAuditable)
+            if (!isAuditable || isDisableAuditing)
             {
                 await _next(context);
                 return;

@@ -64,8 +64,79 @@ namespace BussinessLayer.Services.SAuditoria
             var model = _mapper.Map<AleAuditoria>(vm);
             model.UsuarioAdicion = vm.UserName;
 
-            await _repository.Add(model);
+            await _repository.AddAuditoria(model);
         }
+        /// <summary>
+        /// Método para obtener una lista de auditorías filtrada por diversos criterios.
+        /// Este método permite aplicar múltiples filtros opcionales, como módulo, acción,
+        /// fecha y hora, cadenas de búsqueda en los requests y responses, rol de usuario, 
+        /// empresa, y sucursal, para obtener registros específicos según las necesidades del sistema.
+        /// </summary>
+        /// <param name="requestLike">
+        /// Cadena para buscar coincidencias parciales en el contenido del request. Este filtro es opcional.
+        /// </param>
+        /// <param name="responseLike">
+        /// Cadena para buscar coincidencias parciales en el contenido del response. Este filtro es opcional.
+        /// </param>
+        /// <param name="rolUsuario">
+        /// Rol del usuario que realizó la acción. Este filtro es opcional.
+        /// <returns>
+        /// Una tarea que representa la operación asincrónica y devuelve una lista de objetos 
+        /// <see cref="AleAuditoriaReponse"/> que cumplen con los criterios de filtrado.
+        /// </returns>
+
+        public async Task<List<AleAuditoriaReponse>> GetAllByFilters(
+            string modulo,
+            string accion,
+            int ano,
+            int mes,
+            int dia,
+            int hora,
+            string requestLike,
+            string responseLike,
+            string rolUsuario,
+            long idEmpresa,
+            long idSucursal)
+        {
+            var auditoriaList = await GetAllDto(); 
+            var query = auditoriaList.AsQueryable();
+
+            if (!string.IsNullOrEmpty(modulo))
+                query = query.Where(x => x.Modulo.Contains(modulo));
+
+            if (!string.IsNullOrEmpty(accion))
+                query = query.Where(x => x.Acccion.Contains(accion));
+
+            if (ano > 0)
+                query = query.Where(x => x.Ano == ano);
+
+            if (mes > 0)
+                query = query.Where(x => x.Mes == mes);
+
+            if (dia > 0)
+                query = query.Where(x => x.Dia == dia);
+
+            if (hora > 0)
+                query = query.Where(x => x.Hora == hora);
+
+            if (!string.IsNullOrEmpty(requestLike))
+                query = query.Where(x => x.Request.Contains(requestLike));
+
+            if (!string.IsNullOrEmpty(responseLike))
+                query = query.Where(x => x.Response.Contains(responseLike));
+
+            if (!string.IsNullOrEmpty(rolUsuario))
+                query = query.Where(x => x.RolUsuario == rolUsuario);
+
+            if (idEmpresa > 0)
+                query = query.Where(x => x.IdEmpresa == idEmpresa);
+
+            if (idSucursal > 0)
+                query = query.Where(x => x.IdSucursal == idSucursal);
+
+            return query.ToList();
+        }
+
 
     }
 }

@@ -15,7 +15,7 @@ namespace BussinessLayer.Repository.Auditoria
             _tokenService = tokenService;
         }
 
-        public override async Task<AleAuditoria> Add(AleAuditoria entity)
+        public async Task<AleAuditoria> AddAuditoria(AleAuditoria entity)
         {
             try
             {

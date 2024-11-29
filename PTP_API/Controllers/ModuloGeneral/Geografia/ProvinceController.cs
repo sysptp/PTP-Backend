@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
 using FluentValidation;
-using BussinessLayer.Repository.RGeografia;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {

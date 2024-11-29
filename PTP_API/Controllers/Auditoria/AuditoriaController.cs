@@ -60,6 +60,55 @@ namespace PTP_API.Controllers.Auditoria
             }
         }
 
+        [HttpGet("GetByFilters")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(Response<IEnumerable<AleAuditoriaReponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Obtener Auditoria Sistema con Filtros", Description = "Obtiene una lista de Auditoria Sistema según los filtros proporcionados.")]
+        public async Task<IActionResult> GetByFilters(
+    [FromQuery] string? modulo,
+    [FromQuery] string? accion,   
+    [FromQuery] int? ano,
+    [FromQuery] int? mes,
+    [FromQuery] int? dia,
+    [FromQuery] int? hora,
+    [FromQuery] string? requestLike,
+    [FromQuery] string? responseLike,
+    [FromQuery] string? rolUsuario,
+    [FromQuery] long? idEmpresa,
+    [FromQuery] long? idSucursal)
+        {
+            try
+            {
+                var filteredAuditorias = await _aleAuditoriaService.GetAllByFilters(
+                    modulo ?? string.Empty,
+                    accion ?? string.Empty,
+                    ano ?? 0,
+                    mes ?? 0,
+                    dia ?? 0,
+                    hora ?? 0,
+                    requestLike ?? string.Empty,
+                    responseLike ?? string.Empty,
+                    rolUsuario ?? string.Empty,
+                    idEmpresa ?? 0,
+                    idSucursal ?? 0);
+
+                if (filteredAuditorias == null || !filteredAuditorias.Any())
+                {
+                    return NoContent();
+                }
+
+                return Ok(Response<IEnumerable<AleAuditoriaReponse>>.Success(filteredAuditorias, "Auditorias filtradas obtenidas correctamente."));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al filtrar las Auditorias. Por favor, intente nuevamente."));
+            }
+        }
+
+
         [HttpPost]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
