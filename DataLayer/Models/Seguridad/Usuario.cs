@@ -24,5 +24,6 @@ namespace DataLayer.Models.Seguridad
 
         public bool IsActive = true;
         public string Email { get; set; } = null!;
+        public string? LanguageCode { get; set; } 
     }
 }

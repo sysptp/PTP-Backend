@@ -6,6 +6,7 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
 using BussinessLayer.DTOs.HelpDesk;
+using BussinessLayer.Atributes;
 
 namespace PTP_API.Controllers.HelpDesk
 {
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.HelpDesk
     [ApiController]
     [SwaggerTag("Gestión de Tipo de Ticket")]
     [Authorize]
+    [EnableAuditing]
     public class TypeTicketController : ControllerBase
     {
         private readonly IHdkTypeTicketService _typeTicketService;
@@ -31,6 +33,7 @@ namespace PTP_API.Controllers.HelpDesk
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Tipo de ticket", Description = "Obtiene una lista de todos los tipos de ticket o un Tipo específico si se proporciona un ID.")]
+        [DisableAuditing]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

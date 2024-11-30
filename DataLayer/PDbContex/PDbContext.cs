@@ -23,6 +23,7 @@ using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
 using DataLayer.Models.HelpDesk;
 using DataLayer.Models.Auditoria;
+using DataLayer.Models.ModuloGeneral.Language;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloGeneral.Imagen;
 
@@ -107,6 +108,16 @@ namespace DataLayer.PDbContex
         public DbSet<HdkTickets> HdkTickets { get; set; }
         public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
 
+        #endregion
+        #region Language
+        public DbSet<GnLanguages> GnLanguages { get; set; }
+        public DbSet<GnLanguagesByTable> GnLanguagesByTable { get; set; }
+        public DbSet<GnLanguagesTableSistemas> GnLanguagesTableSistemas { get; set; }
+        #endregion
+
+        #region Modulo General
+        public DbSet<GnSchedule> GnSchedule { get; set; }
+        public DbSet<GnScheduleUser> GnScheduleUser { get; set; }
         #endregion
 
         #region Auditoria

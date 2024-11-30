@@ -20,7 +20,7 @@ namespace BussinessLayer.Repository.ROtros
             _tokenService = tokenService;
         }
 
-        public async Task<T> GetById(int id)
+        public virtual async Task<T> GetById(int id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
             if (entity == null)
@@ -30,7 +30,7 @@ namespace BussinessLayer.Repository.ROtros
             return entity.Borrado == true ? null : entity;
         }
 
-        public async Task<T> GetById(object id)
+        public virtual async Task<T> GetById(object id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
             if (entity == null)
@@ -40,12 +40,12 @@ namespace BussinessLayer.Repository.ROtros
             return entity.Borrado == true ? null : entity;
         }
 
-        public async Task<IList<T>> GetAll()
+        public virtual async Task<IList<T>> GetAll()
         {
             return await _context.Set<T>().Where(e => !e.Borrado).ToListAsync();
         }
 
-        public async Task<T> Add(T entity)
+        public virtual async Task<T> Add(T entity)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace BussinessLayer.Repository.ROtros
             }
         }
 
-        public async Task Update(T entity, object id)
+        public virtual async Task Update(T entity, object id)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace BussinessLayer.Repository.ROtros
             }
         }
 
-        public async Task Update(T entity, int id)
+        public virtual async Task Update(T entity, int id)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace BussinessLayer.Repository.ROtros
             }
         }
 
-        public async Task Delete(int id)
+        public virtual async Task Delete(int id)
         {
             var entity = await GetById(id);
             if (entity != null)
@@ -137,7 +137,7 @@ namespace BussinessLayer.Repository.ROtros
             }
         }
 
-        public async Task Delete(object id)
+        public virtual async Task Delete(object id)
         {
             var entity = await GetById(id);
             if (entity != null)
@@ -159,7 +159,7 @@ namespace BussinessLayer.Repository.ROtros
         }
 
 
-        public async Task<IEnumerable<TResult>> ExecuteStoredProcedureAsync<TResult>(string storedProcedure, object parameters = null)
+        public virtual async Task<IEnumerable<TResult>> ExecuteStoredProcedureAsync<TResult>(string storedProcedure, object parameters = null)
         {
             using (var connection = _context.Database.GetDbConnection())
             {

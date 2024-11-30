@@ -6,6 +6,7 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
+using BussinessLayer.Atributes;
 
 namespace PTP_API.Controllers.ModuloGeneral.Empresa
 {
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
     [Route("api/v1/Company")]
     [SwaggerTag("Gestión de Empresas")]
     [Authorize]
+    [EnableAuditing]
     public class CompanyController : ControllerBase
     {
         private readonly IGnEmpresaservice _empresaService;
@@ -33,6 +35,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener empresas", Description = "Obtiene una lista de todas las empresas o una empresa específica si se proporciona un ID.")]
+        [DisableAuditing]
         public async Task<IActionResult> Get([FromQuery] long? id)
         {
             try

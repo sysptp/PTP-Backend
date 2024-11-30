@@ -31,7 +31,6 @@ using BussinessLayer.Services.SNcfs;
 using BussinessLayer.Services.SMenu;
 using BussinessLayer.Services.SOtros;
 using BussinessLayer.Services.SSeguridad;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.Interfaces.IModulo;
 using BussinessLayer.Services.SModulo;
@@ -51,6 +50,10 @@ using BussinessLayer.Interfaces.IAuditoria;
 using BussinessLayer.Services.SAuditoria;
 using BussinessLayer.Services.ModuloReporteria;
 using BussinessLayer.Interfaces.ModuloReporteria;
+using BussinessLayer.Interfaces.Helpers;
+using BussinessLayer.Services.Helper;
+using BussinessLayer.Interfaces.Language;
+using BussinessLayer.Services.Language.Translation;
 
 
 public static class ServiceRegistration
@@ -90,18 +93,13 @@ public static class ServiceRegistration
         services.AddScoped<IClaimsService, ClaimsService>();
         services.AddScoped<ICargaMasivaService, CargaMasivaService>();
         services.AddScoped<IAperturaCierreCajasService, AperturaCierreCajasService>();
-        services.AddScoped<ISC_USUAR001Service, SC_USUAR001Service>();
         services.AddScoped<IGnSucursalService, GnSucursalService>();
         services.AddScoped<ICajaService, CajaService>();
         services.AddScoped<ITipoMovimientoBancoService, TipoMovimientoBancoService>();
         services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
-        services.AddScoped<IGn_PerfilService, Gn_PerfilService>();
         services.AddScoped<ICiudades_X_PaisesService, Ciudades_X_PaisesService>();
         services.AddScoped<ISC_IPSYS001Service, SC_IPSYS001Service>();
         services.AddScoped<IImpuestosService, ImpuestosService>();
-        services.AddScoped<ISC_HORARIO001Service, SC_HORARIO001Service>();
-        services.AddScoped<ISC_HORAGROUP002Service, SC_HORAGROUP002Service>();
-        services.AddScoped<ISC_HORA_X_USR002Service, SC_HORA_X_USR002Service>();
         services.AddScoped<IMovimientoBancoesService, MovimientoBancoesService>();
         services.AddScoped<IMonedasService, MonedasService>();
         services.AddScoped<ICuentaBancosService, CuentaBancosService>();
@@ -117,12 +115,11 @@ public static class ServiceRegistration
         services.AddScoped<CsvProcessor>();
         services.AddScoped<IGnPerfilService, GnPerfilService>();
         services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddScoped<ITokenService, TokenService>();
-        services.AddTransient<IGnSucursalService, GnSucursalService>();
-        services.AddTransient<INcfService, NcfService>();
-        services.AddTransient<IUsuarioService, UsuarioService>();
-        services.AddTransient<IGnPermisoService, GnPermisoService>();
+        services.AddScoped<IGnSucursalService, GnSucursalService>();
+        services.AddScoped<INcfService, NcfService>();
+        services.AddScoped<IUsuarioService, UsuarioService>();
+        services.AddScoped<IGnPermisoService, GnPermisoService>();
 
         #region Geografia
 
@@ -154,12 +151,19 @@ public static class ServiceRegistration
         #endregion
 
         #region Auditoria
-        services.AddTransient<IAleAuditoriaService, AleAuditoriaService>();
+        services.AddScoped<IAleAuditoriaService, AleAuditoriaService>();
         services.AddTransient<IAleLogsService, AleLogsService>();
         services.AddTransient<IAleLoginService, AleLoginService>();
         services.AddTransient<IAlePrintService, AlePrintService>();
         #endregion
 
+        #region Geocalizacion 
+        services.AddTransient<IIpGeolocalitationService, IpWhoisService>();
+        #endregion
+        #region Language
+        services.AddScoped<ITranslationFieldService, TranslationFieldService>();
+        services.AddScoped<IJsonTranslationService, JsonTranslationService>();
+        #endregion
     }
 }
 

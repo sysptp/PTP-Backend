@@ -9,5 +9,6 @@ namespace BussinessLayer.Interfaces.ISeguridad
     {
         Task<List<UserResponse>> GetAllWithFilters(long? companyId, long? sucursalId, int? roleId,bool? areActive);
         Task UpdateUser(UpdateUserRequest request);
+        Task<UserResponse> GetByUserNameResponse(string userName);
     }
 }

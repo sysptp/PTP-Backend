@@ -3,12 +3,14 @@ using BussinessLayer.DTOs.Configuracion.Menu;
 using BussinessLayer.Interfaces.IMenu;
 using BussinessLayer.Wrappers;
 using Swashbuckle.AspNetCore.Annotations;
+using BussinessLayer.Atributes;
 
 namespace PTP_API.Controllers.Configuration
 {
     [ApiController]
     [Route("api/v1/[controller]")]
     [SwaggerTag("Gestión de Menús")]
+    [EnableAuditing]
     public class MenuController : ControllerBase
     {
         private readonly IGnMenuService _menuService;
@@ -23,6 +25,7 @@ namespace PTP_API.Controllers.Configuration
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener jerarquía de menús", Description = "Obtiene una jerarquía de menús basada en el rol de usuario y la empresa proporcionados.")]
+        [DisableAuditing]
         public async Task<IActionResult> GetMenuHierarchy([FromQuery] int? roleId, [FromQuery] long? companyId,bool isHierarchy)
         {
             try

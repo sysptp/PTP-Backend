@@ -6,5 +6,6 @@ namespace BussinessLayer.Interfaces.Repository.Auditoria
 {
     public interface IAleAuditoriaRepository:IGenericRepository<AleAuditoria>
     {
+        Task<AleAuditoria> AddAuditoria(AleAuditoria entity);
     }
 }

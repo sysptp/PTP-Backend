@@ -54,6 +54,12 @@ namespace BussinessLayer.Services.SSeguridad.SUsuario
             return users.FirstOrDefault(x => x.Id == id);
         }
 
+        public async Task<UserResponse> GetByUserNameResponse(string userName)
+        {
+            var users = await _accountService.GetAllUsers();
+            return users.FirstOrDefault(x => x.UserName == userName);
+        }
+
         public async Task UpdateUser(UpdateUserRequest request)
         {
             var user = _mapper.Map<Usuario>(request);

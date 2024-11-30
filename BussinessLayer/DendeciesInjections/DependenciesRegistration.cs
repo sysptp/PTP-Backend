@@ -20,6 +20,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             #endregion
 
+            #region HttpClient 
+            services.AddHttpClient();
+            #endregion
         }
     }
 }
