@@ -13,6 +13,8 @@ using BussinessLayer.Repository.RNcf;
 using BussinessLayer.Repository.RSeguridad;
 using BussinessLayer.Services.SGeografia;
 using Microsoft.Extensions.DependencyInjection;
+using BussinessLayer.Interfaces.Repository.Auditoria;
+using BussinessLayer.Repository.Auditoria;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -38,22 +40,31 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IGnMenuRepository,GnMenuRepository>();
             services.AddTransient<IGnModuloRepository,GnModuloRepository>();
             services.AddTransient<IGnPermisoRepository, GnPermisoRepository>();
-            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             #endregion
 
             #region HelpDesk
             services.AddTransient<IHdkCategoryTicketRepository, HdkCategoryTicketRepository>();
             services.AddTransient<IHdkDepartamentsRepository, HdkDepartamentsRepository>();
             services.AddTransient<IHdkDepartXUsuarioRepository, HdkDepartXUsuarioRepository>();
-            //services.AddTransient<IHdkErrorSubCategoryRepository, HdkErrorSubCategoryRepository>();
-            //services.AddTransient<IHdkFileEvidenceTicketRepository, HdkFileEvidenceTicketRepository>();
-            //services.AddTransient<IHdkNoteTicketRepository, HdkNoteTicketRepository>();
-            //services.AddTransient<IHdkPrioridadTicketRepository, HdkPrioridadTicketRepository>();
-            //services.AddTransient<IHdkSolutionTicketRepository, HdkSolutionTicketRepository>();
-            //services.AddTransient<IHdkStatusTicketRepository, HdkStatusTicketRepository>();
-            //services.AddTransient<IHdkSubCategoryRepository, HdkSubCategoryRepository>();
-            //services.AddTransient<IHdkTicketsRepository, HdkTicketsRepository>();
-            //services.AddTransient<IHdkTypeTicketRepository, HdkTypeTicketRepository>();
+            services.AddTransient<IHdkErrorSubCategoryRepository, HdkErrorSubCategoryRepository>();
+            services.AddTransient<IHdkFileEvidenceTicketRepository, HdkFileEvidenceTicketRepository>();
+            services.AddTransient<IHdkNoteTicketRepository, HdkNoteTicketRepository>();
+            services.AddTransient<IHdkPrioridadTicketRepository, HdkPrioridadTicketRepository>();
+            services.AddTransient<IHdkSolutionTicketRepository, HdkSolutionTicketRepository>();
+            services.AddTransient<IHdkStatusTicketRepository, HdkStatusTicketRepository>();
+            services.AddTransient<IHdkSubCategoryRepository, HdkSubCategoryRepository>();
+            services.AddTransient<IHdkTicketsRepository, HdkTicketsRepository>();
+            services.AddTransient<IHdkTypeTicketRepository, HdkTypeTicketRepository>();
+
+            #endregion
+
+            #region Auditoria
+            services.AddScoped<IAleAuditoriaRepository, AleAuditoriaRepository>();
+            services.AddTransient<IAleLoginRepository, AleLoginRepository>();
+            services.AddTransient<IAleLogsRepository, AleLogsRepository>();
+            services.AddTransient<IAlePrintRepository, AlePrintRepository>();
+
             #endregion
         }
     }

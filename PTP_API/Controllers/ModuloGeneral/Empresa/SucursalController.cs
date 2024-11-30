@@ -8,6 +8,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using FluentValidation;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using BussinessLayer.Services.SEmpresa;
+using BussinessLayer.Atributes;
 
 namespace PTP_API.Controllers.ModuloGeneral.Empresa
 {
@@ -15,6 +16,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
     [Route("api/v1/Sucursal")]
     [SwaggerTag("Gestión de Sucursales")]
     [Authorize]
+    [EnableAuditing]
     public class SucursalController : ControllerBase
     {
         private readonly IGnSucursalService _sucursalService;
@@ -29,6 +31,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener sucursales", Description = "Obtiene una lista de todas las sucursales o una sucursal específica si se proporciona un ID.")]
+        [DisableAuditing]
         public async Task<IActionResult> Get([FromQuery] long? id, long? companyId)
         {
             try

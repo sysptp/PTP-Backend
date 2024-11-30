@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
 using FluentValidation;
+using BussinessLayer.Atributes;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     [Route("api/v1/Country")]
     [SwaggerTag("Gestión de Países")]
     [Authorize]
+    [EnableAuditing]
     public class CountryController : ControllerBase
     {
         private readonly IPaisService _countryService;
@@ -27,6 +29,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener países", Description = "Obtiene una lista de todos los países o un país específico si se proporciona un ID.")]
+        [DisableAuditing]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

@@ -6,9 +6,8 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
 using BussinessLayer.DTOs.HelpDesk;
-using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using BussinessLayer.Interfaces.IEmpresa;
-using BussinessLayer.Services.SEmpresa;
+using BussinessLayer.Atributes;
+
 
 namespace PTP_API.Controllers.HelpDesk
 {
@@ -16,6 +15,7 @@ namespace PTP_API.Controllers.HelpDesk
     [ApiController]  
     [SwaggerTag("Gestión de Categoria del Ticket")]
     [Authorize]
+    [EnableAuditing]
     public class CatetgoryTickeController : ControllerBase
     {
         private readonly IHdkCategoryTicketService _categoryTicketService;
@@ -33,7 +33,8 @@ namespace PTP_API.Controllers.HelpDesk
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Obtener empresas", Description = "Obtiene una lista de todas las empresas o una empresa específica si se proporciona un ID.")]
+        [SwaggerOperation(Summary = "Obtener categoria de ticket", Description = "Obtiene una lista de todas las categoria de ticket o una categoria específica si se proporciona un ID.")]
+        [DisableAuditing]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try
@@ -49,7 +50,7 @@ namespace PTP_API.Controllers.HelpDesk
                 }
                 else
                 {
-                    var categoryTickets = await _categoryTicketService.GetAllDto();
+                    var categoryTickets = await _categoryTicketService.GetAllWithInclude();
                     if (categoryTickets == null || categoryTickets.Count == 0)
                     {
                         return NoContent();

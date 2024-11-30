@@ -34,6 +34,9 @@ using BussinessLayer.DTOs.ModuloInventario.Marcas;
 using BussinessLayer.DTOs.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
+using BussinessLayer.FluentValidations.Auditoria;
+using BussinessLayer.DTOs.Auditoria;
+using Azure.Core;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -73,8 +76,31 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<MunicipioRequest>, MunicipalityRequestValidator>();
             services.AddScoped<IValidator<string>, StringsRequestValidator>();
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
+
+
+            #region HelpDesk
             services.AddScoped<IValidator<HdkCategoryTicketRequest>, HdkCategoryTicketRequestValidator>();
-            
+            services.AddScoped<IValidator<HdkDepartamentsRequest>, HdkDepartamentsRequestValidator>();
+            services.AddScoped<IValidator<HdkDepartXUsuarioRequest>, HdkDepartXUsuarioRequestValidator>();
+            services.AddScoped<IValidator<HdkErrorSubCategoryRequest>, HdkErrorSubCategoryRequestValidator>();
+            services.AddScoped<IValidator<HdkFileEvidenceTicketRequest>, HdkFileEvidenceTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkNoteTicketRequest>, HdkNoteTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkPrioridadTicketRequest>, HdkPrioridadTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkSolutionTicketRequest>, HdkSolutionTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkStatusTicketRequest>, HdkStatusTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkSubCategoryRequest>, HdkSubCategoryRequestValidator>();
+            services.AddScoped<IValidator<HdkTicketsRequest>, HdkTicketsRequestValidator>();
+            services.AddScoped<IValidator<HdkTypeTicketRequest>, HdkTypeTicketRequestValidator>();
+
+            #endregion
+
+            #region Auditoria
+            services.AddScoped<IValidator<AleAuditoriaRequest>, AleAuditoriaRequestValidator>();
+            services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
+            services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
+            services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
+            #endregion
+
         }
     }
 }

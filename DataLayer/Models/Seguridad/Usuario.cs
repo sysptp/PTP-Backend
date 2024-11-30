@@ -22,7 +22,8 @@ namespace DataLayer.Models.Seguridad
         public string Longitud { get; set; } = "0";
         public string Latitud { get; set; } = "0";
 
-        public bool Activo = false;
-
+        public bool IsActive = true;
+        public string Email { get; set; } = null!;
+        public string? LanguageCode { get; set; } 
     }
 }

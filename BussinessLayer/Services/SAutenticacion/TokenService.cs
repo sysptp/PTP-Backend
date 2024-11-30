@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-
 public class TokenService : ITokenService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;

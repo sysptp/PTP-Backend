@@ -22,6 +22,8 @@ using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
 using DataLayer.Models.HelpDesk;
+using DataLayer.Models.Auditoria;
+using DataLayer.Models.ModuloGeneral.Language;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloGeneral.Imagen;
 using DataLayer.Models.ModuloInventario.Otros;
@@ -114,7 +116,23 @@ namespace DataLayer.PDbContex
         public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
 
         #endregion
+        #region Language
+        public DbSet<GnLanguages> GnLanguages { get; set; }
+        public DbSet<GnLanguagesByTable> GnLanguagesByTable { get; set; }
+        public DbSet<GnLanguagesTableSistemas> GnLanguagesTableSistemas { get; set; }
+        #endregion
 
+        #region Modulo General
+        public DbSet<GnSchedule> GnSchedule { get; set; }
+        public DbSet<GnScheduleUser> GnScheduleUser { get; set; }
+        #endregion
+
+        #region Auditoria
+        public DbSet<AleAuditoria> AleAuditoria { get; set; }
+        public DbSet<AleLogin> AleLogin { get; set; }
+        public DbSet<AleLogs> AleLogs { get; set; }
+        public DbSet<AlePrint> AlePrint { get; set; }
+        #endregion
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }
@@ -133,7 +151,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<DetalleCuentaPorPagar> DetalleCuentaPorPagar { get; set; }
 
-        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Clientes> Clientes { get; set; }
 
         public DbSet<DgiiNcfSecuencia> DgiiNcfSecuencia { get; set; }
 
@@ -173,14 +191,6 @@ namespace DataLayer.PDbContex
 
         public DbSet<SC_IPSYS001> SC_IPSYS001 { get; set; }
 
-        public DbSet<SC_MUNIC001> SC_MUNIC001 { get; set; }
-
-        public DbSet<SC_PAIS001> SC_PAIS001 { get; set; }
-
-        public DbSet<SC_PROV001> SC_PROV001 { get; set; }
-
-        public DbSet<SC_REG001> SC_REG001 { get; set; }
-
         public DbSet<SC_USUAR001> SC_USUAR001 { get; set; }
 
         public DbSet<Ciudades_X_Paises> Ciudades_X_Paises { get; set; }
@@ -210,5 +220,6 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
+
     }
 }

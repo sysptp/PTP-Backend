@@ -67,6 +67,13 @@ namespace IdentityLayer.Services
             var user = await _userManager.FindByEmailAsync(request.UserCredential) ??
                        await _userManager.FindByNameAsync(request.UserCredential);
 
+            if (!user.IsActive) 
+            {
+                response.HasError = true;
+                response.Error = $"{request.UserCredential} se encuentra inactivo";
+                return response;
+            }
+
             if (user == null)
             {
                 response.HasError = true;
@@ -148,7 +155,9 @@ namespace IdentityLayer.Services
                     PhoneNumber = user.PhoneNumber,
                     SucursalName = sucursal?.NombreSuc,
                     RoleName = role?.Name,
-                    CompanyName = company?.NOMBRE_EMP
+                    CompanyName = company?.NOMBRE_EMP,
+                    IsActive = user.IsActive,
+                    LanguageCode = user.LanguageCode
                 };
 
                 userResponseList.Add(userResponse);

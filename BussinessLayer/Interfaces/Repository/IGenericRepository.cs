@@ -12,5 +12,6 @@ namespace BussinessLayer.Interfaces.Repositories
         Task Delete(int id);
         Task Delete(object id);
         Task<IEnumerable<TResult>> ExecuteStoredProcedureAsync<TResult>(string storedProcedure, object parameters = null);
+        Task<List<T>> GetAllWithIncludeAsync(List<string> properties);
     }
 }

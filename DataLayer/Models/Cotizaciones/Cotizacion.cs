@@ -9,8 +9,8 @@ namespace DataLayer.Models.Cotizaciones
         public int ClienteId { get; set; }
 
         [ForeignKey("ClienteId")]
-        public Cliente Cliente { get; set; }
-
+        public Clientes Cliente { get; set; }
+        
         public decimal MontoTotal { get; set; }
 
         public decimal DescuntoTotal { get; set; }

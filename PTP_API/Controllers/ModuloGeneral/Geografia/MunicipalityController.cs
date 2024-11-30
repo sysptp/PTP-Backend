@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
 using BussinessLayer.DTOs.Configuracion.Geografia.DMunicipio;
 using FluentValidation;
+using BussinessLayer.Atributes;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     [Route("api/v1/Municipality")]
     [SwaggerTag("Gestión de Municipios")]
     [Authorize]
+    [EnableAuditing]
     public class MunicipalityController : ControllerBase
     {
         private readonly IMunicipioService _municipalityService;
@@ -27,6 +29,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener municipios", Description = "Obtiene una lista de todos los municipios o un municipio específico si se proporciona un ID.")]
+        [DisableAuditing]
         public async Task<IActionResult> Get([FromQuery] int? id,int? provinceId)
         {
             try

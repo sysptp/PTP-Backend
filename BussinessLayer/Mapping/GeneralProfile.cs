@@ -12,7 +12,6 @@ using DataLayer.Models.Entities;
 using DataLayer.Models.Geografia;
 using DataLayer.Models.MenuApp;
 using DataLayer.Models.Seguridad;
-using Microsoft.Extensions.Configuration;
 
 namespace TaskMaster.Core.Application.Mapping
 {
@@ -118,12 +117,24 @@ namespace TaskMaster.Core.Application.Mapping
            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telefono))
            .ReverseMap();
 
+
+            CreateMap<Usuario, UpdateUserRequest>()
+           .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.CodigoEmp ?? 0))
+           .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.IdHorario))
+           .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.IdPerfil ?? 0))
+           .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Nombre))
+           .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Apellido))
+           .ForMember(dest => dest.UserImage, opt => opt.MapFrom(src => src.ImagenUsuario))
+           .ForMember(dest => dest.SucursalId, opt => opt.MapFrom(src => src.CodigoSuc ?? 0))
+           .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.TelefonoPersonal))
+           .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.TelefonoPersonal))
+           .ForMember(dest => dest.UserImage, opt => opt.MapFrom(src => src.ImagenUsuario))
+           .ReverseMap();
             #endregion
 
+        #region Permiso 
 
-            #region Permiso 
-
-            CreateMap<GnPermiso, GnPermisoResponse>()
+        CreateMap<GnPermiso, GnPermisoResponse>()
            .ForMember(dest => dest.PermisoId, opt => opt.MapFrom(src => src.IDPermiso))
            .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.IDPerfil))
            .ForMember(dest => dest.MenuId, opt => opt.MapFrom(src => src.IDMenu))

@@ -7,5 +7,6 @@ namespace BussinessLayer.DTOs.HelpDesk
         public int IdCategoria { get; set; }
         public string Descripcion { get; set; }
         public long IdEmpresa { get; set; }
+        public string? NombreEmpresa { get; set; }
     }
 }

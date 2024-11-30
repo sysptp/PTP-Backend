@@ -23,7 +23,6 @@ builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
 var app = builder.Build();
@@ -33,6 +32,7 @@ app.UseCors(policy => policy.AllowAnyHeader()
                              .AllowAnyOrigin());
 
 app.UseMiddleware<SqlInjectionProtectionMiddleware>();
+app.UseMiddleware<AuditingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
