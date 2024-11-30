@@ -1,4 +1,5 @@
 ﻿
+using DataLayer.Models.ModuloInventario.Otros;
 using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
 
@@ -24,6 +25,6 @@ namespace DataLayer.Models.Empresa
         public string? Latitud { get; set; }
         public bool Principal { get; set; }
 
-
+        public virtual ICollection<InvInventarioSucursal>? InventarioSucursales { get; set; }
     }
 }

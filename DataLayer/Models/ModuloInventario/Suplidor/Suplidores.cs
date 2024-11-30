@@ -64,5 +64,7 @@ public class Suplidores
 
     // Navigation Property
     public virtual ICollection<Pedido>? Pedidos { get; set; }
+
+    public virtual ICollection<ContactosSuplidores> Contactos { get; set; }
 } 
 

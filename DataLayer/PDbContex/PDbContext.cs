@@ -24,6 +24,7 @@ using DataLayer.Models.ModuloInventario.Almacen;
 using DataLayer.Models.HelpDesk;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloGeneral.Imagen;
+using DataLayer.Models.ModuloInventario.Otros;
 
 namespace DataLayer.PDbContex
 {
@@ -76,6 +77,12 @@ namespace DataLayer.PDbContex
         public DbSet<Precio> Precios { get; set; }
 
         public DbSet<Pedido> Pedidos { get; set; }
+
+        public DbSet<InvAlmacenInventario> InvAlmacenInventarios { get; set; }
+
+        public DbSet<InvInventarioSucursal> InvInventarioSucursales { get; set; }
+
+        public DbSet<InvMetodoPago> InvMetodoPagos { get; set; }
 
         #endregion
 
