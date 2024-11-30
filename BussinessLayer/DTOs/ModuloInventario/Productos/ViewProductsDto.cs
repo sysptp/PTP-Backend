@@ -1,5 +1,7 @@
-﻿using DataLayer.Models.ModuloInventario.Productos;
+﻿using BussinessLayer.Atributes;
+using DataLayer.Models.ModuloInventario.Productos;
 
+[TableName("InvProducto")]
 public class ViewProductsDto
 {
     public int? Id { get; set; }

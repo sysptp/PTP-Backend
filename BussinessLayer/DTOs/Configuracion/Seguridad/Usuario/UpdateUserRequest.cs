@@ -18,5 +18,6 @@ namespace BussinessLayer.DTOs.Configuracion.Seguridad.Usuario
         public string? UserImage {  get; set; }
         [JsonIgnore]
         public int Id { get; set; }
+        public string? LanguageCode { get; set; } 
     }
 }

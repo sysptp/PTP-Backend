@@ -24,5 +24,6 @@ namespace IdentityLayer.Entities
         public string Latitud { get; set; } = "0";
         public bool IsActive = true;
         public bool Borrado { get; set; }
+        public string? LanguageCode { get; set; } 
     }
 }

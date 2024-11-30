@@ -18,5 +18,6 @@ namespace DataLayer.Models.Empresa
         public int CANT_SUCURSALES { get; set; }
         public int CANT_USUARIO { get; set; }
         public string? WEB_URL { get; set; }
+        public string? LanguageCode { get; set; } 
     }
 }

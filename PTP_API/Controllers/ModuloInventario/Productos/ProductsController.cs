@@ -2,11 +2,15 @@
 using BussinessLayer.DTOs.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Language;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using BussinessLayer.Wrappers;
+using DataLayer.Models.ModuloInventario.Productos;
 using FluentValidation;
+using FluentValidation.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
 
@@ -22,12 +26,14 @@ public class ProductsController : ControllerBase
     private readonly IValidator<EditProductDto> _validatorEdit;
     private readonly IValidator<long> _validateNumbers;
     private readonly IValidator<string> _validateString;
+    private readonly IJsonTranslationService _jsonTranlationService;
 
     public ProductsController(IProductoService productoService,
         IValidator<CreateProductsDto> validationCreate,
         IValidator<EditProductDto> validatorEdit,
         IValidator<string> validateString,
-        IValidator<long> validateNumbers
+        IValidator<long> validateNumbers,
+        IJsonTranslationService jsonTranlationService
         )
     {
         _productoService = productoService;
@@ -35,6 +41,7 @@ public class ProductsController : ControllerBase
         _validatorEdit = validatorEdit;
         _validateString = validateString;
         _validateNumbers = validateNumbers;
+        _jsonTranlationService = jsonTranlationService;
     }
     #endregion
 
@@ -96,7 +103,9 @@ public class ProductsController : ControllerBase
                 return Ok(Response<List<ViewProductsDto>>.NoContent("No hay Productos disponibles."));
             }
 
-            return Ok(Response<List<ViewProductsDto>>.Success(productos, "Productos obtenidos correctamente."));
+            var translatedProducts = await _jsonTranlationService.TranslateEntities(productos);
+
+            return Ok(Response<IEnumerable<object>>.Success(translatedProducts, "Productos obtenidos correctamente."));
             
         }
         catch

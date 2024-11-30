@@ -157,6 +157,7 @@ namespace IdentityLayer.Services
                     RoleName = role?.Name,
                     CompanyName = company?.NOMBRE_EMP,
                     IsActive = user.IsActive,
+                    LanguageCode = user.LanguageCode
                 };
 
                 userResponseList.Add(userResponse);
