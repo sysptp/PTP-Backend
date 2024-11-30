@@ -1,32 +1,59 @@
 ﻿using DataLayer.Models.Geografia;
-using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.ModuloInventario.Almacen
 {
-    public class Almacenes : BaseModel
+    [Table("InvAlmacenes")]
+    public class Almacenes
     {
-        [StringLength(60), Required]
-        public string Nombre { get; set; }
-
-        [StringLength(100), Required]
-        public string Direccion { get; set; }
-
-        [StringLength(20), Required]
-        public string Telefono { get; set; }
+        [Key]
+        public int Id { get; set; }
 
         [Required]
-        public int IdUSuarioACargo { get; set; }
+        public long IdEmpresa { get; set; }
 
-        public long IDEmpresa { get; set; }
-
-        public string AlmacenPrincipal { get; set; }
-
+        [Required]
         public int IdMunicipio { get; set; }
 
+        [Required]
+        public int IdUsuario { get; set; }
+
+        public long IdSucursal { get; set; }
+
+        [Required]
+        [MaxLength(60)]
+        public string? Nombre { get; set; }
+
+        [Required]
+        [MaxLength(1500)]
+        public string? Direccion { get; set; }
+
+        [Required]
+        [MaxLength(20)]
+        public string? Telefono { get; set; }
+
+        [Required]
+        public bool Borrado { get; set; }
+
+        [Required]
+        public bool EsPrincipal { get; set; }
+
+        [Required]
+        public DateTime FechaCreacion { get; set; }
+
+        public DateTime? FechaModificacion { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string? UsuarioCreacion { get; set; }
+
+        [MaxLength(50)]
+        public string? UsuarioModificacion { get; set; }
+
+        // Navigation Property
         [ForeignKey("IdMunicipio")]
-        public virtual Municipio Municipio { get; set; }
+        public virtual Municipio? Municipio { get; set; }
 
     }
 }

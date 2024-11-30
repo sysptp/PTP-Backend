@@ -13,18 +13,18 @@ using DataLayer.Models.Cuentas;
 using DataLayer.Models.Facturas;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Models.Entities;
-using DataLayer.Models.ModuloGeneral;
 using DataLayer.Models.ModuloInventario.Suplidor;
 using DataLayer.Models.ModuloInventario.Productos;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.Models.ModuloInventario.Pedidos;
-using DataLayer.Models.ModuloInventario.Monedas;
 using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
 using DataLayer.Models.HelpDesk;
 using DataLayer.Models.Auditoria;
+using DataLayer.Models.ModuloGeneral.Monedas;
+using DataLayer.Models.ModuloGeneral.Imagen;
 
 namespace DataLayer.PDbContex
 {

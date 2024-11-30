@@ -1,7 +1,7 @@
-﻿using DataLayer.Models.ModuloInventario.Monedas;
-using DataLayer.Models.ModuloInventario.Productos;
+﻿using DataLayer.Models.ModuloInventario.Productos;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using DataLayer.Models.ModuloGeneral.Monedas;
 
 public class ViewPreciosDto
 {

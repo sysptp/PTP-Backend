@@ -1,47 +1,70 @@
-﻿using DataLayer.Models.ModuloInventario.Suplidor;
-using DataLayer.Models.Otros;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.Models.ModuloInventario.Almacen
+[Table("InvMovimientoAlmacen")]
+public class MovimientoAlmacen 
 {
-    public class MovimientoAlmacen : BaseModel
-    {
-        public int IdSuplidor { get; set; }
+    [Key]
+    public int Id { get; set; }
 
-        [ForeignKey("IdSuplidor")]
-        public virtual Suplidores Suplidor { get; set; }
+    [Required]
+    public int IdSuplidor { get; set; }
 
-        [Required]
-        public int IdTipoMovimiento { get; set; }
+    [Required]
+    public int IdTipoMovimiento { get; set; }
 
-        [ForeignKey("IdTipoMovimiento")]
-        public virtual TipoMovimiento TipoMovimiento { get; set; }
+    public long IdEmpresa { get; set; }
 
-        [StringLength(30), Required]
-        public string NoFactura { get; set; }
+    [Required]
+    public int IdAlmacen { get; set; }
 
-        [StringLength(30)]
-        public string Ncf { get; set; }
+    [Required]
+    public int IdMetodoPago { get; set; }
 
-        public int CantidadProducto { get; set; }
+    [Required]
+    [MaxLength(100)]
+    public string? NoFactura { get; set; }
 
-        public long TotalFacturado { get; set; }
+    [MaxLength(100)]
+    public string? Comprobante { get; set; }
 
-        public int IdAlmacen { get; set; }
+    [Required]
+    public int CantidadProducto { get; set; }
 
-        [ForeignKey("IdAlmacen")]
-        public virtual Almacenes Almacen { get; set; }
+    [Required]
+    public bool EsCredito { get; set; }
 
-        public int IdTipoPago { get; set; }
+    public decimal? MontoInicial { get; set; }
 
-        [ForeignKey("IdTipoPago")]
-        public virtual TipoPago TipoPago { get; set; }
+    public decimal? MontoPendiente { get; set; }
 
-        public ICollection<DetalleMovimientoAlmacen> DetalleMovimientoAlmacen { get; set; }
+    [Required]
+    public long TotalFacturado { get; set; }
 
-        public string Motivo { get; set; }
-    }
+    [MaxLength(1500)]
+    public string? Comentario { get; set; }
+
+    [MaxLength(100)]
+    public string? NoReferencia { get; set; }
+
+    [MaxLength(100)]
+    public string? NoAutorizacion { get; set; }
+
+    [Required]
+    public bool Borrado { get; set; }
+
+    [Required]
+    public DateTime FechaCreacion { get; set; }
+
+    public DateTime? FechaModificacion { get; set; }
+
+    [MaxLength(50)]
+    public string? UsuarioModificacion { get; set; }
+
+    [Required]
+    [MaxLength(50)]
+    public string? UsuarioCreacion { get; set; }
 }
+
 
 

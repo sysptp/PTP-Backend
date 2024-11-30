@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.ModuloInventario.Monedas;
+﻿using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloInventario.Productos;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.Models.ModuloGeneral
+namespace DataLayer.Models.ModuloGeneral.Imagen
 {
     [Table("Imagen")]
     public class Imagen
