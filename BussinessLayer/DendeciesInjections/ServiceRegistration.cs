@@ -79,7 +79,7 @@ public static class ServiceRegistration
         services.AddScoped<IDgiiNcfService, DgiiNcfService>();
         services.AddScoped<IFacturacionService, FacturacionService>();
         services.AddScoped<IMarcaService, MarcaService>();
-        services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
+        //services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
         services.AddScoped<IPedidoService, PedidoService>();
         services.AddScoped<IPrecioService, PrecioService>();
         services.AddScoped<IProductoService, ProductoService>();
