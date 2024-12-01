@@ -103,9 +103,9 @@ public class ProductsController : ControllerBase
                 return Ok(Response<List<ViewProductsDto>>.NoContent("No hay Productos disponibles."));
             }
 
-            var translatedProducts = await _jsonTranlationService.TranslateEntities(productos);
+            //var translatedProducts = await _jsonTranlationService.TranslateEntities(productos);
 
-            return Ok(Response<IEnumerable<object>>.Success(translatedProducts, "Productos obtenidos correctamente."));
+            return Ok(Response<IEnumerable<object>>.Success(productos, "Productos obtenidos correctamente."));
             
         }
         catch
