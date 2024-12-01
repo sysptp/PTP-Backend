@@ -5,7 +5,7 @@ using BussinessLayer.Repository.REmpresa;
 using BussinessLayer.Repository.RSeguridad;
 using FluentValidation;
 
-namespace BussinessLayer.FluentValidations.Configuracion.Seguridad
+namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad
 {
     public class GnPermisoRequestValidator : AbstractValidator<GnPermisoRequest>
     {

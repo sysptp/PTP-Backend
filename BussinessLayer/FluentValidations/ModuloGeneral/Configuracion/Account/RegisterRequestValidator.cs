@@ -3,7 +3,7 @@ using BussinessLayer.Interfaces.Repository.Empresa;
 using BussinessLayer.Repository.RSeguridad;
 using BussinessLayer.DTOs.Configuracion.Account;
 
-namespace BussinessLayer.FluentValidations.Configuracion.Account
+namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account
 {
     public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {

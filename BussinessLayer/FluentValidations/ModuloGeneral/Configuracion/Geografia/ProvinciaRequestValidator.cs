@@ -1,7 +1,7 @@
 ﻿using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
 using FluentValidation;
 
-namespace BussinessLayer.FluentValidations.Configuracion.Geografia
+namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Geografia
 {
     public class ProvinciaRequestValidator : AbstractValidator<ProvinceRequest>
     {

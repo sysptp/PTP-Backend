@@ -2,7 +2,7 @@
 using BussinessLayer.Interfaces.Repository.Empresa;
 using FluentValidation;
 
-namespace BussinessLayer.FluentValidations.Configuracion.Seguridad
+namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad
 {
 
     public class GnPerfilRequestValidator : AbstractValidator<GnPerfilRequest>

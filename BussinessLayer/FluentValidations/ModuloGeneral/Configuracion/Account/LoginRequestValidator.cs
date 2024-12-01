@@ -1,7 +1,7 @@
 ﻿using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
 using FluentValidation;
 
-namespace BussinessLayer.FluentValidations.Configuracion.Account
+namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account
 {
     public class LoginRequestValidator : AbstractValidator<LoginRequestDTO>
     {

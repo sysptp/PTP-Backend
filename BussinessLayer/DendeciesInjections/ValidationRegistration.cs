@@ -5,8 +5,6 @@ using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using BussinessLayer.DTOs.Configuracion.Seguridad;
 using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.Configuracion.Account;
-using BussinessLayer.FluentValidations.Configuracion.Seguridad;
-using BussinessLayer.FluentValidations.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloInventario.Precios;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
@@ -37,6 +35,8 @@ using BussinessLayer.DTOs.ModuloInventario.Versiones;
 using BussinessLayer.FluentValidations.Auditoria;
 using BussinessLayer.DTOs.Auditoria;
 using Azure.Core;
+using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account;
+using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad;
 
 namespace BussinessLayer.DendeciesInjections
 {
