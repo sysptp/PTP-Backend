@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
 using BussinessLayer.Interfaces.Repository.Configuracion.Menu;
 using BussinessLayer.Interfaces.Repository.Empresa;
 using BussinessLayer.Repository.REmpresa;

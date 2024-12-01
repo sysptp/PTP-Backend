@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Schedule;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
 using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Interfaces.Repositories;
 

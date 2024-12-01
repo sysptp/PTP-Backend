@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Modulo;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Modulo;
 using BussinessLayer.Interfaces.IModulo;
 using BussinessLayer.Interfaces.Repositories;
 using DataLayer.Models.MenuApp;

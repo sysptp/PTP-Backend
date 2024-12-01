@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
 using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Interfaces.Repository.Seguridad;

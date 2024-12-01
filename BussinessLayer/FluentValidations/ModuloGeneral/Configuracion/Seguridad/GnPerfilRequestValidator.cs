@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Configuracion.Seguridad;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad;
 using BussinessLayer.Interfaces.Repository.Empresa;
 using FluentValidation;
 

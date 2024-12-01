@@ -2,9 +2,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using BussinessLayer.DTOs.Configuracion.Seguridad;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
-using BussinessLayer.DTOs.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloInventario.Precios;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
@@ -12,12 +9,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
 using BussinessLayer.FluentValidations.HelpDesk;
 using BussinessLayer.DTOs.HelpDesk;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
-using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
 using BussinessLayer.FluentValidations.ModuloGeneral.Geografia;
-using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
-using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
-using BussinessLayer.DTOs.Configuracion.Geografia.DMunicipio;
 using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
 using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
 using BussinessLayer.FluentValidations.ModuloInventario.Impuestos;
@@ -37,6 +29,14 @@ using BussinessLayer.DTOs.Auditoria;
 using Azure.Core;
 using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DMunicipio;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DProvincia;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
 
 namespace BussinessLayer.DendeciesInjections
 {

@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Configuracion.Modulo;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Modulo;
 using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.MenuApp;
 
