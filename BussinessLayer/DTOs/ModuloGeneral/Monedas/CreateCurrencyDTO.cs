@@ -2,9 +2,9 @@
 {
     public class CreateCurrencyDTO
     {
-        public int? IdPais { get; set; }
+        public int IdPais { get; set; }
 
-        public long? IdEmpresa { get; set; }
+        public long IdEmpresa { get; set; }
 
         public string? Descripcion { get; set; }
 

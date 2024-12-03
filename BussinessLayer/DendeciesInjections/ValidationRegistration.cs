@@ -36,7 +36,8 @@ using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
 using BussinessLayer.FluentValidations.Auditoria;
 using BussinessLayer.DTOs.Auditoria;
-using Azure.Core;
+using BussinessLayer.DTOs.ModuloGeneral.Monedas;
+using BussinessLayer.FluentValidations.ModuloGeneral.Monedas;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -68,6 +69,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<EditOrderDto>, EditOrderRequestValidator>();
             services.AddScoped<IValidator<CreateOrderDto>, CreateOrderRequestValidator>();
 
+            services.AddScoped<IValidator<CreateCurrencyDTO>, CreateCurrencyRequestValidator>();
+            services.AddScoped<IValidator<EditCurrencyDTO>, EditCurrencyRequestValidator>();
+
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
             services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
             services.AddScoped<IValidator<CountryRequest>, CountryRequestValidator>();
@@ -76,6 +80,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<MunicipioRequest>, MunicipalityRequestValidator>();
             services.AddScoped<IValidator<string>, StringsRequestValidator>();
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
+            services.AddScoped<IValidator<decimal>, DecimalsRequestValidator>();
+
 
 
             #region HelpDesk

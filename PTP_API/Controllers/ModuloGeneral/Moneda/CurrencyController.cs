@@ -1,30 +1,32 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Monedas;
+using BussinessLayer.DTOs.ModuloInventario.Impuestos;
+using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
+using BussinessLayer.Wrappers;
+using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
 using System.Net.Mime;
-using BussinessLayer.Wrappers;
-using BussinessLayer.DTOs.ModuloInventario.Impuestos;
-using FluentValidation;
 
-namespace PTP_API.Controllers.ModuloInventario.Impuestos
+namespace PTP_API.Controllers.ModuloGeneral.Moneda
 {
     [ApiController]
-    [SwaggerTag("Gestión de Impuestos")]
+    [SwaggerTag("Gestión de Monedas")]
     [Authorize]
-    public class TaxController : ControllerBase
+    public class CurrencyController : ControllerBase
     {
         #region Propiedades
-        private readonly IValidator<CreateTaxDto> _validatorCreate;
-        private readonly IValidator<EditTaxDto> _validationsEdit;
+        private readonly IValidator<CreateCurrencyDTO> _validatorCreate;
+        private readonly IValidator<EditCurrencyDTO> _validationsEdit;
         private readonly IValidator<long> _validateNumbers;
         private readonly IValidator<string> _validateString;
-        private readonly IImpuestosService _impuestosService;
+        private readonly IMonedasService _monedasService;
 
-        public TaxController(
-            IImpuestosService impuestosService,
-            IValidator<CreateTaxDto> validationRules,
-            IValidator<EditTaxDto> validations,
+        public CurrencyController(
+            IMonedasService monedasService,
+            IValidator<CreateCurrencyDTO> validationRules,
+            IValidator<EditCurrencyDTO> validations,
             IValidator<string> validateString,
             IValidator<long> validateNumbers)
         {
@@ -32,13 +34,13 @@ namespace PTP_API.Controllers.ModuloInventario.Impuestos
             _validationsEdit = validations;
             _validateString = validateString;
             _validateNumbers = validateNumbers;
-            _impuestosService = impuestosService;
+            _monedasService = monedasService;
         }
         #endregion
 
-        [HttpGet("api/v1/[controller]/ObtenerImpuesto/{id}")]
+        [HttpGet("api/v1/[controller]/ObtenerMoneda/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Obtener Impuesto", Description = "Obtiene un impuesto en especifico por su id.")]
+        [SwaggerOperation(Summary = "Obtener Moneda", Description = "Obtiene una moneda en especifico por su id.")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -51,27 +53,27 @@ namespace PTP_API.Controllers.ModuloInventario.Impuestos
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var data = await _impuestosService.GetTaxById(id);
+                var data = await _monedasService.GetById(id);
 
                 if (data != null)
                 {
 
-                    return Ok(Response<ViewTaxDto>.Success(data, "Impuesto encontrado."));
+                    return Ok(Response<ViewCurrencyDTO>.Success(data, "Moneda encontrada."));
                 }
                 else
                 {
-                    return Ok(Response<ViewTaxDto>.NotFound("No se han encontrado Impuestos."));
+                    return Ok(Response<ViewCurrencyDTO>.NotFound("No se han encontrado Monedas."));
                 }
             }
             catch (Exception)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al obtener el impuesto. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError("Ocurrió un error al obtener la moneda. Por favor, intente nuevamente."));
             }
         }
 
-        [HttpGet("api/v1/[controller]/ObtenerImpuestos")]
+        [HttpGet("api/v1/[controller]/ObtenerMonedas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Obtener Impuestos", Description = "Obtiene todas los impuestos de una empresa por su id.")]
+        [SwaggerOperation(Summary = "Obtener Monedas", Description = "Obtiene todas las monedas de una empresa por su id.")]
         public async Task<IActionResult> Get([FromQuery] int idCompany)
         {
             try
@@ -84,28 +86,28 @@ namespace PTP_API.Controllers.ModuloInventario.Impuestos
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var data = await _impuestosService.GetTaxByCompany(idCompany);
+                var data = await _monedasService.GetByCompany(idCompany);
 
                 if (data.Count > 0)
                 {
 
-                    return Ok(Response<List<ViewTaxDto>>.Success(data, "Impuestos encontrados."));
+                    return Ok(Response<List<ViewCurrencyDTO>>.Success(data, "Monedas encontradas."));
                 }
                 else
                 {
-                    return Ok(Response<List<ViewTaxDto>>.NotFound("No se han encontrado impuestos."));
+                    return Ok(Response<List<ViewCurrencyDTO>>.NotFound("No se han encontrado monedas."));
                 }
             }
             catch
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al obtener los impuestos. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError("Ocurrió un error al obtener la moneda. Por favor, intente nuevamente."));
             }
         }
 
-        [HttpPost("api/v1/[controller]/CrearImpuesto")]
+        [HttpPost("api/v1/[controller]/CrearMoneda")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Crear Impuesto", Description = "Endpoint para crear impuesto.")]
-        public async Task<IActionResult> Add(CreateTaxDto create)
+        [SwaggerOperation(Summary = "Crear Moneda", Description = "Endpoint para crear moneda.")]
+        public async Task<IActionResult> Add(CreateCurrencyDTO create)
         {
             try
             {
@@ -117,7 +119,7 @@ namespace PTP_API.Controllers.ModuloInventario.Impuestos
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var created = await _impuestosService.CreateTax(create);
+                var created = await _monedasService.Add(create);
 
                 return Ok(Response<int?>.Created(created));
 
@@ -125,18 +127,18 @@ namespace PTP_API.Controllers.ModuloInventario.Impuestos
             catch
             {
 
-                return Ok(Response<string>.ServerError("Ocurrió un error al crear el impuesto. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError("Ocurrió un error al crear la moneda. Por favor, intente nuevamente."));
             }
         }
 
-        [HttpPut("api/v1/[controller]/EditarImpuesto")]
+        [HttpPut("api/v1/[controller]/EditarMoneda")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Editar Impuesto", Description = "Endpoint para editar el impuesto")]
-        public async Task<IActionResult> Edit([FromBody] EditTaxDto edit)
+        [SwaggerOperation(Summary = "Editar Moneda", Description = "Endpoint para editar moneda")]
+        public async Task<IActionResult> Edit([FromBody] EditCurrencyDTO edit)
         {
             try
             {
@@ -148,28 +150,28 @@ namespace PTP_API.Controllers.ModuloInventario.Impuestos
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var existing = await _impuestosService.GetTaxById(edit.Id);
+                var existing = await _monedasService.GetById(edit.Id);
                 if (existing == null)
                 {
-                    return NotFound(Response<string>.NotFound("Impuesto no encontrado."));
+                    return NotFound(Response<string>.NotFound("Moneda no encontrada."));
                 }
 
-                await _impuestosService.EditTax(edit);
+                await _monedasService.Update(edit);
 
 
-                return Ok(Response<string>.Success("Impuesto editado correctamente"));
+                return Ok(Response<string>.Success("Moneda editada correctamente"));
             }
             catch
             {
 
-                return Ok(Response<string>.ServerError("Ocurrió un error al editar el impuesto. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError("Ocurrió un error al editar la moneda. Por favor, intente nuevamente."));
             }
 
         }
 
-        [HttpDelete("api/v1/[controller]/EliminarImpuestoId/{id}")]
+        [HttpDelete("api/v1/[controller]/EliminarMonedaId/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Eliminar Impuesto", Description = "Endpoint para eliminar impuestos por id")]
+        [SwaggerOperation(Summary = "Eliminar Moneda", Description = "Endpoint para eliminar moneda por id")]
         public async Task<IActionResult> DeleteById(int id)
         {
             try
@@ -182,14 +184,14 @@ namespace PTP_API.Controllers.ModuloInventario.Impuestos
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                await _impuestosService.DeleteTaxById(id);
+                await _monedasService.Delete(id);
 
-                return Ok(Response<int>.Success(id, "Impuesto eliminado correctamente"));
+                return Ok(Response<int>.Success(id, "Moneda eliminada correctamente"));
             }
             catch
             {
 
-                return Ok(Response<string>.ServerError("Ocurrió un error al eliminar el impuesto. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError("Ocurrió un error al eliminar la moneda. Por favor, intente nuevamente."));
             }
 
         }

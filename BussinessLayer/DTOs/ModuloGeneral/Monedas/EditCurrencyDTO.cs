@@ -11,9 +11,9 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Monedas
 {
     public class EditCurrencyDTO
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
-        public int? IdPais { get; set; }
+        public int IdPais { get; set; }
 
         public string? Descripcion { get; set; }
 

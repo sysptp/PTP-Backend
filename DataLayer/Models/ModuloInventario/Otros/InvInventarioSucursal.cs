@@ -46,11 +46,5 @@ namespace DataLayer.Models.ModuloInventario.Otros
         [MaxLength(30)]
         public string? UsuarioModificacion { get; set; }
 
-        // Navigation properties
-        [ForeignKey("IdProducto")]
-        public virtual Producto? Producto { get; set; }
-
-        [ForeignKey("IdSucursal")]
-        public virtual GnSucursal? Sucursal { get; set; }
     }
 }

@@ -39,6 +39,4 @@ public class Pedido
     [ForeignKey("IdSuplidor")]
     public virtual Suplidores? Suplidor { get; set; }
 
-    public virtual List<DetallePedido>? Detalle { get; set; }
-    public virtual ICollection<DetallePedido>? DetallePedidos { get; set; }
 }

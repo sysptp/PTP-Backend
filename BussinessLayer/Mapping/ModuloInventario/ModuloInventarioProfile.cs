@@ -12,7 +12,6 @@ using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.Models.ModuloInventario.Productos;
-using DataLayer.Models.ModuloInventario.Suplidor;
 
 public class ModuloInventarioProfile : Profile
 {

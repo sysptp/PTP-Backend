@@ -42,8 +42,8 @@ namespace DataLayer.Models.ModuloInventario.Pedidos
         [ForeignKey("IdProducto")]
         public virtual Producto? Producto { get; set; }
 
-        [ForeignKey("IdPedido")]
-        public virtual Pedido? Pedido { get; set; }
+        //[ForeignKey("IdPedido")]
+        //public virtual Pedido? Pedido { get; set; }
 
     }
 }

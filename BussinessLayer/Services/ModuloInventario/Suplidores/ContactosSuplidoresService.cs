@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataLayer.PDbContex;
 using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
-using DataLayer.Models.ModuloInventario.Suplidor;
 
 namespace BussinessLayer.Services.ModuloInventario.Suplidores
 {
