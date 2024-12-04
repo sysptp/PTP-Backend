@@ -54,6 +54,8 @@ using BussinessLayer.Interfaces.Helpers;
 using BussinessLayer.Services.Helper;
 using BussinessLayer.Interfaces.Language;
 using BussinessLayer.Services.Language.Translation;
+using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
+using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
 
 
 public static class ServiceRegistration
@@ -133,6 +135,7 @@ public static class ServiceRegistration
         #region Configuracion 
         services.AddTransient<IGnMenuService,GnMenuService>();
         services.AddTransient<IGnModuloService, GnModuloService>();
+        services.AddTransient<IGnParametrosGeneralesService, GnParametrosGeneralesService>();
         #endregion
 
         #region HelpDesk
