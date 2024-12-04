@@ -3,16 +3,16 @@ using DataLayer.Models.ModuloInventario.Almacen;
 
 public interface IAlmacenesService 
 {
-    Task Add(Almacenes entity);
+    //Task Add(Almacenes entity);
 
-    Task<Almacenes> GetById(int id, long idEmpresa);
+    //Task<Almacenes> GetById(int id, long idEmpresa);
 
-    Task<List<Almacenes>> GetPrincipal(long idEmpresa);
+    //Task<List<Almacenes>> GetPrincipal(long idEmpresa);
 
-    Task<List<Almacenes>> GetAll(long idEmpresa);
+    //Task<List<Almacenes>> GetAll(long idEmpresa);
 
-    Task Delete(int id, long idEmpresa);
+    //Task Delete(int id, long idEmpresa);
 
-    Task Edit(Almacenes entity);
+    //Task Edit(Almacenes entity);
 
 }
