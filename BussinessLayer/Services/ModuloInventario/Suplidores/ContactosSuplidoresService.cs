@@ -1,71 +1,96 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataLayer.PDbContex;
 using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
+using AutoMapper;
+using BussinessLayer.DTOs.ModuloGeneral.Monedas;
+using DataLayer.Models.ModuloGeneral.Monedas;
+using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 
 namespace BussinessLayer.Services.ModuloInventario.Suplidores
 {
     public class ContactosSuplidoresService : IContactosSuplidoresService
     {
         private readonly PDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly ITokenService _tokenService;
 
-        public ContactosSuplidoresService(PDbContext dbContext)
+        public ContactosSuplidoresService(PDbContext dbContext,
+            IMapper mapper, ITokenService tokenService)
         {
             _context = dbContext;
+            _mapper = mapper;
+            _tokenService = tokenService;
         }
 
-        public async Task Add(ContactosSuplidores entity)
+        public async Task<int> Add(CreateContactosSuplidoresDto model)
         {
-            try
+            var newDta = _mapper.Map<ContactosSuplidores>(model);
+
+            newDta.FechaCreacion = DateTime.Now;
+            newDta.Borrado = false;
+            newDta.UsuarioCreacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+
+            _context.ContactosSuplidores.Add(newDta);
+            await _context.SaveChangesAsync();
+
+            return newDta.Id;
+        }
+
+        public async Task Delete(int Id)
+        {
+            var data = await _context.ContactosSuplidores
+                .FirstOrDefaultAsync(x => x.Id == Id
+                && x.Borrado == false);
+
+            if (data != null)
             {
-                _context.ContactosSuplidores.Add(entity);
+                data.Borrado = true;
+                _context.Update(data);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
         }
 
-        public async Task Edit(ContactosSuplidores entity)
+        public async Task<List<ViewContactosSuplidoresDto>> GetAll()
         {
-            try
+            var list = await _context.ContactosSuplidores
+                .Where(x => x.Borrado == false)
+                .ToListAsync();
+
+            return _mapper.Map<List<ViewContactosSuplidoresDto>>(list);
+        }
+
+        public async Task<ViewContactosSuplidoresDto> GetById(int id)
+        {
+            var product = await _context.ContactosSuplidores
+                .FirstOrDefaultAsync(x => x.Id == id
+                && x.Borrado == false);
+
+            return _mapper.Map<ViewContactosSuplidoresDto>(product);
+        }
+
+        public async Task<List<ViewContactosSuplidoresDto>> GetByCompany(int idEmpresa)
+        {
+            var product = await _context.ContactosSuplidores
+                .FirstOrDefaultAsync(x => x.Borrado == false
+                && x.IdEmpresa == idEmpresa);
+
+            return _mapper.Map<List<ViewContactosSuplidoresDto>>(product);
+        }
+
+        public async Task Update(EditContactosSuplidoresDto model)
+        {
+            var existing = await _context.ContactosSuplidores
+                .FirstOrDefaultAsync(x => x.Id == model.Id
+                && x.Borrado == false);
+
+
+            if (existing != null)
             {
-                _context.Entry(entity).State = EntityState.Modified;
+                //_mapper.Map(producto, existing);
+                existing.FechaModificacion = DateTime.Now;
+                existing.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+                _context.ContactosSuplidores.Update(existing);
                 await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        public async Task<ContactosSuplidores> GetById(int id, long idempresa)
-        {
-            return await _context.ContactosSuplidores.FindAsync(id);
-        }
-
-        public async Task<IList<ContactosSuplidores>> GetAll(long idempresa)
-        {
-            return await _context.ContactosSuplidores.Where(x => x.Borrado != true).ToListAsync();
-        }
-
-        public async Task Delete(int id, long idempresa)
-        {
-            try
-            {
-                var c = await _context.ContactosSuplidores.FindAsync(id);
-                if (c != null)
-                {
-                    c.Borrado = true;
-                    await _context.SaveChangesAsync();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
             }
         }
     }

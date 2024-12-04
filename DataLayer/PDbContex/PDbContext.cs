@@ -85,6 +85,8 @@ namespace DataLayer.PDbContex
 
         public DbSet<InvMetodoPago> InvMetodoPagos { get; set; }
 
+        public DbSet<TipoMovimiento> TipoMovimientos { get; set; }
+
         #endregion
 
         #region Seguridad
@@ -141,8 +143,6 @@ namespace DataLayer.PDbContex
         public DbSet<Municipio> Municipio { get; set; }
 
         public DbSet<Imagen> Imagenes { get; set; }
-
-        public DbSet<TipoMovimiento> TipoMovimientos { get; set; }
 
         public DbSet<TipoPago> TipoPagos { get; set; }
 

@@ -56,6 +56,8 @@ using BussinessLayer.Interfaces.Language;
 using BussinessLayer.Services.Language.Translation;
 using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
 using BussinessLayer.Services.ModuloGeneral.Imagenes;
+using BussinessLayer.Interfaces.ModuloInventario.Otros;
+using BussinessLayer.Services.ModuloInventario.Otros;
 
 
 public static class ServiceRegistration
@@ -78,6 +80,7 @@ public static class ServiceRegistration
         services.AddScoped<IDetalleCuentasPorCobrar, DetalleCuentaPorCobrarService>();
         services.AddScoped<IDetalleFacturacionService, DetalleFacturacionService>();
         services.AddScoped<IDetalleMovimientoAlmacenService, DetalleMovimientoAlmacenService>();
+        services.AddScoped<IInvProductoImpuestoService, InvProductoImpuestoService>();
         services.AddScoped<IDgiiNcfService, DgiiNcfService>();
         services.AddScoped<IFacturacionService, FacturacionService>();
         services.AddScoped<IMarcaService, MarcaService>();
@@ -113,6 +116,7 @@ public static class ServiceRegistration
         services.AddScoped<IBancosService, BancosService>();
         services.AddScoped<ITipoProductoService, TipoProductoService>();
         services.AddScoped<IImagenesService, ImagenesService>();
+        services.AddScoped<IInvProductoSuplidorService, InvProductoSuplidorService>();
         services.AddScoped<DeserializadorCrearReporte>();
         services.AddScoped<EntityMapper>();
         services.AddScoped<CsvProcessor>();

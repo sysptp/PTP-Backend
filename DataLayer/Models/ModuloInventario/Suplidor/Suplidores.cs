@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DataLayer.Models.ModuloInventario.Productos;
-
+using DataLayer.Models.ModuloInventario.Otros;
 
 [Table("InvSuplidores")]
 public class Suplidores

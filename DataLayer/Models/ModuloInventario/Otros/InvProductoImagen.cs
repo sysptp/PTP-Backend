@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using DataLayer.Models.ModuloGeneral.Imagen;
+using DataLayer.Models.ModuloInventario.Productos;
 
-namespace DataLayer.Models.ModuloInventario.Productos
+namespace DataLayer.Models.ModuloInventario.Otros
 {
     [Table("InvProductoImagen")]
     public class InvProductoImagen

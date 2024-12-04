@@ -40,6 +40,8 @@ using BussinessLayer.FluentValidations.ModuloGeneral.Monedas;
 using BussinessLayer.FluentValidations.ModuloHelpDesk;
 using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
 using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
+using BussinessLayer.DTOs.ModuloInventario.Otros;
+using BussinessLayer.FluentValidations.ModuloInventario.Otros;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -70,9 +72,20 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CreateSuppliersDto>, CreateSuppliersRequestValidation>();
             services.AddScoped<IValidator<EditOrderDto>, EditOrderRequestValidator>();
             services.AddScoped<IValidator<CreateOrderDto>, CreateOrderRequestValidator>();
-
             services.AddScoped<IValidator<CreateCurrencyDTO>, CreateCurrencyRequestValidator>();
             services.AddScoped<IValidator<EditCurrencyDTO>, EditCurrencyRequestValidator>();
+
+            services.AddScoped<IValidator<EditInvProductoSuplidorDTO>, EditInvProductoSuplidorRequestValidator>();
+            services.AddScoped<IValidator<CreateInvProductoSuplidorDTO>, CreateInvProductoSuplidorRequestValidator>();
+
+            services.AddScoped<IValidator<CreateContactosSuplidoresDto>, CreateContactosSuplidoresRequestValidation>();
+            services.AddScoped<IValidator<EditContactosSuplidoresDto>, EditContactosSuplidoresRequestValidation>();
+
+            services.AddScoped<IValidator<CreateTipoMovimientoDto>, CreateTipoMovimientoRequestValidation>();
+            services.AddScoped<IValidator<EditTipoMovimientoDto>, EditTipoMovimientoRequestValidation>();
+
+            services.AddScoped<IValidator<CreateDetallePedidoDto>, CreateDetallePedidoRequestValidator>();
+            services.AddScoped<IValidator<EditDetallePedidoDto>, EditDetallePedidoRequestValidator>();
 
             services.AddScoped<IValidator<AddImageProductDTO>, AddImageRequestValidator>();
 

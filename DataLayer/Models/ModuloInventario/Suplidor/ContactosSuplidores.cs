@@ -11,6 +11,8 @@ using System.ComponentModel.DataAnnotations.Schema;
         [Required]
         public int IdSuplidor { get; set; }
 
+        public long? IdEmpresa { get; set; }
+
         [Required]
         [MaxLength(30)]
         public string? Nombre { get; set; }
@@ -26,14 +28,16 @@ using System.ComponentModel.DataAnnotations.Schema;
         public string? Extension { get; set; }
 
         [Required]
-        public DateTime FechaCreacion { get; set; }
-
-        [Required]
         public bool Borrado { get; set; }
 
-        public long? IdEmpresa { get; set; }
+        public DateTime? FechaModificacion { get; set; }
 
-        // Navigation property for the relationship with InvSuplidores
+        public DateTime? FechaCreacion { get; set; }
+
+        public string? UsuarioCreacion { get; set; }
+
+        public string? UsuarioModificacion { get; set; }
+
         [ForeignKey("IdSuplidor")]
         public virtual Suplidores? Suplidor { get; set; }
     }
