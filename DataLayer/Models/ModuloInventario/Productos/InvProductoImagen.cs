@@ -8,7 +8,7 @@ namespace DataLayer.Models.ModuloInventario.Productos
     public class InvProductoImagen
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         public int? ProductoId { get; set; }
 

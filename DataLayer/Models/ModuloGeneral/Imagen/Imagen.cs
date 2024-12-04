@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.ModuloGeneral.Imagen
 {
-    [Table("Imagen")]
+    [Table("GnImagenes")]
     public class Imagen
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public long? IdEmpresa { get; set; }
+        public long IdEmpresa { get; set; }
 
         [Required]
         public string? Descripcion { get; set; }
@@ -35,6 +35,6 @@ namespace DataLayer.Models.ModuloGeneral.Imagen
         [Required]
         public bool? Borrado { get; set; }
 
-        public virtual ICollection<InvProductoImagen> InvProductoImagenes { get; set; } = [];
+        public virtual ICollection<InvProductoImagen>? InvProductoImagenes { get; set; }
     }
 }
