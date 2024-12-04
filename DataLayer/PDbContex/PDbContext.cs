@@ -19,7 +19,6 @@ using DataLayer.Models.ModuloInventario.Pedidos;
 using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
-using DataLayer.Models.ModuloInventario.Almacen;
 using DataLayer.Models.HelpDesk;
 using DataLayer.Models.Auditoria;
 using DataLayer.Models.ModuloGeneral.Language;
@@ -63,12 +62,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<Descuentos> Descuentos { get; set; }
 
-        public DbSet<Almacenes> Almacenes { get; set; }
-
-        public DbSet<MovimientoAlmacen> MovimientoAlmacenes { get; set; }
-
-        public DbSet<DetalleMovimientoAlmacen> DetalleMovimientoAlmacenes { get; set; }
-
+       
         public DbSet<Suplidores> Suplidores { get; set; }
 
         public DbSet<ContactosSuplidores> ContactosSuplidores { get; set; }
@@ -79,8 +73,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<Pedido> Pedidos { get; set; }
 
-        public DbSet<InvAlmacenInventario> InvAlmacenInventarios { get; set; }
-
+        
         public DbSet<InvInventarioSucursal> InvInventarioSucursales { get; set; }
 
         public DbSet<InvMetodoPago> InvMetodoPagos { get; set; }
@@ -115,6 +108,7 @@ namespace DataLayer.PDbContex
         public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
 
         #endregion
+
         #region Language
         public DbSet<GnLanguages> GnLanguages { get; set; }
         public DbSet<GnLanguagesByTable> GnLanguagesByTable { get; set; }
@@ -132,6 +126,8 @@ namespace DataLayer.PDbContex
         public DbSet<AleLogs> AleLogs { get; set; }
         public DbSet<AlePrint> AlePrint { get; set; }
         #endregion
+
+
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }
@@ -219,6 +215,8 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
+
+
 
     }
 }
