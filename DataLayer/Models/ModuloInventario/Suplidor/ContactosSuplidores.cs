@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-    [Table("InvContactosSuplidores")]
+    [Table("InvSuplidoresContactos")]
     public class ContactosSuplidores
     {
         [Key]

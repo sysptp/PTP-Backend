@@ -12,7 +12,6 @@ using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
-using BussinessLayer.FluentValidations.HelpDesk;
 using BussinessLayer.DTOs.HelpDesk;
 using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
 using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
@@ -38,6 +37,9 @@ using BussinessLayer.FluentValidations.Auditoria;
 using BussinessLayer.DTOs.Auditoria;
 using BussinessLayer.DTOs.ModuloGeneral.Monedas;
 using BussinessLayer.FluentValidations.ModuloGeneral.Monedas;
+using BussinessLayer.FluentValidations.ModuloHelpDesk;
+using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
+using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -71,6 +73,8 @@ namespace BussinessLayer.DendeciesInjections
 
             services.AddScoped<IValidator<CreateCurrencyDTO>, CreateCurrencyRequestValidator>();
             services.AddScoped<IValidator<EditCurrencyDTO>, EditCurrencyRequestValidator>();
+
+            services.AddScoped<IValidator<AddImageProductDTO>, AddImageRequestValidator>();
 
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
             services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
