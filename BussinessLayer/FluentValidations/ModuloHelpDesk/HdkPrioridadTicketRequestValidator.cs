@@ -2,7 +2,7 @@
 using FluentValidation;
 
 
-namespace BussinessLayer.FluentValidations.HelpDesk
+namespace BussinessLayer.FluentValidations.ModuloHelpDesk
 {
     public class HdkPrioridadTicketRequestValidator : AbstractValidator<HdkPrioridadTicketRequest>
     {

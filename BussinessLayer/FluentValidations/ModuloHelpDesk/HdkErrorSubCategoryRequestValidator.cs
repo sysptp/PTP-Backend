@@ -2,7 +2,7 @@
 using FluentValidation;
 
 
-namespace BussinessLayer.FluentValidations.HelpDesk
+namespace BussinessLayer.FluentValidations.ModuloHelpDesk
 {
     public class HdkErrorSubCategoryRequestValidator : AbstractValidator<HdkErrorSubCategoryRequest>
     {

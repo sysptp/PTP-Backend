@@ -54,6 +54,8 @@ using BussinessLayer.Interfaces.Helpers;
 using BussinessLayer.Services.Helper;
 using BussinessLayer.Interfaces.Language;
 using BussinessLayer.Services.Language.Translation;
+using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
+using BussinessLayer.Services.ModuloGeneral.Imagenes;
 
 
 public static class ServiceRegistration
@@ -110,6 +112,7 @@ public static class ServiceRegistration
         services.AddScoped<IBilletes_MonedaService, Billetes_MonedaService>();
         services.AddScoped<IBancosService, BancosService>();
         services.AddScoped<ITipoProductoService, TipoProductoService>();
+        services.AddScoped<IImagenesService, ImagenesService>();
         services.AddScoped<DeserializadorCrearReporte>();
         services.AddScoped<EntityMapper>();
         services.AddScoped<CsvProcessor>();
