@@ -31,7 +31,7 @@ namespace PTP_API.Controllers.Configuracion.ParametrosGenerales
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Parametros Generales", Description = "Obtiene una lista de todas las Parametros Generales o una categoria específica si se proporciona un ID.")]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] long? id)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace PTP_API.Controllers.Configuracion.ParametrosGenerales
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Actualizar una Parametros Generales", Description = "Actualiza la información de una Parametros Generales existente.")]
-        public async Task<IActionResult> Update(int id, [FromBody] GnParametrosGeneralesRequest saveDto)
+        public async Task<IActionResult> Update(long id, [FromBody] GnParametrosGeneralesRequest saveDto)
         {
             var validationResult = await _validator.ValidateAsync(saveDto);
 
@@ -113,7 +113,7 @@ namespace PTP_API.Controllers.Configuracion.ParametrosGenerales
                 }
                 saveDto.IdParametro = id;
                 await _parametrosGeneralesService.Update(saveDto, id);
-                return Ok(Response<string>.Success(null, "Categoria actualizada correctamente"));
+                return Ok(Response<string>.Success(null, "Parametro genreales actualizado correctamente"));
             }
             catch (Exception ex)
             {
@@ -125,7 +125,7 @@ namespace PTP_API.Controllers.Configuracion.ParametrosGenerales
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Eliminar una Parametros Generales", Description = "Elimina un Parametro general de manera lógica.")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(long id)
         {
             try
             {
