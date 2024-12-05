@@ -1,7 +1,6 @@
 ﻿using DataLayer.Models;
 using DataLayer.Models.MenuApp;
 using DataLayer.Models.Caja;
-using DataLayer.Models.Reporteria;
 using DataLayer.Models.Bancos;
 using DataLayer.Models.Boveda;
 using DataLayer.Models.Otros;
@@ -13,7 +12,6 @@ using DataLayer.Models.Cuentas;
 using DataLayer.Models.Facturas;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Models.Entities;
-using DataLayer.Models.ModuloInventario.Suplidor;
 using DataLayer.Models.ModuloInventario.Productos;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.Models.ModuloInventario.Pedidos;
@@ -21,11 +19,13 @@ using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
-using DataLayer.Models.HelpDesk;
 using DataLayer.Models.Auditoria;
 using DataLayer.Models.ModuloGeneral.Language;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloGeneral.Imagen;
+using DataLayer.Models.ModuloInventario.Otros;
+using DataLayer.Models.ModuloReporteria;
+using DataLayer.Models.ModuloHelpDesk;
 
 namespace DataLayer.PDbContex
 {
@@ -42,8 +42,12 @@ namespace DataLayer.PDbContex
         }
 
         #region Reporteria
-        public DbSet<CentroReporteria> CentroReporterias { get; set; }
-        public DbSet<VariablesReporteria> VariablesReporterias { get; set; }
+
+
+        public DbSet<RepReporte> RepReportes { get; set; }
+        public DbSet<RepReportesVariable> RepReportesVariables { get; set; }
+
+
         #endregion
 
         #region Inventario
@@ -78,6 +82,14 @@ namespace DataLayer.PDbContex
         public DbSet<Precio> Precios { get; set; }
 
         public DbSet<Pedido> Pedidos { get; set; }
+
+        public DbSet<InvAlmacenInventario> InvAlmacenInventarios { get; set; }
+
+        public DbSet<InvInventarioSucursal> InvInventarioSucursales { get; set; }
+
+        public DbSet<InvMetodoPago> InvMetodoPagos { get; set; }
+
+        public DbSet<TipoMovimiento> TipoMovimientos { get; set; }
 
         #endregion
 
@@ -135,8 +147,6 @@ namespace DataLayer.PDbContex
         public DbSet<Municipio> Municipio { get; set; }
 
         public DbSet<Imagen> Imagenes { get; set; }
-
-        public DbSet<TipoMovimiento> TipoMovimientos { get; set; }
 
         public DbSet<TipoPago> TipoPagos { get; set; }
 

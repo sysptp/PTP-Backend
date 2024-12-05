@@ -42,6 +42,7 @@ public class MonedasService : IMonedasService
         if (producto != null)
         {
             producto.Borrado = true;
+            producto.Activo = false;
             _context.Update(producto);
             await _context.SaveChangesAsync();
         }

@@ -1,5 +1,4 @@
 ﻿using BussinessLayer.DTOs.ModuloGeneral.Monedas;
-using DataLayer.Models.ModuloGeneral.Monedas;
 
 public interface IMonedasService
 {

@@ -15,6 +15,9 @@ using BussinessLayer.Services.SGeografia;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.Interfaces.Repository.Auditoria;
 using BussinessLayer.Repository.Auditoria;
+using DataLayer.Models.ModuloGeneral;
+using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
+using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -46,6 +49,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IGnMenuRepository,GnMenuRepository>();
             services.AddTransient<IGnModuloRepository,GnModuloRepository>();
             services.AddTransient<IGnPermisoRepository, GnPermisoRepository>();
+            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+            services.AddTransient<IGnParametrosGeneralesRepository, GnParametrosGeneralesRepository>();
+            
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             #endregion
 

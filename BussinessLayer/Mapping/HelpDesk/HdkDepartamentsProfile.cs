@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.HelpDesk;
-using DataLayer.Models.HelpDesk;
+using DataLayer.Models.ModuloHelpDesk;
 
 namespace BussinessLayer.Mapping.HeplDesk
 {

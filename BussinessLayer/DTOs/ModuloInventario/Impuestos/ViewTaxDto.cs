@@ -1,12 +1,5 @@
-﻿using DataLayer.Models.ModuloInventario.Productos;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataLayer.Models.ModuloGeneral.Monedas;
+﻿using DataLayer.Models.ModuloGeneral.Monedas;
+using DataLayer.Models.ModuloInventario.Otros;
 
 namespace BussinessLayer.DTOs.ModuloInventario.Impuestos
 {

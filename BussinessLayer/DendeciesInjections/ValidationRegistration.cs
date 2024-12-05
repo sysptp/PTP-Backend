@@ -7,7 +7,6 @@ using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
-using BussinessLayer.FluentValidations.HelpDesk;
 using BussinessLayer.DTOs.HelpDesk;
 using BussinessLayer.FluentValidations.ModuloGeneral.Geografia;
 using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
@@ -38,6 +37,16 @@ using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
+using DataLayer.Models.ModuloGeneral;
+using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
+using BussinessLayer.FluentValidations.Configuracion.ParametrosGenerales;
+using BussinessLayer.DTOs.ModuloGeneral.Monedas;
+using BussinessLayer.FluentValidations.ModuloGeneral.Monedas;
+using BussinessLayer.FluentValidations.ModuloHelpDesk;
+using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
+using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
+using BussinessLayer.DTOs.ModuloInventario.Otros;
+using BussinessLayer.FluentValidations.ModuloInventario.Otros;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -68,6 +77,22 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CreateSuppliersDto>, CreateSuppliersRequestValidation>();
             services.AddScoped<IValidator<EditOrderDto>, EditOrderRequestValidator>();
             services.AddScoped<IValidator<CreateOrderDto>, CreateOrderRequestValidator>();
+            services.AddScoped<IValidator<CreateCurrencyDTO>, CreateCurrencyRequestValidator>();
+            services.AddScoped<IValidator<EditCurrencyDTO>, EditCurrencyRequestValidator>();
+
+            services.AddScoped<IValidator<EditInvProductoSuplidorDTO>, EditInvProductoSuplidorRequestValidator>();
+            services.AddScoped<IValidator<CreateInvProductoSuplidorDTO>, CreateInvProductoSuplidorRequestValidator>();
+
+            services.AddScoped<IValidator<CreateContactosSuplidoresDto>, CreateContactosSuplidoresRequestValidation>();
+            services.AddScoped<IValidator<EditContactosSuplidoresDto>, EditContactosSuplidoresRequestValidation>();
+
+            services.AddScoped<IValidator<CreateTipoMovimientoDto>, CreateTipoMovimientoRequestValidation>();
+            services.AddScoped<IValidator<EditTipoMovimientoDto>, EditTipoMovimientoRequestValidation>();
+
+            services.AddScoped<IValidator<CreateDetallePedidoDto>, CreateDetallePedidoRequestValidator>();
+            services.AddScoped<IValidator<EditDetallePedidoDto>, EditDetallePedidoRequestValidator>();
+
+            services.AddScoped<IValidator<AddImageProductDTO>, AddImageRequestValidator>();
 
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
             services.AddScoped<IValidator<GnPermisoRequest>, GnPermisoRequestValidator>();
@@ -77,6 +102,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<MunicipioRequest>, MunicipalityRequestValidator>();
             services.AddScoped<IValidator<string>, StringsRequestValidator>();
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
+            services.AddScoped<IValidator<decimal>, DecimalsRequestValidator>();
+
 
             #region Modulo General
             services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
@@ -106,6 +133,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
             #endregion
 
+            #region Modulo General
+            
+                services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+            #endregion
         }
     }
 }
