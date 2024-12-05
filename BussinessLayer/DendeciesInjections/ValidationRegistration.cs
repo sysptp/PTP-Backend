@@ -37,6 +37,9 @@ using BussinessLayer.DTOs.Auditoria;
 using Azure.Core;
 using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad;
+using DataLayer.Models.ModuloGeneral;
+using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
+using BussinessLayer.FluentValidations.Configuracion.ParametrosGenerales;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -101,6 +104,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
             #endregion
 
+            #region Modulo General
+            
+                services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+            #endregion
         }
     }
 }
