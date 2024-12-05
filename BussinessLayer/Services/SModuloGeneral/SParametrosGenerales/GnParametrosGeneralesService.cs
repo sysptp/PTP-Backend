@@ -2,8 +2,6 @@
 using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
 using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
-using BussinessLayer.Interfaces.Repository.HelpDesk;
-using DataLayer.Models.HelpDesk;
 using DataLayer.Models.ModuloGeneral;
 
 

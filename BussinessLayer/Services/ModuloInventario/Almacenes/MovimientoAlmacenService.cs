@@ -6,8 +6,8 @@
 //using DataLayer.Models.ModuloInventario.Productos;
 //using DataLayer.Models.ModuloInventario.Almacen;
 
-public class MovimientoAlmacenService : IMovimientoAlmacenService
-{
+//public class MovimientoAlmacenService : IMovimientoAlmacenService
+//{
     //private readonly PDbContext _context;
     //private readonly ICuentaPorPagarService _cppService;
     //private readonly ITipoPagoService _tipoPagoService;
