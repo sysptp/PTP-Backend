@@ -15,12 +15,12 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
     [Route("api/v1/[controller]")]
     [Authorize]
     [EnableAuditing]
-    public class GnScheduleController : ControllerBase
+    public class ScheduleController : ControllerBase
     {
         private readonly IGnScheduleService _gnScheduleService;
         private readonly IValidator<GnScheduleRequest> _validator;
 
-        public GnScheduleController(IGnScheduleService gnScheduleService, IValidator<GnScheduleRequest> validator)
+        public ScheduleController(IGnScheduleService gnScheduleService, IValidator<GnScheduleRequest> validator)
         {
             _gnScheduleService = gnScheduleService;
             _validator = validator;
@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Horarios", Description = "Devuelve una lista de horarios o un horario específico si se proporciona un ID")]
         [DisableAuditing]
-        public async Task<IActionResult> GetAllSchedule([FromQuery] long? companyId, int? roleId, int? id)
+        public async Task<IActionResult> GetAllSchedule([FromQuery] long? companyId, int? id)
         {
             try
             {
@@ -49,6 +49,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
                 else
                 {
                     var schedules = await _gnScheduleService.GetAllDto();
+                    schedules = companyId != null ? schedules : schedules.Where(x => x.CompanyId == companyId).ToList();    
                     if (schedules == null || !schedules.Any())
                     {
                         return StatusCode(204, Response<IEnumerable<GnScheduleResponse>>.NoContent("No hay horarios disponibles."));
@@ -87,7 +88,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear el horario. Por favor, intente más tarde."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -97,9 +98,9 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Actualizar horario", Description = "Endpoint para actualizar los datos de un horario")]
-        public async Task<IActionResult> UpdateSchedule(int id, [FromBody] GnScheduleRequest horarioDto)
+        public async Task<IActionResult> UpdateSchedule(int id, [FromBody] GnScheduleRequest scheduleDto)
         {
-            var validationResult = await _validator.ValidateAsync(horarioDto);
+            var validationResult = await _validator.ValidateAsync(scheduleDto);
 
             if (!validationResult.IsValid)
             {
@@ -113,8 +114,8 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
                 if (existingSchedule == null)
                     return NotFound(Response<string>.NotFound("horario no encontrado"));
 
-                existingSchedule.Id = id;
-                await _gnScheduleService.Update(horarioDto, id);
+                scheduleDto.Id = id;
+                await _gnScheduleService.Update(scheduleDto, id);
                 return Ok(Response<string>.Success(null, "horario actualizado correctamente"));
             }
             catch (Exception ex)
@@ -128,7 +129,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Eliminar horario", Description = "Endpoint para eliminar un horario")]
-        public async Task<IActionResult> DeleteSchedule(long id)
+        public async Task<IActionResult> DeleteSchedule(int id)
         {
             try
             {
@@ -141,7 +142,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar el horario. Por favor, intente más tarde."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
     }

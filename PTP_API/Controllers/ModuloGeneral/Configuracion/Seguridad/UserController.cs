@@ -52,7 +52,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener los usuarios. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -86,7 +86,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el usuario. Por favor, intente más tarde."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 

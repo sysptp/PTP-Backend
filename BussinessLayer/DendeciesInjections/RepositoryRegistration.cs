@@ -23,10 +23,16 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddRepositoryInjections(this IServiceCollection services)
         {
+            services.AddTransient<INcfRepository, NcfRepository>();
+
+            #region Modulo General 
             services.AddTransient<IGnPerfilRepository, GnPerfilRepository>();
             services.AddTransient<IGnEmpresaRepository, GnEmpresaRepository>();
             services.AddTransient<IGnSucursalRepository, GnSucursalRepository>();
-            services.AddTransient<INcfRepository, NcfRepository>();
+            services.AddTransient<IGnScheduleRepository, GnScheduleRepository>();
+            services.AddTransient<IGnScheduleUserRepository, GnScheduleUserRepository>();
+            #endregion
+
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

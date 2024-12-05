@@ -37,6 +37,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DProvincia;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -77,6 +78,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<string>, StringsRequestValidator>();
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
 
+            #region Modulo General
+            services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
+            services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
+            #endregion
 
             #region HelpDesk
             services.AddScoped<IValidator<HdkCategoryTicketRequest>, HdkCategoryTicketRequestValidator>();

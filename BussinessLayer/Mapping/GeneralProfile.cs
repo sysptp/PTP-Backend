@@ -6,6 +6,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Menu;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Usuario;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using DataLayer.Models.Entities;
@@ -132,7 +133,7 @@ namespace TaskMaster.Core.Application.Mapping
            .ReverseMap();
             #endregion
 
-        #region Permiso 
+            #region Permiso 
 
         CreateMap<GnPermiso, GnPermisoResponse>()
            .ForMember(dest => dest.PermisoId, opt => opt.MapFrom(src => src.IDPermiso))
@@ -154,7 +155,24 @@ namespace TaskMaster.Core.Application.Mapping
                 .ForMember(dest => dest.Editar, opt => opt.MapFrom(src => src.Edit))
                 .ForMember(dest => dest.Consultar, opt => opt.MapFrom(src => src.Query))
                 .ReverseMap();
-            #endregion 
+            #endregion
+
+            #region GnSchedule
+            CreateMap<GnSchedule, GnScheduleRequest>()
+                .ReverseMap();
+            CreateMap<GnSchedule, GnScheduleResponse>()
+                .ReverseMap();
+
+            CreateMap<GnScheduleUser, GnScheduleUserRequest>()
+               .ReverseMap();
+            CreateMap<GnScheduleUser, GnScheduleUserResponse>()
+                .ForMember(dest => dest.Schedule, opt => opt.MapFrom(src => src.GnSchedule))
+                .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Usuario.UserName))
+                .ForMember(dest => dest.NameOfUser, opt => opt.MapFrom(src => $"{src.Usuario.Nombre} {src.Usuario.Apellido}"))
+                .ReverseMap();
+            #endregion
+
             #endregion
 
         }

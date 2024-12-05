@@ -6,5 +6,6 @@ namespace BussinessLayer.Interfaces.ISeguridad
 {
     public interface IGnScheduleUserService : IGenericService<GnScheduleUserRequest, GnScheduleUserResponse, GnScheduleUser>
     {
+        Task<List<GnScheduleUserResponse>> GetAllByFilters(long? companyId, int? userId, int? scheduleId);
     }
 }

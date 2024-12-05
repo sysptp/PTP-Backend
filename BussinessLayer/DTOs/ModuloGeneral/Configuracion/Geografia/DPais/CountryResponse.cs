@@ -1,5 +1,9 @@
-﻿namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais
+﻿using BussinessLayer.Atributes;
+
+namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais
 {
+
+    [TableName("Pais")]
     public class CountryResponse
     {
         public int Id { get; set; }

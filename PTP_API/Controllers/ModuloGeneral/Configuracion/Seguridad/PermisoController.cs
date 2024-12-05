@@ -48,7 +48,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener los permisos. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -77,7 +77,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear el permiso. Por favor, intente más tarde."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -109,7 +109,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el permiso. Por favor, intente más tarde."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -131,7 +131,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar el permiso. Por favor, intente más tarde."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
     }

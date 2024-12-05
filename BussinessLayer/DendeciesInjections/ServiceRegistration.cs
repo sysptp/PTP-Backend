@@ -54,7 +54,7 @@ using BussinessLayer.Interfaces.Helpers;
 using BussinessLayer.Services.Helper;
 using BussinessLayer.Interfaces.Language;
 using BussinessLayer.Services.Language.Translation;
-
+using BussinessLayer.Services.SSeguridad.Schedule;
 
 public static class ServiceRegistration
 {
@@ -121,20 +121,6 @@ public static class ServiceRegistration
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IGnPermisoService, GnPermisoService>();
 
-        #region Geografia
-
-        services.AddTransient<IPaisService, PaisService>();
-        services.AddTransient<IMunicipioService, MunicipioService>();
-        services.AddTransient<IRegionService, RegionService>();
-        services.AddTransient<IProvinciaService, ProvinciaService>();
-
-        #endregion
-
-        #region Configuracion 
-        services.AddTransient<IGnMenuService,GnMenuService>();
-        services.AddTransient<IGnModuloService, GnModuloService>();
-        #endregion
-
         #region HelpDesk
         services.AddTransient<IHdkCategoryTicketService, HdkCategoryTicketService>();
         services.AddTransient<IHdkDepartamentsService, HdkDepartamentsService>();
@@ -160,9 +146,30 @@ public static class ServiceRegistration
         #region Geocalizacion 
         services.AddTransient<IIpGeolocalitationService, IpWhoisService>();
         #endregion
+
+        #region Modulo General
+        
+        services.AddTransient<IGnScheduleService, GnScheduleService>();
+        services.AddTransient<IGnScheduleUserService, GnScheduleUserService>();
+
         #region Language
         services.AddScoped<ITranslationFieldService, TranslationFieldService>();
         services.AddScoped<IJsonTranslationService, JsonTranslationService>();
+        #endregion
+
+        #region Geografia
+
+        services.AddTransient<IPaisService, PaisService>();
+        services.AddTransient<IMunicipioService, MunicipioService>();
+        services.AddTransient<IRegionService, RegionService>();
+        services.AddTransient<IProvinciaService, ProvinciaService>();
+
+        #endregion
+
+        #region Configuracion 
+        services.AddTransient<IGnMenuService, GnMenuService>();
+        services.AddTransient<IGnModuloService, GnModuloService>();
+        #endregion
         #endregion
     }
 }

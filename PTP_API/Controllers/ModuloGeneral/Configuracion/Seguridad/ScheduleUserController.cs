@@ -15,12 +15,12 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
     [Route("api/v1/[controller]")]
     [Authorize]
     [EnableAuditing]
-    public class GnScheduleUserController : ControllerBase
+    public class ScheduleUserController : ControllerBase
     {
         private readonly IGnScheduleUserService _gnScheduleUserService;
         private readonly IValidator<GnScheduleUserRequest> _validator;
 
-        public GnScheduleUserController(IGnScheduleUserService gnScheduleUserService, IValidator<GnScheduleUserRequest> validator)
+        public ScheduleUserController(IGnScheduleUserService gnScheduleUserService, IValidator<GnScheduleUserRequest> validator)
         {
             _gnScheduleUserService = gnScheduleUserService;
             _validator = validator;
@@ -33,28 +33,18 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Horarios de usuarios", Description = "Devuelve una lista de horarios de usuarios o un horario de usuario específico si se proporciona un ID")]
         [DisableAuditing]
-        public async Task<IActionResult> GetAllSchedule([FromQuery] long? companyId, int? roleId, int? id)
+        public async Task<IActionResult> GetAllUserSchedules([FromQuery] long? companyId, int? userId, int? scheduleId)
         {
             try
             {
-                if (id.HasValue)
-                {
-                    var schedule = await _gnScheduleUserService.GetByIdResponse((int)id);
-                    if (schedule == null)
-                    {
-                        return NotFound(Response<GnScheduleUserResponse>.NotFound("Horario de usuario no encontrado."));
-                    }
-                    return Ok(Response<GnScheduleUserResponse>.Success(schedule, "Horario de usuario encontrado."));
-                }
-                else
-                {
-                    var schedules = await _gnScheduleUserService.GetAllDto();
-                    if (schedules == null || !schedules.Any())
-                    {
-                        return StatusCode(204, Response<IEnumerable<GnScheduleUserResponse>>.NoContent("No hay horarios de usuarios disponibles."));
-                    }
-                    return Ok(Response<IEnumerable<GnScheduleUserResponse>>.Success(schedules, "Horarios de usuarios obtenidos correctamente."));
-                }
+               
+                 var schedules = await _gnScheduleUserService.GetAllByFilters(companyId,userId,scheduleId);
+                 if (schedules == null || !schedules.Any())
+                 {
+                    return StatusCode(204, Response<IEnumerable<GnScheduleUserResponse>>.NoContent("No hay horarios de usuarios disponibles."));
+                 }
+                 return Ok(Response<IEnumerable<GnScheduleUserResponse>>.Success(schedules, "Horarios de usuarios obtenidos correctamente."));
+                
             }
             catch (Exception ex)
             {
@@ -68,7 +58,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Crear un nuevo horario de usuario", Description = "Endpoint para crear un horario de usuario nuevo")]
-        public async Task<IActionResult> CreateSchedule([FromBody] GnScheduleUserRequest horarioDto)
+        public async Task<IActionResult> CreateUserSchedule([FromBody] GnScheduleUserRequest horarioDto)
         {
             try
             {
@@ -82,7 +72,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
 
                 var response = await _gnScheduleUserService.Add(horarioDto);
 
-                return CreatedAtAction(nameof(GetAllSchedule), response);
+                return CreatedAtAction(nameof(GetAllUserSchedules), response);
 
             }
             catch (Exception ex)
@@ -97,9 +87,9 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Actualizar horario", Description = "Endpoint para actualizar los datos de un horario")]
-        public async Task<IActionResult> UpdateSchedule(int id, [FromBody] GnScheduleUserRequest horarioDto)
+        public async Task<IActionResult> UpdateUserSchedule(int id, [FromBody] GnScheduleUserRequest scheduleDto)
         {
-            var validationResult = await _validator.ValidateAsync(horarioDto);
+            var validationResult = await _validator.ValidateAsync(scheduleDto);
 
             if (!validationResult.IsValid)
             {
@@ -113,8 +103,8 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
                 if (existingSchedule == null)
                     return NotFound(Response<string>.NotFound("horario no encontrado"));
 
-                existingSchedule.Id = id;
-                await _gnScheduleUserService.Update(horarioDto, id);
+                scheduleDto.Id = id;
+                await _gnScheduleUserService.Update(scheduleDto, id);
                 return Ok(Response<string>.Success(null, "horario actualizado correctamente"));
             }
             catch (Exception ex)
@@ -128,7 +118,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Eliminar horario", Description = "Endpoint para eliminar un horario")]
-        public async Task<IActionResult> DeleteSchedule(long id)
+        public async Task<IActionResult> DeleteUserSchedule(int id)
         {
             try
             {

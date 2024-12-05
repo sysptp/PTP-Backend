@@ -4,7 +4,6 @@ using BussinessLayer.Interface.IAccount;
 using System.Net.Mime;
 using FluentValidation;
 using BussinessLayer.Wrappers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
 
@@ -60,7 +59,7 @@ namespace PTP_API.Controllers.Configuration.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error inesperado durante el proceso de autenticación. Detalle: " + ex.Message));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -89,7 +88,7 @@ namespace PTP_API.Controllers.Configuration.Seguridad
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error inesperado durante el proceso de registro. Detalle: " + ex.Message));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
     }
