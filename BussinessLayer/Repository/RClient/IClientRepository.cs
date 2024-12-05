@@ -5,6 +5,7 @@ namespace BussinessLayer.Repository.RClient
 {
     public interface IClientRepository
     {
-        Task CreateAsync(CreateClientDto client);
+        Task<Client> AddAsync(Client client);
+        Task<List<Client>> GetAllAsync(int bussinesId);
     }
 }

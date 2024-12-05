@@ -26,6 +26,8 @@ using DataLayer.Models.ModuloGeneral.Imagen;
 using DataLayer.Models.ModuloInventario.Otros;
 using DataLayer.Models.ModuloReporteria;
 using DataLayer.Models.ModuloHelpDesk;
+using DataLayer.Models.Clients;
+using DataLayer.EntitiesConfiguration;
 
 namespace DataLayer.PDbContex
 {
@@ -39,6 +41,11 @@ namespace DataLayer.PDbContex
         public PDbContext(DbContextOptions<PDbContext> options) : base(options)
         {
 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new ClientConfiguration());
         }
 
         #region Reporteria
@@ -154,7 +161,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<DetalleCuentaPorPagar> DetalleCuentaPorPagar { get; set; }
 
-        public DbSet<Clientes> Clientes { get; set; }
+        public DbSet<Client> Clients { get; set; }
 
         public DbSet<DgiiNcfSecuencia> DgiiNcfSecuencia { get; set; }
 

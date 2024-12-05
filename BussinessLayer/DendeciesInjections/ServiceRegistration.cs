@@ -57,6 +57,8 @@ using BussinessLayer.Interfaces.ModuloInventario.Otros;
 using BussinessLayer.Services.ModuloInventario.Otros;
 using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
 using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
+using BussinessLayer.Interfaces.IClient;
+using BussinessLayer.Services.SCliente;
 
 
 public static class ServiceRegistration
@@ -67,7 +69,7 @@ public static class ServiceRegistration
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
         services.AddScoped<IRepositorySection, RepositorySection>();
-       //services.AddScoped<, >();
+        //services.AddScoped<, >();
         services.AddScoped<IAlmacenesService, AlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
@@ -125,6 +127,7 @@ public static class ServiceRegistration
         services.AddScoped<INcfService, NcfService>();
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IGnPermisoService, GnPermisoService>();
+        services.AddTransient<IClientService, ClientService>();
 
         #region Geografia
 
@@ -136,7 +139,7 @@ public static class ServiceRegistration
         #endregion
 
         #region Configuracion 
-        services.AddTransient<IGnMenuService,GnMenuService>();
+        services.AddTransient<IGnMenuService, GnMenuService>();
         services.AddTransient<IGnModuloService, GnModuloService>();
         services.AddTransient<IGnParametrosGeneralesService, GnParametrosGeneralesService>();
         #endregion

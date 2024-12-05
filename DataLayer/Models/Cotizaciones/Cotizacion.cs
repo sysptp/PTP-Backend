@@ -1,4 +1,5 @@
-﻿using DataLayer.Models.Otros;
+﻿using DataLayer.Models.Clients;
+using DataLayer.Models.Otros;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,7 +10,7 @@ namespace DataLayer.Models.Cotizaciones
         public int ClienteId { get; set; }
 
         [ForeignKey("ClienteId")]
-        public Clientes Cliente { get; set; }
+        public Client Cliente { get; set; }
         
         public decimal MontoTotal { get; set; }
 
