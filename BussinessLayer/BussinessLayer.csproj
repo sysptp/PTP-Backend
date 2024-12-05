@@ -47,7 +47,6 @@
     <Folder Include="Mapping\ModuloContabilidad\" />
     <Folder Include="Mapping\ModuloHelpDesk\" />
     <Folder Include="Services\ModuloAuditoria\" />
-    <Folder Include="Services\ModuloCitas\" />
     <Folder Include="Services\ModuloContabilidad\" />
     <Folder Include="Services\ModuloHelpDesk\" />
     <Folder Include="ViewModels\Bancos\" />
