@@ -15,6 +15,8 @@ using BussinessLayer.Services.SGeografia;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.Interfaces.Repository.Auditoria;
 using BussinessLayer.Repository.Auditoria;
+using BussinessLayer.Interfaces.Repository.Inventario.Almacenes;
+using BussinessLayer.Repository.Almacen;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -66,6 +68,18 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IAlePrintRepository, AlePrintRepository>();
 
             #endregion
+
+            #region Almacen
+            services.AddTransient<IInvAlmacenesRepository, InvAlmacenesRepository>();
+            services.AddTransient<IInvAlmacenInventarioRepository, InvAlmacenInventarioRepository>();
+            services.AddTransient<IInvInventarioSucursalRepository, InvInventarioSucursalRepository>();
+            services.AddTransient<IInvMovAlmacenSucursalRepository, InvMovAlmacenSucursalRepository>();
+            services.AddTransient<IInvMovAlmacenSucursalDetalleRepository, InvMovAlmacenSucursalDetalleRepository>();
+            services.AddTransient<IInvMovimientoAlmacenRepository, InvMovimientoAlmacenRepository>();
+            services.AddTransient<IInvMovimientoAlmacenDetalleRepository, InvMovimientoAlmacenDetalleRepository>();
+            services.AddTransient<IInvMovimientoSucursalDetalleRepository, InvMovimientoSucursalDetalleRepository>();
+            services.AddTransient<IInvMovInventarioSucursalRepository, InvMovInventarioSucursalRepository>();
+            #endregion 
         }
     }
 }

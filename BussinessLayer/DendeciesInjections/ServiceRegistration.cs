@@ -55,6 +55,8 @@ using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
 using BussinessLayer.Services.ModuloGeneral.Imagenes;
 using BussinessLayer.Interfaces.ModuloInventario.Otros;
 using BussinessLayer.Services.ModuloInventario.Otros;
+using BussinessLayer.Interfaces.ModuloInventario.Almacen;
+using BussinessLayer.Services.ModuloInventario.SAlmacen;
 
 
 public static class ServiceRegistration
@@ -163,9 +165,22 @@ public static class ServiceRegistration
         #region Geocalizacion 
         services.AddTransient<IIpGeolocalitationService, IpWhoisService>();
         #endregion
+
         #region Language
         services.AddScoped<ITranslationFieldService, TranslationFieldService>();
         services.AddScoped<IJsonTranslationService, JsonTranslationService>();
+        #endregion
+
+        #region Almacen
+        services.AddTransient<IInvAlmacenesService, InvAlmacenesService>();
+        services.AddTransient<IInvAlmacenInventarioService, InvAlmacenInventarioService>();
+        services.AddTransient<IInvInventarioSucursalService, InvInventarioSucursalService>();
+        services.AddTransient<IInvMovAlmacenSucursalService, InvMovAlmacenSucursalService>();
+        services.AddTransient<IInvMovAlmacenSucursalDetalleService, InvMovAlmacenSucursalDetalleService>();
+        services.AddTransient<IInvMovimientoAlmacenService, InvMovimientoAlmacenService>();
+        services.AddTransient<IInvMovimientoAlmacenDetalleService, InvMovimientoAlmacenDetalleService>();
+        services.AddTransient<IInvMovimientoSucursalDetalleService, InvMovimientoSucursalDetalleService>();
+        services.AddTransient<IInvMovInventarioSucursalService, InvMovInventarioSucursalService>();
         #endregion
     }
 }
