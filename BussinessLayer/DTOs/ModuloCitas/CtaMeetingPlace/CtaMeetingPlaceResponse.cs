@@ -1,5 +1,5 @@
-﻿namespace DataLayer.Models.Modulo_Citas
-{
+﻿namespace BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace
+{ 
     public class CtaMeetingPlaceResponse 
     {
         public int IdMeetingPlace { get; set; }

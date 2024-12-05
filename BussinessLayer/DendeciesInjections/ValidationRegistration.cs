@@ -47,6 +47,29 @@ using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
 using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
 using BussinessLayer.FluentValidations.ModuloInventario.Otros;
+using DataLayer.Models.Modulo_Citas;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentManagement;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentMovements;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentReason;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointments;
+using BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion;
+using BussinessLayer.Validations.ModuloCitas.CtaCitaConfiguracion;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
+using BussinessLayer.Validations.ModuloCitas.CtaEmailConfiguracion;
+using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.Validations.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
+using BussinessLayer.Validations.ModuloCitas.CtaSessionDetails;
+using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
+using BussinessLayer.Validations.ModuloCitas.CtaSessions;
+using BussinessLayer.DTOs.ModuloCitas.CtaState;
+using BussinessLayer.Validations.ModuloCitas.CtaState;
+using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
+using BussinessLayer.Validations.ModuloCitas.CtaUnwanted;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -136,6 +159,22 @@ namespace BussinessLayer.DendeciesInjections
             #region Modulo General
             
                 services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+            #endregion
+
+            #region Modulo Citas
+
+            services.AddScoped<IValidator<CtaAppointmentManagementRequest>, CtaAppointmentManagementRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentMovementsRequest>, CtaAppointmentMovementsRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentReasonRequest>, CtaAppointmentReasonRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentsRequest>, CtaAppointmentsRequestValidation>();
+            services.AddScoped<IValidator<CtaCitaConfiguracionRequest>, CtaCitaConfiguracionRequestValidation>();
+            services.AddScoped<IValidator<CtaEmailConfiguracionRequest>, CtaEmailConfiguracionRequestValidation>();
+            services.AddScoped<IValidator<CtaMeetingPlaceRequest>, CtaMeetingPlaceRequestValidation>();
+            services.AddScoped<IValidator<CtaSessionDetailsRequest>, CtaSessionDetailsRequestValidation>();
+            services.AddScoped<IValidator<CtaSessionsRequest>, CtaSessionsRequestValidation>();
+            services.AddScoped<IValidator<CtaStateRequest>, CtaStateRequestValidation>();
+            services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
+
             #endregion
         }
     }

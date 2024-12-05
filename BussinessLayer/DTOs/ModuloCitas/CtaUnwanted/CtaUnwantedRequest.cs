@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace DataLayer.Models.Modulo_Citas
-{
+namespace BussinessLayer.DTOs.ModuloCitas.CtaUnwanted
+{ 
     public class CtaUnwantedRequest
     {
         [JsonIgnore]

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
+using BussinessLayer.Interface.Modulo_Citas;
 using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Services;
 

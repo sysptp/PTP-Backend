@@ -1,7 +1,9 @@
-﻿using BussinessLayer.Repository.ROtros;
+﻿using BussinessLayer.Interface.Repository.Modulo_Citas;
+using BussinessLayer.Repository.ROtros;
+using DataLayer.Models.Modulo_Citas;
 using DataLayer.PDbContex;
 
-namespace DataLayer.Models.Modulo_Citas
+namespace BussinessLayer.Repository.Modulo_Citas
 {
     public class CtaAppointmentMovementsRepository : GenericRepository<CtaAppointmentMovements>, ICtaAppointmentMovementsRepository
     {
