@@ -1,8 +1,8 @@
-﻿using DataLayer.Models.HelpDesk;
-using BussinessLayer.Interfaces.IHelpDesk;
+﻿using BussinessLayer.Interfaces.IHelpDesk;
 using BussinessLayer.DTOs.HelpDesk;
 using AutoMapper;
 using BussinessLayer.Interfaces.Repository.HelpDesk;
+using DataLayer.Models.ModuloHelpDesk;
 
 namespace BussinessLayer.Services.SHelpDesk
 {

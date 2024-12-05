@@ -1,13 +1,10 @@
-﻿using BussinessLayer.FluentValidations;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
-using BussinessLayer.FluentValidations.ModuloInventario.Impuestos;
 using System.Net.Mime;
 using BussinessLayer.Wrappers;
 using BussinessLayer.DTOs.ModuloInventario.Impuestos;
-using BussinessLayer.DTOs.ModuloInventario.Descuentos;
 using FluentValidation;
 
 namespace PTP_API.Controllers.ModuloInventario.Impuestos

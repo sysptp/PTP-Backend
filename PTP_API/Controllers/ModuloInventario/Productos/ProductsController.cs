@@ -1,16 +1,10 @@
-﻿using BussinessLayer.DTOs.ModuloInventario.Precios;
-using BussinessLayer.DTOs.ModuloInventario.Productos;
-using BussinessLayer.FluentValidations;
-using BussinessLayer.FluentValidations.ModuloInventario.Productos;
+﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.Language;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using BussinessLayer.Wrappers;
-using DataLayer.Models.ModuloInventario.Productos;
 using FluentValidation;
-using FluentValidation.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
 

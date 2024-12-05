@@ -1,4 +1,6 @@
 ﻿using DataLayer.Models.ModuloInventario.Almacen;
+using DataLayer.Models.ModuloInventario.Otros;
+using DataLayer.Models.ModuloInventario.Pedidos;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -89,5 +91,9 @@ namespace DataLayer.Models.ModuloInventario.Productos
         public virtual ICollection<InvProductoImagen>? InvProductoImagenes { get; set; }
 
         public virtual ICollection<DetalleMovimientoAlmacen>? MovimientoDetalles { get; set; }
+
+        public virtual ICollection<DetallePedido>? DetallePedidos { get; set; }
+
+        public virtual ICollection<InvInventarioSucursal>? InventarioSucursales { get; set; }
     }
 }
