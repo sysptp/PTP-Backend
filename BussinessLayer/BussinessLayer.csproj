@@ -39,7 +39,6 @@
     <Folder Include="FluentValidations\ModuloContabilidad\" />
     <Folder Include="FluentValidations\ModuloInventario\Almacenes\" />
     <Folder Include="Interfaces\ModuloAuditoria\" />
-    <Folder Include="Interfaces\ModuloCitas\" />
     <Folder Include="Interfaces\ModuloContabilidad\" />
     <Folder Include="Interfaces\ModuloHelpDesk\" />
     <Folder Include="Interfaces\ModuloReporteria\" />
