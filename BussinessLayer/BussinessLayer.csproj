@@ -33,7 +33,6 @@
   <ItemGroup>
     <Folder Include="DTOs\ModuloHelpDesk\" />
     <Folder Include="DTOs\ModuloAuditoria\" />
-    <Folder Include="DTOs\ModuloCitas\" />
     <Folder Include="DTOs\ModuloContabilidad\" />
     <Folder Include="FluentValidations\ModuloAuditoria\" />
     <Folder Include="FluentValidations\ModuloCitas\" />
