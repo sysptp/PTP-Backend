@@ -26,6 +26,7 @@ using DataLayer.Models.ModuloInventario.Otros;
 using DataLayer.Models.ModuloReporteria;
 using DataLayer.Models.ModuloHelpDesk;
 using DataLayer.Models.ModuloAuditoria;
+using DataLayer.Models.ModuloGeneral.Archivos;
 
 namespace DataLayer.PDbContex
 {
@@ -121,6 +122,7 @@ namespace DataLayer.PDbContex
         public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
 
         #endregion
+
         #region Language
         public DbSet<GnLanguages> GnLanguages { get; set; }
         public DbSet<GnLanguagesByTable> GnLanguagesByTable { get; set; }
@@ -130,6 +132,8 @@ namespace DataLayer.PDbContex
         #region Modulo General
         public DbSet<GnSchedule> GnSchedule { get; set; }
         public DbSet<GnScheduleUser> GnScheduleUser { get; set; }
+        public DbSet<GnUploadFileParametro> GnUploadFileParametro { get; set; }
+        public DbSet<GnTecnoAlmacenExterno> GnTecnoAlmacenExterno { get; set; }
         #endregion
 
         #region Auditoria

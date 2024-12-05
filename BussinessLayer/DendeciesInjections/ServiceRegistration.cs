@@ -7,9 +7,7 @@ using BussinessLayer.Interfaces.IBoveda;
 using BussinessLayer.Interfaces.ICaja;
 using BussinessLayer.Interfaces.ICargaMasiva;
 using BussinessLayer.Interfaces.ICuentas;
-using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.Interfaces.IGeografia;
-using BussinessLayer.Interfaces.IMenu;
 using BussinessLayer.Interfaces.IOtros;
 using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Interfaces.Repositories;
@@ -22,24 +20,18 @@ using BussinessLayer.Services.SCaja;
 using BussinessLayer.Services.SCargaMasiva;
 using BussinessLayer.Services.SCotizaciones;
 using BussinessLayer.Services.SCuentas;
-using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Services.SGeografia;
 using BussinessLayer.Services.SNcfs;
-using BussinessLayer.Services.SMenu;
 using BussinessLayer.Services.SOtros;
 using BussinessLayer.Services.SSeguridad;
 using Microsoft.Extensions.DependencyInjection;
-using BussinessLayer.Interfaces.IModulo;
-using BussinessLayer.Services.SModulo;
 using BussinessLayer.Interfaces.ModuloInventario.Precios;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
 using BussinessLayer.Services.ModuloInventario.Suplidores;
 using BussinessLayer.Services.ModuloInventario.Impuesto;
 using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
-using BussinessLayer.Services.SSeguridad.Perfil;
 using BussinessLayer.Services.SSeguridad.SUsuario;
-using BussinessLayer.Services.SSeguridad.Permiso;
 using BussinessLayer.Services.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.Helpers;
 using BussinessLayer.Services.Helper;
@@ -57,6 +49,16 @@ using BussinessLayer.Services.ModuloAuditoria;
 using BussinessLayer.Interfaces.ModuloAuditoria;
 using BussinessLayer.Interfaces.ModuloFacturacion;
 using BussinessLayer.Interfaces.ModuloHelpDesk;
+using BussinessLayer.Interfaces.ModuloGeneral.Archivos;
+using BussinessLayer.Services.ModuloGeneral.Archivos;
+using BussinessLayer.Services.ModuloGeneral.Empresas;
+using BussinessLayer.Services.ModuloGeneral.Modulo;
+using BussinessLayer.Services.ModuloGeneral.Menu;
+using BussinessLayer.Services.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.ModuloGeneral.Modulo;
+using BussinessLayer.Interfaces.ModuloGeneral.Menu;
+using BussinessLayer.Interfaces.ModuloGeneral.Empresas;
 
 
 public static class ServiceRegistration
@@ -67,6 +69,8 @@ public static class ServiceRegistration
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
         services.AddScoped<IRepositorySection, RepositorySection>();
+        services.AddScoped<IGnUploadFileParametroService, GnUploadFileParametroService>();
+        services.AddScoped<IGnTecnoAlmacenExternoService, GnTecnoAlmacenExternoService>();
         services.AddScoped<IRepReporteService, RepReporteService>();
         services.AddScoped<IRepReportesVariableService, RepReportesVariableService>();
         services.AddScoped<IAlmacenesService, AlmacenesService>();
@@ -166,6 +170,7 @@ public static class ServiceRegistration
         #region Geocalizacion 
         services.AddTransient<IIpGeolocalitationService, IpWhoisService>();
         #endregion
+
         #region Language
         services.AddScoped<ITranslationFieldService, TranslationFieldService>();
         services.AddScoped<IJsonTranslationService, JsonTranslationService>();

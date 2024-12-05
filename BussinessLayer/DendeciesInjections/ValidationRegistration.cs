@@ -44,6 +44,8 @@ using BussinessLayer.FluentValidations.ModuloReporteria;
 using BussinessLayer.FluentValidations.ModuloAuditoria;
 using BussinessLayer.DTOs.ModuloAuditoria;
 using BussinessLayer.DTOs.ModuloHelpDesk;
+using BussinessLayer.DTOs.ModuloGeneral.Archivos;
+using BussinessLayer.FluentValidations.ModuloGeneral.Archivo;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -94,6 +96,13 @@ namespace BussinessLayer.DendeciesInjections
 
             services.AddScoped<IValidator<CreateRepReportesVariableDto>, CreateRepReportesVariableRequestValidator>();
             services.AddScoped<IValidator<EditRepReportesVariableDto>, EditRepReportesVariableRequestValidator>();
+
+            services.AddScoped<IValidator<CreateGnUploadFileParametroDto>, CreateGnUploadFileParametroRequestValidator>();
+            services.AddScoped<IValidator<EditGnUploadFileParametroDto>, EditGnUploadFileParametroRequestValidator>();
+
+            services.AddScoped<IValidator<CreateGnTecnoAlmacenExternoDto>, CreateGnTecnoAlmacenExternoDtoValidator>();
+            services.AddScoped<IValidator<EditGnTecnoAlmacenExternoDto>, EditGnTecnoAlmacenExternoDtoValidator>();
+
 
             services.AddScoped<IValidator<AddImageProductDTO>, AddImageRequestValidator>();
 

@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
-using BussinessLayer.Interfaces.ISeguridad;
+using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

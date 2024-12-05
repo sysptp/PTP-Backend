@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BussinessLayer.DTOs.Configuracion.Menu;
-using BussinessLayer.Interfaces.IMenu;
 using BussinessLayer.Wrappers;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Atributes;
+using BussinessLayer.Interfaces.ModuloGeneral.Menu;
 
 namespace PTP_API.Controllers.Configuration
 {

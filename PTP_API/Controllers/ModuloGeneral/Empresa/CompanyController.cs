@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
-using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using BussinessLayer.Atributes;
+using BussinessLayer.Interfaces.ModuloGeneral.Empresas;
 
 namespace PTP_API.Controllers.ModuloGeneral.Empresa
 {
