@@ -1,5 +1,5 @@
-﻿using DataLayer.Models.ModuloInventario.Productos;
-using DataLayer.Models.ModuloGeneral.Monedas;
+﻿using DataLayer.Models.ModuloGeneral.Monedas;
+using DataLayer.Models.ModuloInventario.Otros;
 
 namespace BussinessLayer.DTOs.ModuloInventario.Impuestos
 {

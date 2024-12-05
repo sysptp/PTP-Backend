@@ -43,6 +43,7 @@
     <Folder Include="Interfaces\ModuloCitas\" />
     <Folder Include="Interfaces\ModuloContabilidad\" />
     <Folder Include="Interfaces\ModuloHelpDesk\" />
+    <Folder Include="Interfaces\ModuloReporteria\" />
     <Folder Include="Mapping\ModuloAuditoria\" />
     <Folder Include="Mapping\ModuloCitas\" />
     <Folder Include="Mapping\ModuloContabilidad\" />

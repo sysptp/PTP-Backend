@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DataLayer.Models.ModuloGeneral.Monedas;
-using DataLayer.Models.ModuloInventario.Productos;
+using DataLayer.Models.ModuloInventario.Otros;
 
 namespace DataLayer.Models.ModuloInventario.Impuesto
 {

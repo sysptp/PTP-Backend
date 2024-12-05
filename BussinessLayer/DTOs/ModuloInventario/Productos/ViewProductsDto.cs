@@ -1,4 +1,5 @@
 ﻿using BussinessLayer.Atributes;
+using DataLayer.Models.ModuloInventario.Otros;
 using DataLayer.Models.ModuloInventario.Productos;
 
 [TableName("InvProducto")]

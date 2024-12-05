@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Interfaces.Repository.HelpDesk;
 using BussinessLayer.Repository.ROtros;
-using DataLayer.Models.HelpDesk;
+using DataLayer.Models.ModuloHelpDesk;
 using DataLayer.PDbContex;
 
 namespace BussinessLayer.Repository.HelpDesk

@@ -1,5 +1,4 @@
 ﻿using BussinessLayer.Helpers.CargaMasivaHelpers;
-using BussinessLayer.Helpers.CentroReporteriaHelpers;
 using BussinessLayer.Interface.ICotizaciones;
 using BussinessLayer.Interface.IFacturacion;
 using BussinessLayer.Interface.IOtros;
@@ -48,14 +47,14 @@ using BussinessLayer.Services.SSeguridad.Permiso;
 using BussinessLayer.Services.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.IAuditoria;
 using BussinessLayer.Services.SAuditoria;
-using BussinessLayer.Services.ModuloReporteria;
-using BussinessLayer.Interfaces.ModuloReporteria;
 using BussinessLayer.Interfaces.Helpers;
 using BussinessLayer.Services.Helper;
 using BussinessLayer.Interfaces.Language;
 using BussinessLayer.Services.Language.Translation;
 using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
 using BussinessLayer.Services.ModuloGeneral.Imagenes;
+using BussinessLayer.Interfaces.ModuloInventario.Otros;
+using BussinessLayer.Services.ModuloInventario.Otros;
 
 
 public static class ServiceRegistration
@@ -66,7 +65,7 @@ public static class ServiceRegistration
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
         services.AddScoped<IRepositorySection, RepositorySection>();
-        services.AddScoped<IReporteriaService, ReporteriaService>();
+       //services.AddScoped<, >();
         services.AddScoped<IAlmacenesService, AlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
@@ -78,6 +77,7 @@ public static class ServiceRegistration
         services.AddScoped<IDetalleCuentasPorCobrar, DetalleCuentaPorCobrarService>();
         services.AddScoped<IDetalleFacturacionService, DetalleFacturacionService>();
         services.AddScoped<IDetalleMovimientoAlmacenService, DetalleMovimientoAlmacenService>();
+        services.AddScoped<IInvProductoImpuestoService, InvProductoImpuestoService>();
         services.AddScoped<IDgiiNcfService, DgiiNcfService>();
         services.AddScoped<IFacturacionService, FacturacionService>();
         services.AddScoped<IMarcaService, MarcaService>();
@@ -113,7 +113,7 @@ public static class ServiceRegistration
         services.AddScoped<IBancosService, BancosService>();
         services.AddScoped<ITipoProductoService, TipoProductoService>();
         services.AddScoped<IImagenesService, ImagenesService>();
-        services.AddScoped<DeserializadorCrearReporte>();
+        services.AddScoped<IInvProductoSuplidorService, InvProductoSuplidorService>();
         services.AddScoped<EntityMapper>();
         services.AddScoped<CsvProcessor>();
         services.AddScoped<IGnPerfilService, GnPerfilService>();

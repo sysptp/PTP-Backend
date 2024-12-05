@@ -23,7 +23,7 @@ namespace DataLayer.Models.ModuloInventario.Pedidos
         public int Cantidad { get; set; }
 
         [Required]
-        public bool Borrado { get; set; }
+        public bool Borrado { get; set; } 
 
         public bool? Activo { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.DTOs.HelpDesk;
 using BussinessLayer.Interfaces.IOtros;
-using DataLayer.Models.HelpDesk;
+using DataLayer.Models.ModuloHelpDesk;
 
 
 namespace BussinessLayer.Interfaces.IHelpDesk

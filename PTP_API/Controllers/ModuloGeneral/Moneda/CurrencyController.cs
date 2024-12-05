@@ -1,10 +1,7 @@
 ﻿using BussinessLayer.DTOs.ModuloGeneral.Monedas;
-using BussinessLayer.DTOs.ModuloInventario.Impuestos;
-using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
