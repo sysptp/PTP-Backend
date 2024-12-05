@@ -6,16 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer.Models.HelpDesk
+namespace DataLayer.Models.ModuloHelpDesk
 {
-    public class HdkNoteTicket:AuditableEntities
+    public class HdkPrioridadTicket : AuditableEntities
     {
         [Key]
-        public int IdNota { get; set; }
-        public string Notas { get; set; }
-        public int IdTicket { get; set; }
+        public int IdPrioridad { get; set; }
+        public string Descripcion { get; set; }
         public long IdEmpresa { get; set; }
-     
 
     }
 }

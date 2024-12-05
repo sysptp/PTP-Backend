@@ -2,16 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 
 
-namespace DataLayer.Models.HelpDesk
+namespace DataLayer.Models.ModuloHelpDesk
 {
-    public class HdkStatusTicket:AuditableEntities
+    public class HdkSolutionTicket : AuditableEntities
     {
         [Key]
-        public int IdEstado { get; set; }
+        public int IdSolution { get; set; }
         public string Descripcion { get; set; }
-        public bool EsCierre { get; set; }
         public long IdEmpresa { get; set; }
-        public int IdDepartamento { get; set; } 
+        public int IdDepartamento { get; set; }
         public int OrdenStatus { get; set; }
 
     }

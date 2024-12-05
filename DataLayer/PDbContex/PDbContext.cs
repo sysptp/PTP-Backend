@@ -1,7 +1,6 @@
 ﻿using DataLayer.Models;
 using DataLayer.Models.MenuApp;
 using DataLayer.Models.Caja;
-using DataLayer.Models.Reporteria;
 using DataLayer.Models.Bancos;
 using DataLayer.Models.Boveda;
 using DataLayer.Models.Otros;
@@ -20,12 +19,13 @@ using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
-using DataLayer.Models.HelpDesk;
 using DataLayer.Models.Auditoria;
 using DataLayer.Models.ModuloGeneral.Language;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloGeneral.Imagen;
 using DataLayer.Models.ModuloInventario.Otros;
+using DataLayer.Models.ModuloReporteria;
+using DataLayer.Models.ModuloHelpDesk;
 
 namespace DataLayer.PDbContex
 {
@@ -42,8 +42,12 @@ namespace DataLayer.PDbContex
         }
 
         #region Reporteria
-        public DbSet<CentroReporteria> CentroReporterias { get; set; }
-        public DbSet<VariablesReporteria> VariablesReporterias { get; set; }
+
+
+        public DbSet<RepReporte> RepReportes { get; set; }
+        public DbSet<RepReportesVariable> RepReportesVariables { get; set; }
+
+
         #endregion
 
         #region Inventario

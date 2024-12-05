@@ -1,5 +1,4 @@
 ﻿using BussinessLayer.Helpers.CargaMasivaHelpers;
-using BussinessLayer.Helpers.CentroReporteriaHelpers;
 using BussinessLayer.Interface.ICotizaciones;
 using BussinessLayer.Interface.IFacturacion;
 using BussinessLayer.Interface.IOtros;
@@ -48,8 +47,6 @@ using BussinessLayer.Services.SSeguridad.Permiso;
 using BussinessLayer.Services.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.IAuditoria;
 using BussinessLayer.Services.SAuditoria;
-using BussinessLayer.Services.ModuloReporteria;
-using BussinessLayer.Interfaces.ModuloReporteria;
 using BussinessLayer.Interfaces.Helpers;
 using BussinessLayer.Services.Helper;
 using BussinessLayer.Interfaces.Language;
@@ -68,7 +65,7 @@ public static class ServiceRegistration
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
         services.AddScoped<IRepositorySection, RepositorySection>();
-        services.AddScoped<IReporteriaService, ReporteriaService>();
+       //services.AddScoped<, >();
         services.AddScoped<IAlmacenesService, AlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
@@ -117,7 +114,6 @@ public static class ServiceRegistration
         services.AddScoped<ITipoProductoService, TipoProductoService>();
         services.AddScoped<IImagenesService, ImagenesService>();
         services.AddScoped<IInvProductoSuplidorService, InvProductoSuplidorService>();
-        services.AddScoped<DeserializadorCrearReporte>();
         services.AddScoped<EntityMapper>();
         services.AddScoped<CsvProcessor>();
         services.AddScoped<IGnPerfilService, GnPerfilService>();

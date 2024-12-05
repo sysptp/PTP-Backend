@@ -6,15 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer.Models.HelpDesk
+namespace DataLayer.Models.ModuloHelpDesk
 {
-    public class HdkDepartXUsuario:AuditableEntities
+    public class HdkDepartXUsuario : AuditableEntities
     {
         [Key]
         public int IdDepartXUsuario { get; set; }
         public string IdUsuarioDepto { get; set; }
         public int IdDepartamento { get; set; }
         public long IdEmpresa { get; set; }
-        
+
     }
 }

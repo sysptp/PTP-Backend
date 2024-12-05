@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 
 
-namespace DataLayer.Models.HelpDesk
+namespace DataLayer.Models.ModuloHelpDesk
 {
-    public class HdkFileEvidenceTicket:AuditableEntities
+    public class HdkFileEvidenceTicket : AuditableEntities
     {
         [Key]
         public int IdFileEvidence { get; set; }
@@ -13,6 +13,6 @@ namespace DataLayer.Models.HelpDesk
         public string FileName { get; set; }
         public string FileExtencion { get; set; }
         public long IdEmpresa { get; set; }
-       
+
     }
 }

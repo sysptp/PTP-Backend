@@ -2,15 +2,14 @@
 using System.ComponentModel.DataAnnotations;
 
 
-namespace DataLayer.Models.HelpDesk
+namespace DataLayer.Models.ModuloHelpDesk
 {
-    public class HdkDepartaments:AuditableEntities
+    public class HdkTypeTicket : AuditableEntities
     {
         [Key]
-        public int IdDepartamentos { get; set; }
+        public int IdTipoTicket { get; set; }
         public string Descripcion { get; set; }
         public long IdEmpresa { get; set; }
-        public bool EsPrincipal { get; set; }
-      
+
     }
 }

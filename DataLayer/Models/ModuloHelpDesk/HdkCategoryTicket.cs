@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DataLayer.Models.HelpDesk
+namespace DataLayer.Models.ModuloHelpDesk
 {
-    public class HdkCategoryTicket:AuditableEntities
+    public class HdkCategoryTicket : AuditableEntities
     {
         [Key]
         public int IdCategoria { get; set; }
@@ -14,6 +14,6 @@ namespace DataLayer.Models.HelpDesk
         public long IdEmpresa { get; set; }
         [ForeignKey("IdEmpresa")]
         public virtual GnEmpresa GnEmpresa { get; set; }
-       
+
     }
 }
