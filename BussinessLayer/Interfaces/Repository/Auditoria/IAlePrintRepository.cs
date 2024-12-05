@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.Interfaces.Repositories;
-using DataLayer.Models.Auditoria;
+using DataLayer.Models.ModuloAuditoria;
 using System;
 using System.Collections.Generic;
 using System.Linq;

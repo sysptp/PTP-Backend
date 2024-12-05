@@ -3,7 +3,6 @@ using BussinessLayer.Interfaces.Repository.Configuracion.Modulo;
 using BussinessLayer.Interfaces.Repository.Empresa;
 using BussinessLayer.Interfaces.Repository.Geografia;
 using BussinessLayer.Interfaces.Repository.HelpDesk;
-using BussinessLayer.Repository.HelpDesk;
 using BussinessLayer.Interfaces.Repository.Seguridad;
 using BussinessLayer.Repository.RConfiguracion.Menu;
 using BussinessLayer.Repository.RConfiguracion.Modulo;
@@ -14,7 +13,8 @@ using BussinessLayer.Repository.RSeguridad;
 using BussinessLayer.Services.SGeografia;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.Interfaces.Repository.Auditoria;
-using BussinessLayer.Repository.Auditoria;
+using BussinessLayer.Repository.ModuloHelpDesk;
+using BussinessLayer.Repository.ModuloAuditoria;
 
 namespace BussinessLayer.DendeciesInjections
 {

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using BussinessLayer.DTOs.HelpDesk;
+using BussinessLayer.DTOs.ModuloHelpDesk;
 
 namespace BussinessLayer.FluentValidations.ModuloHelpDesk
 {

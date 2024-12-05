@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.HelpDesk;
+﻿using BussinessLayer.DTOs.ModuloHelpDesk;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloHelpDesk

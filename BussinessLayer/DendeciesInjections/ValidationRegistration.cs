@@ -12,7 +12,6 @@ using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
-using BussinessLayer.DTOs.HelpDesk;
 using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
 using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
 using BussinessLayer.FluentValidations.ModuloGeneral.Geografia;
@@ -33,8 +32,6 @@ using BussinessLayer.DTOs.ModuloInventario.Marcas;
 using BussinessLayer.DTOs.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
-using BussinessLayer.FluentValidations.Auditoria;
-using BussinessLayer.DTOs.Auditoria;
 using BussinessLayer.DTOs.ModuloGeneral.Monedas;
 using BussinessLayer.FluentValidations.ModuloGeneral.Monedas;
 using BussinessLayer.FluentValidations.ModuloHelpDesk;
@@ -42,6 +39,11 @@ using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
 using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
 using BussinessLayer.FluentValidations.ModuloInventario.Otros;
+using BussinessLayer.DTOs.ModuloReporteria;
+using BussinessLayer.FluentValidations.ModuloReporteria;
+using BussinessLayer.FluentValidations.ModuloAuditoria;
+using BussinessLayer.DTOs.ModuloAuditoria;
+using BussinessLayer.DTOs.ModuloHelpDesk;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -86,6 +88,12 @@ namespace BussinessLayer.DendeciesInjections
 
             services.AddScoped<IValidator<CreateDetallePedidoDto>, CreateDetallePedidoRequestValidator>();
             services.AddScoped<IValidator<EditDetallePedidoDto>, EditDetallePedidoRequestValidator>();
+
+            services.AddScoped<IValidator<CreateRepReporteDto>, CreateRepReporteDtoValidator>();
+            services.AddScoped<IValidator<EditRepReporteDto>, EditRepReporteDtoValidator>();
+
+            services.AddScoped<IValidator<CreateRepReportesVariableDto>, CreateRepReportesVariableRequestValidator>();
+            services.AddScoped<IValidator<EditRepReportesVariableDto>, EditRepReportesVariableRequestValidator>();
 
             services.AddScoped<IValidator<AddImageProductDTO>, AddImageRequestValidator>();
 

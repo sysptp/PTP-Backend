@@ -9,8 +9,8 @@ namespace DataLayer.Models.ModuloReporteria
     public class RepReporte
     {
         public int Id { get; set; }
-        public int? IdEmpresa { get; set; }
-        public int? NumQuery { get; set; }
+        public int IdEmpresa { get; set; }
+        public int NumQuery { get; set; }
         public string? NombreReporte { get; set; }
         public bool? EsPesado { get; set; }
         public bool? EsSubquery { get; set; }

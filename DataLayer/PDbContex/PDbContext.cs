@@ -19,13 +19,13 @@ using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
-using DataLayer.Models.Auditoria;
 using DataLayer.Models.ModuloGeneral.Language;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloGeneral.Imagen;
 using DataLayer.Models.ModuloInventario.Otros;
 using DataLayer.Models.ModuloReporteria;
 using DataLayer.Models.ModuloHelpDesk;
+using DataLayer.Models.ModuloAuditoria;
 
 namespace DataLayer.PDbContex
 {

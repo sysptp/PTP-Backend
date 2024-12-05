@@ -1,6 +1,5 @@
 ﻿using BussinessLayer.Helpers.CargaMasivaHelpers;
 using BussinessLayer.Interface.ICotizaciones;
-using BussinessLayer.Interface.IFacturacion;
 using BussinessLayer.Interface.IOtros;
 using BussinessLayer.Interfaces.IAutenticacion;
 using BussinessLayer.Interfaces.IBancos;
@@ -24,7 +23,6 @@ using BussinessLayer.Services.SCargaMasiva;
 using BussinessLayer.Services.SCotizaciones;
 using BussinessLayer.Services.SCuentas;
 using BussinessLayer.Services.SEmpresa;
-using BussinessLayer.Services.SFacturacion;
 using BussinessLayer.Services.SGeografia;
 using BussinessLayer.Services.SNcfs;
 using BussinessLayer.Services.SMenu;
@@ -39,14 +37,10 @@ using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
 using BussinessLayer.Services.ModuloInventario.Suplidores;
 using BussinessLayer.Services.ModuloInventario.Impuesto;
 using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
-using BussinessLayer.Interfaces.IHelpDesk;
-using BussinessLayer.Services.SHelpDesk;
 using BussinessLayer.Services.SSeguridad.Perfil;
 using BussinessLayer.Services.SSeguridad.SUsuario;
 using BussinessLayer.Services.SSeguridad.Permiso;
 using BussinessLayer.Services.ModuloInventario.Productos;
-using BussinessLayer.Interfaces.IAuditoria;
-using BussinessLayer.Services.SAuditoria;
 using BussinessLayer.Interfaces.Helpers;
 using BussinessLayer.Services.Helper;
 using BussinessLayer.Interfaces.Language;
@@ -55,6 +49,14 @@ using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
 using BussinessLayer.Services.ModuloGeneral.Imagenes;
 using BussinessLayer.Interfaces.ModuloInventario.Otros;
 using BussinessLayer.Services.ModuloInventario.Otros;
+using BussinessLayer.Interfaces.ModuloReporteria;
+using BussinessLayer.Services.ModuloReportes;
+using BussinessLayer.Services.ModuloFacturacion;
+using BussinessLayer.Services.ModuloHelpDesk;
+using BussinessLayer.Services.ModuloAuditoria;
+using BussinessLayer.Interfaces.ModuloAuditoria;
+using BussinessLayer.Interfaces.ModuloFacturacion;
+using BussinessLayer.Interfaces.ModuloHelpDesk;
 
 
 public static class ServiceRegistration
@@ -65,7 +67,8 @@ public static class ServiceRegistration
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
         services.AddScoped<IRepositorySection, RepositorySection>();
-       //services.AddScoped<, >();
+        services.AddScoped<IRepReporteService, RepReporteService>();
+        services.AddScoped<IRepReportesVariableService, RepReportesVariableService>();
         services.AddScoped<IAlmacenesService, AlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
