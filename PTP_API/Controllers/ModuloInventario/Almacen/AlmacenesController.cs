@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
     [Route("api/v1/[controller]")]
     [ApiController]
     [SwaggerTag("Almacen")]
-    [Authorize]
+    //[Authorize]
     [EnableAuditing]
     public class AlmacenesController : ControllerBase
     {

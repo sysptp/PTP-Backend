@@ -9,7 +9,7 @@ namespace DataLayer.Models.ModuloInventario.Almacen
         [Key]
         public int Id { get; set; }
         public long IdEmpresa { get; set; }
-        public int IdMunicipio { get; set; }
+        public int MunicipioId { get; set; }
         public int IdUsuario { get; set; }
         public long IdSucursal { get; set; }
         public string Nombre { get; set; }
