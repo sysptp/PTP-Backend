@@ -231,7 +231,7 @@ public class PricesController : Controller
 
             return Ok(Response<string>.Success("Precios actualizados correctamente"));
         }
-        catch (Exception es)
+        catch (Exception ex)
         {
             // Log the exception here for debugging purposes
             return StatusCode(StatusCodes.Status500InternalServerError,
