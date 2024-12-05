@@ -1,8 +1,5 @@
-﻿using BussinessLayer.DTOs.Configuracion.Account;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
+﻿using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
 using BussinessLayer.Interfaces.ISeguridad;
-using BussinessLayer.Services.SSeguridad.Permiso;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

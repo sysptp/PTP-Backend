@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace BussinessLayer.Services.SSeguridad
+namespace BussinessLayer.Services.ModuloGeneral.Seguridad
 {
     public class SC_IPSYS001Service : ISC_IPSYS001Service
     {

@@ -6,7 +6,7 @@ using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Interfaces.Repository.Seguridad;
 using DataLayer.Models.Seguridad;
 
-namespace BussinessLayer.Services.SSeguridad.SUsuario
+namespace BussinessLayer.Services.ModuloGeneral.Seguridad
 {
     public class UsuarioService : GenericService<RegisterRequest, UserResponse, Usuario>, IUsuarioService
     {
@@ -23,7 +23,7 @@ namespace BussinessLayer.Services.SSeguridad.SUsuario
 
         public async Task<List<UserResponse>> GetAllWithFilters(long? companyId, long? sucursalId, int? roleId, bool? areActive)
         {
-           var users = await _accountService.GetAllUsers();
+            var users = await _accountService.GetAllUsers();
 
             if (companyId != null)
             {
@@ -63,7 +63,7 @@ namespace BussinessLayer.Services.SSeguridad.SUsuario
         public async Task UpdateUser(UpdateUserRequest request)
         {
             var user = _mapper.Map<Usuario>(request);
-            await _repository.Update(user,user.Id);
+            await _repository.Update(user, user.Id);
         }
     }
 }
