@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Cliente;
+﻿using BussinessLayer.DTOs.ModuloVentas.Cliente;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;

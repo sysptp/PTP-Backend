@@ -8,7 +8,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.Account;
 
-namespace PTP_API.Controllers.Configuration.Seguridad
+namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 {
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -84,7 +84,7 @@ namespace PTP_API.Controllers.Configuration.Seguridad
                 var origin = Request?.Headers["origin"].ToString() ?? string.Empty;
                 var registrationResponse = await _accountService.RegisterUserAsync(request, origin);
 
-                return registrationResponse.HasError ? BadRequest(Response<string>.BadRequest(new List<string> { registrationResponse?.Error }, 400)) 
+                return registrationResponse.HasError ? BadRequest(Response<string>.BadRequest(new List<string> { registrationResponse?.Error }, 400))
                     : Ok(Response<object>.Created(registrationResponse, "Registro de usuario exitoso"));
             }
             catch (Exception ex)

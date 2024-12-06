@@ -1,4 +1,4 @@
-﻿namespace BussinessLayer.DTOs.ModuloFacturacion
+﻿namespace BussinessLayer.DTOs.ModuloVentas.Facturacion
 {
     public class CreateInvoiceDto
     {

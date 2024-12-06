@@ -1,4 +1,4 @@
-﻿namespace BussinessLayer.DTOs.Cliente
+﻿namespace BussinessLayer.DTOs.ModuloVentas.Cliente
 {
     public class CreateClientDto
     {

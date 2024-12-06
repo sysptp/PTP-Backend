@@ -7,7 +7,7 @@ using FluentValidation;
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 
-namespace PTP_API.Controllers.Configuration.Seguridad
+namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 {
     [ApiController]
     [Route("api/v1/[controller]")]

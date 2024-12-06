@@ -5,7 +5,7 @@ using BussinessLayer.Atributes;
 using BussinessLayer.Interfaces.ModuloGeneral.Menu;
 using BussinessLayer.DTOs.ModuloGeneral.Menu;
 
-namespace PTP_API.Controllers.Configuration
+namespace PTP_API.Controllers.ModuloGeneral.Menu
 {
     [ApiController]
     [Route("api/v1/[controller]")]
@@ -26,11 +26,11 @@ namespace PTP_API.Controllers.Configuration
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener jerarquía de menús", Description = "Obtiene una jerarquía de menús basada en el rol de usuario y la empresa proporcionados.")]
         [DisableAuditing]
-        public async Task<IActionResult> GetMenuHierarchy([FromQuery] int? roleId, [FromQuery] long? companyId,bool isHierarchy)
+        public async Task<IActionResult> GetMenuHierarchy([FromQuery] int? roleId, [FromQuery] long? companyId, bool isHierarchy)
         {
             try
             {
-                var menus = await _menuService.GetMenuHierarchy(roleId, companyId,isHierarchy);
+                var menus = await _menuService.GetMenuHierarchy(roleId, companyId, isHierarchy);
 
                 if (menus == null || !menus.Any())
                 {
@@ -70,7 +70,7 @@ namespace PTP_API.Controllers.Configuration
 
                 menuRequest.IDMenu = id;
                 await _menuService.Update(menuRequest, id);
-                return Ok(Response<string>.Success(null,"Menú actualizado correctamente."));
+                return Ok(Response<string>.Success(null, "Menú actualizado correctamente."));
             }
             catch (Exception ex)
             {
@@ -119,7 +119,7 @@ namespace PTP_API.Controllers.Configuration
                 }
 
                 await _menuService.Delete(id);
-                return Ok(Response<string>.Success(null,"Menú eliminado satisfactoriamente"));
+                return Ok(Response<string>.Success(null, "Menú eliminado satisfactoriamente"));
             }
             catch (Exception ex)
             {

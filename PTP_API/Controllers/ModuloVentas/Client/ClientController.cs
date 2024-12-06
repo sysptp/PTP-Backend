@@ -1,9 +1,9 @@
-﻿using BussinessLayer.DTOs.Cliente;
+﻿using BussinessLayer.DTOs.ModuloVentas.Cliente;
 using BussinessLayer.Repository.ModuloVentas.RClient;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PTP_API.Controllers.Client
+namespace PTP_API.Controllers.ModuloVentas.Client
 {
     [Route("api/[controller]")]
     [ApiController]

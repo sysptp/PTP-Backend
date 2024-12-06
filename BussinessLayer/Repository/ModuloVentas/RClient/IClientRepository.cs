@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Cliente;
+﻿using BussinessLayer.DTOs.ModuloVentas.Cliente;
 
 namespace BussinessLayer.Repository.ModuloVentas.RClient
 {

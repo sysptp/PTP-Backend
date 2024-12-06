@@ -34,7 +34,6 @@
     <Folder Include="DTOs\ModuloCitas\" />
     <Folder Include="DTOs\ModuloContabilidad\" />
     <Folder Include="DTOs\ModuloRRHH\" />
-    <Folder Include="DTOs\ModuloVentas\" />
     <Folder Include="FluentValidations\ModuloCitas\" />
     <Folder Include="FluentValidations\ModuloContabilidad\" />
     <Folder Include="FluentValidations\ModuloGeneral\Configuracion\" />

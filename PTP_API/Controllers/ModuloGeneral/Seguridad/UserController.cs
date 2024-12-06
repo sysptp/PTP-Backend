@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace PTP_API.Controllers.Configuracion.Seguridad
+namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 {
     [Route("api/v1/[controller]")]
     [Authorize]
@@ -41,7 +41,7 @@ namespace PTP_API.Controllers.Configuracion.Seguridad
                 }
                 else
                 {
-                    var users = await _usuarioService.GetAllWithFilters(companyId,sucursalId,roleId,areActive);
+                    var users = await _usuarioService.GetAllWithFilters(companyId, sucursalId, roleId, areActive);
                     if (users == null || !users.Any())
                     {
                         return NoContent();

@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Cliente;
+﻿using BussinessLayer.DTOs.ModuloVentas.Cliente;
 using BussinessLayer.Wrappers;
 
 namespace BussinessLayer.Interfaces.ModuloVentas.IClient
