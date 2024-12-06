@@ -2,9 +2,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using BussinessLayer.DTOs.Configuracion.Seguridad;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
-using BussinessLayer.DTOs.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloInventario.Precios;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
@@ -25,12 +22,6 @@ using BussinessLayer.DTOs.ModuloInventario.Marcas;
 using BussinessLayer.DTOs.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
-using BussinessLayer.FluentValidations.Auditoria;
-using BussinessLayer.DTOs.Auditoria;
-using Azure.Core;
-using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account;
-using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad;
-using DataLayer.Models.ModuloGeneral;
 using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
 using BussinessLayer.FluentValidations.Configuracion.ParametrosGenerales;
 using BussinessLayer.DTOs.ModuloGeneral.Monedas;
@@ -48,7 +39,6 @@ using BussinessLayer.DTOs.ModuloHelpDesk;
 using BussinessLayer.DTOs.ModuloGeneral.Archivos;
 using BussinessLayer.FluentValidations.ModuloGeneral.Archivo;
 using BussinessLayer.FluentValidations.ModuloGeneral.ModuloReporteria;
-using BussinessLayer.FluentValidations.ModuloGeneral.Seguridad;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DMunicipio;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DProvincia;
@@ -57,7 +47,6 @@ using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.DTOs.Account;
-using BussinessLayer.FluentValidations.Account;
 
 namespace BussinessLayer.DendeciesInjections
 {

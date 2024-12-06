@@ -1,6 +1,5 @@
 ﻿using BussinessLayer.Repository.RNcf;
 using Microsoft.Extensions.DependencyInjection;
-using BussinessLayer.Repository.ModuloHelpDesk;
 using BussinessLayer.Repository.ModuloAuditoria;
 using BussinessLayer.Repository.ModuloGeneral.Menu;
 using BussinessLayer.Repository.ModuloGeneral.Modulo;
@@ -14,9 +13,6 @@ using BussinessLayer.Interfaces.Repository.ModuloHelpDesk;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Repository.ModuloGeneral.Geografia;
-using BussinessLayer.Interfaces.Repository.Auditoria;
-using BussinessLayer.Repository.Auditoria;
-using DataLayer.Models.ModuloGeneral;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 
