@@ -1,5 +1,4 @@
-﻿
-using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloGeneral.Geografia

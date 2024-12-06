@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.Interfaces.Repositories;
-using BussinessLayer.Interfaces.Repository.Seguridad;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
 using BussinessLayer.Wrappers;
-using DataLayer.Models.Seguridad;
+using DataLayer.Models.ModuloGeneral.Seguridad;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Client;
 

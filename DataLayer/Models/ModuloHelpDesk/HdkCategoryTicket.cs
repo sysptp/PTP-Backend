@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.Empresa;
+﻿using DataLayer.Models.ModuloGeneral.Empresa;
 using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

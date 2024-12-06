@@ -1,17 +1,6 @@
-﻿using DataLayer.Models;
-using DataLayer.Models.MenuApp;
-using DataLayer.Models.Caja;
-using DataLayer.Models.Bancos;
-using DataLayer.Models.Boveda;
-using DataLayer.Models.Otros;
-using DataLayer.Models.Geografia;
-using DataLayer.Models.Seguridad;
-using DataLayer.Models.Empresa;
-using DataLayer.Models.Cotizaciones;
+﻿using DataLayer.Models.Otros;
 using DataLayer.Models.Cuentas;
-using DataLayer.Models.Facturas;
 using Microsoft.EntityFrameworkCore;
-using DataLayer.Models.Entities;
 using DataLayer.Models.ModuloInventario.Productos;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.Models.ModuloInventario.Pedidos;
@@ -27,6 +16,14 @@ using DataLayer.Models.ModuloReporteria;
 using DataLayer.Models.ModuloHelpDesk;
 using DataLayer.Models.ModuloAuditoria;
 using DataLayer.Models.ModuloGeneral.Archivos;
+using DataLayer.Models.ModuloGeneral.Seguridad;
+using DataLayer.Models.ModuloGeneral.Empresa;
+using DataLayer.Models.ModuloGeneral.Menu;
+using DataLayer.Models.ModuloGeneral.Geografia;
+using DataLayer.Models.ModuloVentas.Caja;
+using DataLayer.Models.ModuloVentas.Boveda;
+using DataLayer.Models.ModuloVentas.Bancos;
+using DataLayer.Models.ModuloVentas.Cotizaciones;
 
 namespace DataLayer.PDbContex
 {

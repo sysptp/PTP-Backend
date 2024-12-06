@@ -1,6 +1,6 @@
-﻿using BussinessLayer.DTOs.Configuracion.Modulo;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Modulo;
 using BussinessLayer.Interfaces.IOtros;
-using DataLayer.Models.MenuApp;
+using DataLayer.Models.ModuloGeneral.Menu;
 
 namespace BussinessLayer.Interfaces.ModuloGeneral.Modulo
 {

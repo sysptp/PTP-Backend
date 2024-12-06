@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Modulo;
+using BussinessLayer.DTOs.ModuloGeneral.Modulo;
 using BussinessLayer.Interfaces.ModuloGeneral.Modulo;
 using BussinessLayer.Interfaces.Repositories;
-using DataLayer.Models.MenuApp;
+using DataLayer.Models.ModuloGeneral.Menu;
 
 namespace BussinessLayer.Services.ModuloGeneral.Modulo
 {

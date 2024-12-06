@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Geografia.DMunicipio;
-using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
-using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
-using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
-using BussinessLayer.DTOs.Configuracion.Menu;
-using BussinessLayer.DTOs.Configuracion.Seguridad;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using DataLayer.Models.Entities;
-using DataLayer.Models.Geografia;
-using DataLayer.Models.MenuApp;
-using DataLayer.Models.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DMunicipio;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DProvincia;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DRegion;
+using BussinessLayer.DTOs.ModuloGeneral.Menu;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
+using DataLayer.Models.ModuloGeneral.Geografia;
+using DataLayer.Models.ModuloGeneral.Menu;
+using DataLayer.Models.ModuloGeneral.Seguridad;
 
 namespace BussinessLayer.Mapping.ModuloGeneral
 {

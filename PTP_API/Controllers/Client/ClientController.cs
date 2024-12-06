@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.Cliente;
-using BussinessLayer.Repository.RClient;
+using BussinessLayer.Repository.ModuloVentas.RClient;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.Interfaces.ICuentas;
-using DataLayer.Models.Bancos;
+using DataLayer.Models.ModuloVentas.Bancos;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 

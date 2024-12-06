@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BussinessLayer.Interface.IOtros;
-using DataLayer.Models.Facturas;
+﻿using BussinessLayer.Interface.IOtros;
 
 namespace BussinessLayer.Interfaces.ModuloFacturacion
 {

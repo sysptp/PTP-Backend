@@ -1,17 +1,17 @@
-﻿using BussinessLayer.ViewModels;
-using DataLayer.Models.Facturas;
+﻿//using BussinessLayer.ViewModels;
+//using DataLayer.Models.Facturas;
 
 public interface IFacturacionService 
 {
-    Task Create(FacturacionViewModel vm);
+    //Task Create(FacturacionViewModel vm);
 
-    Task<IList<Facturacion>> GetAll();
+    //Task<IList<Facturacion>> GetAll();
 
-    Task Delete(Facturacion model);
+    //Task Delete(Facturacion model);
 
-    Task<Facturacion> GetById(int id);
+    //Task<Facturacion> GetById(int id);
 
-    Task Update(Facturacion model);
+    //Task Update(Facturacion model);
 
 }
 

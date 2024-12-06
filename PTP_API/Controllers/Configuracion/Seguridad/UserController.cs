@@ -1,5 +1,5 @@
-﻿using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
-using BussinessLayer.Interfaces.ISeguridad;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
+using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

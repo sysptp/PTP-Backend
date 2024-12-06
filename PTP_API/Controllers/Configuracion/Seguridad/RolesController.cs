@@ -4,8 +4,8 @@ using BussinessLayer.Wrappers;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
-using BussinessLayer.DTOs.Configuracion.Seguridad;
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 
 namespace PTP_API.Controllers.Configuration.Seguridad
 {

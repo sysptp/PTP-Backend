@@ -1,5 +1,4 @@
-﻿using DataLayer.Models.Facturas;
-using DataLayer.PDbContex;
+﻿using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 
 namespace BussinessLayer.Repository.ModuloFacturacion

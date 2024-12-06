@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Account;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
+using BussinessLayer.DTOs.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 using BussinessLayer.Interface.IAccount;
-using BussinessLayer.Interfaces.ISeguridad;
-using BussinessLayer.Interfaces.Repository.Seguridad;
-using DataLayer.Models.Seguridad;
+using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
+using DataLayer.Models.ModuloGeneral.Seguridad;
 
 namespace BussinessLayer.Services.ModuloGeneral.Seguridad
 {

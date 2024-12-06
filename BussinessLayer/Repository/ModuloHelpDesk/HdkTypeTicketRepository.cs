@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.Repository.HelpDesk;
+﻿using BussinessLayer.Interfaces.Repository.ModuloHelpDesk;
 using BussinessLayer.Repository.ROtros;
 using DataLayer.Models.ModuloHelpDesk;
 using DataLayer.PDbContex;

@@ -1,5 +1,5 @@
-﻿using BussinessLayer.DTOs.Configuracion.Account;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
+﻿using BussinessLayer.DTOs.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 
 namespace BussinessLayer.Interface.IAccount
 {

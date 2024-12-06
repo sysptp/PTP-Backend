@@ -1,8 +1,8 @@
-﻿using BussinessLayer.DTOs.Configuracion.Seguridad;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.Interface.IOtros;
 using BussinessLayer.Interfaces.IOtros;
 using BussinessLayer.Services;
-using DataLayer.Models.Entities;
+using DataLayer.Models.ModuloGeneral.Seguridad;
 
 
 namespace BussinessLayer.Interfaces.ModuloGeneral.Seguridad

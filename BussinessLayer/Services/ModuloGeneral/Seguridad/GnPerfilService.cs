@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
-using BussinessLayer.Repository.RSeguridad;
-using DataLayer.Models.Entities;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
+using DataLayer.Models.ModuloGeneral.Seguridad;
 
 namespace BussinessLayer.Services.ModuloGeneral.Seguridad
 {

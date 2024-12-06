@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.Repository.Auditoria;
+﻿using BussinessLayer.Interfaces.Repository.ModuloAuditoria;
 using BussinessLayer.Repository.ROtros;
 using DataLayer.Models.ModuloAuditoria;
 using DataLayer.PDbContex;

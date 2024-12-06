@@ -1,14 +1,8 @@
 ﻿using BussinessLayer.DTOs.ModuloReporteria;
-using BussinessLayer.Repository.REmpresa;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace BussinessLayer.FluentValidations.ModuloReporteria
+namespace BussinessLayer.FluentValidations.ModuloGeneral.ModuloReporteria
 {
     public class EditRepReportesVariableRequestValidator : AbstractValidator<EditRepReportesVariableDto>
     {

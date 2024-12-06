@@ -1,7 +1,4 @@
-﻿
-using DataLayer.Models.Entities;
-
-namespace BussinessLayer.Interface.IAccount
+﻿namespace BussinessLayer.Interface.IAccount
 {
     public interface IRoleService
     {

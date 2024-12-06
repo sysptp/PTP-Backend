@@ -1,6 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
-using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Repository.REmpresa;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Productos

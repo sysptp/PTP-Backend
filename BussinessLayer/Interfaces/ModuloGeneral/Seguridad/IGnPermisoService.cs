@@ -1,7 +1,7 @@
-﻿using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.Interfaces.IOtros;
 using BussinessLayer.Wrappers;
-using DataLayer.Models.Seguridad;
+using DataLayer.Models.ModuloGeneral.Seguridad;
 
 namespace BussinessLayer.Interfaces.ModuloGeneral.Seguridad
 {

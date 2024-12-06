@@ -3,10 +3,10 @@ using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
-using BussinessLayer.Interfaces.IGeografia;
-using BussinessLayer.DTOs.Configuracion.Geografia.DMunicipio;
 using FluentValidation;
 using BussinessLayer.Atributes;
+using BussinessLayer.Interfaces.ModuloGeneral.Geografia;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DMunicipio;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {

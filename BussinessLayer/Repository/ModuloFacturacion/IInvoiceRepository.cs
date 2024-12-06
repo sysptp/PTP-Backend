@@ -1,5 +1,4 @@
-﻿using DataLayer.Models.Facturas;
-
+﻿
 namespace BussinessLayer.Repository.ModuloFacturacion
 {
     public interface IInvoiceRepository
@@ -8,7 +7,5 @@ namespace BussinessLayer.Repository.ModuloFacturacion
         Task<List<Facturacion>> GetAllAsync(int bussinesId);
         Task<Facturacion> GetByIdAsync(string invoiceNumber);
         Task UpdateAync(Facturacion invoice);
-
-
     }
 }

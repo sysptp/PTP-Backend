@@ -1,20 +1,19 @@
-﻿using BussinessLayer.Interfaces.Repository.Configuracion.Menu;
-using BussinessLayer.Interfaces.Repository.Configuracion.Modulo;
-using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Interfaces.Repository.Geografia;
-using BussinessLayer.Interfaces.Repository.HelpDesk;
-using BussinessLayer.Interfaces.Repository.Seguridad;
-using BussinessLayer.Repository.RConfiguracion.Menu;
-using BussinessLayer.Repository.RConfiguracion.Modulo;
-using BussinessLayer.Repository.REmpresa;
-using BussinessLayer.Repository.RGeografia;
-using BussinessLayer.Repository.RNcf;
-using BussinessLayer.Repository.RSeguridad;
-using BussinessLayer.Services.SGeografia;
+﻿using BussinessLayer.Repository.RNcf;
 using Microsoft.Extensions.DependencyInjection;
-using BussinessLayer.Interfaces.Repository.Auditoria;
 using BussinessLayer.Repository.ModuloHelpDesk;
 using BussinessLayer.Repository.ModuloAuditoria;
+using BussinessLayer.Repository.ModuloGeneral.Menu;
+using BussinessLayer.Repository.ModuloGeneral.Modulo;
+using BussinessLayer.Repository.ModuloGeneral.Empresa;
+using BussinessLayer.Repository.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.Repository.ModuloAuditoria;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Modulo;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Menu;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.Repository.ModuloHelpDesk;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
+using BussinessLayer.Repository.ModuloGeneral.Geografia;
 
 namespace BussinessLayer.DendeciesInjections
 {

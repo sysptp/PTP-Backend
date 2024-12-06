@@ -33,24 +33,24 @@
   <ItemGroup>
     <Folder Include="DTOs\ModuloCitas\" />
     <Folder Include="DTOs\ModuloContabilidad\" />
+    <Folder Include="DTOs\ModuloRRHH\" />
+    <Folder Include="DTOs\ModuloVentas\" />
     <Folder Include="FluentValidations\ModuloCitas\" />
     <Folder Include="FluentValidations\ModuloContabilidad\" />
+    <Folder Include="FluentValidations\ModuloGeneral\Configuracion\" />
     <Folder Include="FluentValidations\ModuloInventario\Almacenes\" />
+    <Folder Include="FluentValidations\ModuloVentas\" />
+    <Folder Include="FluentValidations\ModuloRRHH\" />
     <Folder Include="Interfaces\ModuloCitas\" />
     <Folder Include="Interfaces\ModuloContabilidad\" />
+    <Folder Include="Interfaces\ModuloRRHH\" />
     <Folder Include="Mapping\ModuloCitas\" />
     <Folder Include="Mapping\ModuloContabilidad\" />
+    <Folder Include="Mapping\ModuloRRHH\" />
+    <Folder Include="Mapping\ModuloVentas\" />
     <Folder Include="Services\ModuloCitas\" />
     <Folder Include="Services\ModuloContabilidad\" />
-    <Folder Include="ViewModels\Bancos\" />
-    <Folder Include="ViewModels\Boveda\" />
-    <Folder Include="ViewModels\Caja\" />
-    <Folder Include="ViewModels\Cuentas\" />
-    <Folder Include="ViewModels\Empresa\" />
-    <Folder Include="ViewModels\Geografia\" />
-    <Folder Include="ViewModels\Otros\" />
-    <Folder Include="ViewModels\Pedidos\" />
-    <Folder Include="ViewModels\Seguridad\" />
+    <Folder Include="Services\ModuloRRHH\" />
   </ItemGroup>
 
 </Project>

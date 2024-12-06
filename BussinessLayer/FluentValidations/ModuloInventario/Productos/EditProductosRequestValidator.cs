@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
-using BussinessLayer.Interfaces.Repository.Empresa;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using FluentValidation;
 using System.Text.RegularExpressions;
 

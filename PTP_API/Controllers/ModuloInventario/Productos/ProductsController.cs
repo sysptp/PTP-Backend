@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
-using BussinessLayer.Interfaces.Language;
+using BussinessLayer.Interfaces.ModuloGeneral.Language;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using BussinessLayer.Wrappers;
 using FluentValidation;

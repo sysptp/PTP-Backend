@@ -3,10 +3,10 @@ using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Interface.IAccount;
 using System.Net.Mime;
 using FluentValidation;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
-using BussinessLayer.DTOs.Configuracion.Account;
 using BussinessLayer.Wrappers;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
+using BussinessLayer.DTOs.Account;
 
 namespace PTP_API.Controllers.Configuration.Seguridad
 {

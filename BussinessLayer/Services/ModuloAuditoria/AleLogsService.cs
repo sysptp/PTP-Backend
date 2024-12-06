@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloAuditoria;
 using BussinessLayer.Interfaces.ModuloAuditoria;
-using BussinessLayer.Interfaces.Repository.Auditoria;
+using BussinessLayer.Interfaces.Repository.ModuloAuditoria;
 using DataLayer.Models.ModuloAuditoria;
 
 namespace BussinessLayer.Services.ModuloAuditoria

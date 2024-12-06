@@ -1,7 +1,5 @@
-﻿
-using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
-using BussinessLayer.Interfaces.Repository.Geografia;
-using BussinessLayer.Repository.REmpresa;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Geografia.DRegion;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloGeneral.Geografia
