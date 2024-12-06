@@ -24,8 +24,6 @@ using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
 using BussinessLayer.Services.ModuloGeneral.Imagenes;
 using BussinessLayer.Interfaces.ModuloInventario.Otros;
 using BussinessLayer.Services.ModuloInventario.Otros;
-using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
-using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
 using BussinessLayer.Interfaces.ModuloReporteria;
 using BussinessLayer.Services.ModuloReportes;
 using BussinessLayer.Services.ModuloHelpDesk;
@@ -58,6 +56,8 @@ using BussinessLayer.Interfaces.ModuloVentas.ICotizaciones;
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad.IpWhois;
 using BussinessLayer.Interfaces.ModuloVentas.ICaja;
 using BussinessLayer.Services.ModuloVentas.Facturacion;
+using BussinessLayer.Interfaces.ModuloGeneral.ParametrosGenerales;
+using BussinessLayer.Services.ModuloGeneral.ParametrosGenerales;
 
 
 public static class ServiceRegistration

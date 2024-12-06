@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
-using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
+using BussinessLayer.Interfaces.ModuloGeneral.ParametrosGenerales;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using DataLayer.Models.ModuloGeneral;
 
 
-namespace BussinessLayer.Services.SModuloGeneral.SParametrosGenerales
+namespace BussinessLayer.Services.ModuloGeneral.ParametrosGenerales
 {
     internal class GnParametrosGeneralesService : GenericService<GnParametrosGeneralesRequest, GnParametrosGeneralesReponse, GnParametrosGenerales>, IGnParametrosGeneralesService
     {

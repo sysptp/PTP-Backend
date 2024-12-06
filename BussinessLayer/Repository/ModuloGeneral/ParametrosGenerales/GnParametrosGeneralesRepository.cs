@@ -4,7 +4,7 @@ using DataLayer.Models.ModuloGeneral;
 using DataLayer.PDbContex;
 
 
-namespace BussinessLayer.Repository.RConfiguracion.ParametrosGenerales
+namespace BussinessLayer.Repository.ModuloGeneral.ParametrosGenerales
 {
     public class GnParametrosGeneralesRepository : GenericRepository<GnParametrosGenerales>, IGnParametrosGeneralesRepository
     {

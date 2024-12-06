@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
-using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
+using BussinessLayer.Interfaces.ModuloGeneral.ParametrosGenerales;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
 
-namespace PTP_API.Controllers.Configuracion.ParametrosGenerales
+namespace PTP_API.Controllers.ModuloGeneral.ParametrosGenerales
 {
     [Route("api/v1/[controller]")]
     [ApiController]

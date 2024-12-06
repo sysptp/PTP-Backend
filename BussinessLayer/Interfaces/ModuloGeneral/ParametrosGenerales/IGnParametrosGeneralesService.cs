@@ -3,7 +3,7 @@ using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.ModuloGeneral;
 
 
-namespace BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales
+namespace BussinessLayer.Interfaces.ModuloGeneral.ParametrosGenerales
 {
     public interface IGnParametrosGeneralesService : IGenericService<GnParametrosGeneralesRequest, GnParametrosGeneralesReponse, GnParametrosGenerales>
     {

@@ -23,7 +23,6 @@ using BussinessLayer.DTOs.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
 using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
-using BussinessLayer.FluentValidations.Configuracion.ParametrosGenerales;
 using BussinessLayer.DTOs.ModuloGeneral.Monedas;
 using BussinessLayer.FluentValidations.ModuloGeneral.Monedas;
 using BussinessLayer.FluentValidations.ModuloHelpDesk;
@@ -48,6 +47,8 @@ using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.DTOs.Account;
 using BussinessLayer.FluentValidations.Account;
+using BussinessLayer.FluentValidations.ModuloGeneral.Seguridad;
+using BussinessLayer.FluentValidations.ModuloGeneral.ParametrosGenerales;
 
 namespace BussinessLayer.DendeciesInjections
 {

@@ -1,9 +1,8 @@
-﻿using BussinessLayer.DTOs.Auditoria;
-using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
+﻿using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
 using FluentValidation;
 
 
-namespace BussinessLayer.FluentValidations.Configuracion.ParametrosGenerales
+namespace BussinessLayer.FluentValidations.ModuloGeneral.ParametrosGenerales
 {
     public class GnParametrosGeneralesRequestValidator : AbstractValidator<GnParametrosGeneralesRequest>
     {
