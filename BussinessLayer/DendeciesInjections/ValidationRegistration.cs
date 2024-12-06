@@ -47,6 +47,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.DTOs.Account;
+using BussinessLayer.FluentValidations.Account;
 
 namespace BussinessLayer.DendeciesInjections
 {

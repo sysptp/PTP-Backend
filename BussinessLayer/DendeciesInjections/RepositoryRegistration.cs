@@ -15,6 +15,7 @@ using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
+using BussinessLayer.Repository.ModuloHelpDesk;
 
 namespace BussinessLayer.DendeciesInjections
 {
