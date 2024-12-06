@@ -24,11 +24,16 @@ namespace BussinessLayer.Repository.RClient
             }
         }
 
-        public async Task<List<Client>> GetAllAsync(int bussinesId)
+        public async Task<List<Client>> GetAllAsync(int bussinesId,int pageSize,int pageCount)
         {
             try
             {
-                return await _context.Clients.Where(x=> !x.IsDeleted && x.CodeBussines == bussinesId).ToListAsync();
+                return await _context.Clients
+                    .Where(x=> !x.IsDeleted && x.CodeBussines == bussinesId)
+                    .OrderBy(c=> c.Id)
+                    .Skip((pageSize - 1) * pageCount)
+                    .Take(pageCount)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {

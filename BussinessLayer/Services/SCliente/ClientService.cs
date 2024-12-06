@@ -15,24 +15,21 @@ namespace BussinessLayer.Services.SCliente
         {
             try
             {
-
                 Client client = _mapper.Map<Client>(dto);
                 client = await _clientRepository.AddAsync(client);
                 dto = _mapper.Map<CreateClientDto>(client);
                 return Response<CreateClientDto>.Created(dto);
-
             }
             catch (Exception ex)
             {
                 return Response<CreateClientDto>.ServerError(ex.Message);
             }
         }
-
-        public async Task<Response<List<Client>>> GetAllAsync(int bussinesCode)
+        public async Task<Response<List<Client>>> GetAllAsync(int bussinesId, int pageSize, int pageCount)
         {
             try
             {
-                List<Client> clients = await _clientRepository.GetAllAsync(bussinesCode);
+                List<Client> clients = await _clientRepository.GetAllAsync(bussinesId, pageSize,pageCount);
 
                 return Response<List<Client>>.Success(clients);
             }

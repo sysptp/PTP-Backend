@@ -1,4 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using DataLayer.Models.Contactos;
 
 namespace DataLayer.Models.Clients
 {
@@ -20,5 +20,7 @@ namespace DataLayer.Models.Clients
         public DateTime DateAdded { get; set; }
         public string? ModifiedBy { get; set; }
         public DateTime DateModified { get; set; }
+        public ICollection<ClientContact>? ClientContacts { get; set; }
+
     }
 }

@@ -28,6 +28,7 @@ using DataLayer.Models.ModuloReporteria;
 using DataLayer.Models.ModuloHelpDesk;
 using DataLayer.Models.Clients;
 using DataLayer.EntitiesConfiguration;
+using DataLayer.Models.Contactos;
 
 namespace DataLayer.PDbContex
 {
@@ -43,10 +44,38 @@ namespace DataLayer.PDbContex
 
         }
 
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in ChangeTracker.Entries<EntityAuditable>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.DateAdded = DateTime.Now;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.DateUpdated = DateTime.Now;
+                        break;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ClientConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientContactConfiguration());
+            modelBuilder.ApplyConfiguration(new TypeContactConfiguration());
         }
+
+        #region Cliente
+
+        public DbSet<ClientContact> ClientContacts { get; set; }
+        public DbSet<TypeContact> TypeContacts { get; set; }
+
+        public DbSet<Client> Clients { get; set; }
+
+        #endregion
 
         #region Reporteria
 
@@ -101,7 +130,7 @@ namespace DataLayer.PDbContex
         #endregion
 
         #region Seguridad
-        public DbSet<GnPerfil> GnPerfil {get; set; }
+        public DbSet<GnPerfil> GnPerfil { get; set; }
         public DbSet<GnPermiso> GnPermiso { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
         #endregion
@@ -128,6 +157,7 @@ namespace DataLayer.PDbContex
         public DbSet<HdkTypeTicket> HdkTypeTicket { get; set; }
 
         #endregion
+
         #region Language
         public DbSet<GnLanguages> GnLanguages { get; set; }
         public DbSet<GnLanguagesByTable> GnLanguagesByTable { get; set; }
@@ -145,6 +175,8 @@ namespace DataLayer.PDbContex
         public DbSet<AleLogs> AleLogs { get; set; }
         public DbSet<AlePrint> AlePrint { get; set; }
         #endregion
+
+        #region Otros
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }
@@ -160,8 +192,6 @@ namespace DataLayer.PDbContex
         public DbSet<CuentasPorPagar> CuentasPorPagar { get; set; }
 
         public DbSet<DetalleCuentaPorPagar> DetalleCuentaPorPagar { get; set; }
-
-        public DbSet<Client> Clients { get; set; }
 
         public DbSet<DgiiNcfSecuencia> DgiiNcfSecuencia { get; set; }
 
@@ -230,6 +260,6 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
-
+        #endregion
     }
 }

@@ -59,6 +59,7 @@ using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
 using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
 using BussinessLayer.Interfaces.IClient;
 using BussinessLayer.Services.SCliente;
+using BussinessLayer.Services.SContactos;
 
 
 public static class ServiceRegistration
@@ -128,6 +129,7 @@ public static class ServiceRegistration
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IGnPermisoService, GnPermisoService>();
         services.AddTransient<IClientService, ClientService>();
+        services.AddTransient<IContactService, ContactService>();
 
         #region Geografia
 

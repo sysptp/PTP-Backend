@@ -7,6 +7,6 @@ namespace BussinessLayer.Interfaces.IClient
     public interface IClientService
     {
         Task<Response<CreateClientDto>> CreateAsync(CreateClientDto dto);
-        Task<Response<List<Client>>> GetAllAsync(int bussinesCode);
+        Task<Response<List<Client>>> GetAllAsync(int bussinesId, int pageSize, int pageCount);
     }
 }
