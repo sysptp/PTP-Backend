@@ -2,6 +2,9 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
+using BussinessLayer.DTOs.Configuracion.Seguridad;
+using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
+using BussinessLayer.DTOs.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloInventario.Precios;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
@@ -22,6 +25,14 @@ using BussinessLayer.DTOs.ModuloInventario.Marcas;
 using BussinessLayer.DTOs.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
+using BussinessLayer.FluentValidations.Auditoria;
+using BussinessLayer.DTOs.Auditoria;
+using Azure.Core;
+using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account;
+using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad;
+using DataLayer.Models.ModuloGeneral;
+using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
+using BussinessLayer.FluentValidations.Configuracion.ParametrosGenerales;
 using BussinessLayer.DTOs.ModuloGeneral.Monedas;
 using BussinessLayer.FluentValidations.ModuloGeneral.Monedas;
 using BussinessLayer.FluentValidations.ModuloHelpDesk;
@@ -142,6 +153,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
             #endregion
 
+            #region Modulo General
+            
+                services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+            #endregion
         }
     }
 }

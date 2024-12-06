@@ -1,5 +1,13 @@
-﻿public class MovimientoAlmacenService : IMovimientoAlmacenService
-{
+﻿//using DataLayer.PDbContex;
+//using DataLayer.Enums;
+//using BussinessLayer.Interfaces.ICuentas;
+//using BussinessLayer.Interface.IOtros;
+//using Microsoft.EntityFrameworkCore;
+//using DataLayer.Models.ModuloInventario.Productos;
+//using DataLayer.Models.ModuloInventario.Almacen;
+
+//public class MovimientoAlmacenService : IMovimientoAlmacenService
+//{
     //private readonly PDbContext _context;
     //private readonly ICuentaPorPagarService _cppService;
     //private readonly ITipoPagoService _tipoPagoService;
@@ -153,5 +161,5 @@
     //    return maxID;
     //}
 
-}
+//}
 

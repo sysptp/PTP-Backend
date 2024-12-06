@@ -24,6 +24,8 @@ using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
 using BussinessLayer.Services.ModuloGeneral.Imagenes;
 using BussinessLayer.Interfaces.ModuloInventario.Otros;
 using BussinessLayer.Services.ModuloInventario.Otros;
+using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
+using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
 using BussinessLayer.Interfaces.ModuloReporteria;
 using BussinessLayer.Services.ModuloReportes;
 using BussinessLayer.Services.ModuloHelpDesk;
@@ -85,7 +87,7 @@ public static class ServiceRegistration
         services.AddScoped<IDgiiNcfService, DgiiNcfService>();
         services.AddScoped<IFacturacionService, FacturacionService>();
         services.AddScoped<IMarcaService, MarcaService>();
-        services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
+        //services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
         services.AddScoped<IPedidoService, PedidoService>();
         services.AddScoped<IPrecioService, PrecioService>();
         services.AddScoped<IProductoService, ProductoService>();
@@ -140,6 +142,7 @@ public static class ServiceRegistration
         #region Configuracion 
         services.AddTransient<IGnMenuService,GnMenuService>();
         services.AddTransient<IGnModuloService, GnModuloService>();
+        services.AddTransient<IGnParametrosGeneralesService, GnParametrosGeneralesService>();
         #endregion
 
         #region HelpDesk
