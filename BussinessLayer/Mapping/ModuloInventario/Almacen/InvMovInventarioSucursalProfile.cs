@@ -1,6 +1,4 @@
-﻿using BussinessLayer.DTOs.Auditoria;
-using DataLayer.Models.Auditoria;
-using AutoMapper;
+﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloInventario.Almacenes;
 using DataLayer.Models.ModuloInventario.Almacen;
 

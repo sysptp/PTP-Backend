@@ -74,7 +74,7 @@ public static class ServiceRegistration
         services.AddScoped<IGnTecnoAlmacenExternoService, GnTecnoAlmacenExternoService>();
         services.AddScoped<IRepReporteService, RepReporteService>();
         services.AddScoped<IRepReportesVariableService, RepReportesVariableService>();
-        services.AddScoped<IAlmacenesService, AlmacenesService>();
+        //services.AddScoped<IAlmacenesService, AlmacenesService>();
        //services.AddScoped<, >();
        // services.AddScoped<IAlmacenesService, AlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();

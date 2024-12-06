@@ -1,7 +1,5 @@
 ﻿using BussinessLayer.Repository.RNcf;
 using Microsoft.Extensions.DependencyInjection;
-using BussinessLayer.Interfaces.Repository.Auditoria;
-using BussinessLayer.Repository.Auditoria;
 using BussinessLayer.Interfaces.Repository.Inventario.Almacenes;
 using BussinessLayer.Repository.Almacen;
 using BussinessLayer.Repository.ModuloAuditoria;
