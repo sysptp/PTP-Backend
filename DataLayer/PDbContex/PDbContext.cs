@@ -65,12 +65,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<Descuentos> Descuentos { get; set; }
 
-        public DbSet<Almacenes> Almacenes { get; set; }
-
-        public DbSet<MovimientoAlmacen> MovimientoAlmacenes { get; set; }
-
-        public DbSet<DetalleMovimientoAlmacen> DetalleMovimientoAlmacenes { get; set; }
-
+       
         public DbSet<Suplidores> Suplidores { get; set; }
 
         public DbSet<ContactosSuplidores> ContactosSuplidores { get; set; }
@@ -81,9 +76,7 @@ namespace DataLayer.PDbContex
 
         public DbSet<Pedido> Pedidos { get; set; }
 
-        public DbSet<InvAlmacenInventario> InvAlmacenInventarios { get; set; }
-
-        public DbSet<InvInventarioSucursal> InvInventarioSucursales { get; set; }
+        
 
         public DbSet<InvMetodoPago> InvMetodoPagos { get; set; }
 
@@ -139,6 +132,8 @@ namespace DataLayer.PDbContex
         public DbSet<AleLogs> AleLogs { get; set; }
         public DbSet<AlePrint> AlePrint { get; set; }
         #endregion
+
+        #region Location
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }
@@ -146,6 +141,7 @@ namespace DataLayer.PDbContex
         public DbSet<Provincia> Provincia { get; set; }
 
         public DbSet<Municipio> Municipio { get; set; }
+        #endregion
 
         public DbSet<Imagen> Imagenes { get; set; }
 
@@ -224,6 +220,18 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
+
+        #region Almacen
+        public DbSet<InvAlmacenes> InvAlmacenes { get; set; }
+        public DbSet<InvAlmacenInventario> InvAlmacenInventario { get; set; }
+        public DbSet<InvInventarioSucursal> InvInventarioSucursal { get; set; }
+        public DbSet<InvMovAlmacenSucursal> InvMovAlmacenSucursal { get; set; }
+        public DbSet<InvMovAlmacenSucursalDetalle> InvMovAlmacenSucursalDetalle { get; set; }
+        public DbSet<InvMovimientoAlmacen> InvMovimientoAlmacen { get; set; }
+        public DbSet<InvMovimientoAlmacenDetalle> InvMovimientoAlmacenDetalle { get; set; }
+        public DbSet<InvMovimientoSucursalDetalle> InvMovimientoSucursalDetalle { get; set; }
+        public DbSet<InvMovInventarioSucursal> InvMovInventarioSucursal { get; set; }
+        #endregion
 
     }
 }

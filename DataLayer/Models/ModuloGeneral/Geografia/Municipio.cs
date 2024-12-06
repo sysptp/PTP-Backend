@@ -15,6 +15,6 @@ namespace DataLayer.Models.ModuloGeneral.Geografia
         [ForeignKey("IdProvincia")]
         public virtual Provincia? Provincia { get; set; }
 
-        public virtual ICollection<Almacenes> Almacenes { get; set; }
+        public virtual ICollection<InvAlmacenes> Almacenes { get; set; }
     }
 }

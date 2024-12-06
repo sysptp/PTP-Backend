@@ -58,6 +58,8 @@ using BussinessLayer.Interfaces.ModuloVentas.ICaja;
 using BussinessLayer.Services.ModuloVentas.Facturacion;
 using BussinessLayer.Interfaces.ModuloGeneral.ParametrosGenerales;
 using BussinessLayer.Services.ModuloGeneral.ParametrosGenerales;
+using BussinessLayer.Interfaces.ModuloInventario.Almacen;
+using BussinessLayer.Services.ModuloInventario.SAlmacen;
 
 
 public static class ServiceRegistration
@@ -73,21 +75,23 @@ public static class ServiceRegistration
         services.AddScoped<IRepReporteService, RepReporteService>();
         services.AddScoped<IRepReportesVariableService, RepReportesVariableService>();
         services.AddScoped<IAlmacenesService, AlmacenesService>();
+       //services.AddScoped<, >();
+       // services.AddScoped<IAlmacenesService, AlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
-        services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
+       // services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
         services.AddScoped<ICuentasPorCobrar, CuentaPorCobrarService>();
         services.AddScoped<IDescuentoService, DescuentoService>();
         services.AddScoped<IDetalleCotizacionService, DetalleCotizacionService>();
         services.AddScoped<IDetalleCuentaPorPagar, DetalleCuentaPorPagarService>();
         services.AddScoped<IDetalleCuentasPorCobrar, DetalleCuentaPorCobrarService>();
         services.AddScoped<IDetalleFacturacionService, DetalleFacturacionService>();
-        services.AddScoped<IDetalleMovimientoAlmacenService, DetalleMovimientoAlmacenService>();
+//services.AddScoped<IDetalleMovimientoAlmacenService, DetalleMovimientoAlmacenService>();
         services.AddScoped<IInvProductoImpuestoService, InvProductoImpuestoService>();
         services.AddScoped<IDgiiNcfService, DgiiNcfService>();
         services.AddScoped<IFacturacionService, FacturacionService>();
         services.AddScoped<IMarcaService, MarcaService>();
-        //services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
+       // services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
         services.AddScoped<IPedidoService, PedidoService>();
         services.AddScoped<IPrecioService, PrecioService>();
         services.AddScoped<IProductoService, ProductoService>();
@@ -174,6 +178,18 @@ public static class ServiceRegistration
         #region Language
         services.AddScoped<ITranslationFieldService, TranslationFieldService>();
         services.AddScoped<IJsonTranslationService, JsonTranslationService>();
+        #endregion
+
+        #region Almacen
+        services.AddTransient<IInvAlmacenesService, InvAlmacenesService>();
+        services.AddTransient<IInvAlmacenInventarioService, InvAlmacenInventarioService>();
+        services.AddTransient<IInvInventarioSucursalService, InvInventarioSucursalService>();
+        services.AddTransient<IInvMovAlmacenSucursalService, InvMovAlmacenSucursalService>();
+        services.AddTransient<IInvMovAlmacenSucursalDetalleService, InvMovAlmacenSucursalDetalleService>();
+        services.AddTransient<IInvMovimientoAlmacenService, InvMovimientoAlmacenService>();
+        services.AddTransient<IInvMovimientoAlmacenDetalleService, InvMovimientoAlmacenDetalleService>();
+        services.AddTransient<IInvMovimientoSucursalDetalleService, InvMovimientoSucursalDetalleService>();
+        services.AddTransient<IInvMovInventarioSucursalService, InvMovInventarioSucursalService>();
         #endregion
     }
 }

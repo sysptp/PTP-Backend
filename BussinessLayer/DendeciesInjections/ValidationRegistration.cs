@@ -49,6 +49,8 @@ using BussinessLayer.DTOs.Account;
 using BussinessLayer.FluentValidations.Account;
 using BussinessLayer.FluentValidations.ModuloGeneral.Seguridad;
 using BussinessLayer.FluentValidations.ModuloGeneral.ParametrosGenerales;
+using BussinessLayer.DTOs.ModuloInventario.Almacenes;
+using BussinessLayer.FluentValidations.ModuloInventario.Almacen;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -56,6 +58,7 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddValidationInjections(this IServiceCollection services)
         {
+
             services.AddTransient<IValidator<GnEmpresaRequest>, SaveGnEmpresaRequestValidator>();
             services.AddScoped<IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
@@ -142,6 +145,18 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
             services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
             services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
+            #endregion
+
+            #region Almacen
+            services.AddScoped<IValidator<InvAlmacenesRequest>, InvAlmacenesRequestValidator>();
+            services.AddScoped<IValidator<InvAlmacenInventarioRequest>, InvAlmacenInventarioRequestValidator>();
+            services.AddScoped<IValidator<InvInventarioSucursalRequest>, InvInventarioSucursalRequestValidator>();
+            services.AddScoped<IValidator<InvMovAlmacenSucursalRequest>, InvMovAlmacenSucursalRequestValidator>();
+            services.AddScoped<IValidator<InvMovAlmacenSucursalDetalleRequest>, InvMovAlmacenSucursalDetalleRequestValidator>();
+            services.AddScoped<IValidator<InvMovimientoAlmacenRequest>, InvMovimientoAlmacenRequestValidator>();
+            services.AddScoped<IValidator<InvMovimientoAlmacenDetalleRequest>, InvMovimientoAlmacenDetalleRequestValidator>();
+            services.AddScoped<IValidator<InvMovimientoSucursalDetalleRequest>, InvMovimientoSucursalDetalleRequestValidator>();
+            services.AddScoped<IValidator<InvMovInventarioSucursalRequest>, InvMovInventarioSucursalRequestValidator>();
             #endregion
 
             #region Modulo General
