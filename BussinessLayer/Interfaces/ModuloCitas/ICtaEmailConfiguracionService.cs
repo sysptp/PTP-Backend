@@ -4,7 +4,7 @@ using DataLayer.Models.Modulo_Citas;
 
 namespace BussinessLayer.Interface.Modulo_Citas
 {
-    public interface ICtaEmailConfiguracionService : IGenericService<CtaEmailConfiguracionResponse, CtaEmailConfiguracionResponse, CtaEmailConfiguracion>
+    public interface ICtaEmailConfiguracionService : IGenericService<CtaEmailConfiguracionRequest, CtaEmailConfiguracionResponse, CtaEmailConfiguracion>
     {
     }
 }

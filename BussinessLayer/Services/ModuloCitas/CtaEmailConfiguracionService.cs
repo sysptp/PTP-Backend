@@ -6,7 +6,7 @@ using BussinessLayer.Services;
 
 namespace DataLayer.Models.Modulo_Citas
 {
-    public class CtaEmailConfiguracionService : GenericService<CtaEmailConfiguracionResponse, CtaEmailConfiguracionResponse, CtaEmailConfiguracion>, ICtaEmailConfiguracionService
+    public class CtaEmailConfiguracionService : GenericService<CtaEmailConfiguracionRequest, CtaEmailConfiguracionResponse, CtaEmailConfiguracion>, ICtaEmailConfiguracionService
     {
         public CtaEmailConfiguracionService(IGenericRepository<CtaEmailConfiguracion> repository, IMapper mapper) : base(repository, mapper)
         {

@@ -10,97 +10,69 @@ using System.Net.Mime;
 
 namespace PTP_API.Controllers.ModuloCita
 {
-    
-    namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Cuenta
+
+    [ApiController]
+    [SwaggerTag("Servicio de configuración de cuentas")]
+    [Route("api/v1/[controller]")]
+    [Authorize]
+    [EnableAuditing]
+    public class CtaCitaConfigurationController : ControllerBase
     {
-        [ApiController]
-        [SwaggerTag("Servicio de configuración de cuentas")]
-        [Route("api/v1/[controller]")]
-        [Authorize]
-        [EnableAuditing]
-        public class CtaCitaConfigurationController : ControllerBase
+        private readonly ICtaCitaConfiguracionService _ctaConfigurationService;
+        private readonly IValidator<CtaCitaConfiguracionRequest> _validator;
+
+        public CtaCitaConfigurationController(ICtaCitaConfiguracionService ctaConfigurationService, IValidator<CtaCitaConfiguracionRequest> validator)
         {
-            private readonly ICtaCitaConfiguracionService _ctaConfigurationService;
-            private readonly IValidator<CtaCitaConfiguracionRequest> _validator;
+            _ctaConfigurationService = ctaConfigurationService;
+            _validator = validator;
+        }
 
-            public CtaCitaConfigurationController(ICtaCitaConfiguracionService ctaConfigurationService, IValidator<CtaCitaConfiguracionRequest> validator)
+        [HttpGet]
+        [ProducesResponseType(typeof(Response<IEnumerable<CtaCitaConfiguracionResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Obtener configuraciones de cuentas", Description = "Devuelve una lista de configuraciones o una configuración específica si se proporciona un ID")]
+        [DisableAuditing]
+        public async Task<IActionResult> GetAllCtaConfiguration([FromQuery] int? IdConfiguration)
+        {
+            try
             {
-                _ctaConfigurationService = ctaConfigurationService;
-                _validator = validator;
-            }
-
-            [HttpGet]
-            [ProducesResponseType(typeof(Response<IEnumerable<CtaCitaConfiguracionResponse>>), StatusCodes.Status200OK)]
-            [ProducesResponseType(StatusCodes.Status204NoContent)]
-            [ProducesResponseType(StatusCodes.Status404NotFound)]
-            [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-            [SwaggerOperation(Summary = "Obtener configuraciones de cuentas", Description = "Devuelve una lista de configuraciones o una configuración específica si se proporciona un ID")]
-            [DisableAuditing]
-            public async Task<IActionResult> GetAllCtaConfiguration([FromQuery] int? IdConfiguration)
-            {
-                try
+                if (IdConfiguration.HasValue)
                 {
-                    if (IdConfiguration.HasValue)
+                    var configuration = await _ctaConfigurationService.GetByIdResponse(IdConfiguration);
+                    if (configuration == null)
                     {
-                        var configuration = await _ctaConfigurationService.GetByIdResponse(IdConfiguration);
-                        if (configuration == null)
-                        {
-                            return NotFound(Response<CtaCitaConfiguracionResponse>.NotFound("Configuración no encontrada."));
-                        }
-                        return Ok(Response<CtaCitaConfiguracionResponse>.Success(configuration, "Configuración encontrada."));
+                        return NotFound(Response<CtaCitaConfiguracionResponse>.NotFound("Configuración no encontrada."));
                     }
-                    else
-                    {
-                        var configurations = await _ctaConfigurationService.GetAllDto();
-
-                        if (configurations == null || !configurations.Any())
-                        {
-                            return StatusCode(204, Response<IEnumerable<CtaCitaConfiguracionResponse>>.NoContent("No hay configuraciones disponibles."));
-                        }
-                        return Ok(Response<IEnumerable<CtaCitaConfiguracionResponse>>.Success(configurations, "Configuraciones obtenidas correctamente."));
-                    }
+                    return Ok(Response<CtaCitaConfiguracionResponse>.Success(configuration, "Configuración encontrada."));
                 }
-                catch (Exception ex)
+                else
                 {
-                    return StatusCode(500, Response<string>.ServerError(ex.Message));
+                    var configurations = await _ctaConfigurationService.GetAllDto();
+
+                    if (configurations == null || !configurations.Any())
+                    {
+                        return StatusCode(204, Response<IEnumerable<CtaCitaConfiguracionResponse>>.NoContent("No hay configuraciones disponibles."));
+                    }
+                    return Ok(Response<IEnumerable<CtaCitaConfiguracionResponse>>.Success(configurations, "Configuraciones obtenidas correctamente."));
                 }
             }
-
-            [HttpPost]
-            [Consumes(MediaTypeNames.Application.Json)]
-            [ProducesResponseType(StatusCodes.Status201Created)]
-            [ProducesResponseType(StatusCodes.Status400BadRequest)]
-            [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-            [SwaggerOperation(Summary = "Crear una nueva configuración", Description = "Endpoint para crear una configuración nueva")]
-            public async Task<IActionResult> CreateCtaConfiguration([FromBody] CtaCitaConfiguracionRequest configurationDto)
+            catch (Exception ex)
             {
-                try
-                {
-                    var validationResult = await _validator.ValidateAsync(configurationDto);
-
-                    if (!validationResult.IsValid)
-                    {
-                        var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                        return BadRequest(Response<string>.BadRequest(errors, 400));
-                    }
-
-                    var response = await _ctaConfigurationService.Add(configurationDto);
-
-                    return CreatedAtAction(nameof(GetAllCtaConfiguration), response);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, Response<string>.ServerError(ex.Message));
-                }
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
+        }
 
-            [HttpPut("{id}")]
-            [ProducesResponseType(StatusCodes.Status200OK)]
-            [ProducesResponseType(StatusCodes.Status400BadRequest)]
-            [ProducesResponseType(StatusCodes.Status404NotFound)]
-            [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-            [SwaggerOperation(Summary = "Actualizar configuración", Description = "Endpoint para actualizar los datos de una configuración")]
-            public async Task<IActionResult> UpdateCtaConfiguration(int id, [FromBody] CtaCitaConfiguracionRequest configurationDto)
+        [HttpPost]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Crear una nueva configuración", Description = "Endpoint para crear una configuración nueva")]
+        public async Task<IActionResult> CreateCtaConfiguration([FromBody] CtaCitaConfiguracionRequest configurationDto)
+        {
+            try
             {
                 var validationResult = await _validator.ValidateAsync(configurationDto);
 
@@ -110,42 +82,67 @@ namespace PTP_API.Controllers.ModuloCita
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                try
-                {
-                    var existingConfiguration = await _ctaConfigurationService.GetByIdRequest(id);
-                    if (existingConfiguration == null)
-                        return NotFound(Response<string>.NotFound("Configuración no encontrada."));
+                var response = await _ctaConfigurationService.Add(configurationDto);
 
-                    configurationDto.IdConfiguration = id;
-                    await _ctaConfigurationService.Update(configurationDto, id);
-                    return Ok(Response<string>.Success(null, "Configuración actualizada correctamente."));
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, Response<string>.ServerError(ex.Message));
-                }
+                return CreatedAtAction(nameof(GetAllCtaConfiguration), response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
+            }
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Actualizar configuración", Description = "Endpoint para actualizar los datos de una configuración")]
+        public async Task<IActionResult> UpdateCtaConfiguration(int id, [FromBody] CtaCitaConfiguracionRequest configurationDto)
+        {
+            var validationResult = await _validator.ValidateAsync(configurationDto);
+
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
-            [HttpDelete("{id}")]
-            [ProducesResponseType(StatusCodes.Status200OK)]
-            [ProducesResponseType(StatusCodes.Status404NotFound)]
-            [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-            [SwaggerOperation(Summary = "Eliminar configuración", Description = "Endpoint para eliminar una configuración")]
-            public async Task<IActionResult> DeleteCtaConfiguration(int id)
+            try
             {
-                try
-                {
-                    var existingConfiguration = await _ctaConfigurationService.GetByIdRequest(id);
-                    if (existingConfiguration == null)
-                        return NotFound(Response<string>.NotFound("Configuración no encontrada."));
+                var existingConfiguration = await _ctaConfigurationService.GetByIdRequest(id);
+                if (existingConfiguration == null)
+                    return NotFound(Response<string>.NotFound("Configuración no encontrada."));
 
-                    await _ctaConfigurationService.Delete(id);
-                    return Ok(Response<string>.Success(null, "Configuración eliminada correctamente."));
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, Response<string>.ServerError(ex.Message));
-                }
+                configurationDto.IdConfiguration = id;
+                await _ctaConfigurationService.Update(configurationDto, id);
+                return Ok(Response<string>.Success(null, "Configuración actualizada correctamente."));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Eliminar configuración", Description = "Endpoint para eliminar una configuración")]
+        public async Task<IActionResult> DeleteCtaConfiguration(int id)
+        {
+            try
+            {
+                var existingConfiguration = await _ctaConfigurationService.GetByIdRequest(id);
+                if (existingConfiguration == null)
+                    return NotFound(Response<string>.NotFound("Configuración no encontrada."));
+
+                await _ctaConfigurationService.Delete(id);
+                return Ok(Response<string>.Success(null, "Configuración eliminada correctamente."));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
     }

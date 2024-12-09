@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.Interface.Modulo_Citas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
@@ -16,46 +16,42 @@ namespace PTP_API.Controllers.ModuloCita
     [Route("api/v1/[controller]")]
     [Authorize]
     [EnableAuditing]
-    public class CtaAppointmentManagementController : ControllerBase
+    public class CtaAppointmentsController : ControllerBase
     {
-        private readonly ICtaAppointmentManagementService _appointmentService;
-        private readonly IValidator<CtaAppointmentManagementRequest> _validator;
+        private readonly ICtaAppointmentsService _appointmentService;
+        private readonly IValidator<CtaAppointmentsRequest> _validator;
 
-        public CtaAppointmentManagementController(ICtaAppointmentManagementService appointmentService, IValidator<CtaAppointmentManagementRequest> validator)
+        public CtaAppointmentsController(ICtaAppointmentsService appointmentService, IValidator<CtaAppointmentsRequest> validator)
         {
             _appointmentService = appointmentService;
             _validator = validator;
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Response<IEnumerable<CtaAppointmentManagementResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<IEnumerable<CtaAppointmentsResponse>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener citas", Description = "Devuelve una lista de citas o una cita específica si se proporciona un ID")]
-        [DisableAuditing]
-        public async Task<IActionResult> GetAllAppointments([FromQuery] int? IdManagmentAppoinment)
+        public async Task<IActionResult> GetAllAppointments([FromQuery] int? idAppointment)
         {
             try
             {
-                if (IdManagmentAppoinment.HasValue)
+                if (idAppointment.HasValue)
                 {
-                    var appointment = await _appointmentService.GetByIdResponse(IdManagmentAppoinment);
+                    var appointment = await _appointmentService.GetByIdResponse(idAppointment.Value);
                     if (appointment == null)
-                    {
-                        return NotFound(Response<CtaAppointmentManagementResponse>.NotFound("Cita no encontrada."));
-                    }
-                    return Ok(Response<CtaAppointmentManagementResponse>.Success(appointment, "Cita encontrada."));
+                        return NotFound(Response<CtaAppointmentsResponse>.NotFound("Cita no encontrada."));
+
+                    return Ok(Response<CtaAppointmentsResponse>.Success(appointment, "Cita encontrada."));
                 }
                 else
                 {
                     var appointments = await _appointmentService.GetAllDto();
-
                     if (appointments == null || !appointments.Any())
-                    {
-                        return StatusCode(204, Response<IEnumerable<CtaAppointmentManagementResponse>>.NoContent("No hay citas disponibles."));
-                    }
-                    return Ok(Response<IEnumerable<CtaAppointmentManagementResponse>>.Success(appointments, "Citas obtenidas correctamente."));
+                        return StatusCode(204, Response<IEnumerable<CtaAppointmentsResponse>>.NoContent("No hay citas disponibles."));
+
+                    return Ok(Response<IEnumerable<CtaAppointmentsResponse>>.Success(appointments, "Citas obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
@@ -69,8 +65,8 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Crear una nueva cita", Description = "Endpoint para crear una nueva cita")]
-        public async Task<IActionResult> CreateAppointment([FromBody] CtaAppointmentManagementRequest appointmentDto)
+        [SwaggerOperation(Summary = "Crear una nueva cita", Description = "Endpoint para registrar una cita")]
+        public async Task<IActionResult> CreateAppointment([FromBody] CtaAppointmentsRequest appointmentDto)
         {
             try
             {
@@ -83,7 +79,6 @@ namespace PTP_API.Controllers.ModuloCita
                 }
 
                 var response = await _appointmentService.Add(appointmentDto);
-
                 return CreatedAtAction(nameof(GetAllAppointments), response);
             }
             catch (Exception ex)
@@ -97,24 +92,24 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Actualizar una cita", Description = "Endpoint para actualizar los datos de una cita")]
-        public async Task<IActionResult> UpdateAppointment(int id, [FromBody] CtaAppointmentManagementRequest appointmentDto)
+        [SwaggerOperation(Summary = "Actualizar una cita", Description = "Endpoint para actualizar una cita")]
+        public async Task<IActionResult> UpdateAppointment(int id, [FromBody] CtaAppointmentsRequest appointmentDto)
         {
-            var validationResult = await _validator.ValidateAsync(appointmentDto);
-
-            if (!validationResult.IsValid)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(Response<string>.BadRequest(errors, 400));
-            }
-
             try
             {
+                var validationResult = await _validator.ValidateAsync(appointmentDto);
+
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                    return BadRequest(Response<string>.BadRequest(errors, 400));
+                }
+
                 var existingAppointment = await _appointmentService.GetByIdRequest(id);
                 if (existingAppointment == null)
                     return NotFound(Response<string>.NotFound("Cita no encontrada."));
 
-                appointmentDto.IdManagementAppointment = id;
+                appointmentDto.IdAppointment = id;
                 await _appointmentService.Update(appointmentDto, id);
                 return Ok(Response<string>.Success(null, "Cita actualizada correctamente."));
             }

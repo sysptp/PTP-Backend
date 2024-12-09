@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.Otros;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.Modulo_Citas
