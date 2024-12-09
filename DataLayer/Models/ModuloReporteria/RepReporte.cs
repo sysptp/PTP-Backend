@@ -10,6 +10,7 @@ namespace DataLayer.Models.ModuloReporteria
     {
         public int Id { get; set; }
         public int IdEmpresa { get; set; }
+        public int IdConexion { get; set; }
         public int NumQuery { get; set; }
         public string? NombreReporte { get; set; }
         public bool? EsPesado { get; set; }
@@ -24,6 +25,6 @@ namespace DataLayer.Models.ModuloReporteria
         public DateTime? FechaModificacion { get; set; }
 
         // Navigation Property
-        public virtual ICollection<RepReportesVariable> RepReportesVariables { get; set; } = new List<RepReportesVariable>();
+        public virtual ICollection<RepReportesVariables> RepReportesVariables { get; set; } = new List<RepReportesVariables>();
     }
 }

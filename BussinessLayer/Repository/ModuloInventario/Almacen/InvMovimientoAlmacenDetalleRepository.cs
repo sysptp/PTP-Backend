@@ -3,14 +3,13 @@ using BussinessLayer.Repository.ROtros;
 using DataLayer.Models.ModuloInventario.Almacen;
 using DataLayer.PDbContex;
 
-
-namespace BussinessLayer.Repository.Almacen
+namespace BussinessLayer.Repository.ModuloInventario.Almacen
 {
-    public class InvMovAlmacenSucursalDetalleRepository : GenericRepository<InvMovAlmacenSucursalDetalle>, IInvMovAlmacenSucursalDetalleRepository
+    public class InvMovimientoAlmacenDetalleRepository : GenericRepository<InvMovimientoAlmacenDetalle>, IInvMovimientoAlmacenDetalleRepository
     {
         private readonly PDbContext _dbContext;
         private readonly ITokenService _tokenService;
-        public InvMovAlmacenSucursalDetalleRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
+        public InvMovimientoAlmacenDetalleRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
         {
             _dbContext = dbContext;
             _tokenService = tokenService;

@@ -27,7 +27,7 @@ namespace BussinessLayer.Services.ModuloReportes
 
         public async Task<int> Add(CreateRepReportesVariableDto model)
         {
-            var entity = _mapper.Map<RepReportesVariable>(model);
+            var entity = _mapper.Map<RepReportesVariables>(model);
             entity.FechaAdicion = DateTime.Now;
             entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
             _context.RepReportesVariables.Add(entity);

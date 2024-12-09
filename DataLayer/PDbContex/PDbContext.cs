@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.Otros;
-using DataLayer.Models.Cuentas;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Models.ModuloInventario.Productos;
 using DataLayer.Models.ModuloInventario.Precios;
@@ -40,11 +39,9 @@ namespace DataLayer.PDbContex
         }
 
         #region Reporteria
-
-
         public DbSet<RepReporte> RepReportes { get; set; }
-        public DbSet<RepReportesVariable> RepReportesVariables { get; set; }
-
+        public DbSet<RepReportesVariables> RepReportesVariables { get; set; }
+        public DbSet<RepReportesConexiones> RepReportesConexiones { get; set; }
 
         #endregion
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Models.ModuloReporteria
 {
-    public class RepReportesVariable
+    public class RepReportesVariables
     {
         public int Id { get; set; }
         public int IdEmpresa { get; set; }

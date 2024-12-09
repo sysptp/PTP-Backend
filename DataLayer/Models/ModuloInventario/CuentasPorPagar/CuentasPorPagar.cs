@@ -1,13 +1,11 @@
-﻿using DataLayer.Models.Cuentas;
-using DataLayer.Models.ModuloInventario.Almacen;
-using DataLayer.Models.Otros;
+﻿using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 public class CuentasPorPagar : BaseModel
 {
     [StringLength(250), Required]
-    public string Descripcion { get; set; }
+    public string? Descripcion { get; set; }
 
     public decimal MontoInicial { get; set; }
 

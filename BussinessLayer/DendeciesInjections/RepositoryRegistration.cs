@@ -1,7 +1,6 @@
 ﻿using BussinessLayer.Repository.RNcf;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.Interfaces.Repository.Inventario.Almacenes;
-using BussinessLayer.Repository.Almacen;
 using BussinessLayer.Repository.ModuloAuditoria;
 using BussinessLayer.Repository.ModuloGeneral.Menu;
 using BussinessLayer.Repository.ModuloGeneral.Modulo;
@@ -18,6 +17,7 @@ using BussinessLayer.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.ModuloHelpDesk;
 using BussinessLayer.Repository.ModuloGeneral.ParametrosGenerales;
+using BussinessLayer.Repository.ModuloInventario.Almacen;
 
 namespace BussinessLayer.DendeciesInjections
 {

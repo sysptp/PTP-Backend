@@ -13,9 +13,9 @@ namespace BussinessLayer.Mapping.ModuloReporteria
     {
         public RepReportesVariableProfile()
         {
-            CreateMap<RepReportesVariable, CreateRepReportesVariableDto>().ReverseMap();
-            CreateMap<RepReportesVariable, EditRepReportesVariableDto>().ReverseMap();
-            CreateMap<RepReportesVariable, ViewRepReportesVariableDto>().ReverseMap();
+            CreateMap<RepReportesVariables, CreateRepReportesVariableDto>().ReverseMap();
+            CreateMap<RepReportesVariables, EditRepReportesVariableDto>().ReverseMap();
+            CreateMap<RepReportesVariables, ViewRepReportesVariableDto>().ReverseMap();
         }
     }
 }

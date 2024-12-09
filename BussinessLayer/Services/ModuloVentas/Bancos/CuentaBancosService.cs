@@ -1,9 +1,9 @@
-﻿using BussinessLayer.Interfaces.ICuentas;
+﻿using BussinessLayer.Interfaces.ModuloVentas.IBancos;
 using DataLayer.Models.ModuloVentas.Bancos;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 
-namespace BussinessLayer.Services.SCuentas
+namespace BussinessLayer.Services.ModuloVentas.Bancos
 {
     public class CuentaBancosService : ICuentaBancosService
     {

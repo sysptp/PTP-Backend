@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BussinessLayer.Interfaces.ICuentas
+namespace BussinessLayer.Interfaces.ModuloVentas.IBancos
 {
     public interface ICuentaBancosService
     {
