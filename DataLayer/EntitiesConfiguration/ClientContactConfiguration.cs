@@ -13,8 +13,8 @@ namespace DataLayer.EntitiesConfiguration
             builder.Property(t => t.ClientId).HasColumnName("IdCliente");
             builder.Property(t => t.TypeContactId).HasColumnName("IdTipoContacto");
             builder.Property(t => t.Value).HasColumnName("Valor");
-            builder.Property(t => t.AddedBy).HasColumnName("UsuarioCreacion");
-            builder.Property(t => t.ModifiedBy).HasColumnName("UsuarioModificacion");
+            builder.Property(t => t.AddedBy).HasColumnName("IdUsuarioCreacion");
+            builder.Property(t => t.ModifiedBy).HasColumnName("IdUsuarioModificacion");
             builder.Property(t => t.DateAdded).HasColumnName("FechaCreacion");
             builder.Property(t => t.DateUpdated).HasColumnName("FechaModificacion");
             builder.Property(t => t.IsDeleted).HasColumnName("Borrado");

@@ -19,6 +19,7 @@ using DataLayer.Models.ModuloGeneral;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 using BussinessLayer.Repository.RClient;
+using BussinessLayer.Services.SCliente;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -32,6 +33,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IGnSucursalRepository, GnSucursalRepository>();
             services.AddTransient<INcfRepository, NcfRepository>();
             services.AddTransient<IClientRepository,ClientRepository>();
+            services.AddTransient<IClientContactRepository,ClientContactRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

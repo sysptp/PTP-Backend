@@ -1,4 +1,6 @@
-﻿using BussinessLayer.DTOs.Contactos;
+﻿using BussinessLayer.DTOs.Cliente;
+using BussinessLayer.DTOs.Contactos;
+using BussinessLayer.Services.SCliente;
 using BussinessLayer.Services.SContactos;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Http;
@@ -8,7 +10,7 @@ namespace PTP_API.Controllers.Contactos
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ContactosController(IContactService contactService) : ControllerBase
+    public class ContactosController(IContactService contactService,IClientContactRepository clientContactRepository) : ControllerBase
     {
         [HttpGet("type-contact/{bussinesId}")]
         public async Task<IActionResult> GetTypeContacts(int bussinesId)
@@ -35,6 +37,12 @@ namespace PTP_API.Controllers.Contactos
             {
                 throw new ApplicationException(ex.Message, ex);
             }
+        }
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(ClientContactDto dto)
+        {
+            await clientContactRepository.CreateAsync(dto);
+            return Ok(dto);
         }
     }
 }

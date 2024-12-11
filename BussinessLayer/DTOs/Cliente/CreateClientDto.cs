@@ -14,9 +14,6 @@ namespace BussinessLayer.DTOs.Cliente
         public string? Description { get; set; }
         public int CodeTypeIdentification { get; set; }
         public long CodeBussines { get; set; }
-        public string AddedBy { get; set; }
-
-        [JsonIgnore]
-        public DateTime DateAdded { get; set; } = DateTime.UtcNow;
+        public string UserId { get; set; }
     }
 }

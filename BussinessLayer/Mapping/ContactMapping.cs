@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BussinessLayer.DTOs.Cliente;
 using BussinessLayer.DTOs.Contactos;
 using DataLayer.Models.Contactos;
 
@@ -23,6 +24,9 @@ namespace BussinessLayer.Mapping
                 .ForMember(x => x.IsActive, opt => opt.Ignore())
                 .ForMember(x => x.IsDeleted, opt => opt.Ignore())
                 .ReverseMap();
+
+            CreateMap<ClientContactDto, ClientContact>()
+                 .ReverseMap();
         }
     }
 }
