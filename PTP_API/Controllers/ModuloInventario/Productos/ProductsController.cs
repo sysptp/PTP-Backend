@@ -97,9 +97,9 @@ public class ProductsController : ControllerBase
                 return Ok(Response<List<ViewProductsDto>>.NoContent("No hay Productos disponibles."));
             }
 
-            //var translatedProducts = await _jsonTranlationService.TranslateEntities(productos);
+            var translatedProducts = await _jsonTranlationService.TranslateEntities(productos);
 
-            return Ok(Response<IEnumerable<object>>.Success(productos, "Productos obtenidos correctamente."));
+            return Ok(Response<IEnumerable<object>>.Success(translatedProducts, "Productos obtenidos correctamente."));
             
         }
         catch
@@ -134,9 +134,9 @@ public class ProductsController : ControllerBase
                 return Ok(Response<List<ViewProductsDto>>.Success(producto, "No existen productos facturados."));
             }
         }
-        catch
+        catch(Exception ex) 
         {
-            return Ok(Response<string>.ServerError("Ocurrió un error al obtener los productos. Por favor, intente nuevamente."));
+            return Ok(Response<string>.ServerError(ex.Message));
         }
     }
 
@@ -176,9 +176,9 @@ public class ProductsController : ControllerBase
 
             }
         }
-        catch
+        catch (Exception ex) 
         {
-            return Ok(Response<string>.ServerError("Ocurrió un error al obtener los productos. Por favor, intente nuevamente."));
+            return Ok(Response<string>.ServerError(ex.Message));
         }
     }
 
@@ -209,9 +209,9 @@ public class ProductsController : ControllerBase
             }
 
         }
-        catch
+        catch(Exception ex)
         {
-            return Ok(Response<string>.ServerError("Ocurrió un error al obtener los productos agotados. Por favor, intente nuevamente."));
+            return Ok(Response<string>.ServerError(ex.Message));
         }
     }
 
@@ -239,7 +239,7 @@ public class ProductsController : ControllerBase
         {
             Console.WriteLine(ex.ToString());
 
-            return Ok(Response<string>.ServerError("Ocurrió un error al crear la empresa. Por favor, intente nuevamente."));
+            return Ok(Response<string>.ServerError(ex.Message));
         }
 
     }
@@ -274,10 +274,10 @@ public class ProductsController : ControllerBase
             return Ok(Response<string>.Success("Producto editado correctamente"));
 
         }
-        catch
+        catch(Exception ex)
         {
 
-            return Ok(Response<string>.ServerError("Ocurrió un error al editar el producto. Por favor, intente nuevamente."));
+            return Ok(Response<string>.ServerError(ex.Message));
         }
 
     }
@@ -309,10 +309,9 @@ public class ProductsController : ControllerBase
             return Ok(Response<string>.Success(codigo));
 
         }
-        catch
+        catch(Exception ex) 
         {
-
-            return Ok(Response<string>.ServerError("Ocurrió un error al eliminar el producto. Por favor, intente nuevamente."));
+            return Ok(Response<string>.ServerError(ex.Message));
         }
 
     }

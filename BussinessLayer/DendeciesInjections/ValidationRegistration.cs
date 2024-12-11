@@ -2,21 +2,13 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using BussinessLayer.DTOs.Configuracion.Seguridad;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
-using BussinessLayer.DTOs.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloInventario.Precios;
 using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
 using BussinessLayer.DTOs.HelpDesk;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
-using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
 using BussinessLayer.FluentValidations.ModuloGeneral.Geografia;
-using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
-using BussinessLayer.DTOs.Configuracion.Geografia.DProvincia;
-using BussinessLayer.DTOs.Configuracion.Geografia.DMunicipio;
 using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
 using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
 using BussinessLayer.FluentValidations.ModuloInventario.Impuestos;
@@ -36,6 +28,15 @@ using BussinessLayer.DTOs.Auditoria;
 using Azure.Core;
 using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DMunicipio;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DProvincia;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
 using DataLayer.Models.ModuloGeneral;
 using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
 using BussinessLayer.FluentValidations.Configuracion.ParametrosGenerales;
@@ -46,6 +47,29 @@ using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
 using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
 using BussinessLayer.FluentValidations.ModuloInventario.Otros;
+using DataLayer.Models.Modulo_Citas;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentManagement;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentMovements;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentReason;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointments;
+using BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion;
+using BussinessLayer.Validations.ModuloCitas.CtaCitaConfiguracion;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
+using BussinessLayer.Validations.ModuloCitas.CtaEmailConfiguracion;
+using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.Validations.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
+using BussinessLayer.Validations.ModuloCitas.CtaSessionDetails;
+using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
+using BussinessLayer.Validations.ModuloCitas.CtaSessions;
+using BussinessLayer.DTOs.ModuloCitas.CtaState;
+using BussinessLayer.Validations.ModuloCitas.CtaState;
+using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
+using BussinessLayer.Validations.ModuloCitas.CtaUnwanted;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -104,6 +128,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<decimal>, DecimalsRequestValidator>();
 
 
+            #region Modulo General
+            services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
+            services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
+            #endregion
 
             #region HelpDesk
             services.AddScoped<IValidator<HdkCategoryTicketRequest>, HdkCategoryTicketRequestValidator>();
@@ -131,6 +159,22 @@ namespace BussinessLayer.DendeciesInjections
             #region Modulo General
             
                 services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+            #endregion
+
+            #region Modulo Citas
+
+            services.AddScoped<IValidator<CtaAppointmentManagementRequest>, CtaAppointmentManagementRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentMovementsRequest>, CtaAppointmentMovementsRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentReasonRequest>, CtaAppointmentReasonRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentsRequest>, CtaAppointmentsRequestValidation>();
+            services.AddScoped<IValidator<CtaCitaConfiguracionRequest>, CtaCitaConfiguracionRequestValidation>();
+            services.AddScoped<IValidator<CtaEmailConfiguracionRequest>, CtaEmailConfiguracionRequestValidation>();
+            services.AddScoped<IValidator<CtaMeetingPlaceRequest>, CtaMeetingPlaceRequestValidation>();
+            services.AddScoped<IValidator<CtaSessionDetailsRequest>, CtaSessionDetailsRequestValidation>();
+            services.AddScoped<IValidator<CtaSessionsRequest>, CtaSessionsRequestValidation>();
+            services.AddScoped<IValidator<CtaStateRequest>, CtaStateRequestValidation>();
+            services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
+
             #endregion
         }
     }

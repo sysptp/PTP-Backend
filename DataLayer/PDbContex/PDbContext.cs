@@ -29,6 +29,7 @@ using DataLayer.Models.ModuloHelpDesk;
 using DataLayer.Models.Clients;
 using DataLayer.EntitiesConfiguration;
 using DataLayer.Models.Contactos;
+using DataLayer.Models.Modulo_Citas;
 
 namespace DataLayer.PDbContex
 {
@@ -176,7 +177,21 @@ namespace DataLayer.PDbContex
         public DbSet<AlePrint> AlePrint { get; set; }
         #endregion
 
-        #region Otros
+        #region Modulo Citas
+
+        public DbSet<CtaAppointmentManagement> ctaAppointmentManagement { get; set; }
+        public DbSet<CtaAppointmentMovements> CtaAppointmentMovements { get; set; }
+        public DbSet<CtaAppointmentReason> CtaAppointmentReason { get; set; }
+        public DbSet<CtaAppointments> CtaAppointments { get; set; }
+        public DbSet<CtaCitaConfiguracion> CtaCitaConfiguracion { get; set; }
+        public DbSet<CtaEmailConfiguracion> CtaEmailConfiguracion { get; set; }
+        public DbSet<CtaMeetingPlace> CtaMeetingPlace { get; set; }
+        public DbSet<CtaSessionDetails> CtaSessionDetails { get; set; }
+        public DbSet<CtaSessions> CtaSessions { get; set; }
+        public DbSet<CtaState> CtaState { get; set; }
+        public DbSet<CtaUnwanted> CtaUnwanted { get; set; }
+
+        #endregion 
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }

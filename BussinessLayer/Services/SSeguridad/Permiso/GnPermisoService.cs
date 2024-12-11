@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Permiso;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
 using BussinessLayer.Interfaces.ISeguridad;
-using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Interfaces.Repository.Seguridad;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.Seguridad;
-using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Client;
 
 namespace BussinessLayer.Services.SSeguridad.Permiso
 {
@@ -24,30 +21,20 @@ namespace BussinessLayer.Services.SSeguridad.Permiso
         public async Task<List<GnPermisoResponse>> GetAllPermisosByFilter(long? companyId, int? roleId, int? menuId)
         {
             var permisos = await _permisoRepository.GetAllWithIncludeAsync(new List<string> { "GnMenu", "GnPerfil", "GnEmpresa" });
-            
-            var permisosResponse = permisos.Select(permiso =>
-            {
-                var permisoResponse = _mapper.Map<GnPermisoResponse>(permiso);
-                permisoResponse.MenuName = permiso.GnMenu.Menu;
-                permisoResponse.RoleName = permiso.GnPerfil.Name;
-                permisoResponse.CompanyName = permiso.GnEmpresa.NOMBRE_EMP;
-                return permisoResponse;
-            }).ToList();
 
-            if (companyId != null)
-            {
-                permisosResponse = permisosResponse.Where(x => x.CompanyId == companyId).ToList();
-            }
-
-            if(roleId != null)
-            {
-                permisosResponse = permisosResponse.Where(x => x.RoleId == roleId).ToList();
-            }
-
-            if(menuId != null)
-            {
-                permisosResponse = permisosResponse.Where(x => x.MenuId == menuId).ToList();
-            }
+            var permisosResponse = permisos
+                .Where(permiso => (!companyId.HasValue || permiso.Codigo_EMP == companyId) &&
+                                  (!roleId.HasValue || permiso.IDPerfil == roleId) &&
+                                  (!menuId.HasValue || permiso.IDMenu == menuId))
+                .Select(permiso =>
+                {
+                    var permisoResponse = _mapper.Map<GnPermisoResponse>(permiso);
+                    permisoResponse.MenuName = permiso.GnMenu.Menu;
+                    permisoResponse.RoleName = permiso.GnPerfil.Name;
+                    permisoResponse.CompanyName = permiso.GnEmpresa.NOMBRE_EMP;
+                    return permisoResponse;
+                })
+                .ToList();
 
             return permisosResponse;
         }
@@ -70,7 +57,6 @@ namespace BussinessLayer.Services.SSeguridad.Permiso
                 return Response<object>.Success(null, "Permiso actualizado correctamente");
             }
         }
-
 
     }
 }

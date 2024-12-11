@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Configuracion.Seguridad.Autenticacion;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
 using BussinessLayer.Helpers.UtilsHelpers;
 using BussinessLayer.Interfaces.IAutenticacion;
 using DataLayer.PDbContex;

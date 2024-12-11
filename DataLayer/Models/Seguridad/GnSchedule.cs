@@ -2,7 +2,7 @@
 
 namespace DataLayer.Models.Seguridad
 {
-    public class GnSchedule : AuditableEntities 
+    public class GnSchedule : AuditableEntities  
     {
         public int Id { get; set; }
         public long CompanyId { get; set; }

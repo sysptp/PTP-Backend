@@ -33,23 +33,18 @@
   <ItemGroup>
     <Folder Include="DTOs\ModuloHelpDesk\" />
     <Folder Include="DTOs\ModuloAuditoria\" />
-    <Folder Include="DTOs\ModuloCitas\" />
     <Folder Include="DTOs\ModuloContabilidad\" />
     <Folder Include="FluentValidations\ModuloAuditoria\" />
-    <Folder Include="FluentValidations\ModuloCitas\" />
     <Folder Include="FluentValidations\ModuloContabilidad\" />
     <Folder Include="FluentValidations\ModuloInventario\Almacenes\" />
     <Folder Include="Interfaces\ModuloAuditoria\" />
-    <Folder Include="Interfaces\ModuloCitas\" />
     <Folder Include="Interfaces\ModuloContabilidad\" />
     <Folder Include="Interfaces\ModuloHelpDesk\" />
     <Folder Include="Interfaces\ModuloReporteria\" />
     <Folder Include="Mapping\ModuloAuditoria\" />
-    <Folder Include="Mapping\ModuloCitas\" />
     <Folder Include="Mapping\ModuloContabilidad\" />
     <Folder Include="Mapping\ModuloHelpDesk\" />
     <Folder Include="Services\ModuloAuditoria\" />
-    <Folder Include="Services\ModuloCitas\" />
     <Folder Include="Services\ModuloContabilidad\" />
     <Folder Include="Services\ModuloHelpDesk\" />
     <Folder Include="ViewModels\Bancos\" />

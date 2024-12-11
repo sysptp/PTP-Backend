@@ -1,8 +1,10 @@
 ﻿using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.Auditoria
 {
+    [Table("AleBitacora")]
     public class AleAuditoria : AuditableEntities
     {
         [Key]

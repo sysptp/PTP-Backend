@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Configuracion.Account;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Usuario;
 using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.ISeguridad;
 using BussinessLayer.Interfaces.Repository.Seguridad;

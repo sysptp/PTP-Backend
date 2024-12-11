@@ -4,9 +4,12 @@ using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
-using BussinessLayer.DTOs.Configuracion.Geografia.DPais;
 using FluentValidation;
 using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais;
+using BussinessLayer.Interfaces.Language;
+using BussinessLayer.Services.Language.Translation;
+using DataLayer.Models.ModuloInventario.Productos;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -19,11 +22,13 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     {
         private readonly IPaisService _countryService;
         private readonly IValidator<CountryRequest> _validator;
+        private readonly IJsonTranslationService _jsonTranslationService;
 
-        public CountryController(IPaisService countryService, IValidator<CountryRequest> validator)
+        public CountryController(IPaisService countryService, IValidator<CountryRequest> validator, IJsonTranslationService jsonTranslationService)
         {
             _countryService = countryService;
             _validator = validator;
+            _jsonTranslationService = jsonTranslationService;
         }
 
         [HttpGet]
@@ -50,12 +55,14 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
                     {
                         return StatusCode(204, Response<IEnumerable<CountryResponse>>.NoContent("No hay países disponibles."));
                     }
+
+                    var translatedCountry = await _jsonTranslationService.TranslateEntities(countries);
                     return Ok(Response<IEnumerable<CountryResponse>>.Success(countries, "Países obtenidos correctamente."));
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener los países. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -80,7 +87,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear el país. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -112,7 +119,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el país. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -134,7 +141,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar el país. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 

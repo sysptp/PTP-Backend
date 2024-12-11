@@ -20,6 +20,8 @@ using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 using BussinessLayer.Repository.RClient;
 using BussinessLayer.Services.SCliente;
+using BussinessLayer.Interface.Repository.Modulo_Citas;
+using BussinessLayer.Repository.Modulo_Citas;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -28,12 +30,19 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddRepositoryInjections(this IServiceCollection services)
         {
+            services.AddTransient<INcfRepository, NcfRepository>();
+
+            #region Modulo General 
             services.AddTransient<IGnPerfilRepository, GnPerfilRepository>();
             services.AddTransient<IGnEmpresaRepository, GnEmpresaRepository>();
             services.AddTransient<IGnSucursalRepository, GnSucursalRepository>();
             services.AddTransient<INcfRepository, NcfRepository>();
             services.AddTransient<IClientRepository,ClientRepository>();
             services.AddTransient<IClientContactRepository,ClientContactRepository>();
+            services.AddTransient<IGnScheduleRepository, GnScheduleRepository>();
+            services.AddTransient<IGnScheduleUserRepository, GnScheduleUserRepository>();
+            #endregion
+
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();
@@ -74,6 +83,22 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IAleLoginRepository, AleLoginRepository>();
             services.AddTransient<IAleLogsRepository, AleLogsRepository>();
             services.AddTransient<IAlePrintRepository, AlePrintRepository>();
+
+            #endregion
+
+            #region Modulo de Citas
+
+            services.AddScoped<ICtaAppointmentManagementRepository, CtaAppointmentManagementRepository>();
+            services.AddScoped<ICtaAppointmentMovementsRepository, CtaAppointmentMovementsRepository>();
+            services.AddScoped<ICtaAppointmentReasonRepository, CtaAppointmentReasonRepository>();
+            services.AddScoped<ICtaAppointmentsRepository,CtaAppointmentsRepository>();
+            services.AddScoped<ICtaCitaConfiguracionRepository, CtaCitaConfiguracionRepository>();
+            services.AddScoped<ICtaEmailConfiguracionRepository, CtaEmailConfiguracionRepository>();
+            services.AddScoped<ICtaMeetingPlaceRepository, CtaMeetingPlaceRepository>();
+            services.AddScoped<ICtaSessionDetailsRepository, CtaSessionDetailsRepository>();
+            services.AddScoped<ICtaSessionsRepository, CtaSessionsRepository>();
+            services.AddScoped<ICtaStateRepository, CtaStateRepository>();
+            services.AddScoped<ICtaUnwantedRepository,CtaUnwantedRepository>();
 
             #endregion
         }

@@ -51,6 +51,7 @@ using BussinessLayer.Interfaces.Helpers;
 using BussinessLayer.Services.Helper;
 using BussinessLayer.Interfaces.Language;
 using BussinessLayer.Services.Language.Translation;
+using BussinessLayer.Services.SSeguridad.Schedule;
 using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
 using BussinessLayer.Services.ModuloGeneral.Imagenes;
 using BussinessLayer.Interfaces.ModuloInventario.Otros;
@@ -60,7 +61,8 @@ using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
 using BussinessLayer.Interfaces.IClient;
 using BussinessLayer.Services.SCliente;
 using BussinessLayer.Services.SContactos;
-
+using BussinessLayer.Interface.Modulo_Citas;
+using DataLayer.Models.Modulo_Citas;
 
 public static class ServiceRegistration
 {
@@ -171,9 +173,46 @@ public static class ServiceRegistration
         #region Geocalizacion 
         services.AddTransient<IIpGeolocalitationService, IpWhoisService>();
         #endregion
+
+        #region Modulo General
+
+        services.AddTransient<IGnScheduleService, GnScheduleService>();
+        services.AddTransient<IGnScheduleUserService, GnScheduleUserService>();
+
         #region Language
         services.AddScoped<ITranslationFieldService, TranslationFieldService>();
         services.AddScoped<IJsonTranslationService, JsonTranslationService>();
+        #endregion
+
+        #region Geografia
+
+        services.AddTransient<IPaisService, PaisService>();
+        services.AddTransient<IMunicipioService, MunicipioService>();
+        services.AddTransient<IRegionService, RegionService>();
+        services.AddTransient<IProvinciaService, ProvinciaService>();
+
+        #endregion
+
+        #region Configuracion 
+        services.AddTransient<IGnMenuService, GnMenuService>();
+        services.AddTransient<IGnModuloService, GnModuloService>();
+        #endregion
+        #endregion
+
+        #region Modulo de Citas
+
+        services.AddScoped<ICtaAppointmentManagementService, CtaAppointmentManagementService>();
+        services.AddScoped<ICtaAppointmentMovementsService, CtaAppointmentMovementsService>();
+        services.AddScoped<ICtaAppointmentReasonService, CtaAppointmentReasonService>();
+        services.AddScoped<ICtaAppointmentsService, CtaAppointmentsService>();
+        services.AddScoped<ICtaCitaConfiguracionService, CtaCitaConfiguracionService>();
+        services.AddScoped<ICtaEmailConfiguracionService, CtaEmailConfiguracionService>();
+        services.AddScoped<ICtaMeetingPlaceService, CtaMeetingPlaceService>();
+        services.AddScoped<ICtaSessionDetailsService, CtaSessionDetailsService>();
+        services.AddScoped<ICtaSessionsService, CtaSessionsService>();
+        services.AddScoped<ICtaStateService, CtaStateService>();
+        services.AddScoped<ICtaUnwantedService, CtaUnwantedService>();
+
         #endregion
     }
 }
