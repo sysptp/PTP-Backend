@@ -8,5 +8,6 @@ namespace BussinessLayer.Interfaces.IClient
     {
         Task<Response<CreateClientDto>> CreateAsync(CreateClientDto dto);
         Task<Response<List<Client>>> GetAllAsync(int bussinesId, int pageSize, int pageCount);
+        Task<Response<Client>> GetByIdAsync(int clientId);
     }
 }

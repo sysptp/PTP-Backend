@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Contactos;
+﻿using BussinessLayer.DTOs.Contactos.TypeContact;
 using BussinessLayer.Wrappers;
 
 namespace BussinessLayer.Services.SContactos

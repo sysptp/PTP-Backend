@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Cliente;
+using BussinessLayer.DTOs.Contactos.ClienteContacto;
 using DataLayer.Models.Contactos;
 using DataLayer.PDbContex;
 

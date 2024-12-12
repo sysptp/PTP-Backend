@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using BussinessLayer.DTOs.Contactos.ClienteContacto;
 
 namespace BussinessLayer.DTOs.Cliente
 {
@@ -14,6 +14,7 @@ namespace BussinessLayer.DTOs.Cliente
         public string? Description { get; set; }
         public int CodeTypeIdentification { get; set; }
         public long CodeBussines { get; set; }
-        public string UserId { get; set; }
+        public string? AddedBy { get; set; }
+        public List<ClientContactDto>? ClientContacts { get; set; }
     }
 }

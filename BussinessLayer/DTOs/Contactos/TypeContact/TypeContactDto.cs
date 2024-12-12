@@ -1,4 +1,4 @@
-﻿namespace BussinessLayer.DTOs.Contactos
+﻿namespace BussinessLayer.DTOs.Contactos.TypeContact
 {
     public class TypeContactDto
     {

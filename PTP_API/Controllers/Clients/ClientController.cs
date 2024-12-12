@@ -2,15 +2,13 @@
 using BussinessLayer.Interfaces.IClient;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.Clients;
-using DataLayer.PDbContex;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace PTP_API.Controllers.Clients
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ClientController(IClientService clientService,PDbContext pDbContext) : ControllerBase
+    public class ClientController(IClientService clientService) : ControllerBase
     {
         private readonly IClientService _clientService = clientService;
 
@@ -19,8 +17,20 @@ namespace PTP_API.Controllers.Clients
         {
             try
             {
-                var e = await pDbContext.TypeContacts.ToListAsync();
                 Response<List<Client>> response = await _clientService.GetAllAsync(bussinesId,pageSize,pageCount);
+                return response.Succeeded ? Ok(response) : BadRequest(response);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }[HttpGet("/ById{clientId}")]
+        public async Task<IActionResult> GetById(int clientId)
+        {
+            try
+            {
+                Response<Client> response = await _clientService.GetByIdAsync(clientId);
                 return response.Succeeded ? Ok(response) : BadRequest(response);
 
             }

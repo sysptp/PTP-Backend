@@ -2,8 +2,8 @@
 {
     public class EntityAuditable
     {
-        public string? AddedBy { get; set; }
-        public string? ModifiedBy { get; set; }
+        public int AddedBy { get; set; }
+        public int ModifiedBy { get; set; }
         public DateTime? DateAdded { get; set; }
         public DateTime? DateUpdated { get; set; }
         public bool IsDeleted { get; set; }

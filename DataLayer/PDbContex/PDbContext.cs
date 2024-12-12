@@ -53,6 +53,7 @@ namespace DataLayer.PDbContex
                 {
                     case EntityState.Added:
                         entry.Entity.DateAdded = DateTime.Now;
+                        entry.Entity.DateUpdated = new DateTime(1793, 1, 1);
                         break;
                     case EntityState.Modified:
                         entry.Entity.DateUpdated = DateTime.Now;
@@ -275,6 +276,6 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
-        #endregion
+        
     }
 }
