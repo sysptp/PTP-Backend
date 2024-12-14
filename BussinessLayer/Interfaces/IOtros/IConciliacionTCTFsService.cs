@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.Caja;
+﻿using DataLayer.Models.ModuloVentas.Caja;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

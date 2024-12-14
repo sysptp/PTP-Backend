@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Precios;
 using BussinessLayer.Interfaces.ModuloInventario.Productos;
-using BussinessLayer.Interfaces.Repository.Empresa;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Precios

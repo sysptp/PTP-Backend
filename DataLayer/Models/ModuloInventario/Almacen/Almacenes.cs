@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.Geografia;
+﻿using DataLayer.Models.ModuloGeneral.Geografia;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

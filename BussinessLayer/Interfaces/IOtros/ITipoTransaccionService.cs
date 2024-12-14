@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace BussinessLayer.Interface.IOtros
 {
-    public interface ITipoTransaccionService : IBaseService<TipoTransaccion>
+    public interface ITipoTransaccionService 
+        //: IBaseService<TipoTransaccion>
     {
-        IList<TipoTransaccion> GetAllE();
+        //IList<TipoTransaccion> GetAllE();
 
     }
 }

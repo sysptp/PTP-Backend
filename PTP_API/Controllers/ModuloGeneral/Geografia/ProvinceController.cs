@@ -7,6 +7,8 @@ using BussinessLayer.Interfaces.IGeografia;
 using FluentValidation;
 using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DProvincia;
+using BussinessLayer.Interfaces.ModuloGeneral.Geografia;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DProvincia;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {

@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 
 namespace BussinessLayer.Interfaces.IAutenticacion
 {

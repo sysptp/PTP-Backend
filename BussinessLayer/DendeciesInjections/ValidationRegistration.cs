@@ -70,6 +70,24 @@ using BussinessLayer.DTOs.ModuloCitas.CtaState;
 using BussinessLayer.Validations.ModuloCitas.CtaState;
 using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
 using BussinessLayer.Validations.ModuloCitas.CtaUnwanted;
+using BussinessLayer.DTOs.ModuloReporteria;
+using BussinessLayer.FluentValidations.ModuloReporteria;
+using BussinessLayer.FluentValidations.ModuloAuditoria;
+using BussinessLayer.DTOs.ModuloAuditoria;
+using BussinessLayer.DTOs.ModuloHelpDesk;
+using BussinessLayer.DTOs.ModuloGeneral.Archivos;
+using BussinessLayer.FluentValidations.ModuloGeneral.Archivo;
+using BussinessLayer.FluentValidations.ModuloGeneral.ModuloReporteria;
+using BussinessLayer.FluentValidations.ModuloGeneral.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DMunicipio;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DProvincia;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DRegion;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
+using BussinessLayer.DTOs.Account;
+using BussinessLayer.FluentValidations.Account;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -114,6 +132,19 @@ namespace BussinessLayer.DendeciesInjections
 
             services.AddScoped<IValidator<CreateDetallePedidoDto>, CreateDetallePedidoRequestValidator>();
             services.AddScoped<IValidator<EditDetallePedidoDto>, EditDetallePedidoRequestValidator>();
+
+            services.AddScoped<IValidator<CreateRepReporteDto>, CreateRepReporteDtoValidator>();
+            services.AddScoped<IValidator<EditRepReporteDto>, EditRepReporteDtoValidator>();
+
+            services.AddScoped<IValidator<CreateRepReportesVariableDto>, CreateRepReportesVariableRequestValidator>();
+            services.AddScoped<IValidator<EditRepReportesVariableDto>, EditRepReportesVariableRequestValidator>();
+
+            services.AddScoped<IValidator<CreateGnUploadFileParametroDto>, CreateGnUploadFileParametroRequestValidator>();
+            services.AddScoped<IValidator<EditGnUploadFileParametroDto>, EditGnUploadFileParametroRequestValidator>();
+
+            services.AddScoped<IValidator<CreateGnTecnoAlmacenExternoDto>, CreateGnTecnoAlmacenExternoDtoValidator>();
+            services.AddScoped<IValidator<EditGnTecnoAlmacenExternoDto>, EditGnTecnoAlmacenExternoDtoValidator>();
+
 
             services.AddScoped<IValidator<AddImageProductDTO>, AddImageRequestValidator>();
 

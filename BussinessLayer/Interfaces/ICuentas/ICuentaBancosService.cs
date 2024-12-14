@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.Bancos;
+﻿using DataLayer.Models.ModuloVentas.Bancos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

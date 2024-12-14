@@ -26,4 +26,8 @@
     <ProjectReference Include="..\IdentityLayer\IdentityLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\ModuloRRHH\" />
+  </ItemGroup>
+
 </Project>

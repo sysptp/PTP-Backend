@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
-using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Interfaces.Repository.Geografia;
 using BussinessLayer.Interface.IAccount;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
 
 namespace BussinessLayer.FluentValidations.ModuloGeneral.Empresas
 {

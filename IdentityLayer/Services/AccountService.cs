@@ -9,9 +9,9 @@ using AutoMapper;
 using BussinessLayer.Settings;
 using System.Security.Cryptography;
 using BussinessLayer.Interface.IAccount;
-using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Usuario;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
+using BussinessLayer.DTOs.Account;
 
 namespace IdentityLayer.Services
 {

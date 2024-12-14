@@ -3,12 +3,11 @@ using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
-using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using FluentValidation;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Atributes;
+using BussinessLayer.Interfaces.ModuloGeneral.Empresas;
 
 namespace PTP_API.Controllers.ModuloGeneral.Empresa
 {

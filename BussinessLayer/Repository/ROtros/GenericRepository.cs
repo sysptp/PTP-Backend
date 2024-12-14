@@ -1,6 +1,5 @@
 ﻿using BussinessLayer.Interfaces.Repositories;
 using Dapper;
-using DataLayer.Models.Empresa;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
