@@ -80,12 +80,80 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddValidationInjections(this IServiceCollection services)
         {
+          
+            #region Auditoria
+            services.AddScoped<IValidator<AleBitacoraRequest>, AleBitacoraRequestValidator>();
+            services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
+            services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
+            services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
+            #endregion
+
+            #region Modulo Citas
+
+            services.AddScoped<IValidator<CtaAppointmentManagementRequest>, CtaAppointmentManagementRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentMovementsRequest>, CtaAppointmentMovementsRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentReasonRequest>, CtaAppointmentReasonRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentsRequest>, CtaAppointmentsRequestValidation>();
+            services.AddScoped<IValidator<CtaCitaConfiguracionRequest>, CtaCitaConfiguracionRequestValidation>();
+            services.AddScoped<IValidator<CtaEmailConfiguracionRequest>, CtaEmailConfiguracionRequestValidation>();
+            services.AddScoped<IValidator<CtaMeetingPlaceRequest>, CtaMeetingPlaceRequestValidation>();
+            services.AddScoped<IValidator<CtaSessionDetailsRequest>, CtaSessionDetailsRequestValidation>();
+            services.AddScoped<IValidator<CtaSessionsRequest>, CtaSessionsRequestValidation>();
+            services.AddScoped<IValidator<CtaStateRequest>, CtaStateRequestValidation>();
+            services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
+
+            #endregion
+
+            #region Modulo Contabilidad
+            #endregion
+
+            #region Modulo General
+            services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+            services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
+            services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
+            #endregion
+
+            #region HelpDesk
+            services.AddScoped<IValidator<HdkCategoryTicketRequest>, HdkCategoryTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkDepartamentsRequest>, HdkDepartamentsRequestValidator>();
+            services.AddScoped<IValidator<HdkDepartXUsuarioRequest>, HdkDepartXUsuarioRequestValidator>();
+            services.AddScoped<IValidator<HdkErrorSubCategoryRequest>, HdkErrorSubCategoryRequestValidator>();
+            services.AddScoped<IValidator<HdkFileEvidenceTicketRequest>, HdkFileEvidenceTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkNoteTicketRequest>, HdkNoteTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkPrioridadTicketRequest>, HdkPrioridadTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkSolutionTicketRequest>, HdkSolutionTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkStatusTicketRequest>, HdkStatusTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkSubCategoryRequest>, HdkSubCategoryRequestValidator>();
+            services.AddScoped<IValidator<HdkTicketsRequest>, HdkTicketsRequestValidator>();
+            services.AddScoped<IValidator<HdkTypeTicketRequest>, HdkTypeTicketRequestValidator>();
+
+            #endregion
+
+            #region Modulo Inventario
+            #endregion
+
+            #region Modulo Reporteria
+            #endregion
+
+            #region Modulo RRHH
+            #endregion
+
+            #region Modulo Ventas
+            #endregion
+
+            #region NCFs
+            #endregion
+
+            #region Otros
+            #endregion
+
+            #region De momento sin modulo
             services.AddTransient<IValidator<GnEmpresaRequest>, SaveGnEmpresaRequestValidator>();
             services.AddScoped<IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
 
-            services.AddScoped<IValidator<CreateProductsDto>,CreateProductosRequestValidator>();
+            services.AddScoped<IValidator<CreateProductsDto>, CreateProductosRequestValidator>();
             services.AddScoped<IValidator<EditProductDto>, EditProductosRequestValidator>();
             services.AddScoped<IValidator<CreatePreciosDto>, CreatePreciosRequestValidator>();
             services.AddScoped<IValidator<EditPricesDto>, EditPreciosRequestValidator>();
@@ -130,7 +198,6 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CreateGnTecnoAlmacenExternoDto>, CreateGnTecnoAlmacenExternoDtoValidator>();
             services.AddScoped<IValidator<EditGnTecnoAlmacenExternoDto>, EditGnTecnoAlmacenExternoDtoValidator>();
 
-
             services.AddScoped<IValidator<AddImageProductDTO>, AddImageRequestValidator>();
 
             services.AddScoped<IValidator<GnSucursalRequest>, GnSucursalRequestValidator>();
@@ -142,54 +209,6 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<string>, StringsRequestValidator>();
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
             services.AddScoped<IValidator<decimal>, DecimalsRequestValidator>();
-
-
-            #region Modulo General
-            services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
-            services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
-            #endregion
-
-            #region HelpDesk
-            services.AddScoped<IValidator<HdkCategoryTicketRequest>, HdkCategoryTicketRequestValidator>();
-            services.AddScoped<IValidator<HdkDepartamentsRequest>, HdkDepartamentsRequestValidator>();
-            services.AddScoped<IValidator<HdkDepartXUsuarioRequest>, HdkDepartXUsuarioRequestValidator>();
-            services.AddScoped<IValidator<HdkErrorSubCategoryRequest>, HdkErrorSubCategoryRequestValidator>();
-            services.AddScoped<IValidator<HdkFileEvidenceTicketRequest>, HdkFileEvidenceTicketRequestValidator>();
-            services.AddScoped<IValidator<HdkNoteTicketRequest>, HdkNoteTicketRequestValidator>();
-            services.AddScoped<IValidator<HdkPrioridadTicketRequest>, HdkPrioridadTicketRequestValidator>();
-            services.AddScoped<IValidator<HdkSolutionTicketRequest>, HdkSolutionTicketRequestValidator>();
-            services.AddScoped<IValidator<HdkStatusTicketRequest>, HdkStatusTicketRequestValidator>();
-            services.AddScoped<IValidator<HdkSubCategoryRequest>, HdkSubCategoryRequestValidator>();
-            services.AddScoped<IValidator<HdkTicketsRequest>, HdkTicketsRequestValidator>();
-            services.AddScoped<IValidator<HdkTypeTicketRequest>, HdkTypeTicketRequestValidator>();
-
-            #endregion
-
-            #region Auditoria
-            services.AddScoped<IValidator<AleBitacoraRequest>, AleBitacoraRequestValidator>();
-            services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
-            services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
-            services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
-            #endregion
-
-            #region Modulo General
-            
-                services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
-            #endregion
-
-            #region Modulo Citas
-
-            services.AddScoped<IValidator<CtaAppointmentManagementRequest>, CtaAppointmentManagementRequestValidation>();
-            services.AddScoped<IValidator<CtaAppointmentMovementsRequest>, CtaAppointmentMovementsRequestValidation>();
-            services.AddScoped<IValidator<CtaAppointmentReasonRequest>, CtaAppointmentReasonRequestValidation>();
-            services.AddScoped<IValidator<CtaAppointmentsRequest>, CtaAppointmentsRequestValidation>();
-            services.AddScoped<IValidator<CtaCitaConfiguracionRequest>, CtaCitaConfiguracionRequestValidation>();
-            services.AddScoped<IValidator<CtaEmailConfiguracionRequest>, CtaEmailConfiguracionRequestValidation>();
-            services.AddScoped<IValidator<CtaMeetingPlaceRequest>, CtaMeetingPlaceRequestValidation>();
-            services.AddScoped<IValidator<CtaSessionDetailsRequest>, CtaSessionDetailsRequestValidation>();
-            services.AddScoped<IValidator<CtaSessionsRequest>, CtaSessionsRequestValidation>();
-            services.AddScoped<IValidator<CtaStateRequest>, CtaStateRequestValidation>();
-            services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
 
             #endregion
         }

@@ -34,7 +34,6 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IGnSucursalRepository, GnSucursalRepository>();
             services.AddTransient<IGnScheduleRepository, GnScheduleRepository>();
             services.AddTransient<IGnScheduleUserRepository, GnScheduleUserRepository>();
-            #endregion
 
             #region Geografia
 
@@ -46,13 +45,15 @@ namespace BussinessLayer.DendeciesInjections
             #endregion
 
             #region Configuracion
-            services.AddTransient<IGnMenuRepository,GnMenuRepository>();
-            services.AddTransient<IGnModuloRepository,GnModuloRepository>();
+            services.AddTransient<IGnMenuRepository, GnMenuRepository>();
+            services.AddTransient<IGnModuloRepository, GnModuloRepository>();
             services.AddTransient<IGnPermisoRepository, GnPermisoRepository>();
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             services.AddTransient<IGnParametrosGeneralesRepository, GnParametrosGeneralesRepository>();
-            
+
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            #endregion
+
             #endregion
 
             #region HelpDesk

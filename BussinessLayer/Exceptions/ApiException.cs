@@ -2,7 +2,7 @@
 
 using System.Globalization;
 
-namespace RealStateApp.Core.Application.Exceptions
+namespace BussinessLayer.Exceptions
 {
     public class ApiException : Exception
     {
