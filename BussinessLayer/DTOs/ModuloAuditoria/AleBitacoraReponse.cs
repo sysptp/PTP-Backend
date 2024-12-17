@@ -1,11 +1,10 @@
 ﻿using BussinessLayer.DTOs.Otros;
 
-
 namespace BussinessLayer.DTOs.ModuloAuditoria
 {
-    public class AleAuditoriaReponse : AuditableEntitiesReponse
+    public class AleBitacoraReponse : AuditableEntitiesReponse
     {
-        public long IdAuditoria { get; set; }
+        public long IdBitacora { get; set; }
         public string Modulo { get; set; } = null!;
         public string Acccion { get; set; } = null!;
         public int Ano { get; set; }

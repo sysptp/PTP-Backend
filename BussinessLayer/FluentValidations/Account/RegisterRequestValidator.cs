@@ -1,17 +1,9 @@
-﻿using FluentValidation;
-<<<<<<<< HEAD:BussinessLayer/FluentValidations/ModuloGeneral/Configuracion/Account/RegisterRequestValidator.cs
-using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Repository.RSeguridad;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
-
-namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account
-========
-using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
+﻿using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
-using BussinessLayer.DTOs.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
+using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.Account
->>>>>>>> REFACTOR:BussinessLayer/FluentValidations/Account/RegisterRequestValidator.cs
 {
     public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {

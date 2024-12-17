@@ -15,7 +15,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaAppointmentsController : ControllerBase
     {
         private readonly ICtaAppointmentsService _appointmentService;

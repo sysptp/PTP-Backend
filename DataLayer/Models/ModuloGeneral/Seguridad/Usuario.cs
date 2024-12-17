@@ -1,5 +1,7 @@
-﻿using DataLayer.Models.Otros;
+﻿using DataLayer.Models.ModuloGeneral.Empresa;
+using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.ModuloGeneral.Seguridad
 {
@@ -25,6 +27,12 @@ namespace DataLayer.Models.ModuloGeneral.Seguridad
         public bool IsActive = true;
         public string Email { get; set; } = null!;
         public string? LanguageCode { get; set; } 
-        public string UserName { get; set; } = null!;
+        public string? UserName { get; set; }
+        [ForeignKey("CodigoSuc")]
+        public GnSucursal? GnSucursal { get; set; }
+        [ForeignKey("CodigoEmp")]
+        public GnEmpresa? GnEmpresa { get; set; }
+        [ForeignKey("IdPerfil")]
+        public GnPerfil? GnPerfil { get; set; }
     }
 }

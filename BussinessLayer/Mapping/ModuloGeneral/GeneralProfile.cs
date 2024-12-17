@@ -1,13 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DMunicipio;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DProvincia;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Menu;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Usuario;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DMunicipio;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
@@ -115,13 +107,16 @@ namespace BussinessLayer.Mapping.ModuloGeneral
            .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.CodigoEmp ?? 0))
            .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.IdHorario))
            .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.IdPerfil ?? 0))
+           .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP))
+           .ForMember(dest => dest.SucursalName, opt => opt.MapFrom(src => src.GnSucursal.NombreSuc))
+           .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.GnPerfil.Name))
            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Nombre))
            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Apellido))
            .ForMember(dest => dest.UserImage, opt => opt.MapFrom(src => src.ImagenUsuario))
            .ForMember(dest => dest.PersonalPhone, opt => opt.MapFrom(src => src.TelefonoPersonal))
            .ForMember(dest => dest.IsUserOnline, opt => opt.MapFrom(src => src.OnlineUsuario))
            .ForMember(dest => dest.SucursalId, opt => opt.MapFrom(src => src.CodigoSuc ?? 0))
-           .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Nombre))
+           .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telefono))
            .ReverseMap();
 

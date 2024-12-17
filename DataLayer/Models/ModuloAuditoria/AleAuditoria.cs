@@ -8,7 +8,7 @@ namespace DataLayer.Models.ModuloAuditoria
     public class AleAuditoria : AuditableEntities
     {
         [Key]
-        public long IdAuditoria { get; set; }
+        public long IdBitacora { get; set; }
         public string Modulo { get; set; }
         public string Acccion { get; set; }
         public int Ano { get; set; } = DateTime.Now.Year;

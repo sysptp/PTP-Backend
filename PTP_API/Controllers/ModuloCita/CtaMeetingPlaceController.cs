@@ -15,7 +15,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de lugares de reunión")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaMeetingPlaceController : ControllerBase
     {
         private readonly ICtaMeetingPlaceService _meetingPlaceService;

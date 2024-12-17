@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Seguridad/Permiso/GnPermisoResponse.cs
-﻿namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso
-========
 ﻿namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso
->>>>>>>> REFACTOR:BussinessLayer/DTOs/ModuloGeneral/Seguridad/Permiso/GnPermisoResponse.cs
 {
     public class GnPermisoResponse
     {

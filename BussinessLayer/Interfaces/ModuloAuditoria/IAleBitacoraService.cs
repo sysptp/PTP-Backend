@@ -5,10 +5,10 @@ using DataLayer.Models.ModuloAuditoria;
 
 namespace BussinessLayer.Interfaces.ModuloAuditoria
 {
-    public interface IAleAuditoriaService : IGenericService<AleAuditoriaRequest, AleAuditoriaReponse, AleAuditoria>
+    public interface IAleBitacoraService : IGenericService<AleBitacoraRequest, AleBitacoraReponse, AleAuditoria>
     {
-        Task AddAuditoria(AleAuditoriaRequest vm);
-        Task<List<AleAuditoriaReponse>> GetAllByFilters(
+        Task AddAuditoria(AleBitacoraRequest vm);
+        Task<List<AleBitacoraReponse>> GetAllByFilters(
             string modulo,
             string accion,
             int ano,

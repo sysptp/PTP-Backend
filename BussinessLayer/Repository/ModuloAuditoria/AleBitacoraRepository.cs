@@ -5,11 +5,11 @@ using DataLayer.PDbContex;
 
 namespace BussinessLayer.Repository.ModuloAuditoria
 {
-    public class AleAuditoriaRepository : GenericRepository<AleAuditoria>, IAleAuditoriaRepository
+    public class AleBitacoraRepository : GenericRepository<AleAuditoria>, IAleBitacoraRepository
     {
         private readonly PDbContext _dbContext;
         private readonly ITokenService _tokenService;
-        public AleAuditoriaRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
+        public AleBitacoraRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
         {
             _dbContext = dbContext;
             _tokenService = tokenService;

@@ -1,10 +1,6 @@
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Geografia/DPais/CountryResponse.cs
-﻿using BussinessLayer.Atributes;
+using BussinessLayer.Atributes;
 
-namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais
-========
 ﻿namespace BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais
->>>>>>>> REFACTOR:BussinessLayer/DTOs/ModuloGeneral/Geografia/DPais/CountryResponse.cs
 {
 
     [TableName("Pais")]

@@ -20,13 +20,6 @@ using BussinessLayer.Services.ModuloInventario.Suplidores;
 using BussinessLayer.Services.ModuloInventario.Impuesto;
 using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
 using BussinessLayer.Services.ModuloInventario.Productos;
-using BussinessLayer.Interfaces.IAuditoria;
-using BussinessLayer.Services.SAuditoria;
-using BussinessLayer.Interfaces.Helpers;
-using BussinessLayer.Services.Helper;
-using BussinessLayer.Interfaces.Language;
-using BussinessLayer.Services.Language.Translation;
-using BussinessLayer.Services.SSeguridad.Schedule;
 using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
 using BussinessLayer.Services.ModuloGeneral.Imagenes;
 using BussinessLayer.Interfaces.ModuloInventario.Otros;
@@ -105,7 +98,6 @@ public static class ServiceRegistration
         services.AddScoped<ITipoPagoService, TipoPagoService>();
         services.AddScoped<ITipoTransaccionService, TipoTransaccionService>();
         services.AddScoped<IVersionService, VersionService>();
-        services.AddScoped<IAutenticacionService, AutenticacionService>();
         services.AddScoped<IClaimsService, ClaimsService>();
         services.AddScoped<ICargaMasivaService, CargaMasivaService>();
         services.AddScoped<IAperturaCierreCajasService, AperturaCierreCajasService>();
@@ -169,7 +161,7 @@ public static class ServiceRegistration
         #endregion
 
         #region Auditoria
-        services.AddScoped<IAleAuditoriaService, AleAuditoriaService>();
+        services.AddScoped<IAleBitacoraService, AleBitacoraService>();
         services.AddTransient<IAleLogsService, AleLogsService>();
         services.AddTransient<IAleLoginService, AleLoginService>();
         services.AddTransient<IAlePrintService, AlePrintService>();

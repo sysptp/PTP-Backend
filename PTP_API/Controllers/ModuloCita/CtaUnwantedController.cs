@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloCitas
     [SwaggerTag("Gestión de contactos no deseados")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaUnwantedController : ControllerBase
     {
         private readonly ICtaUnwantedService _unwantedService;

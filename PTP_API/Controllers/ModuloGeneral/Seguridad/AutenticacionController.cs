@@ -1,17 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using BussinessLayer.Interface.IAccount;
-using System.Net.Mime;
-using FluentValidation;
-using BussinessLayer.Wrappers;
-<<<<<<<< HEAD:PTP_API/Controllers/ModuloGeneral/Configuracion/Seguridad/AutenticacionController.cs
+﻿
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
-========
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
-using BussinessLayer.DTOs.Account;
->>>>>>>> REFACTOR:PTP_API/Controllers/ModuloGeneral/Seguridad/AutenticacionController.cs
+using BussinessLayer.Interface.IAccount;
+using BussinessLayer.Wrappers;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net.Mime;
 
 namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 {

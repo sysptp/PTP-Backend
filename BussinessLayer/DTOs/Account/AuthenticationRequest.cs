@@ -1,11 +1,7 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Account/AuthenticationRequest.cs
 namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
-========
-namespace BussinessLayer.DTOs.Account
->>>>>>>> REFACTOR:BussinessLayer/DTOs/Account/AuthenticationRequest.cs
 {
     public class AuthenticationRequest
     {

@@ -1,11 +1,6 @@
-﻿
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Seguridad/GnPerfilRequest.cs
-namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad
-========
 namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil
->>>>>>>> REFACTOR:BussinessLayer/DTOs/ModuloGeneral/Seguridad/Perfil/GnPerfilRequest.cs
 {
     public class GnPerfilRequest
     {

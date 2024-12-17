@@ -15,7 +15,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de razones de citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaAppointmentReasonController : ControllerBase
     {
         private readonly ICtaAppointmentReasonService _reasonService;

@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [ApiController]
     [SwaggerTag("Gestión de Error SubCategoria de Ticket")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class ErrorSubCategoryController : ControllerBase
     {
         private readonly IHdkErrorSubCategoryService _errorSubCategoryService;
@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Error Subcategoria de ticket", Description = "Obtiene una lista de todos los Error por Subcategoria o un error Subcategoria específica si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

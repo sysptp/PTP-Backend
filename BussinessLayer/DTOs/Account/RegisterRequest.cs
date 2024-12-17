@@ -1,11 +1,7 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Account/RegisterRequest.cs
 namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
-========
-namespace BussinessLayer.DTOs.Account
->>>>>>>> REFACTOR:BussinessLayer/DTOs/Account/RegisterRequest.cs
 {
     public class RegisterRequest
     {

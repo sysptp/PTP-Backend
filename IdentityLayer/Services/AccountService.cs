@@ -12,35 +12,25 @@ using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 using BussinessLayer.DTOs.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityLayer.Services
 {
     public class AccountService : IAccountService
     {
         private readonly UserManager<Usuario> _userManager;
-        private readonly SignInManager<Usuario> _signInManager;
         private readonly JWTSettings _jwtSettings;
-        private readonly IMapper _mapper;
         private readonly RoleManager<GnPerfil> _roleManager;
-        private readonly IGnSucursalRepository _sucursalRepository;
-        private readonly IGnEmpresaRepository _empresaRepository;
 
         public AccountService(
               UserManager<Usuario> userManager,
-              SignInManager<Usuario> signInManager,
               RoleManager<GnPerfil> roleManager,
-              IOptions<JWTSettings> jwtSettings,
-              IMapper mapper,
-              IGnSucursalRepository sucursalRepository,
-              IGnEmpresaRepository empresaRepository)
+              IOptions<JWTSettings> jwtSettings)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
-            _mapper = mapper;
-            _sucursalRepository = sucursalRepository;
-            _empresaRepository = empresaRepository;
         }
 
         public async Task<bool> VerifyUser(string UserName)
@@ -64,15 +54,11 @@ namespace IdentityLayer.Services
         {
             var response = new AuthenticationResponse();
 
-            var user = await _userManager.FindByEmailAsync(request.UserCredential) ??
-                       await _userManager.FindByNameAsync(request.UserCredential);
-
-            if (!user.IsActive) 
-            {
-                response.HasError = true;
-                response.Error = $"{request.UserCredential} se encuentra inactivo";
-                return response;
-            }
+            var user = await _userManager.Users
+     .Include(u => u.GnPerfil) 
+     .Include(u => u.GnEmpresa) 
+     .Include(u => u.GnSucursal) 
+     .FirstOrDefaultAsync(u => u.Email == request.UserCredential || u.UserName == request.UserCredential);
 
             if (user == null)
             {
@@ -80,9 +66,14 @@ namespace IdentityLayer.Services
                 response.Error = $"{request.UserCredential} no tiene cuenta registrada";
                 return response;
             }
+            if (!user.IsActive) 
+            {
+                response.HasError = true;
+                response.Error = $"{request.UserCredential} se encuentra inactivo";
+                return response;
+            }
 
-            var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
-            if (!signInResult.Succeeded)
+            if (!await _userManager.CheckPasswordAsync(user, request.Password))
             {
                 response.HasError = true;
                 response.Error = $"Credenciales incorrectas {request.UserCredential}";
@@ -102,12 +93,9 @@ namespace IdentityLayer.Services
             response.Email = user.Email ?? string.Empty;
             response.PhoneNumber = user.PhoneNumber ?? string.Empty;
             response.SucursalId = user.CodigoSuc;
-            var role = await _roleManager.FindByIdAsync(response.RoleId.ToString());
-            var sucursal = await _sucursalRepository.GetById(response.SucursalId);
-            var company = await _empresaRepository.GetById((long)response.CompanyId);
-            response.RoleName = role.Name;
-            response.CompanyName = company.NOMBRE_EMP;
-            response.SucursalName = sucursal.NombreSuc;
+            response.RoleName = user.GnPerfil.Name;
+            response.CompanyName = user.GnEmpresa.NOMBRE_EMP;
+            response.SucursalName = user.GnSucursal.NombreSuc;
 
             JwtSecurityToken jwtToken = GenerateJWToken(user);
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
@@ -118,54 +106,6 @@ namespace IdentityLayer.Services
 
             return response;
         }
-
-        public async Task<List<UserResponse>> GetAllUsers()
-        {
-            var users = _userManager.Users.ToList();
-            var userResponseList = new List<UserResponse>();
-
-            foreach (var user in users)
-            {
-                var role = user.IdPerfil.HasValue
-                     ? await _roleManager.FindByIdAsync(user.IdPerfil.Value.ToString())
-                     : null;
-
-                var sucursal = user.CodigoSuc.HasValue
-                    ? await _sucursalRepository.GetById(user.CodigoSuc.Value)
-                    : null;
-
-                var company = user.CodigoEmp.HasValue
-                    ? await _empresaRepository.GetById(user.CodigoEmp.Value)
-                    : null;
-
-                var userResponse = new UserResponse
-                {
-                    Id = user.Id,
-                    CompanyId = user.CodigoEmp ?? 0,
-                    ScheduleId = user.IdHorario,
-                    RoleId = user.IdPerfil ?? 0,
-                    FirstName = user.Nombre,
-                    LastName = user.Apellido,
-                    UserImage = user.ImagenUsuario,
-                    PersonalPhone = user.TelefonoPersonal,
-                    IsUserOnline = user.OnlineUsuario,
-                    SucursalId = user.CodigoSuc ?? 0,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
-                    SucursalName = sucursal?.NombreSuc,
-                    RoleName = role?.Name,
-                    CompanyName = company?.NOMBRE_EMP,
-                    IsActive = user.IsActive,
-                    LanguageCode = user.LanguageCode
-                };
-
-                userResponseList.Add(userResponse);
-            }
-
-            return userResponseList;
-        }
-
 
         #region PrivateMethods
 
@@ -228,7 +168,7 @@ namespace IdentityLayer.Services
                 if (!result.Succeeded)
                 {
                     response.HasError = true;
-                    response.Error = "Ocurrió un error al intentar registrar al usuario.";
+                    response.Error = string.Join(", ", result.Errors.Select(e => e.Description));
                     return response;
                 }
 

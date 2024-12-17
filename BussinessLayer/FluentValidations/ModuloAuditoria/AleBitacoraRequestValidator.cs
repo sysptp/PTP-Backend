@@ -3,8 +3,8 @@ using BussinessLayer.DTOs.ModuloAuditoria;
 
 namespace BussinessLayer.FluentValidations.ModuloAuditoria
 {
-    public class AleAuditoriaRequestValidator : AbstractValidator<AleAuditoriaRequest>
+    public class AleBitacoraRequestValidator : AbstractValidator<AleBitacoraRequest>
     {
-        public AleAuditoriaRequestValidator() { }
+        public AleBitacoraRequestValidator() { }
     }
 }

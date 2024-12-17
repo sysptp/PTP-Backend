@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.Account;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.ModuloGeneral.Seguridad;

@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Schedule;
+﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
 using BussinessLayer.Interfaces.IOtros;
 using DataLayer.Models.ModuloGeneral.Seguridad;
 

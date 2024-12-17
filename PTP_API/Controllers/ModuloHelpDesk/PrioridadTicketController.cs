@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [ApiController]
     [SwaggerTag("Gestión de Prioridad de Ticket")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class PrioridadTicketController : ControllerBase
     {
         private readonly IHdkPrioridadTicketService _prioridadTicketService;
@@ -34,7 +34,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Prioridad de ticket", Description = "Obtiene una lista de todos las prioridades de ticket o un Prioridad específico si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

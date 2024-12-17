@@ -1,10 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Seguridad/Permiso/GnPermisoRequest.cs
-namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso
-========
 namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso
->>>>>>>> REFACTOR:BussinessLayer/DTOs/ModuloGeneral/Seguridad/Permiso/GnPermisoRequest.cs
 {
     public class GnPermisoRequest
     {

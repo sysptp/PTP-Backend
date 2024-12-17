@@ -1,8 +1,5 @@
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Menu/GnMenuResponse.cs
-﻿namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Menu
-========
+
 ﻿namespace BussinessLayer.DTOs.ModuloGeneral.Menu
->>>>>>>> REFACTOR:BussinessLayer/DTOs/ModuloGeneral/Menu/GnMenuResponse.cs
 {
     public class GnMenuResponse
     {

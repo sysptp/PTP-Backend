@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Account/RefreshToken.cs
 ﻿namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
-========
-﻿namespace BussinessLayer.DTOs.Account
->>>>>>>> REFACTOR:BussinessLayer/DTOs/Account/RefreshToken.cs
 {
     public class RefreshToken
     {

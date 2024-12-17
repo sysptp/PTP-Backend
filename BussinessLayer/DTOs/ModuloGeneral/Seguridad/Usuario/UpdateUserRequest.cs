@@ -1,11 +1,6 @@
-﻿
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Seguridad/Usuario/UpdateUserRequest.cs
-namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Usuario
-========
 namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario
->>>>>>>> REFACTOR:BussinessLayer/DTOs/ModuloGeneral/Seguridad/Usuario/UpdateUserRequest.cs
 {
     public class UpdateUserRequest
     {

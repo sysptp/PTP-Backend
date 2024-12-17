@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [ApiController]
     [SwaggerTag("Gestión de Solución de Ticket")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class SolutionTicketController : ControllerBase
     {
         private readonly IHdkSolutionTicketService _solutionTicketService;
@@ -34,7 +34,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Solución de Ticket", Description = "Obtiene una lista de todos los departamento de ticket o un Solucion específico si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

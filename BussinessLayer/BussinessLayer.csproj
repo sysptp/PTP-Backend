@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="DTOs\ModuloCitas\" />
     <Folder Include="DTOs\ModuloContabilidad\" />
     <Folder Include="DTOs\ModuloRRHH\" />
@@ -50,6 +46,10 @@
     <Folder Include="Services\ModuloCitas\" />
     <Folder Include="Services\ModuloContabilidad\" />
     <Folder Include="Services\ModuloRRHH\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
   </ItemGroup>
 
 </Project>

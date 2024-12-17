@@ -1,11 +1,7 @@
-<<<<<<<< HEAD:PTP_API/Controllers/ModuloGeneral/Configuracion/Seguridad/UserController.cs
-﻿using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Usuario;
-using BussinessLayer.Interfaces.ISeguridad;
-========
-﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
+
+using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
->>>>>>>> REFACTOR:PTP_API/Controllers/ModuloGeneral/Seguridad/UserController.cs
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -68,8 +64,8 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Actualizar Usuario", Description = "Endpoint para actualizar los datos de un usuario")]
-        [EnableAuditing]
-        public async Task<IActionResult> UpdatePermission(int id, [FromBody] UpdateUserRequest userRequest)
+        [EnableBitacora]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserRequest userRequest)
         {
             //var validationResult = await _validator.ValidateAsync(permisoDto);
 

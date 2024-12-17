@@ -1,10 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Account/AuthenticationResponse.cs
 namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
-========
-namespace BussinessLayer.DTOs.Account
->>>>>>>> REFACTOR:BussinessLayer/DTOs/Account/AuthenticationResponse.cs
 {
     public class AuthenticationResponse
     {

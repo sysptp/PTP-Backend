@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Modulo/GnModuloResponse.cs
-﻿namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Modulo
-========
-﻿namespace BussinessLayer.DTOs.ModuloGeneral.Modulo
->>>>>>>> REFACTOR:BussinessLayer/DTOs/ModuloGeneral/Modulo/GnModuloResponse.cs
+namespace BussinessLayer.DTOs.ModuloGeneral.Modulo
 {
     public class GnModuloResponse
     {

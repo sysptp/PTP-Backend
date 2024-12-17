@@ -9,9 +9,9 @@ namespace BussinessLayer.Mapping.ModuloAuditoria
         public AleAuditoriaProfile()
         {
 
-            CreateMap<AleAuditoriaRequest, AleAuditoria>().ReverseMap();
+            CreateMap<AleBitacoraRequest, AleAuditoria>().ReverseMap();
 
-            CreateMap<AleAuditoriaReponse, AleAuditoria>().ReverseMap();
+            CreateMap<AleBitacoraReponse, AleAuditoria>().ReverseMap();
 
 
 

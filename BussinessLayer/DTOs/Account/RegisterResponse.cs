@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Account/RegisterResponse.cs
-﻿namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
-========
-﻿namespace BussinessLayer.DTOs.Account
->>>>>>>> REFACTOR:BussinessLayer/DTOs/Account/RegisterResponse.cs
+namespace BussinessLayer.DTOs.Account
 {
     public class RegisterResponse
     {

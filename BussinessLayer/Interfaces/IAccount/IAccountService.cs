@@ -1,4 +1,5 @@
 ﻿using BussinessLayer.DTOs.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 
 namespace BussinessLayer.Interface.IAccount
@@ -9,6 +10,5 @@ namespace BussinessLayer.Interface.IAccount
         Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin);
         Task<bool> VerifyUser(string UserName);
         Task<bool> VerifyUserById(int userId);
-        Task<List<UserResponse>> GetAllUsers();
     }
 }

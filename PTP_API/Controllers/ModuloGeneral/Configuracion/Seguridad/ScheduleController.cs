@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
-using BussinessLayer.Interfaces.ISeguridad;
+using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
     [SwaggerTag("Servicio de manejo de horarios")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class ScheduleController : ControllerBase
     {
         private readonly IGnScheduleService _gnScheduleService;
@@ -32,7 +32,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Configuracion.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Horarios", Description = "Devuelve una lista de horarios o un horario específico si se proporciona un ID")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllSchedule([FromQuery] long? companyId, int? id)
         {
             try

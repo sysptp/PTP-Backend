@@ -1,12 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-
 namespace BussinessLayer.DTOs.ModuloAuditoria
 {
-    public class AleAuditoriaRequest
+    public class AleBitacoraRequest
     {
         [JsonIgnore]
-        public long IdAuditoria { get; set; }
+        public long IdBitacora { get; set; }
         public string Modulo { get; set; }
         public string Acccion { get; set; }
 

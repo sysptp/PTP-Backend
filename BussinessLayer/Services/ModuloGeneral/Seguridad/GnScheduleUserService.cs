@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Schedule;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
-using BussinessLayer.Interfaces.Repositories;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
 using DataLayer.Models.ModuloGeneral.Seguridad;
 
 namespace BussinessLayer.Services.ModuloGeneral.Seguridad
@@ -28,7 +28,7 @@ namespace BussinessLayer.Services.ModuloGeneral.Seguridad
                 userSchedulesResponse.Where(x => x.CompanyId != companyId).ToList();
             }
 
-            if (userId != null) 
+            if (userId != null)
             {
                 userSchedulesResponse.Where(x => x.UserId != userId).ToList();
             }

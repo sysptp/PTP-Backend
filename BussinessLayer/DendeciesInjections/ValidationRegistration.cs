@@ -7,7 +7,6 @@ using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
-using BussinessLayer.DTOs.HelpDesk;
 using BussinessLayer.FluentValidations.ModuloGeneral.Geografia;
 using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
 using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
@@ -23,21 +22,9 @@ using BussinessLayer.DTOs.ModuloInventario.Marcas;
 using BussinessLayer.DTOs.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
-using BussinessLayer.FluentValidations.Auditoria;
-using BussinessLayer.DTOs.Auditoria;
-using Azure.Core;
-using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DMunicipio;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DProvincia;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
-using DataLayer.Models.ModuloGeneral;
 using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
 using BussinessLayer.FluentValidations.Configuracion.ParametrosGenerales;
 using BussinessLayer.DTOs.ModuloGeneral.Monedas;
@@ -47,7 +34,6 @@ using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
 using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
 using BussinessLayer.FluentValidations.ModuloInventario.Otros;
-using DataLayer.Models.Modulo_Citas;
 using BussinessLayer.Validations.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
@@ -86,7 +72,6 @@ using BussinessLayer.DTOs.ModuloGeneral.Geografia.DRegion;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
-using BussinessLayer.DTOs.Account;
 using BussinessLayer.FluentValidations.Account;
 
 namespace BussinessLayer.DendeciesInjections
@@ -181,7 +166,7 @@ namespace BussinessLayer.DendeciesInjections
             #endregion
 
             #region Auditoria
-            services.AddScoped<IValidator<AleAuditoriaRequest>, AleAuditoriaRequestValidator>();
+            services.AddScoped<IValidator<AleBitacoraRequest>, AleBitacoraRequestValidator>();
             services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
             services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
             services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();

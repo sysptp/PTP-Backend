@@ -13,19 +13,19 @@ namespace PTP_API.Controllers.ModuloAuditoria
     [ApiController]
     [SwaggerTag("Gestión de Auditoria")]
     [Authorize]
-    public class AuditoriaController : ControllerBase
+    public class BitacoraController : ControllerBase
     {
-        private readonly IAleAuditoriaService _aleAuditoriaService;
-        private readonly IValidator<AleAuditoriaRequest> _validator;
+        private readonly IAleBitacoraService _aleAuditoriaService;
+        private readonly IValidator<AleBitacoraRequest> _validator;
 
-        public AuditoriaController(IAleAuditoriaService aleAuditoriaService, IValidator<AleAuditoriaRequest> validator)
+        public BitacoraController(IAleBitacoraService aleAuditoriaService, IValidator<AleBitacoraRequest> validator)
         {
             _aleAuditoriaService = aleAuditoriaService;
             _validator = validator;
         }
         [HttpGet]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(typeof(Response<IEnumerable<AleAuditoriaReponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<IEnumerable<AleBitacoraReponse>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -40,9 +40,9 @@ namespace PTP_API.Controllers.ModuloAuditoria
                     var aleAuditoria = await _aleAuditoriaService.GetByIdResponse(id);
                     if (aleAuditoria == null)
                     {
-                        return NotFound(Response<AleAuditoriaReponse>.NotFound("Auditoria no encontrada."));
+                        return NotFound(Response<AleBitacoraReponse>.NotFound("Auditoria no encontrada."));
                     }
-                    return Ok(Response<List<AleAuditoriaReponse>>.Success(new List<AleAuditoriaReponse> { aleAuditoria }, "Auditoria Sistema encontrada."));
+                    return Ok(Response<List<AleBitacoraReponse>>.Success(new List<AleBitacoraReponse> { aleAuditoria }, "Auditoria Sistema encontrada."));
                 }
                 else
                 {
@@ -51,7 +51,7 @@ namespace PTP_API.Controllers.ModuloAuditoria
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<AleAuditoriaReponse>>.Success(aleAuditorias, "Auditoria Sistema obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<AleBitacoraReponse>>.Success(aleAuditorias, "Auditoria Sistema obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace PTP_API.Controllers.ModuloAuditoria
 
         [HttpGet("GetByFilters")]
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(typeof(Response<IEnumerable<AleAuditoriaReponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<IEnumerable<AleBitacoraReponse>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -100,11 +100,11 @@ namespace PTP_API.Controllers.ModuloAuditoria
                     return NoContent();
                 }
 
-                return Ok(Response<IEnumerable<AleAuditoriaReponse>>.Success(filteredAuditorias, "Auditorias filtradas obtenidas correctamente."));
+                return Ok(Response<IEnumerable<AleBitacoraReponse>>.Success(filteredAuditorias, "Auditorias filtradas obtenidas correctamente."));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al filtrar las Auditorias. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -115,7 +115,7 @@ namespace PTP_API.Controllers.ModuloAuditoria
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Crear una nueva Auditoria Sistema", Description = "Crea una nueva Auditoria Sistema en el sistema.")]
-        public async Task<IActionResult> Add([FromBody] AleAuditoriaRequest request)
+        public async Task<IActionResult> Add([FromBody] AleBitacoraRequest request)
         {
             var validationResult = await _validator.ValidateAsync(request);
 
@@ -128,7 +128,7 @@ namespace PTP_API.Controllers.ModuloAuditoria
             try
             {
                 var aleAuditoria = await _aleAuditoriaService.Add(request);
-                return StatusCode(201, Response<AleAuditoriaReponse>.Created(aleAuditoria, "Auditoria Sistema creada correctamente."));
+                return StatusCode(201, Response<AleBitacoraReponse>.Created(aleAuditoria, "Auditoria Sistema creada correctamente."));
             }
             catch (Exception ex)
             {

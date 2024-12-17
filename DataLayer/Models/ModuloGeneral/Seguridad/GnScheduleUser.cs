@@ -1,4 +1,5 @@
-﻿using DataLayer.Models.Otros;
+﻿using DataLayer.Models.ModuloGeneral.Empresa;
+using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.ModuloGeneral.Seguridad

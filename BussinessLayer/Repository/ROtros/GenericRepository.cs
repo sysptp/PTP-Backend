@@ -27,6 +27,7 @@ namespace BussinessLayer.Repository.ROtros
                 return null;
             }
             return entity.Borrado == true ? null : entity;
+
         }
 
         public virtual async Task<T> GetById(object id)
@@ -111,9 +112,10 @@ namespace BussinessLayer.Repository.ROtros
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error al actualizar la entidad", ex);
+                throw new InvalidOperationException(ex.Message);
             }
         }
+
 
         public virtual async Task Delete(int id)
         {

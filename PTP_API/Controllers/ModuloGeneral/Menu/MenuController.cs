@@ -1,24 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-<<<<<<<< HEAD:PTP_API/Controllers/ModuloGeneral/Configuracion/MenuController.cs
-using BussinessLayer.Interfaces.IMenu;
-using BussinessLayer.Wrappers;
-using Swashbuckle.AspNetCore.Annotations;
-using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Menu;
-========
+
 using BussinessLayer.Wrappers;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Atributes;
 using BussinessLayer.Interfaces.ModuloGeneral.Menu;
 using BussinessLayer.DTOs.ModuloGeneral.Menu;
->>>>>>>> REFACTOR:PTP_API/Controllers/ModuloGeneral/Menu/MenuController.cs
 
 namespace PTP_API.Controllers.ModuloGeneral.Menu
 {
     [ApiController]
     [Route("api/v1/[controller]")]
     [SwaggerTag("Gestión de Menús")]
-    [EnableAuditing]
+    [EnableBitacora]
     public class MenuController : ControllerBase
     {
         private readonly IGnMenuService _menuService;
@@ -33,7 +26,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Menu
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener jerarquía de menús", Description = "Obtiene una jerarquía de menús basada en el rol de usuario y la empresa proporcionados.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> GetMenuHierarchy([FromQuery] int? roleId, [FromQuery] long? companyId, bool isHierarchy)
         {
             try

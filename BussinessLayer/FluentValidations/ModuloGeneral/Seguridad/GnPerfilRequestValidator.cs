@@ -1,16 +1,8 @@
-<<<<<<<< HEAD:BussinessLayer/FluentValidations/ModuloGeneral/Configuracion/Seguridad/GnPerfilRequestValidator.cs
-﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad;
-using BussinessLayer.Interfaces.Repository.Empresa;
-using FluentValidation;
-
-namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad
-========
-﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloGeneral.Seguridad
->>>>>>>> REFACTOR:BussinessLayer/FluentValidations/ModuloGeneral/Seguridad/GnPerfilRequestValidator.cs
 {
 
     public class GnPerfilRequestValidator : AbstractValidator<GnPerfilRequest>

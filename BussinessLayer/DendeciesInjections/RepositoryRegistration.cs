@@ -14,9 +14,6 @@ using BussinessLayer.Interfaces.Repository.ModuloHelpDesk;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Repository.ModuloGeneral.Geografia;
-using BussinessLayer.Interfaces.Repository.Auditoria;
-using BussinessLayer.Repository.Auditoria;
-using DataLayer.Models.ModuloGeneral;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
@@ -75,7 +72,7 @@ namespace BussinessLayer.DendeciesInjections
             #endregion
 
             #region Auditoria
-            services.AddScoped<IAleAuditoriaRepository, AleAuditoriaRepository>();
+            services.AddScoped<IAleBitacoraRepository, AleBitacoraRepository>();
             services.AddTransient<IAleLoginRepository, AleLoginRepository>();
             services.AddTransient<IAleLogsRepository, AleLogsRepository>();
             services.AddTransient<IAlePrintRepository, AlePrintRepository>();

@@ -15,7 +15,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [ApiController]
     [SwaggerTag("Gestión de Categoria del Ticket")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CatetgoryTickeController : ControllerBase
     {
         private readonly IHdkCategoryTicketService _categoryTicketService;
@@ -34,7 +34,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener categoria de ticket", Description = "Obtiene una lista de todas las categoria de ticket o una categoria específica si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

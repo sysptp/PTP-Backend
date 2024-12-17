@@ -1,11 +1,6 @@
-﻿
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Menu/SaveGnMenuRequest.cs
-namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Menu
-========
 namespace BussinessLayer.DTOs.ModuloGeneral.Menu
->>>>>>>> REFACTOR:BussinessLayer/DTOs/ModuloGeneral/Menu/SaveGnMenuRequest.cs
 {
     public class SaveGnMenuRequest
     {

@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de movimientos de citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaAppointmentMovementsController : ControllerBase
     {
         private readonly ICtaAppointmentMovementsService _movementsService;

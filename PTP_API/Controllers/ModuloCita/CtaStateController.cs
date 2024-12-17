@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloCitas
     [SwaggerTag("Gestión de estados de citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaStateController : ControllerBase
     {
         private readonly ICtaStateService _stateService;

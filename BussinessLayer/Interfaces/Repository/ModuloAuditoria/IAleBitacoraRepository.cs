@@ -4,7 +4,7 @@ using DataLayer.Models.ModuloAuditoria;
 
 namespace BussinessLayer.Interfaces.Repository.ModuloAuditoria
 {
-    public interface IAleAuditoriaRepository : IGenericRepository<AleAuditoria>
+    public interface IAleBitacoraRepository : IGenericRepository<AleAuditoria>
     {
         Task<AleAuditoria> AddAuditoria(AleAuditoria entity);
     }

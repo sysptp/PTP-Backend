@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [ApiController]
     [SwaggerTag("Gestión de Notas de Ticket")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class NoteTicketController : ControllerBase
     {
         private readonly IHdkNoteTicketService _noteTicketService;
@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Notas de ticket", Description = "Obtiene una lista de todos los departamento de ticket o un Notas específico si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

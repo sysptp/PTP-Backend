@@ -1,8 +1,5 @@
-<<<<<<<< HEAD:BussinessLayer/DTOs/ModuloGeneral/Configuracion/Seguridad/Usuario/UserResponse.cs
-﻿namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Usuario
-========
-﻿namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario
->>>>>>>> REFACTOR:BussinessLayer/DTOs/ModuloGeneral/Seguridad/Usuario/UserResponse.cs
+
+namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario
 {
     public class UserResponse
     {

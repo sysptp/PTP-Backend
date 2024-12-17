@@ -3,10 +3,8 @@ using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
-using BussinessLayer.Interfaces.IGeografia;
 using FluentValidation;
 using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
 using BussinessLayer.Interfaces.ModuloGeneral.Geografia;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DRegion;
 
@@ -16,7 +14,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     [Route("api/v1/Region")]
     [SwaggerTag("Gestión de Regiones")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class RegionController : ControllerBase
     {
         private readonly IRegionService _regionService;
@@ -29,10 +27,10 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         }
 
         [HttpGet]
-        [EnableAuditing]
+        [EnableBitacora]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener regiones", Description = "Obtiene una lista de todas las regiones o una región específica si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id, int? countryId)
         {
             try

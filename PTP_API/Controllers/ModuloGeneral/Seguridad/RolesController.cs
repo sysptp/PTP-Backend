@@ -3,22 +3,17 @@ using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
-using FluentValidation;
-<<<<<<<< HEAD:PTP_API/Controllers/ModuloGeneral/Configuracion/Seguridad/RolesController.cs
-using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad;
-========
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
->>>>>>>> REFACTOR:PTP_API/Controllers/ModuloGeneral/Seguridad/RolesController.cs
-
+using BussinessLayer.Atributes;
+using FluentValidation;
 namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 {
     [ApiController]
     [Route("api/v1/[controller]")]
     [SwaggerTag("Servicio de manejo de roles")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class RolesController : ControllerBase
     {
         private readonly IGnPerfilService _rolesService;
@@ -37,7 +32,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener perfiles", Description = "Devuelve una lista de perfiles o un perfil específico si se proporciona un ID")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllRoles([FromQuery] int? id, int? companyId)
         {
             try

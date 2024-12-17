@@ -8,16 +8,16 @@ using BussinessLayer.Interfaces.ModuloGeneral.Seguridad.IpWhois;
 
 namespace BussinessLayer.Services.ModuloAuditoria
 {
-    public class AleAuditoriaService : GenericService<AleAuditoriaRequest, AleAuditoriaReponse, AleAuditoria>, IAleAuditoriaService
+    public class AleBitacoraService : GenericService<AleBitacoraRequest, AleBitacoraReponse, AleAuditoria>, IAleBitacoraService
     {
-        private readonly IAleAuditoriaRepository _repository;
+        private readonly IAleBitacoraRepository _repository;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private readonly IUsuarioService _usuarioService;
         private readonly IIpGeolocalitationService _ipWhoisService;
 
-        public AleAuditoriaService(
-            IAleAuditoriaRepository repository,
+        public AleBitacoraService(
+            IAleBitacoraRepository repository,
             IMapper mapper,
             ITokenService tokenService,
             IUsuarioService usuarioService,
@@ -37,14 +37,14 @@ namespace BussinessLayer.Services.ModuloAuditoria
         /// información relevante como el usuario, empresa, sucursal, ubicación geográfica, y más.
         /// </summary>
         /// <param name="vm">
-        /// Objeto <see cref="AleAuditoriaRequest"/> que contiene los datos de auditoría, como el módulo,
+        /// Objeto <see cref="AleBitacoraRequest"/> que contiene los datos de auditoría, como el módulo,
         /// acción, IP, y otros detalles.
         /// </param>
         /// <returns>
-        /// Una tarea que representa la operación asincrónica, con un objeto <see cref="AleAuditoriaReponse"/> 
+        /// Una tarea que representa la operación asincrónica, con un objeto <see cref="AleBitacoraReponse"/> 
         /// que indica el resultado del registro de auditoría.
         /// </returns>
-        public async Task AddAuditoria(AleAuditoriaRequest vm)
+        public async Task AddAuditoria(AleBitacoraRequest vm)
         {
             var usuario = await _usuarioService.GetByUserNameResponse(vm.UserName);
 
@@ -81,10 +81,10 @@ namespace BussinessLayer.Services.ModuloAuditoria
         /// Rol del usuario que realizó la acción. Este filtro es opcional.
         /// <returns>
         /// Una tarea que representa la operación asincrónica y devuelve una lista de objetos 
-        /// <see cref="AleAuditoriaReponse"/> que cumplen con los criterios de filtrado.
+        /// <see cref="AleBitacoraReponse"/> que cumplen con los criterios de filtrado.
         /// </returns>
 
-        public async Task<List<AleAuditoriaReponse>> GetAllByFilters(
+        public async Task<List<AleBitacoraReponse>> GetAllByFilters(
             string modulo,
             string accion,
             int ano,

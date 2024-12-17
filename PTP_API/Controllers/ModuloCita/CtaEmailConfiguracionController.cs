@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de configuraciones de correo electrónico")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaEmailConfiguracionController : ControllerBase
     {
         private readonly ICtaEmailConfiguracionService _emailConfigService;

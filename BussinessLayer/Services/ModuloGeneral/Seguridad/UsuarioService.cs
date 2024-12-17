@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
-using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
 using DataLayer.Models.ModuloGeneral.Seguridad;
@@ -10,34 +9,32 @@ namespace BussinessLayer.Services.ModuloGeneral.Seguridad
 {
     public class UsuarioService : GenericService<RegisterRequest, UserResponse, Usuario>, IUsuarioService
     {
-        private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
         private readonly IUsuarioRepository _repository;
 
-        public UsuarioService(IUsuarioRepository repository, IMapper mapper, IAccountService accountService) : base(repository, mapper)
+        public UsuarioService(IUsuarioRepository repository, IMapper mapper) : base(repository, mapper)
         {
-            _accountService = accountService;
             _mapper = mapper;
             _repository = repository;
         }
 
         public async Task<List<UserResponse>> GetAllWithFilters(long? companyId, long? sucursalId, int? roleId, bool? areActive)
         {
-            var users = await _accountService.GetAllUsers();
+            var users = await _repository.GetAllWithIncludeAsync(new List<string> { "GnEmpresa", "GnSucursal", "GnPerfil" });
 
             if (companyId != null)
             {
-                users = users.Where(x => x.CompanyId == companyId).ToList();
+                users = users.Where(x => x.GnEmpresa != null && x.GnEmpresa.CODIGO_EMP == companyId).ToList();
             }
 
             if (sucursalId != null)
             {
-                users = users.Where(x => x.SucursalId == sucursalId).ToList();
+                users = users.Where(x => x.GnSucursal != null && x.GnSucursal.CodigoSuc == sucursalId).ToList();
             }
 
             if (roleId != null && roleId != 0)
             {
-                users = users.Where(x => x.RoleId == roleId).ToList();
+                users = users.Where(x => x.GnPerfil != null && x.GnPerfil.Id == roleId).ToList();
             }
 
             if (areActive != null)
@@ -45,18 +42,18 @@ namespace BussinessLayer.Services.ModuloGeneral.Seguridad
                 users = users.Where(x => x.IsActive == areActive).ToList();
             }
 
-            return users;
+            return _mapper.Map<List<UserResponse>>(users);
         }
 
         public override async Task<UserResponse> GetByIdResponse(int id)
         {
-            var users = await _accountService.GetAllUsers();
+            var users = await GetAllWithFilters(null,null,null,null);
             return users.FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<UserResponse> GetByUserNameResponse(string userName)
         {
-            var users = await _accountService.GetAllUsers();
+            var users = await GetAllWithFilters(null, null, null, null);
             return users.FirstOrDefault(x => x.UserName == userName);
         }
 

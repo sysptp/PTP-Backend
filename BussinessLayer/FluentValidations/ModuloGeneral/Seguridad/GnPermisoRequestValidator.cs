@@ -1,21 +1,10 @@
-<<<<<<<< HEAD:BussinessLayer/FluentValidations/ModuloGeneral/Configuracion/Seguridad/GnPermisoRequestValidator.cs
-﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
-using BussinessLayer.Interfaces.Repository.Configuracion.Menu;
-using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Repository.REmpresa;
-using BussinessLayer.Repository.RSeguridad;
-using FluentValidation;
-
-namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad
-========
-﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Menu;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloGeneral.Seguridad
->>>>>>>> REFACTOR:BussinessLayer/FluentValidations/ModuloGeneral/Seguridad/GnPermisoRequestValidator.cs
 {
     public class GnPermisoRequestValidator : AbstractValidator<GnPermisoRequest>
     {

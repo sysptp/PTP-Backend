@@ -1,14 +1,7 @@
-<<<<<<<< HEAD:BussinessLayer/FluentValidations/ModuloGeneral/Configuracion/Account/LoginRequestValidator.cs
-﻿using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
-using FluentValidation;
-
-namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account
-========
-﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.Account
->>>>>>>> REFACTOR:BussinessLayer/FluentValidations/Account/LoginRequestValidator.cs
 {
     public class LoginRequestValidator : AbstractValidator<LoginRequestDTO>
     {

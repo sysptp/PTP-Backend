@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de detalles de sesiones")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaSessionDetailsController : ControllerBase
     {
         private readonly ICtaSessionDetailsService _sessionDetailsService;

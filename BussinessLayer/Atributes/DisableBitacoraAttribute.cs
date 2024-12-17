@@ -1,11 +1,10 @@
 ﻿
 namespace BussinessLayer.Atributes
 {
-
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
-    public class EnableAuditingAttribute : Attribute
+    public class DisableBitacoraAttribute : Attribute
     {
-        public EnableAuditingAttribute()
+        public DisableBitacoraAttribute()
         {
         }
     }

@@ -1,11 +1,6 @@
-<<<<<<<< HEAD:PTP_API/Controllers/ModuloGeneral/Configuracion/Seguridad/PermisoController.cs
-﻿using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
-using BussinessLayer.Interfaces.ISeguridad;
-========
-﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
+using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
->>>>>>>> REFACTOR:PTP_API/Controllers/ModuloGeneral/Seguridad/PermisoController.cs
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +14,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
     [SwaggerTag("Servicio de manejo de permisos")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class PermisoController : ControllerBase
     {
         private readonly IGnPermisoService _gnPermisoService;
@@ -37,7 +32,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener permisos", Description = "Devuelve una lista de permisos o un permiso específico si se proporciona un ID")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllPermissions([FromQuery] long? companyId, int? roleId, int? menuId)
         {
             try
