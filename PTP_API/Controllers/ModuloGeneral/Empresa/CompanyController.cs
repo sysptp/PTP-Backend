@@ -122,7 +122,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar la empresa. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 

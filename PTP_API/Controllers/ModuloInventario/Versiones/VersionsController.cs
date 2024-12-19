@@ -98,9 +98,9 @@ namespace PTP_API.Controllers.ModuloInventario.Versiones
                     return Ok(Response<List<ViewVersionsDto>>.NotFound("No se han encontrado versiones."));
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al obtener las versiones. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError(ex.Message));
             }
         }
 

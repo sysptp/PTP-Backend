@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataLayer.Models.ModuloGeneral.Empresa;
 using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Productos;
 
@@ -18,8 +19,6 @@ public class Versiones
 
     [Required]
     public int? IdMarca { get; set; }
-
-    [Required]
     public DateTime? FechaModificacion { get; set; }
 
     [Required]
@@ -34,6 +33,8 @@ public class Versiones
     public string? UsuarioCreacion { get; set; }
 
     public string? UsuarioModificacion { get; set; }
+    //[ForeignKey("IdEmpresa")]
+    //public GnEmpresa? GnEmpresa { get; set; }
 
     // Relación con Marca (muchos a uno)
     [ForeignKey("IdMarca")]
