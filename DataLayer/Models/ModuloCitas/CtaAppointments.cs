@@ -1,6 +1,8 @@
 ﻿
+using DataLayer.Models.ModuloGeneral.Empresa;
 using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.Modulo_Citas
 {
@@ -10,10 +12,16 @@ namespace DataLayer.Models.Modulo_Citas
         public int IdAppointment { get; set; }
         public string? Description { get; set; }
         public int IdReasonAppointment { get; set; }
+        [ForeignKey("IdReasonAppointment")]
+        public CtaAppointmentReason? CtaAppointmentReason { get; set; }
         public DateTime AppointmentDate { get; set; }
         public TimeSpan AppointmentTime { get; set; }
         public int IdPlaceAppointment { get; set; }
+        [ForeignKey("IdPlaceAppointment")]
+        public CtaMeetingPlace? CtaMeetingPlace { get; set; }
         public int IdState { get; set; }
+        [ForeignKey("IdState")]
+        public CtaState? CtaState { get; set; }
         public bool IsConditionedTime { get; set; }
         public DateTime EndAppointmentDate { get; set; }
         public TimeSpan EndAppointmentTime { get; set; }
@@ -33,5 +41,7 @@ namespace DataLayer.Models.Modulo_Citas
         public string Email { get; set; } = null!;
         public int? IdClient { get; set; }
         public long CompanyId { get; set; }
+        [ForeignKey("CompanyId")]
+        public GnEmpresa? GnEmpresa { get; set; }
     }
 }

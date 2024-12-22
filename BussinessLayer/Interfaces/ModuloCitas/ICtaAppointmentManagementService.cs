@@ -6,5 +6,6 @@ namespace BussinessLayer.Interface.Modulo_Citas
 {
     public interface ICtaAppointmentManagementService : IGenericService<CtaAppointmentManagementRequest,CtaAppointmentManagementResponse,CtaAppointmentManagement>
     {
+        Task<List<CtaAppointmentManagementResponse>> GetAllWithFilter(int? id, int? appointmentId);
     }
 }
