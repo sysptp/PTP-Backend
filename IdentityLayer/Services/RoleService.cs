@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using IdentityLayer.Entities;
-using BussinessLayer.Interface.IAccount;
+using BussinessLayer.Interfaces.Services.IAccount;
 
 namespace IdentityLayer.Services
 {

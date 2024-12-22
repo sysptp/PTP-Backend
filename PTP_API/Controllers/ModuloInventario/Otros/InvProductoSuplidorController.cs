@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloGeneral.Monedas;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
-using BussinessLayer.Interfaces.ModuloInventario.Otros;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Otros;
 using BussinessLayer.Services.ModuloInventario.Otros;
 using BussinessLayer.Wrappers;
 using FluentValidation;

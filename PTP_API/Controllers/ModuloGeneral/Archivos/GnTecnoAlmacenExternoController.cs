@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloGeneral.Archivos;
-using BussinessLayer.Interfaces.ModuloGeneral.Archivos;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Archivos;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

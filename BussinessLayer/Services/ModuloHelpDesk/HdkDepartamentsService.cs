@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DataLayer.Models.ModuloHelpDesk;
-using BussinessLayer.Interfaces.ModuloHelpDesk;
 using BussinessLayer.DTOs.ModuloHelpDesk;
 using BussinessLayer.Interfaces.Repository.ModuloHelpDesk;
+using BussinessLayer.Interfaces.Services.ModuloHelpDesk;
 
 namespace BussinessLayer.Services.ModuloHelpDesk
 {

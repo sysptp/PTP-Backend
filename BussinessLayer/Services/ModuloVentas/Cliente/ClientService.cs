@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloVentas.Cliente;
-using BussinessLayer.Interfaces.ModuloVentas.IClient;
+using BussinessLayer.Interfaces.Services.ModuloVentas.IClient;
 using BussinessLayer.Wrappers;
 
 namespace BussinessLayer.Services.ModuloVentas.Cliente

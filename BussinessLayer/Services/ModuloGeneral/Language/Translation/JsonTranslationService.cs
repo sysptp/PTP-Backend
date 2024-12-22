@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.Atributes;
-using BussinessLayer.Interfaces.ModuloGeneral.Language;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Language;
 
 namespace BussinessLayer.Services.ModuloGeneral.Language.Translation
 {

@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloGeneral.Seguridad.IpWhois.Geolocalitation;
-using BussinessLayer.Interfaces.ModuloGeneral.Seguridad.IpWhois;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad.IpWhois;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System.Net.Http;

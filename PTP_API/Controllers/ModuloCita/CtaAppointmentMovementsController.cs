@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
-using BussinessLayer.Interface.Modulo_Citas;
+using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

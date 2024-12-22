@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.ModuloVentas.ICaja;
+﻿using BussinessLayer.Interfaces.Services.ModuloVentas.ICaja;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 

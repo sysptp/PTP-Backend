@@ -4,8 +4,8 @@ using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
-using BussinessLayer.Interfaces.ModuloAuditoria;
 using BussinessLayer.DTOs.ModuloAuditoria;
+using BussinessLayer.Interfaces.Services.ModuloAuditoria;
 
 namespace PTP_API.Controllers.ModuloAuditoria
 {

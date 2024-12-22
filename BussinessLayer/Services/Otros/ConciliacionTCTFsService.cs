@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interface.IOtros;
+﻿using BussinessLayer.Interfaces.Services.IOtros;
 using DataLayer.Models.ModuloVentas.Caja;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

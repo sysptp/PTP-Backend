@@ -1,11 +1,4 @@
-﻿using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
-using BussinessLayer.DTOs.ModuloGeneral.Monedas;
-using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
-using BussinessLayer.Wrappers;
-using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

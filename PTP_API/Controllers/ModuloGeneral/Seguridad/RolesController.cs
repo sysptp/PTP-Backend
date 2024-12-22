@@ -3,10 +3,10 @@ using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
-using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.Atributes;
 using FluentValidation;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
 namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 {
     [ApiController]

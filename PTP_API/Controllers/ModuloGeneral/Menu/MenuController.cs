@@ -3,8 +3,8 @@
 using BussinessLayer.Wrappers;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Atributes;
-using BussinessLayer.Interfaces.ModuloGeneral.Menu;
 using BussinessLayer.DTOs.ModuloGeneral.Menu;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Menu;
 
 namespace PTP_API.Controllers.ModuloGeneral.Menu
 {

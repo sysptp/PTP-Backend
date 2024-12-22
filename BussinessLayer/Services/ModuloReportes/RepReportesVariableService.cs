@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloReporteria;
-using BussinessLayer.Interfaces.ModuloReporteria;
+using BussinessLayer.Interfaces.Services.ModuloReporteria;
 using DataLayer.Models.ModuloReporteria;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

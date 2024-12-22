@@ -1,8 +1,8 @@
-﻿using BussinessLayer.Interfaces.ModuloVentas.IBancos;
+﻿using BussinessLayer.Interfaces.Services.ModuloVentas.IBancos;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 
-    public class BancosService : IBancosService
+public class BancosService : IBancosService
     {
         private readonly PDbContext _context;
 

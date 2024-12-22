@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Interfaces.Repositories;
 using AutoMapper;
-using BussinessLayer.Interfaces.IOtros;
+using BussinessLayer.Interfaces.Services.IOtros;
 
 namespace BussinessLayer.Services
 {

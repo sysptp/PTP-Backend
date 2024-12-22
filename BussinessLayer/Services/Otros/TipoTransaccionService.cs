@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interface.IOtros;
+﻿using BussinessLayer.Interfaces.Services.IOtros;
 
 namespace BussinessLayer.Services.SOtros
 {

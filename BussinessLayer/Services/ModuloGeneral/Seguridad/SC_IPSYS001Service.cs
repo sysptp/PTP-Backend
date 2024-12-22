@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using DataLayer.Models.ModuloGeneral.Seguridad;
-using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
 
 namespace BussinessLayer.Services.ModuloGeneral.Seguridad
 {

@@ -2,8 +2,8 @@
 using BussinessLayer.Helpers.CargaMasivaHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
-using BussinessLayer.Interfaces.ICargaMasiva;
 using Microsoft.AspNetCore.Http;
+using BussinessLayer.Interfaces.Services.ICargaMasiva;
 
 namespace BussinessLayer.Services.SCargaMasiva
 {

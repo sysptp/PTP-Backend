@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.ModuloFacturacion;
+﻿using BussinessLayer.Interfaces.Services.ModuloFacturacion;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 

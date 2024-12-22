@@ -1,5 +1,4 @@
-﻿using BussinessLayer.Interface.IAccount;
-using IdentityLayer.Entities;
+﻿using IdentityLayer.Entities;
 using IdentityLayer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +12,7 @@ using System.Text;
 using BussinessLayer.Settings;
 using Identity.Context;
 using BussinessLayer.Wrappers;
+using BussinessLayer.Interfaces.Services.IAccount;
 
 namespace IdentityLayer
 {

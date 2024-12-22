@@ -1,7 +1,7 @@
 ﻿
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
-using BussinessLayer.Interface.IAccount;
+using BussinessLayer.Interfaces.Services.IAccount;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;

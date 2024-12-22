@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Otros;
-using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Productos;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Otros

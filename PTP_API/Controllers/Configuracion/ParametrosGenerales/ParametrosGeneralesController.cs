@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
-using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
+using BussinessLayer.Interfaces.Services.IModuloGeneral.IParametrosGenerales;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

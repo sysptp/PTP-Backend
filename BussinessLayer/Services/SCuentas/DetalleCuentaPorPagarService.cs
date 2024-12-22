@@ -1,7 +1,7 @@
 ﻿using DataLayer.PDbContex;
 using DataLayer.Models.Cuentas;
-using BussinessLayer.Interfaces.ICuentas;
 using Microsoft.EntityFrameworkCore;
+using BussinessLayer.Interfaces.Services.ICuentas;
 
 namespace BussinessLayer.Services.SCuentas
 {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using BussinessLayer.Interface.IOtros;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
+using BussinessLayer.Interfaces.Services.IOtros;
 
 namespace BussinessLayer.Services.SOtros
 {

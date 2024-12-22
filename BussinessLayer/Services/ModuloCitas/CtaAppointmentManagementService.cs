@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
-using BussinessLayer.Interface.Modulo_Citas;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
+using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Services;
 
 namespace DataLayer.Models.Modulo_Citas

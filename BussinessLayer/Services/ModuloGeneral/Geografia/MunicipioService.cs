@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DMunicipio;
-using BussinessLayer.Interfaces.ModuloGeneral.Geografia;
 using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Geografia;
 using DataLayer.Models.ModuloGeneral.Geografia;
 
 namespace BussinessLayer.Services.ModuloGeneral.Geografia

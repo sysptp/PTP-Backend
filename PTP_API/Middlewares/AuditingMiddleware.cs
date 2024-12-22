@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloAuditoria;
-using BussinessLayer.Interfaces.ModuloAuditoria;
+using BussinessLayer.Interfaces.Services.ModuloAuditoria;
 using System.Text;
 
 namespace PTP_API.Middlewares

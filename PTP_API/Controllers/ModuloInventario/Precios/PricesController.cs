@@ -1,7 +1,7 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Precios;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.FluentValidations.ModuloInventario.Precios;
-using BussinessLayer.Interfaces.ModuloInventario.Precios;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Precios;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

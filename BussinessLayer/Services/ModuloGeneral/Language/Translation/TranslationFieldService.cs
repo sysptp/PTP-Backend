@@ -1,6 +1,6 @@
-﻿using BussinessLayer.Interfaces.ModuloGeneral.Language;
-using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
-using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
+﻿using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Language;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
 using DataLayer.PDbContex;
 
 namespace BussinessLayer.Services.ModuloGeneral.Language.Translation

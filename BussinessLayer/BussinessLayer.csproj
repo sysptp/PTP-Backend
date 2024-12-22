@@ -36,7 +36,7 @@
     <Folder Include="FluentValidations\ModuloInventario\Almacenes\" />
     <Folder Include="FluentValidations\ModuloVentas\" />
     <Folder Include="FluentValidations\ModuloRRHH\" />
-    <Folder Include="Interfaces\ModuloCitas\" />
+    <Folder Include="Interfaces\Services\ModuloCitas\" />
     <Folder Include="Interfaces\ModuloContabilidad\" />
     <Folder Include="Interfaces\ModuloRRHH\" />
     <Folder Include="Mapping\ModuloCitas\" />

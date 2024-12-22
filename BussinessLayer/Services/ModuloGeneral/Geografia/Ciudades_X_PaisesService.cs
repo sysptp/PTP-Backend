@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.ModuloGeneral.Geografia;
+﻿using BussinessLayer.Interfaces.Services.ModuloGeneral.Geografia;
 using DataLayer.Models.ModuloGeneral.Geografia;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.ModuloVentas.ICotizaciones;
+﻿using BussinessLayer.Interfaces.Services.ModuloVentas.ICotizaciones;
 using DataLayer.Models.ModuloVentas.Cotizaciones;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

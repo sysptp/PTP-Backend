@@ -1,5 +1,4 @@
-﻿using BussinessLayer.Interfaces.IAutenticacion;
-using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
+﻿using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using BussinessLayer.Repository.ROtros;
 using DataLayer.Models.ModuloGeneral.Empresa;
 using DataLayer.PDbContex;

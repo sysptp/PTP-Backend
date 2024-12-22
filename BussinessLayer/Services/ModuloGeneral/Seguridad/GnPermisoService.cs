@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
-using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloGeneral.Seguridad;
 using Microsoft.Extensions.Logging;

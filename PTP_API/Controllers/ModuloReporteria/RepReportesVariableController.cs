@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloReporteria;
-using BussinessLayer.Interfaces.ModuloReporteria;
+using BussinessLayer.Interfaces.Services.ModuloReporteria;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

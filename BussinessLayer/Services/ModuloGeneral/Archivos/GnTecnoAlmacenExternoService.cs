@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.Archivos;
-using BussinessLayer.Interfaces.ModuloGeneral.Archivos;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Archivos;
 using DataLayer.Models.ModuloGeneral.Archivos;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

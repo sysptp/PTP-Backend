@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using BussinessLayer.Atributes;
-using BussinessLayer.Interfaces.ModuloGeneral.Empresas;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Empresas;
 
 namespace PTP_API.Controllers.ModuloGeneral.Empresa
 {

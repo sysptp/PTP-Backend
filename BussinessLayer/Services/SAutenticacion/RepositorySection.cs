@@ -1,5 +1,4 @@
-﻿
-using BussinessLayer.Interfaces.IAutenticacion;
+﻿using BussinessLayer.Interfaces.Services.IAutenticacion;
 using System.Text.RegularExpressions;
 
 namespace BussinessLayer.Services.SAutenticacion

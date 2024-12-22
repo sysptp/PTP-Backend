@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Productos;
-using BussinessLayer.Interfaces.ModuloGeneral.Language;
-using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Language;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Productos;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

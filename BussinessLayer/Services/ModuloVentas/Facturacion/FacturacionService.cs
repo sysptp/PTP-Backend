@@ -1,8 +1,4 @@
-﻿using BussinessLayer.Interface.IOtros;
-using BussinessLayer.Interfaces.ICuentas;
-using BussinessLayer.Interfaces.ModuloFacturacion;
-
-//using BussinessLayer.ViewModels;
+﻿//using BussinessLayer.ViewModels;
 using DataLayer.Models.Cuentas;
 using DataLayer.Models.ModuloInventario.Productos;
 using DataLayer.Models.Otros;

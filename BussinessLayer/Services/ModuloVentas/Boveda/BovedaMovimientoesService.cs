@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.ModuloVentas.IBoveda;
+﻿using BussinessLayer.Interfaces.Services.ModuloVentas.IBoveda;
 using DataLayer.Models.ModuloVentas.Boveda;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

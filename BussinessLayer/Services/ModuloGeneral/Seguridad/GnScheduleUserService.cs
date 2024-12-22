@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
-using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
 using DataLayer.Models.ModuloGeneral.Seguridad;
 
 namespace BussinessLayer.Services.ModuloGeneral.Seguridad

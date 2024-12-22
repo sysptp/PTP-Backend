@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using DataLayer.Models.ModuloAuditoria;
-using BussinessLayer.Interfaces.ModuloAuditoria;
 using BussinessLayer.DTOs.ModuloAuditoria;
-using BussinessLayer.Interfaces.ModuloGeneral.Seguridad;
 using BussinessLayer.Interfaces.Repository.ModuloAuditoria;
-using BussinessLayer.Interfaces.ModuloGeneral.Seguridad.IpWhois;
+using BussinessLayer.Interfaces.Services.ModuloAuditoria;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad.IpWhois;
 
 namespace BussinessLayer.Services.ModuloAuditoria
 {

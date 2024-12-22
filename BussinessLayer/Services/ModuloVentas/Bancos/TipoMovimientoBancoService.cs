@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.ModuloVentas.IBancos;
+﻿using BussinessLayer.Interfaces.Services.ModuloVentas.IBancos;
 using DataLayer.Models.ModuloVentas.Bancos;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

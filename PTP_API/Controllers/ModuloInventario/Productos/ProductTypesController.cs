@@ -1,6 +1,5 @@
 ﻿using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
-using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -8,6 +7,7 @@ using BussinessLayer.DTOs.ModuloInventario.Productos;
 using System.Net.Mime;
 using BussinessLayer.Wrappers;
 using FluentValidation;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Productos;
 
 namespace PTP_API.Controllers.ModuloInventario.Productos
 {

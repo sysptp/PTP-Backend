@@ -5,9 +5,9 @@ using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
 using BussinessLayer.Atributes;
-using BussinessLayer.Interfaces.ModuloGeneral.Geografia;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
-using BussinessLayer.Interfaces.ModuloGeneral.Language;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Geografia;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Language;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {

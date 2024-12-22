@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using BussinessLayer.Interfaces.ModuloGeneral.Empresas;
 using DataLayer.Models.ModuloGeneral.Empresa;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Empresas;
 
 namespace BussinessLayer.Services.ModuloGeneral.Empresas
 {

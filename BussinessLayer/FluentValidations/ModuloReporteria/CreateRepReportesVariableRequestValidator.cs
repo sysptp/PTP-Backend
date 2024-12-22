@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloReporteria;
-using BussinessLayer.Interfaces.ModuloReporteria;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
+using BussinessLayer.Interfaces.Services.ModuloReporteria;
 using BussinessLayer.Services.ModuloReportes;
 using FluentValidation;
 using System;
