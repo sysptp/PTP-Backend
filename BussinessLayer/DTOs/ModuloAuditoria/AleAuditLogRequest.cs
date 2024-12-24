@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace BussinessLayer.DTOs.ModuloAuditoria
 {
-    public class AleAuditLogsRequest 
+    public class AleAuditLogRequest 
     {
         [JsonIgnore]
         public int AuditID { get; set; }

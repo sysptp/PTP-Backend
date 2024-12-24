@@ -111,6 +111,8 @@ public static class ServiceRegistration
         services.AddTransient<IAleLogsService, AleLogsService>();
         services.AddTransient<IAleLoginService, AleLoginService>();
         services.AddTransient<IAlePrintService, AlePrintService>();
+        services.AddTransient<IAleAuditLogService, AleAuditLogService>();
+        services.AddTransient<IAleAuditTableControlService, AleAuditTableControlService>();
         #endregion
 
         #region Modulo de Citas

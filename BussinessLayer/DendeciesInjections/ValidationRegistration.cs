@@ -86,6 +86,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
             services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
             services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
+            services.AddScoped<IValidator<AleAuditLogRequest>, AleAuditLogRequestValidator>();
+            services.AddScoped<IValidator<AleAuditTableControlRequest>, AleAuditTableControlRequestValidator>();
             #endregion
 
             #region Modulo Citas

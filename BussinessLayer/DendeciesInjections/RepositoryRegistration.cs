@@ -77,7 +77,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IAleLoginRepository, AleLoginRepository>();
             services.AddTransient<IAleLogsRepository, AleLogsRepository>();
             services.AddTransient<IAlePrintRepository, AlePrintRepository>();
-
+            services.AddTransient<IAleAuditLogRepository, AleAuditLogRepository>();
+            services.AddTransient<IAleAuditTableControlRepository, AleAuditTableControlRepository>();
             #endregion
 
             #region Modulo de Citas

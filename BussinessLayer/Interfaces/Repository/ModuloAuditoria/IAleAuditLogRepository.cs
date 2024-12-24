@@ -3,7 +3,7 @@ using DataLayer.Models.ModuloAuditoria;
 
 namespace BussinessLayer.Interfaces.Repository.ModuloAuditoria
 {
-    public interface IAleAuditLogsRepository : IGenericRepository<AleAuditLogs>    
+    public interface IAleAuditLogRepository : IGenericRepository<AleAuditLog>    
     {
     }
 }

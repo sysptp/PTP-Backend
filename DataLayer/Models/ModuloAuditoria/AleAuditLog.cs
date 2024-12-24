@@ -1,9 +1,11 @@
 ﻿using DataLayer.Models.Otros;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.ModuloAuditoria
 {
-    public class AleAuditLogs : AuditableEntities
+    public class AleAuditLog : AuditableEntities
     {
+        [Key]
         public int AuditID { get; set; }
         public string TableName { get; set; } = null!;
         public string Action { get; set; } = null!;

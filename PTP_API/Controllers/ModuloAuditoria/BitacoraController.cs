@@ -11,16 +11,16 @@ namespace PTP_API.Controllers.ModuloAuditoria
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [SwaggerTag("Gestión de Auditoria")]
+    [SwaggerTag("Gestión de Bitacora")]
     [Authorize]
     public class BitacoraController : ControllerBase
     {
-        private readonly IAleBitacoraService _aleAuditoriaService;
+        private readonly IAleBitacoraService _aleBitacoraService;
         private readonly IValidator<AleBitacoraRequest> _validator;
 
-        public BitacoraController(IAleBitacoraService aleAuditoriaService, IValidator<AleBitacoraRequest> validator)
+        public BitacoraController(IAleBitacoraService aleBitacoraService, IValidator<AleBitacoraRequest> validator)
         {
-            _aleAuditoriaService = aleAuditoriaService;
+            _aleBitacoraService = aleBitacoraService;
             _validator = validator;
         }
         [HttpGet]
@@ -30,33 +30,33 @@ namespace PTP_API.Controllers.ModuloAuditoria
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Obtener Auditoria Sistema", Description = "Obtiene una lista de todas las Auditoria Sistema o una categoria específica si se proporciona un ID.")]
+        [SwaggerOperation(Summary = "Obtener Bitacora Sistema", Description = "Obtiene una lista de todas las Bitacora Sistema o una categoria específica si se proporciona un ID.")]
         public async Task<IActionResult> Get([FromQuery] long? id)
         {
             try
             {
                 if (id.HasValue)
                 {
-                    var aleAuditoria = await _aleAuditoriaService.GetByIdResponse(id);
-                    if (aleAuditoria == null)
+                    var aleBitacora = await _aleBitacoraService.GetByIdResponse(id);
+                    if (aleBitacora == null)
                     {
-                        return NotFound(Response<AleBitacoraReponse>.NotFound("Auditoria no encontrada."));
+                        return NotFound(Response<AleBitacoraReponse>.NotFound("Bitacora no encontrada."));
                     }
-                    return Ok(Response<List<AleBitacoraReponse>>.Success(new List<AleBitacoraReponse> { aleAuditoria }, "Auditoria Sistema encontrada."));
+                    return Ok(Response<List<AleBitacoraReponse>>.Success(new List<AleBitacoraReponse> { aleBitacora }, "Bitacora Sistema encontrada."));
                 }
                 else
                 {
-                    var aleAuditorias = await _aleAuditoriaService.GetAllDto();
-                    if (aleAuditorias == null || aleAuditorias.Count == 0)
+                    var aleBitacoras = await _aleBitacoraService.GetAllDto();
+                    if (aleBitacoras == null || aleBitacoras.Count == 0)
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<AleBitacoraReponse>>.Success(aleAuditorias, "Auditoria Sistema obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<AleBitacoraReponse>>.Success(aleBitacoras, "Bitacora Sistema obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener las Auditoria. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener las Bitacora. Por favor, intente nuevamente."));
             }
         }
 
@@ -66,7 +66,7 @@ namespace PTP_API.Controllers.ModuloAuditoria
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Obtener Auditoria Sistema con Filtros", Description = "Obtiene una lista de Auditoria Sistema según los filtros proporcionados.")]
+        [SwaggerOperation(Summary = "Obtener Bitacora Sistema con Filtros", Description = "Obtiene una lista de Bitacora Sistema según los filtros proporcionados.")]
         public async Task<IActionResult> GetByFilters(
     [FromQuery] string? modulo,
     [FromQuery] string? accion,
@@ -82,7 +82,7 @@ namespace PTP_API.Controllers.ModuloAuditoria
         {
             try
             {
-                var filteredAuditorias = await _aleAuditoriaService.GetAllByFilters(
+                var filteredBitacoras = await _aleBitacoraService.GetAllByFilters(
                     modulo ?? string.Empty,
                     accion ?? string.Empty,
                     ano ?? 0,
@@ -95,12 +95,12 @@ namespace PTP_API.Controllers.ModuloAuditoria
                     idEmpresa ?? 0,
                     idSucursal ?? 0);
 
-                if (filteredAuditorias == null || !filteredAuditorias.Any())
+                if (filteredBitacoras == null || !filteredBitacoras.Any())
                 {
                     return NoContent();
                 }
 
-                return Ok(Response<IEnumerable<AleBitacoraReponse>>.Success(filteredAuditorias, "Auditorias filtradas obtenidas correctamente."));
+                return Ok(Response<IEnumerable<AleBitacoraReponse>>.Success(filteredBitacoras, "Bitacoras filtradas obtenidas correctamente."));
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace PTP_API.Controllers.ModuloAuditoria
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Crear una nueva Auditoria Sistema", Description = "Crea una nueva Auditoria Sistema en el sistema.")]
+        [SwaggerOperation(Summary = "Crear una nueva Bitacora Sistema", Description = "Crea una nueva Bitacora Sistema en el sistema.")]
         public async Task<IActionResult> Add([FromBody] AleBitacoraRequest request)
         {
             var validationResult = await _validator.ValidateAsync(request);
@@ -127,12 +127,12 @@ namespace PTP_API.Controllers.ModuloAuditoria
 
             try
             {
-                var aleAuditoria = await _aleAuditoriaService.Add(request);
-                return StatusCode(201, Response<AleBitacoraReponse>.Created(aleAuditoria, "Auditoria Sistema creada correctamente."));
+                var bitacora = await _aleBitacoraService.Add(request);
+                return StatusCode(201, Response<AleBitacoraReponse>.Created(bitacora, "Bitacora Sistema creada correctamente."));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear la Auditoria Sistema. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear la Bitacora Sistema. Por favor, intente nuevamente."));
             }
         }
 

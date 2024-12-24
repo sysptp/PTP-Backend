@@ -12,7 +12,7 @@ namespace DataLayer.Models.Modulo_Citas
         public int IdSession { get; set; }
         public string? Description { get; set; }
         public string? IdClient { get; set; }
-        public string? IdUser { get; set; }
+        public int? IdUser { get; set; }
         [ForeignKey("IdUser")]
         public Usuario? Usuario { get; set; }
         public DateTime FirstSessionDate { get; set; }

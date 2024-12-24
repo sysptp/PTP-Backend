@@ -1,7 +1,7 @@
 ﻿
 namespace BussinessLayer.DTOs.ModuloAuditoria
 {
-    public class AleAuditLogsResponse 
+    public class AleAuditLogResponse 
     {
             public int AuditID { get; set; }
             public string TableName { get; set; } = null!;

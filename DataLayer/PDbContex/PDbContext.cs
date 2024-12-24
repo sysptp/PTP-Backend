@@ -139,6 +139,8 @@ namespace DataLayer.PDbContex
         public DbSet<AleLogin> AleLogin { get; set; }
         public DbSet<AleLogs> AleLogs { get; set; }
         public DbSet<AlePrint> AlePrint { get; set; }
+        public DbSet<AleAuditLog> AleAuditLog { get; set; }
+        public DbSet<AleAuditTableControl> AleAuditTableControls { get; set; }
         #endregion
 
         #region Modulo Citas

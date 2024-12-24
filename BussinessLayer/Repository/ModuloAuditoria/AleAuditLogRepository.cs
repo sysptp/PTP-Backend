@@ -5,9 +5,9 @@ using DataLayer.PDbContex;
 
 namespace BussinessLayer.Repository.ModuloAuditoria
 {
-    public class AleAuditLogsRepository : GenericRepository<AleAuditLogs>, IAleAuditLogsRepository
+    public class AleAuditLogRepository : GenericRepository<AleAuditLog>, IAleAuditLogRepository
     {
-        public AleAuditLogsRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
+        public AleAuditLogRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
         {
         }
     }
