@@ -133,7 +133,7 @@ namespace DataLayer.PDbContex
         public DbSet<AleLogs> AleLogs { get; set; }
         public DbSet<AlePrint> AlePrint { get; set; }
         public DbSet<AleAuditLog> AleAuditLog { get; set; }
-        public DbSet<AleAuditTableControl> AleAuditTableControls { get; set; }
+        public DbSet<AleAuditTableControl> AleAuditTableControl { get; set; }
         #endregion
 
         #region Modulo Citas
