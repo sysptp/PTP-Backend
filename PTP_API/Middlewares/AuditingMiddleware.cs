@@ -21,9 +21,9 @@ namespace PTP_API.Middlewares
 
             var endpoint = context.GetEndpoint();
             var isAuditable = endpoint?.Metadata.GetMetadata<EnableBitacoraAttribute>() != null;
-            var isDisableAuditing = endpoint?.Metadata.GetMetadata<DisableBitacoraAttribute>() != null;
+            var isDisableBitacora = endpoint?.Metadata.GetMetadata<DisableBitacoraAttribute>() != null;
 
-            if (!isAuditable || isDisableAuditing)
+            if (!isAuditable || isDisableBitacora)
             {
                 await _next(context);
                 return;

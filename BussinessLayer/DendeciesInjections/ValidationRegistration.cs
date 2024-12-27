@@ -71,6 +71,11 @@ using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.FluentValidations.Account;
+using BussinessLayer.DTOs.ModuloInventario.Almacenes;
+using BussinessLayer.FluentValidations.ModuloInventario.Almacen;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
+using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -209,7 +214,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<string>, StringsRequestValidator>();
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
             services.AddScoped<IValidator<decimal>, DecimalsRequestValidator>();
-
+            #endregion
 
             #region Modulo General
             services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
@@ -233,7 +238,6 @@ namespace BussinessLayer.DendeciesInjections
             #endregion
 
             #region Auditoria
-            services.AddScoped<IValidator<AleAuditoriaRequest>, AleAuditoriaRequestValidator>();
             services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
             services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
             services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();

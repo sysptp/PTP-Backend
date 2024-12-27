@@ -15,7 +15,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
     [ApiController]
     [SwaggerTag("Almacen")]
     //[Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class AlmacenesController : ControllerBase
     {
         private readonly IInvAlmacenesService _almacenesService;
@@ -34,7 +34,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Almacenes", Description = "Obtiene una lista de todos los Almacenes o un almacen específico si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

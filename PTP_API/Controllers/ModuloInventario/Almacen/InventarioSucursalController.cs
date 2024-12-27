@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
     [ApiController]
     [SwaggerTag("Inventario Sucursal")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class InventarioSucursalController : ControllerBase
     {
         private readonly IInvInventarioSucursalService _inventarioSucursal;
@@ -32,7 +32,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Inventario Sucursal", Description = "Obtiene una lista de todos los Inventarios Sucursales o un Inventario Sucursal específico si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

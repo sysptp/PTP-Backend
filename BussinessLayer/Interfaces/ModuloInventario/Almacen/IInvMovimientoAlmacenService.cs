@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Almacenes;
-using BussinessLayer.Interfaces.IOtros;
+using BussinessLayer.Interfaces.Services.IOtros;
 using DataLayer.Models.ModuloInventario.Almacen;
 
 

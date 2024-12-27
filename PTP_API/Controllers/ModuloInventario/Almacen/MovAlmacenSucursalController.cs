@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
     [ApiController]
     [SwaggerTag("Movimiento Almacen Sucursal")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class MovAlmacenSucursalController : ControllerBase
     {
         private readonly IInvMovAlmacenSucursalService _MovAlmacenSucursal;
@@ -32,7 +32,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Movimiento Almacen Sucursal", Description = "Obtiene una lista de todos los Inventarios Sucursales o un Movimiento Almacen Sucursal específico si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

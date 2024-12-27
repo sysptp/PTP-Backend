@@ -59,6 +59,8 @@ using BussinessLayer.Interfaces.Services.ModuloVentas.IBancos;
 using BussinessLayer.Interfaces.Services.ModuloVentas.IBoveda;
 using BussinessLayer.Interfaces.Services.ModuloVentas.ICaja;
 using BussinessLayer.Interfaces.Services.ModuloVentas.ICotizaciones;
+using BussinessLayer.Interfaces.ModuloInventario.Almacen;
+using BussinessLayer.Services.ModuloInventario.SAlmacen;
 
 public static class ServiceRegistration
 {
@@ -67,7 +69,7 @@ public static class ServiceRegistration
         
 
         #region Modulo Inventario
-        services.AddScoped<IAlmacenesService, AlmacenesService>();
+        services.AddScoped<IInvAlmacenesService, InvAlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
        // services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
