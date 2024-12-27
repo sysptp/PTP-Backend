@@ -35,10 +35,12 @@ namespace DataLayer.PDbContex
 
         }
 
+
         public PDbContext(DbContextOptions<PDbContext> options) : base(options)
         {
 
         }
+       
 
         #region Reporteria
 
