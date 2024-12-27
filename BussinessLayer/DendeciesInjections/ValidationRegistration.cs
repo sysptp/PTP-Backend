@@ -47,6 +47,30 @@ using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
 using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
 using BussinessLayer.FluentValidations.ModuloInventario.Otros;
+using BussinessLayer.DTOs.ModuloInventario.Almacenes;
+using BussinessLayer.FluentValidations.ModuloInventario.Almacen;
+using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
+using BussinessLayer.Validations.ModuloCitas.CtaSessions;
+using BussinessLayer.DTOs.ModuloCitas.CtaState;
+using BussinessLayer.Validations.ModuloCitas.CtaState;
+using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
+using BussinessLayer.Validations.ModuloCitas.CtaUnwanted;
+using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
+using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentManagement;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentMovements;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentReason;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointments;
+using BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion;
+using BussinessLayer.Validations.ModuloCitas.CtaCitaConfiguracion;
+using BussinessLayer.Validations.ModuloCitas.CtaEmailConfiguracion;
+using BussinessLayer.Validations.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.Validations.ModuloCitas.CtaSessionDetails;
 
 namespace BussinessLayer.DendeciesInjections
 {

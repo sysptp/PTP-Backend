@@ -156,7 +156,6 @@ namespace DataLayer.PDbContex
         public DbSet<Provincia> Provincia { get; set; }
 
         public DbSet<Municipio> Municipio { get; set; }
-        #endregion
 
         public DbSet<Imagen> Imagenes { get; set; }
 
