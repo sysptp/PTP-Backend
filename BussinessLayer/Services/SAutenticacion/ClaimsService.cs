@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.IAutenticacion;
+﻿using BussinessLayer.Interfaces.Services.IAutenticacion;
 using Microsoft.AspNetCore.Http; // Import this namespace
 using System;
 using System.Security.Claims;

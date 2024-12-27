@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloInventario.Precios;
-using BussinessLayer.Interfaces.ModuloInventario.Precios;
-using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Precios;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Productos;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

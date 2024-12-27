@@ -1,6 +1,7 @@
 ﻿
 using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.Modulo_Citas
 {
@@ -9,7 +10,11 @@ namespace DataLayer.Models.Modulo_Citas
         [Key]
         public int IdSessionDetail { get; set; }
         public int IdAppointment { get; set; }
+        [ForeignKey("IdAppointment")]
+        public CtaAppointments? CtaAppointments { get; set; }
         public int IdSession { get; set; }
+        [ForeignKey("IdSession")]
+        public CtaSessions? CtaSessions { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

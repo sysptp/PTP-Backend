@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
-using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using BussinessLayer.Atributes;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Empresas;
 
 namespace PTP_API.Controllers.ModuloGeneral.Empresa
 {
@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
     [Route("api/v1/Company")]
     [SwaggerTag("Gestión de Empresas")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CompanyController : ControllerBase
     {
         private readonly IGnEmpresaservice _empresaService;
@@ -35,7 +35,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener empresas", Description = "Obtiene una lista de todas las empresas o una empresa específica si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] long? id)
         {
             try
@@ -122,7 +122,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar la empresa. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 

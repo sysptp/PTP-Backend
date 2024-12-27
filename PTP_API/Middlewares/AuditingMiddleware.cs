@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.Auditoria;
-using BussinessLayer.Interfaces.IAuditoria;
+using BussinessLayer.DTOs.ModuloAuditoria;
+using BussinessLayer.Interfaces.Services.ModuloAuditoria;
 using System.Text;
 
 namespace PTP_API.Middlewares
@@ -20,8 +20,8 @@ namespace PTP_API.Middlewares
         {
 
             var endpoint = context.GetEndpoint();
-            var isAuditable = endpoint?.Metadata.GetMetadata<EnableAuditingAttribute>() != null;
-            var isDisableAuditing = endpoint?.Metadata.GetMetadata<DisableAuditingAttribute>() != null;
+            var isAuditable = endpoint?.Metadata.GetMetadata<EnableBitacoraAttribute>() != null;
+            var isDisableAuditing = endpoint?.Metadata.GetMetadata<DisableBitacoraAttribute>() != null;
 
             if (!isAuditable || isDisableAuditing)
             {
@@ -55,7 +55,7 @@ namespace PTP_API.Middlewares
                 var responseBodyText = await new StreamReader(context.Response.Body).ReadToEndAsync();
                 context.Response.Body.Seek(0, SeekOrigin.Begin);
 
-                var auditLog = new AleAuditoriaRequest
+                var auditLog = new AleBitacoraRequest
                 {
                     Modulo = "API",
                     Acccion = $"{context.Request.Method} {context.Request.Path}",
@@ -70,7 +70,7 @@ namespace PTP_API.Middlewares
                     try
                     {
                         using var scope = _serviceProvider.CreateScope();
-                        var auditService = scope.ServiceProvider.GetRequiredService<IAleAuditoriaService>();
+                        var auditService = scope.ServiceProvider.GetRequiredService<IAleBitacoraService>();
                         await auditService.AddAuditoria(auditLog);
                     }
                     catch (Exception ex)

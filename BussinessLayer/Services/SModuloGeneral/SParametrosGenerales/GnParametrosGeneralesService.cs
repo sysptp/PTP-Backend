@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
-using BussinessLayer.Interfaces.IModuloGeneral.IParametrosGenerales;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
+using BussinessLayer.Interfaces.Services.IModuloGeneral.IParametrosGenerales;
 using DataLayer.Models.ModuloGeneral;
 
 

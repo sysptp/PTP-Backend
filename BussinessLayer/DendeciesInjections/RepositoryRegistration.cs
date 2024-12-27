@@ -1,21 +1,19 @@
-﻿using BussinessLayer.Interfaces.Repository.Configuracion.Menu;
-using BussinessLayer.Interfaces.Repository.Configuracion.Modulo;
-using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Interfaces.Repository.Geografia;
-using BussinessLayer.Interfaces.Repository.HelpDesk;
-using BussinessLayer.Repository.HelpDesk;
-using BussinessLayer.Interfaces.Repository.Seguridad;
-using BussinessLayer.Repository.RConfiguracion.Menu;
-using BussinessLayer.Repository.RConfiguracion.Modulo;
-using BussinessLayer.Repository.REmpresa;
-using BussinessLayer.Repository.RGeografia;
-using BussinessLayer.Repository.RNcf;
-using BussinessLayer.Repository.RSeguridad;
-using BussinessLayer.Services.SGeografia;
+﻿using BussinessLayer.Repository.RNcf;
 using Microsoft.Extensions.DependencyInjection;
-using BussinessLayer.Interfaces.Repository.Auditoria;
-using BussinessLayer.Repository.Auditoria;
-using DataLayer.Models.ModuloGeneral;
+using BussinessLayer.Repository.ModuloHelpDesk;
+using BussinessLayer.Repository.ModuloAuditoria;
+using BussinessLayer.Repository.ModuloGeneral.Menu;
+using BussinessLayer.Repository.ModuloGeneral.Modulo;
+using BussinessLayer.Repository.ModuloGeneral.Empresa;
+using BussinessLayer.Repository.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.Repository.ModuloAuditoria;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Modulo;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Menu;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
+using BussinessLayer.Interfaces.Repository.ModuloHelpDesk;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
+using BussinessLayer.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
@@ -38,7 +36,6 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IGnSucursalRepository, GnSucursalRepository>();
             services.AddTransient<IGnScheduleRepository, GnScheduleRepository>();
             services.AddTransient<IGnScheduleUserRepository, GnScheduleUserRepository>();
-            #endregion
 
             #region Geografia
 
@@ -50,13 +47,15 @@ namespace BussinessLayer.DendeciesInjections
             #endregion
 
             #region Configuracion
-            services.AddTransient<IGnMenuRepository,GnMenuRepository>();
-            services.AddTransient<IGnModuloRepository,GnModuloRepository>();
+            services.AddTransient<IGnMenuRepository, GnMenuRepository>();
+            services.AddTransient<IGnModuloRepository, GnModuloRepository>();
             services.AddTransient<IGnPermisoRepository, GnPermisoRepository>();
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             services.AddTransient<IGnParametrosGeneralesRepository, GnParametrosGeneralesRepository>();
-            
+
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            #endregion
+
             #endregion
 
             #region HelpDesk
@@ -76,11 +75,12 @@ namespace BussinessLayer.DendeciesInjections
             #endregion
 
             #region Auditoria
-            services.AddScoped<IAleAuditoriaRepository, AleAuditoriaRepository>();
+            services.AddScoped<IAleBitacoraRepository, AleBitacoraRepository>();
             services.AddTransient<IAleLoginRepository, AleLoginRepository>();
             services.AddTransient<IAleLogsRepository, AleLogsRepository>();
             services.AddTransient<IAlePrintRepository, AlePrintRepository>();
-
+            services.AddTransient<IAleAuditLogRepository, AleAuditLogRepository>();
+            services.AddTransient<IAleAuditTableControlRepository, AleAuditTableControlRepository>();
             #endregion
 
             #region Almacen

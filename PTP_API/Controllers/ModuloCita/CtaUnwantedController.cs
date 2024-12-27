@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
-using BussinessLayer.Interface.Modulo_Citas;
+using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloCitas
     [SwaggerTag("Gestión de contactos no deseados")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaUnwantedController : ControllerBase
     {
         private readonly ICtaUnwantedService _unwantedService;

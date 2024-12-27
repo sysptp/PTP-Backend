@@ -1,12 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Marcas;
-using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Repository.REmpresa;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Marcas
 {

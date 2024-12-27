@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloInventario.Pedidos;
-using BussinessLayer.Interfaces.ModuloInventario.Pedidos;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Pedidos;
 using DataLayer.Models.ModuloInventario.Pedidos;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.Monedas;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
-using BussinessLayer.Interfaces.ModuloInventario.Otros;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Otros;
 using DataLayer.Models.ModuloInventario.Otros;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

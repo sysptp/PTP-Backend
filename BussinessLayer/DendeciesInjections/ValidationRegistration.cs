@@ -7,7 +7,6 @@ using BussinessLayer.FluentValidations.ModuloInventario.Productos;
 using BussinessLayer.FluentValidations;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using BussinessLayer.FluentValidations.ModuloGeneral.Empresas;
-using BussinessLayer.DTOs.HelpDesk;
 using BussinessLayer.FluentValidations.ModuloGeneral.Geografia;
 using BussinessLayer.FluentValidations.ModuloInventario.Marcas;
 using BussinessLayer.FluentValidations.ModuloInventario.Versiones;
@@ -23,21 +22,9 @@ using BussinessLayer.DTOs.ModuloInventario.Marcas;
 using BussinessLayer.DTOs.ModuloInventario.Pedidos;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
 using BussinessLayer.DTOs.ModuloInventario.Versiones;
-using BussinessLayer.FluentValidations.Auditoria;
-using BussinessLayer.DTOs.Auditoria;
-using Azure.Core;
-using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Seguridad;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DMunicipio;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DProvincia;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Autenticacion;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Permiso;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
-using DataLayer.Models.ModuloGeneral;
 using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
 using BussinessLayer.FluentValidations.Configuracion.ParametrosGenerales;
 using BussinessLayer.DTOs.ModuloGeneral.Monedas;
@@ -47,17 +34,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
 using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
 using BussinessLayer.FluentValidations.ModuloInventario.Otros;
-using BussinessLayer.DTOs.ModuloInventario.Almacenes;
-using BussinessLayer.FluentValidations.ModuloInventario.Almacen;
-using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
-using BussinessLayer.Validations.ModuloCitas.CtaSessions;
-using BussinessLayer.DTOs.ModuloCitas.CtaState;
-using BussinessLayer.Validations.ModuloCitas.CtaState;
-using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
-using BussinessLayer.Validations.ModuloCitas.CtaUnwanted;
-using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
-using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
-using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.Validations.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.Validations.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
@@ -71,6 +48,29 @@ using BussinessLayer.Validations.ModuloCitas.CtaCitaConfiguracion;
 using BussinessLayer.Validations.ModuloCitas.CtaEmailConfiguracion;
 using BussinessLayer.Validations.ModuloCitas.CtaMeetingPlace;
 using BussinessLayer.Validations.ModuloCitas.CtaSessionDetails;
+using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
+using BussinessLayer.Validations.ModuloCitas.CtaSessions;
+using BussinessLayer.DTOs.ModuloCitas.CtaState;
+using BussinessLayer.Validations.ModuloCitas.CtaState;
+using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
+using BussinessLayer.Validations.ModuloCitas.CtaUnwanted;
+using BussinessLayer.DTOs.ModuloReporteria;
+using BussinessLayer.FluentValidations.ModuloReporteria;
+using BussinessLayer.FluentValidations.ModuloAuditoria;
+using BussinessLayer.DTOs.ModuloAuditoria;
+using BussinessLayer.DTOs.ModuloHelpDesk;
+using BussinessLayer.DTOs.ModuloGeneral.Archivos;
+using BussinessLayer.FluentValidations.ModuloGeneral.Archivo;
+using BussinessLayer.FluentValidations.ModuloGeneral.ModuloReporteria;
+using BussinessLayer.FluentValidations.ModuloGeneral.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DMunicipio;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DProvincia;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DRegion;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
+using BussinessLayer.FluentValidations.Account;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -78,13 +78,82 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddValidationInjections(this IServiceCollection services)
         {
+          
+            #region Auditoria
+            services.AddScoped<IValidator<AleBitacoraRequest>, AleBitacoraRequestValidator>();
+            services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
+            services.AddScoped<IValidator<AleLogsRequest>, AleLogsRequestValidator>();
+            services.AddScoped<IValidator<AlePrintRequest>, AlePrintRequestValidator>();
+            services.AddScoped<IValidator<AleAuditLogRequest>, AleAuditLogRequestValidator>();
+            services.AddScoped<IValidator<AleAuditTableControlRequest>, AleAuditTableControlRequestValidator>();
+            #endregion
 
+            #region Modulo Citas
+
+            services.AddScoped<IValidator<CtaAppointmentManagementRequest>, CtaAppointmentManagementRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentMovementsRequest>, CtaAppointmentMovementsRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentReasonRequest>, CtaAppointmentReasonRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentsRequest>, CtaAppointmentsRequestValidation>();
+            services.AddScoped<IValidator<CtaCitaConfiguracionRequest>, CtaCitaConfiguracionRequestValidation>();
+            services.AddScoped<IValidator<CtaEmailConfiguracionRequest>, CtaEmailConfiguracionRequestValidation>();
+            services.AddScoped<IValidator<CtaMeetingPlaceRequest>, CtaMeetingPlaceRequestValidation>();
+            services.AddScoped<IValidator<CtaSessionDetailsRequest>, CtaSessionDetailsRequestValidation>();
+            services.AddScoped<IValidator<CtaSessionsRequest>, CtaSessionsRequestValidation>();
+            services.AddScoped<IValidator<CtaStateRequest>, CtaStateRequestValidation>();
+            services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
+
+            #endregion
+
+            #region Modulo Contabilidad
+            #endregion
+
+            #region Modulo General
+            services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+            services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
+            services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
+            #endregion
+
+            #region HelpDesk
+            services.AddScoped<IValidator<HdkCategoryTicketRequest>, HdkCategoryTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkDepartamentsRequest>, HdkDepartamentsRequestValidator>();
+            services.AddScoped<IValidator<HdkDepartXUsuarioRequest>, HdkDepartXUsuarioRequestValidator>();
+            services.AddScoped<IValidator<HdkErrorSubCategoryRequest>, HdkErrorSubCategoryRequestValidator>();
+            services.AddScoped<IValidator<HdkFileEvidenceTicketRequest>, HdkFileEvidenceTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkNoteTicketRequest>, HdkNoteTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkPrioridadTicketRequest>, HdkPrioridadTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkSolutionTicketRequest>, HdkSolutionTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkStatusTicketRequest>, HdkStatusTicketRequestValidator>();
+            services.AddScoped<IValidator<HdkSubCategoryRequest>, HdkSubCategoryRequestValidator>();
+            services.AddScoped<IValidator<HdkTicketsRequest>, HdkTicketsRequestValidator>();
+            services.AddScoped<IValidator<HdkTypeTicketRequest>, HdkTypeTicketRequestValidator>();
+
+            #endregion
+
+            #region Modulo Inventario
+            #endregion
+
+            #region Modulo Reporteria
+            #endregion
+
+            #region Modulo RRHH
+            #endregion
+
+            #region Modulo Ventas
+            #endregion
+
+            #region NCFs
+            #endregion
+
+            #region Otros
+            #endregion
+
+            #region De momento sin modulo
             services.AddTransient<IValidator<GnEmpresaRequest>, SaveGnEmpresaRequestValidator>();
             services.AddScoped<IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
 
-            services.AddScoped<IValidator<CreateProductsDto>,CreateProductosRequestValidator>();
+            services.AddScoped<IValidator<CreateProductsDto>, CreateProductosRequestValidator>();
             services.AddScoped<IValidator<EditProductDto>, EditProductosRequestValidator>();
             services.AddScoped<IValidator<CreatePreciosDto>, CreatePreciosRequestValidator>();
             services.AddScoped<IValidator<EditPricesDto>, EditPreciosRequestValidator>();
@@ -116,6 +185,18 @@ namespace BussinessLayer.DendeciesInjections
 
             services.AddScoped<IValidator<CreateDetallePedidoDto>, CreateDetallePedidoRequestValidator>();
             services.AddScoped<IValidator<EditDetallePedidoDto>, EditDetallePedidoRequestValidator>();
+
+            services.AddScoped<IValidator<CreateRepReporteDto>, CreateRepReporteDtoValidator>();
+            services.AddScoped<IValidator<EditRepReporteDto>, EditRepReporteDtoValidator>();
+
+            services.AddScoped<IValidator<CreateRepReportesVariableDto>, CreateRepReportesVariableRequestValidator>();
+            services.AddScoped<IValidator<EditRepReportesVariableDto>, EditRepReportesVariableRequestValidator>();
+
+            services.AddScoped<IValidator<CreateGnUploadFileParametroDto>, CreateGnUploadFileParametroRequestValidator>();
+            services.AddScoped<IValidator<EditGnUploadFileParametroDto>, EditGnUploadFileParametroRequestValidator>();
+
+            services.AddScoped<IValidator<CreateGnTecnoAlmacenExternoDto>, CreateGnTecnoAlmacenExternoDtoValidator>();
+            services.AddScoped<IValidator<EditGnTecnoAlmacenExternoDto>, EditGnTecnoAlmacenExternoDtoValidator>();
 
             services.AddScoped<IValidator<AddImageProductDTO>, AddImageRequestValidator>();
 

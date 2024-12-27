@@ -3,10 +3,10 @@ using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
-using BussinessLayer.Interfaces.IGeografia;
 using FluentValidation;
 using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DProvincia;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DProvincia;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Geografia;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     [Route("api/v1/Province")]
     [SwaggerTag("Gestión de Provincias")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class ProvinceController : ControllerBase
     {
         private readonly IProvinciaService _provinceService;

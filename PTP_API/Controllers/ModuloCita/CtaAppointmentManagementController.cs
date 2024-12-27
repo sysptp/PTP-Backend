@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
-using BussinessLayer.Interface.Modulo_Citas;
+using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +15,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaAppointmentManagementController : ControllerBase
     {
         private readonly ICtaAppointmentManagementService _appointmentService;
@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener citas", Description = "Devuelve una lista de citas o una cita específica si se proporciona un ID")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllAppointments([FromQuery] int? IdManagmentAppoinment)
         {
             try

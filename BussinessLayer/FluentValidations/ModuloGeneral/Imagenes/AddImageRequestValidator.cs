@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
-using BussinessLayer.Interfaces.Repository.Empresa;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using FluentValidation;
 using System;
 using System.Collections.Generic;

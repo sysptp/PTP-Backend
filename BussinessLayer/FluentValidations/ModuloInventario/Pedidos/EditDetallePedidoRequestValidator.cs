@@ -1,13 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Pedidos;
-using BussinessLayer.Interfaces.ModuloInventario.Productos;
-using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.Repository.REmpresa;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Productos;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BussinessLayer.FluentValidations.ModuloInventario.Pedidos
 {

@@ -1,6 +1,5 @@
 ﻿using BussinessLayer.Interfaces.Repositories;
 using Dapper;
-using DataLayer.Models.Empresa;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +27,7 @@ namespace BussinessLayer.Repository.ROtros
                 return null;
             }
             return entity.Borrado == true ? null : entity;
+
         }
 
         public virtual async Task<T> GetById(object id)
@@ -112,9 +112,10 @@ namespace BussinessLayer.Repository.ROtros
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error al actualizar la entidad", ex);
+                throw new InvalidOperationException(ex.Message);
             }
         }
+
 
         public virtual async Task Delete(int id)
         {

@@ -1,5 +1,5 @@
-﻿using BussinessLayer.Wrappers;
-using RealStateApp.Core.Application.Exceptions;
+﻿using BussinessLayer.Exceptions;
+using BussinessLayer.Wrappers;
 using System.Net;
 
 namespace PTP_API.Middlewares

@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Otros;
-using BussinessLayer.Interfaces.ModuloInventario.Otros;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Otros;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

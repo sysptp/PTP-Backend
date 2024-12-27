@@ -2,8 +2,8 @@
 using DataLayer.PDbContex;
 using AutoMapper;
 using BussinessLayer.DTOs.ModuloInventario.Productos;
-using BussinessLayer.Interfaces.ModuloInventario.Productos;
 using DataLayer.Models.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Productos;
 
 public class ProductoService : IProductoService
 {

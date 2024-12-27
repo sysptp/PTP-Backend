@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.ModuloGeneral.Imagenes;
+﻿using BussinessLayer.Interfaces.Services.ModuloGeneral.Imagenes;
 
 namespace BussinessLayer.Services.ModuloGeneral.Imagenes
 {

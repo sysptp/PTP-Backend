@@ -1,17 +1,6 @@
-﻿using DataLayer.Models;
-using DataLayer.Models.MenuApp;
-using DataLayer.Models.Caja;
-using DataLayer.Models.Bancos;
-using DataLayer.Models.Boveda;
-using DataLayer.Models.Otros;
-using DataLayer.Models.Geografia;
-using DataLayer.Models.Seguridad;
-using DataLayer.Models.Empresa;
-using DataLayer.Models.Cotizaciones;
+﻿using DataLayer.Models.Otros;
 using DataLayer.Models.Cuentas;
-using DataLayer.Models.Facturas;
 using Microsoft.EntityFrameworkCore;
-using DataLayer.Models.Entities;
 using DataLayer.Models.ModuloInventario.Productos;
 using DataLayer.Models.ModuloInventario.Precios;
 using DataLayer.Models.ModuloInventario.Pedidos;
@@ -19,13 +8,22 @@ using DataLayer.Models.ModuloInventario.Marcas;
 using DataLayer.Models.ModuloInventario.Impuesto;
 using DataLayer.Models.ModuloInventario.Descuento;
 using DataLayer.Models.ModuloInventario.Almacen;
-using DataLayer.Models.Auditoria;
 using DataLayer.Models.ModuloGeneral.Language;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloGeneral.Imagen;
 using DataLayer.Models.ModuloInventario.Otros;
 using DataLayer.Models.ModuloReporteria;
 using DataLayer.Models.ModuloHelpDesk;
+using DataLayer.Models.ModuloAuditoria;
+using DataLayer.Models.ModuloGeneral.Archivos;
+using DataLayer.Models.ModuloGeneral.Seguridad;
+using DataLayer.Models.ModuloGeneral.Empresa;
+using DataLayer.Models.ModuloGeneral.Menu;
+using DataLayer.Models.ModuloGeneral.Geografia;
+using DataLayer.Models.ModuloVentas.Caja;
+using DataLayer.Models.ModuloVentas.Boveda;
+using DataLayer.Models.ModuloVentas.Bancos;
+using DataLayer.Models.ModuloVentas.Cotizaciones;
 using DataLayer.Models.Modulo_Citas;
 
 namespace DataLayer.PDbContex
@@ -125,6 +123,8 @@ namespace DataLayer.PDbContex
         #region Modulo General
         public DbSet<GnSchedule> GnSchedule { get; set; }
         public DbSet<GnScheduleUser> GnScheduleUser { get; set; }
+        public DbSet<GnUploadFileParametro> GnUploadFileParametro { get; set; }
+        public DbSet<GnTecnoAlmacenExterno> GnTecnoAlmacenExterno { get; set; }
         #endregion
 
         #region Auditoria
@@ -132,6 +132,8 @@ namespace DataLayer.PDbContex
         public DbSet<AleLogin> AleLogin { get; set; }
         public DbSet<AleLogs> AleLogs { get; set; }
         public DbSet<AlePrint> AlePrint { get; set; }
+        public DbSet<AleAuditLog> AleAuditLog { get; set; }
+        public DbSet<AleAuditTableControl> AleAuditTableControls { get; set; }
         #endregion
 
         #region Modulo Citas

@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion;
-using BussinessLayer.Interface.Modulo_Citas;
+using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +15,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Servicio de configuración de cuentas")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaCitaConfigurationController : ControllerBase
     {
         private readonly ICtaCitaConfiguracionService _ctaConfigurationService;
@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener configuraciones de cuentas", Description = "Devuelve una lista de configuraciones o una configuración específica si se proporciona un ID")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllCtaConfiguration([FromQuery] int? IdConfiguration)
         {
             try

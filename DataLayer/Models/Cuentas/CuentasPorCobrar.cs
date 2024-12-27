@@ -1,7 +1,4 @@
-﻿using DataLayer.Models.Facturas;
-using DataLayer.Models.Otros;
-using System;
-using System.Collections.Generic;
+﻿using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.Cuentas

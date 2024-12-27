@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Otros;
-using BussinessLayer.Interfaces.ModuloInventario.Impuestos;
-using BussinessLayer.Interfaces.ModuloInventario.Productos;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Impuestos;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Productos;
 using FluentValidation;
 using System;
 using System.Collections.Generic;

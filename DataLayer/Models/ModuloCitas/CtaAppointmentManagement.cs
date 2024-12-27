@@ -1,6 +1,7 @@
 ﻿
 using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.Modulo_Citas
 {
@@ -9,6 +10,8 @@ namespace DataLayer.Models.Modulo_Citas
         [Key]
         public int IdManagementAppointment { get; set; }
         public int IdAppointment { get; set; }
+        [ForeignKey("IdAppointment")]
+        public CtaAppointments? Appointments { get; set; }
         public string? Comment { get; set; }
       
     }

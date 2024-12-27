@@ -7,7 +7,7 @@ using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using AutoMapper;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
-using BussinessLayer.Interfaces.ModuloInventario.Otros;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Otros;
 
 namespace BussinessLayer.Services.ModuloInventario.Otros
 {

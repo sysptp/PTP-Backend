@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.ICuentas;
+﻿using BussinessLayer.Interfaces.Services.ICuentas;
 using DataLayer.Models.Cuentas;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;

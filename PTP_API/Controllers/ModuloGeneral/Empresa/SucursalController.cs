@@ -3,12 +3,11 @@ using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
-using BussinessLayer.Interfaces.IEmpresa;
 using BussinessLayer.DTOs.ModuloGeneral.Sucursal;
 using FluentValidation;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
-using BussinessLayer.Services.SEmpresa;
 using BussinessLayer.Atributes;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Empresas;
 
 namespace PTP_API.Controllers.ModuloGeneral.Empresa
 {
@@ -16,7 +15,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
     [Route("api/v1/Sucursal")]
     [SwaggerTag("Gestión de Sucursales")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class SucursalController : ControllerBase
     {
         private readonly IGnSucursalService _sucursalService;
@@ -31,7 +30,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener sucursales", Description = "Obtiene una lista de todas las sucursales o una sucursal específica si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] long? id, long? companyId)
         {
             try

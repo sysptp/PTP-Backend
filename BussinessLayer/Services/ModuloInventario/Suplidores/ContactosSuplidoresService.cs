@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataLayer.PDbContex;
-using BussinessLayer.Interfaces.ModuloInventario.Suplidores;
 using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using BussinessLayer.DTOs.ModuloInventario.Suplidores;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Suplidores;
 
 namespace BussinessLayer.Services.ModuloInventario.Suplidores
 {

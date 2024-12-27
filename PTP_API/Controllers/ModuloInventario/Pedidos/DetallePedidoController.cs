@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloInventario.Pedidos;
-using BussinessLayer.Interfaces.ModuloInventario.Pedidos;
+using BussinessLayer.Interfaces.Services.ModuloInventario.Pedidos;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;

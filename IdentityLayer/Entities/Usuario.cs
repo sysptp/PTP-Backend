@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DataLayer.Models.ModuloGeneral.Empresa;
+using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IdentityLayer.Entities
 {
@@ -24,6 +26,12 @@ namespace IdentityLayer.Entities
         public string Latitud { get; set; } = "0";
         public bool IsActive = true;
         public bool Borrado { get; set; }
-        public string? LanguageCode { get; set; } 
+        public string? LanguageCode { get; set; }
+        [ForeignKey("CodigoSuc")]
+        public GnSucursal? GnSucursal { get; set; }
+        [ForeignKey("CodigoEmp")]
+        public GnEmpresa? GnEmpresa { get; set; }
+        [ForeignKey("IdPerfil")]
+        public GnPerfil? GnPerfil { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using BussinessLayer.DTOs.Auditoria;
-using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
+﻿using BussinessLayer.DTOs.ModuloGeneral.ParametroGenerales;
 using FluentValidation;
 
 

@@ -3,13 +3,11 @@ using System.Net.Mime;
 using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
-using BussinessLayer.Interfaces.IGeografia;
 using FluentValidation;
 using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DPais;
-using BussinessLayer.Interfaces.Language;
-using BussinessLayer.Services.Language.Translation;
-using DataLayer.Models.ModuloInventario.Productos;
+using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Geografia;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Language;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {
@@ -17,7 +15,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
     [Route("api/v1/Country")]
     [SwaggerTag("Gestión de Países")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CountryController : ControllerBase
     {
         private readonly IPaisService _countryService;
@@ -34,7 +32,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Geografia
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener países", Description = "Obtiene una lista de todos los países o un país específico si se proporciona un ID.")]
-        [DisableAuditing]
+        [DisableBitacora]
         public async Task<IActionResult> Get([FromQuery] int? id)
         {
             try

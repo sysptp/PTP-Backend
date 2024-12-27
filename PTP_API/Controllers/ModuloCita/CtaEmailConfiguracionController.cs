@@ -1,6 +1,6 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
-using BussinessLayer.Interface.Modulo_Citas;
+using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de configuraciones de correo electrónico")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableAuditing]
+    [EnableBitacora]
     public class CtaEmailConfiguracionController : ControllerBase
     {
         private readonly ICtaEmailConfiguracionService _emailConfigService;
