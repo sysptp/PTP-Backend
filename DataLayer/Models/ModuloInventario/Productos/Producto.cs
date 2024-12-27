@@ -90,10 +90,10 @@ namespace DataLayer.Models.ModuloInventario.Productos
 
         public virtual ICollection<InvProductoImagen>? InvProductoImagenes { get; set; }
 
-        public virtual ICollection<DetalleMovimientoAlmacen>? MovimientoDetalles { get; set; }
+        //public virtual ICollection<DetalleMovimientoAlmacen>? MovimientoDetalles { get; set; }
 
         public virtual ICollection<DetallePedido>? DetallePedidos { get; set; }
 
-        public virtual ICollection<InvInventarioSucursal>? InventarioSucursales { get; set; }
+        //public virtual ICollection<InvInventarioSucursal>? InventarioSucursales { get; set; }
     }
 }

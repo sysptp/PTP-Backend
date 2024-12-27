@@ -11,7 +11,7 @@ using DataLayer.Models.ModuloInventario.Productos;
 namespace DataLayer.Models.ModuloInventario.Otros
 {
     [Table("InvInventarioSucursal")]
-    public class InvInventarioSucursal
+    public class InvInventarioSucursalManuel
     {
         [Key]
         public int Id { get; set; }

@@ -47,29 +47,6 @@ using BussinessLayer.DTOs.ModuloGeneral.Imagenes;
 using BussinessLayer.FluentValidations.ModuloGeneral.Imagenes;
 using BussinessLayer.DTOs.ModuloInventario.Otros;
 using BussinessLayer.FluentValidations.ModuloInventario.Otros;
-using DataLayer.Models.Modulo_Citas;
-using BussinessLayer.Validations.ModuloCitas.CtaAppointmentManagement;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
-using BussinessLayer.Validations.ModuloCitas.CtaAppointmentMovements;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
-using BussinessLayer.Validations.ModuloCitas.CtaAppointmentReason;
-using BussinessLayer.Validations.ModuloCitas.CtaAppointments;
-using BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion;
-using BussinessLayer.Validations.ModuloCitas.CtaCitaConfiguracion;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
-using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
-using BussinessLayer.Validations.ModuloCitas.CtaEmailConfiguracion;
-using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
-using BussinessLayer.Validations.ModuloCitas.CtaMeetingPlace;
-using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
-using BussinessLayer.Validations.ModuloCitas.CtaSessionDetails;
-using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
-using BussinessLayer.Validations.ModuloCitas.CtaSessions;
-using BussinessLayer.DTOs.ModuloCitas.CtaState;
-using BussinessLayer.Validations.ModuloCitas.CtaState;
-using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
-using BussinessLayer.Validations.ModuloCitas.CtaUnwanted;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -77,6 +54,7 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddValidationInjections(this IServiceCollection services)
         {
+
             services.AddTransient<IValidator<GnEmpresaRequest>, SaveGnEmpresaRequestValidator>();
             services.AddScoped<IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
@@ -159,6 +137,18 @@ namespace BussinessLayer.DendeciesInjections
             #region Modulo General
             
                 services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+            #endregion
+
+            #region Almacen
+            services.AddScoped<IValidator<InvAlmacenesRequest>, InvAlmacenesRequestValidator>();
+            services.AddScoped<IValidator<InvAlmacenInventarioRequest>, InvAlmacenInventarioRequestValidator>();
+            services.AddScoped<IValidator<InvInventarioSucursalRequest>, InvInventarioSucursalRequestValidator>();
+            services.AddScoped<IValidator<InvMovAlmacenSucursalRequest>, InvMovAlmacenSucursalRequestValidator>();
+            services.AddScoped<IValidator<InvMovAlmacenSucursalDetalleRequest>, InvMovAlmacenSucursalDetalleRequestValidator>();
+            services.AddScoped<IValidator<InvMovimientoAlmacenRequest>, InvMovimientoAlmacenRequestValidator>();
+            services.AddScoped<IValidator<InvMovimientoAlmacenDetalleRequest>, InvMovimientoAlmacenDetalleRequestValidator>();
+            services.AddScoped<IValidator<InvMovimientoSucursalDetalleRequest>, InvMovimientoSucursalDetalleRequestValidator>();
+            services.AddScoped<IValidator<InvMovInventarioSucursalRequest>, InvMovInventarioSucursalRequestValidator>();
             #endregion
 
             #region Modulo Citas

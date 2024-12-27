@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BussinessLayer.Services.SCuentas
 {
-    public class CuentasPorPagarService : ICuentaPorPagarService
+    public class CuentasPorPagarService 
     {
         private readonly PDbContext _context;
 
@@ -109,15 +109,15 @@ namespace BussinessLayer.Services.SCuentas
             }
         }
 
-        public async Task<IList<CuentasPorPagar>> GetAll(long idEMpresa)
-        {
-            return await _context.CuentasPorPagar.Where(x => x.Borrado != true && x.IdEmpresa==idEMpresa).Include(x => x.MovimientoAlmacen).ToListAsync();
-        }
+        //public async Task<IList<CuentasPorPagar>> GetAll(long idEMpresa)
+        //{
+        //    return await _context.CuentasPorPagar.Where(x => x.Borrado != true && x.IdEmpresa==idEMpresa).Include(x => x.MovimientoAlmacen).ToListAsync();
+        //}
 
-        public async Task<CuentasPorPagar> GetById(int id, long idEMpresa)
-        {
-            //.Include(x=> x.MovimientoAlmacen.Suplidor)
-            return await _context.CuentasPorPagar.Include(x=> x.MovimientoAlmacen).SingleOrDefaultAsync(x=> x.Id == id);
-        }
+        //public async Task<CuentasPorPagar> GetById(int id, long idEMpresa)
+        //{
+        //    //.Include(x=> x.MovimientoAlmacen.Suplidor)
+        //    return await _context.CuentasPorPagar.Include(x=> x.MovimientoAlmacen).SingleOrDefaultAsync(x=> x.Id == id);
+        //}
     }
 }
