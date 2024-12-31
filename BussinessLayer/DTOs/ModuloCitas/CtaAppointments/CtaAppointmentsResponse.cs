@@ -1,4 +1,8 @@
 ﻿
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
+using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.DTOs.ModuloCitas.CtaState;
+
 namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
 {
     public class CtaAppointmentsResponse 
@@ -6,10 +10,13 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public int IdAppointment { get; set; }
         public string? Description { get; set; }
         public int IdReasonAppointment { get; set; }
+        public CtaAppointmentReasonResponse? AppointmentReason { get; set; }
         public DateTime AppointmentDate { get; set; }
         public TimeSpan AppointmentTime { get; set; }
         public int IdPlaceAppointment { get; set; }
+        public CtaMeetingPlaceResponse? MeetingPlace { get; set; }
         public int IdState { get; set; }
+        public CtaStateResponse? State { get; set; }
         public bool IsConditionedTime { get; set; }
         public DateTime EndAppointmentDate { get; set; }
         public TimeSpan EndAppointmentTime { get; set; }
@@ -29,5 +36,6 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public string Email { get; set; } = null!;
         public int? IdClient { get; set; }
         public long CompanyId { get; set; }
+        public string? CompanyName { get; set;} 
     }
 }
