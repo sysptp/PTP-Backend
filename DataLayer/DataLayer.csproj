@@ -25,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\ModuloCitas\" />
     <Folder Include="Models\HelpDesk\" />
     <Folder Include="Models\ModuloContabilidad\" />
     <Folder Include="Models\ModuloRRHH\" />

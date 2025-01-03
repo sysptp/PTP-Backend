@@ -71,8 +71,11 @@ namespace BussinessLayer.Repository.ROtros
                 }
                 // Construye dinámicamente las columnas y parámetros para la consulta SQL
                 var properties = typeof(T).GetProperties()
-                                          .Where(p => p.Name != primaryKey) // Excluir la clave primaria si es autogenerada
-                                          .Select(p => p.Name);
+     .Where(p => p.Name != primaryKey &&
+                 (p.PropertyType.IsPrimitive ||
+                  p.PropertyType == typeof(string) ||
+                  p.PropertyType == typeof(DateTime)))
+     .Select(p => p.Name);
 
                 var columns = string.Join(", ", properties);
                 var values = string.Join(", ", properties.Select(p => $"@{p}"));
@@ -97,7 +100,7 @@ namespace BussinessLayer.Repository.ROtros
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error al agregar la entidad con Dapper", ex);
+                throw new InvalidOperationException(ex.Message, ex);
             }
         }
 

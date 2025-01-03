@@ -3,7 +3,7 @@ using DataLayer.Models.Modulo_Citas;
 
 namespace BussinessLayer.Interface.Repository.Modulo_Citas
 {
-    public interface ICtaEmailConfiguracionRepository : IGenericRepository<CtaEmailConfiguracion>
+    public interface ICtaEmailConfiguracionRepository : IGenericRepository<CtaEmailConfiguration>
     {
     }
 }

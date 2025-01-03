@@ -145,7 +145,7 @@ namespace DataLayer.PDbContex
         public DbSet<CtaAppointmentReason> CtaAppointmentReason { get; set; }
         public DbSet<CtaAppointments> CtaAppointments { get; set; }
         public DbSet<CtaCitaConfiguracion> CtaCitaConfiguracion { get; set; }
-        public DbSet<CtaEmailConfiguracion> CtaEmailConfiguracion { get; set; }
+        public DbSet<CtaEmailConfiguration> CtaEmailConfiguration { get; set; }
         public DbSet<CtaMeetingPlace> CtaMeetingPlace { get; set; }
         public DbSet<CtaSessionDetails> CtaSessionDetails { get; set; }
         public DbSet<CtaSessions> CtaSessions { get; set; }

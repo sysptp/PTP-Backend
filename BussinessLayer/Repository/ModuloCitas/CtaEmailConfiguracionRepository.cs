@@ -5,7 +5,7 @@ using DataLayer.PDbContex;
 
 namespace BussinessLayer.Repository.Modulo_Citas
 {
-    public class CtaEmailConfiguracionRepository : GenericRepository<CtaEmailConfiguracion>, ICtaEmailConfiguracionRepository
+    public class CtaEmailConfiguracionRepository : GenericRepository<CtaEmailConfiguration>, ICtaEmailConfiguracionRepository
     {
         public CtaEmailConfiguracionRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
         {

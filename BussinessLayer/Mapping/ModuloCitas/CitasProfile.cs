@@ -43,9 +43,9 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaCitaConfiguracionResponse, CtaCitaConfiguracion>()
              .ReverseMap();
 
-            CreateMap<CtaEmailConfiguracionRequest, CtaEmailConfiguracion>()
+            CreateMap<CtaEmailConfiguracionRequest, CtaEmailConfiguration>()
                 .ReverseMap();
-            CreateMap<CtaEmailConfiguracionResponse, CtaEmailConfiguracion>()
+            CreateMap<CtaEmailConfiguracionResponse, CtaEmailConfiguration>()
                .ReverseMap();
 
             CreateMap<CtaMeetingPlaceRequest, CtaMeetingPlace>()

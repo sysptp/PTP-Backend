@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.Modulo_Citas
 {
-    public class CtaEmailConfiguracion : AuditableEntities
+    public class CtaEmailConfiguration : AuditableEntities
     {
         [Key]
         public int IdEmailConfiguration { get; set; }
