@@ -11,7 +11,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [SwaggerTag("Movimiento Movimiento Inventario Sucursal")]
+    [SwaggerTag("Movimiento Movimiento Inventario Sucursal")]+
     [Authorize]
     [EnableBitacora]
     public class MovInventarioSucursalController : ControllerBase
