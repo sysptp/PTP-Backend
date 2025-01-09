@@ -123,7 +123,7 @@ public static class ServiceRegistration
         services.AddScoped<ICtaAppointmentMovementsService, CtaAppointmentMovementsService>();
         services.AddScoped<ICtaAppointmentReasonService, CtaAppointmentReasonService>();
         services.AddScoped<ICtaAppointmentsService, CtaAppointmentsService>();
-        services.AddScoped<ICtaCitaConfiguracionService, CtaCitaConfiguracionService>();
+        services.AddScoped<ICtaConfiguracionService, CtaConfiguracionService>();
         services.AddScoped<ICtaEmailConfiguracionService, CtaEmailConfiguracionService>();
         services.AddScoped<ICtaMeetingPlaceService, CtaMeetingPlaceService>();
         services.AddScoped<ICtaSessionDetailsService, CtaSessionDetailsService>();

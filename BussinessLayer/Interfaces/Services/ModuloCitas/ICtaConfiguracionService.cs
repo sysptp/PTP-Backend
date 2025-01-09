@@ -4,7 +4,7 @@ using DataLayer.Models.Modulo_Citas;
 
 namespace BussinessLayer.Interfaces.Services.ModuloCitas
 {
-    public interface ICtaCitaConfiguracionService : IGenericService<CtaCitaConfiguracionRequest, CtaCitaConfiguracionResponse, CtaCitaConfiguracion>
+    public interface ICtaConfiguracionService : IGenericService<CtaConfiguracionRequest, CtaConfiguracionResponse, CtaConfiguration>
     {
     }
 }

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace BussinessLayer.Validations.ModuloCitas.CtaCitaConfiguracion
 {
-    public class CtaCitaConfiguracionRequestValidation : AbstractValidator<CtaCitaConfiguracionRequest>
+    public class CtaConfiguracionRequestValidation : AbstractValidator<CtaConfiguracionRequest>
     {
     }
 }

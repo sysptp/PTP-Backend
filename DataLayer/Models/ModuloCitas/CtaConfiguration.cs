@@ -1,10 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using DataLayer.Models.Otros;
+using System.ComponentModel.DataAnnotations;
 
-namespace BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion
+namespace DataLayer.Models.Modulo_Citas
 {
-    public class CtaCitaConfiguracionRequest 
+    public class CtaConfiguration : AuditableEntities
     {
-        [JsonIgnore]
+        [Key]
         public int IdConfiguration { get; set; }
         public bool SendEmail { get; set; } = false;
         public bool SendSms { get; set; } = false;
@@ -12,5 +13,6 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion
         public bool SendSmsReminder { get; set; } = false;
         public bool SendWhatsapp { get; set; } = false;
         public bool SendWhatsappReminder { get; set; } = false;
+        public long CompanyId { get; set; }
     }
 }

@@ -95,9 +95,9 @@ namespace PTP_API.Controllers.ModuloGeneral.Moneda
                     return Ok(Response<List<ViewCurrencyDTO>>.NotFound("No se han encontrado monedas."));
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al obtener la moneda. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError(ex.Message));
             }
         }
 

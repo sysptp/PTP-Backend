@@ -11,5 +11,6 @@ namespace DataLayer.Models.Modulo_Citas
         public CtaSessionsService(IGenericRepository<CtaSessions> repository, IMapper mapper) : base(repository, mapper)
         {
         }
+
     }
 }

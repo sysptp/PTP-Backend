@@ -1,11 +1,7 @@
-﻿using DataLayer.Models.Otros;
-using System.ComponentModel.DataAnnotations;
-
-namespace DataLayer.Models.Modulo_Citas
+﻿namespace BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion
 {
-    public class CtaCitaConfiguracion : AuditableEntities
+    public class CtaConfiguracionResponse
     {
-        [Key]
         public int IdConfiguration { get; set; }
         public bool SendEmail { get; set; } = false;
         public bool SendSms { get; set; } = false;
@@ -13,5 +9,6 @@ namespace DataLayer.Models.Modulo_Citas
         public bool SendSmsReminder { get; set; } = false;
         public bool SendWhatsapp { get; set; } = false;
         public bool SendWhatsappReminder { get; set; } = false;
+        public long CompanyId { get; set; }
     }
 }

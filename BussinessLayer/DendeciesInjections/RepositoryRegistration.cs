@@ -101,7 +101,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICtaAppointmentMovementsRepository, CtaAppointmentMovementsRepository>();
             services.AddScoped<ICtaAppointmentReasonRepository, CtaAppointmentReasonRepository>();
             services.AddScoped<ICtaAppointmentsRepository,CtaAppointmentsRepository>();
-            services.AddScoped<ICtaCitaConfiguracionRepository, CtaCitaConfiguracionRepository>();
+            services.AddScoped<ICtaConfiguracionRepository, CtaConfiguracionRepository>();
             services.AddScoped<ICtaEmailConfiguracionRepository, CtaEmailConfiguracionRepository>();
             services.AddScoped<ICtaMeetingPlaceRepository, CtaMeetingPlaceRepository>();
             services.AddScoped<ICtaSessionDetailsRepository, CtaSessionDetailsRepository>();

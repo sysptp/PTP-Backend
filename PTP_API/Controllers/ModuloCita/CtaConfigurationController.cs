@@ -16,19 +16,19 @@ namespace PTP_API.Controllers.ModuloCita
     [Route("api/v1/[controller]")]
     [Authorize]
     [EnableBitacora]
-    public class CtaCitaConfigurationController : ControllerBase
+    public class CtaConfigurationController : ControllerBase
     {
-        private readonly ICtaCitaConfiguracionService _ctaConfigurationService;
-        private readonly IValidator<CtaCitaConfiguracionRequest> _validator;
+        private readonly ICtaConfiguracionService _ctaConfigurationService;
+        private readonly IValidator<CtaConfiguracionRequest> _validator;
 
-        public CtaCitaConfigurationController(ICtaCitaConfiguracionService ctaConfigurationService, IValidator<CtaCitaConfiguracionRequest> validator)
+        public CtaConfigurationController(ICtaConfiguracionService ctaConfigurationService, IValidator<CtaConfiguracionRequest> validator)
         {
             _ctaConfigurationService = ctaConfigurationService;
             _validator = validator;
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Response<IEnumerable<CtaCitaConfiguracionResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<IEnumerable<CtaConfiguracionResponse>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -43,9 +43,9 @@ namespace PTP_API.Controllers.ModuloCita
                     var configuration = await _ctaConfigurationService.GetByIdResponse(IdConfiguration);
                     if (configuration == null)
                     {
-                        return NotFound(Response<CtaCitaConfiguracionResponse>.NotFound("Configuración no encontrada."));
+                        return NotFound(Response<CtaConfiguracionResponse>.NotFound("Configuración no encontrada."));
                     }
-                    return Ok(Response<CtaCitaConfiguracionResponse>.Success(configuration, "Configuración encontrada."));
+                    return Ok(Response<CtaConfiguracionResponse>.Success(configuration, "Configuración encontrada."));
                 }
                 else
                 {
@@ -53,9 +53,9 @@ namespace PTP_API.Controllers.ModuloCita
 
                     if (configurations == null || !configurations.Any())
                     {
-                        return StatusCode(204, Response<IEnumerable<CtaCitaConfiguracionResponse>>.NoContent("No hay configuraciones disponibles."));
+                        return StatusCode(204, Response<IEnumerable<CtaConfiguracionResponse>>.NoContent("No hay configuraciones disponibles."));
                     }
-                    return Ok(Response<IEnumerable<CtaCitaConfiguracionResponse>>.Success(configurations, "Configuraciones obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<CtaConfiguracionResponse>>.Success(configurations, "Configuraciones obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
@@ -70,7 +70,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Crear una nueva configuración", Description = "Endpoint para crear una configuración nueva")]
-        public async Task<IActionResult> CreateCtaConfiguration([FromBody] CtaCitaConfiguracionRequest configurationDto)
+        public async Task<IActionResult> CreateCtaConfiguration([FromBody] CtaConfiguracionRequest configurationDto)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Actualizar configuración", Description = "Endpoint para actualizar los datos de una configuración")]
-        public async Task<IActionResult> UpdateCtaConfiguration(int id, [FromBody] CtaCitaConfiguracionRequest configurationDto)
+        public async Task<IActionResult> UpdateCtaConfiguration(int id, [FromBody] CtaConfiguracionRequest configurationDto)
         {
             var validationResult = await _validator.ValidateAsync(configurationDto);
 

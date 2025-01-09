@@ -69,8 +69,8 @@ public class MonedasService : IMonedasService
     public async Task<List<ViewCurrencyDTO>> GetByCompany(int idEmpresa)
     {
         var product = await _context.Monedas
-            .FirstOrDefaultAsync(x => x.Borrado == false 
-            && x.IdEmpresa == idEmpresa);
+            .Where(x => x.Borrado == false 
+            && x.IdEmpresa == idEmpresa).ToListAsync();
 
         return _mapper.Map<List<ViewCurrencyDTO>>(product);
     }

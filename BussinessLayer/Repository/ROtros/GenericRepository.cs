@@ -71,11 +71,13 @@ namespace BussinessLayer.Repository.ROtros
                 }
                 // Construye dinámicamente las columnas y parámetros para la consulta SQL
                 var properties = typeof(T).GetProperties()
-     .Where(p => p.Name != primaryKey &&
-                 (p.PropertyType.IsPrimitive ||
-                  p.PropertyType == typeof(string) ||
-                  p.PropertyType == typeof(DateTime)))
-     .Select(p => p.Name);
+    .Where(p => p.Name != primaryKey &&
+                (p.PropertyType.IsPrimitive ||
+                 p.PropertyType == typeof(string) ||
+                 p.PropertyType == typeof(DateTime) ||
+                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime)))
+    .Select(p => p.Name);
 
                 var columns = string.Join(", ", properties);
                 var values = string.Join(", ", properties.Select(p => $"@{p}"));
@@ -138,7 +140,12 @@ namespace BussinessLayer.Repository.ROtros
 
                 // Construye dinámicamente las columnas a actualizar
                 var properties = typeof(T).GetProperties()
-                                          .Where(p => p.Name != primaryKey && p.Name != "FechaAdicion" && p.Name != "UsuarioAdicion")
+                                          .Where(p => p.Name != primaryKey && p.Name != "FechaAdicion" && p.Name != "UsuarioAdicion" &&
+                (p.PropertyType.IsPrimitive ||
+                 p.PropertyType == typeof(string) ||
+                 p.PropertyType == typeof(DateTime) ||
+                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime)))
                                           .Select(p => $"{p.Name} = @{p.Name}");
                 var updateColumns = string.Join(", ", properties);
 
@@ -205,7 +212,12 @@ namespace BussinessLayer.Repository.ROtros
 
                 // Construye dinámicamente las columnas a actualizar
                 var properties = typeof(T).GetProperties()
-                                          .Where(p => p.Name != primaryKey && p.Name != "FechaAdicion" && p.Name != "UsuarioAdicion")
+                                          .Where(p => p.Name != primaryKey && p.Name != "FechaAdicion" && p.Name != "UsuarioAdicion" &&
+                (p.PropertyType.IsPrimitive ||
+                 p.PropertyType == typeof(string) ||
+                 p.PropertyType == typeof(DateTime) ||
+                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime)))
                                           .Select(p => $"{p.Name} = @{p.Name}");
                 var updateColumns = string.Join(", ", properties);
 

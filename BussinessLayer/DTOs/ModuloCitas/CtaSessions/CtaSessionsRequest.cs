@@ -7,12 +7,15 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
         [JsonIgnore]
         public int IdSession { get; set; }
         public string? Description { get; set; }
-        public string? IdClient { get; set; }
-        public string? IdUser { get; set; }
+        public int? IdClient { get; set; }
+        public int? IdUser { get; set; }
         public DateTime FirstSessionDate { get; set; }
         public int? IdReason { get; set; }
-        public int IdState { get; set; }
-        public bool IsActive { get; set; } = true;
+        public int TotalAppointments { get; set; }
+        public DateTime SessionEndDate { get; set; }
+        [JsonIgnore]
+        public int CompletedAppointments { get; set; } = 0;
+        public int FrequencyInDays { get; set; }
 
     }
 }
