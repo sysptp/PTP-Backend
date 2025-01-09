@@ -13,7 +13,7 @@ namespace DataLayer.Models.ModuloInventario.Otros
 
         public int IdEmpresa { get; set; }
 
-        public int IdSucursal { get; set; }
+        public long IdSucursal { get; set; }
 
         [MaxLength(500)]
         public string? UbicacionExhibicion { get; set; }

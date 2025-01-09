@@ -107,6 +107,7 @@ public static class ServiceRegistration
         services.AddScoped<IImagenesService, ImagenesService>();
         services.AddScoped<IInvProductoSuplidorService, InvProductoSuplidorService>();
         services.AddScoped<IInvAlmacenInventarioService, InvAlmacenInventarioService>();
+        services.AddScoped<IInvMovInventarioSucursalService, InvMovInventarioSucursalService>();
         #endregion
 
         #region Auditoria

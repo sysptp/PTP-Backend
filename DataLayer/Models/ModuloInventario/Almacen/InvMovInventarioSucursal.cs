@@ -10,7 +10,7 @@ namespace DataLayer.Models.ModuloInventario.Almacen
     {
         [Key]
         public int Id { get; set; }
-        public int IdSucursal { get; set; }
+        public long IdSucursal { get; set; }
         [ForeignKey("IdSucursal")]
         public GnSucursal? GnSucursal { get; set; }
         public int IdTransaccion { get; set; }
