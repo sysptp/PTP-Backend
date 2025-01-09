@@ -74,11 +74,11 @@ public class PricesController : Controller
     [HttpGet("api/v1/[controller]/ObtenerPrecios")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [SwaggerOperation(Summary = "Obtener Precios", Description = "Obtiene todos los precios de un producto por su id.")]
-    public async Task<IActionResult> Get([FromQuery] int idProduct)
+    public async Task<IActionResult> Get([FromQuery] int? idProduct, long idCompany)
     {
         try
         {
-            var validationResult = await _validateNumbers.ValidateAsync(idProduct);
+            var validationResult = await _validateNumbers.ValidateAsync(idCompany);
 
             if (!validationResult.IsValid)
             {
@@ -86,7 +86,7 @@ public class PricesController : Controller
                 return BadRequest(Response<string>.BadRequest(errors, 400));
             }
 
-            var precio = await _precioService.GetPricesByIdProduct(idProduct);
+            var precio = await _precioService.GetPricesByFilters(idCompany, idProduct);
 
             if (precio.Count > 0)
             {

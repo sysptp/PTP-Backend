@@ -36,17 +36,26 @@ public class PrecioService : IPrecioService
         return _mapper.Map<ViewPreciosDto>(data);
     }
 
-    // Obtener precios por ID de producto
-    public async Task<List<ViewPreciosDto>> GetPricesByIdProduct(int idProduct)
+    // Obtener precios por filtros
+    public async Task<List<ViewPreciosDto>> GetPricesByFilters(long idCompany, int? idProduct)
     {
-        var data = await _context.Precios
-            .Where(x => x.IdProducto == idProduct)
+        var query = _context.Precios
             .Include(x => x.Producto)
             .Include(x => x.Moneda)
-            .Where(x => x.Borrado == false)
-            .ToListAsync();
+            .Where(x => x.Borrado != false);
+
+
+        query = query.Where(x => x.IdEmpresa == idCompany);
+
+        if (idProduct.HasValue)
+        {
+            query = query.Where(x => x.IdProducto == idProduct.Value);
+        }
+
+        var data = await query.ToListAsync();
 
         return _mapper.Map<List<ViewPreciosDto>>(data);
+
     }
 
     // Crear un nuevo precio

@@ -14,11 +14,11 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
     [SwaggerTag("Movimiento Movimiento Inventario Sucursal")]
     [Authorize]
     [EnableBitacora]
-    public class MovMovInventarioSucursalController : ControllerBase
+    public class MovInventarioSucursalController : ControllerBase
     {
         private readonly IInvMovInventarioSucursalService _MovInventarioSucursal;
         private readonly IValidator<InvMovInventarioSucursalRequest> _validator;
-        public MovMovInventarioSucursalController(IInvMovInventarioSucursalService MovInventarioSucursal, IValidator<InvMovInventarioSucursalRequest> validator)
+        public MovInventarioSucursalController(IInvMovInventarioSucursalService MovInventarioSucursal, IValidator<InvMovInventarioSucursalRequest> validator)
         {
             _MovInventarioSucursal = MovInventarioSucursal;
             _validator = validator;
@@ -32,7 +32,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Movimiento Inventario Sucursal", Description = "Obtiene una lista de todos los Inventarios Sucursales o un Movimiento Inventario Sucursal específico si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, long? idSucursal, long? idCompany)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
                 }
                 else
                 {
-                    var MovInventarioSucursals = await _MovInventarioSucursal.GetAllDto();
+                    var MovInventarioSucursals = await _MovInventarioSucursal.GetAllByFilters(idSucursal, idCompany);
                     if (MovInventarioSucursals == null || MovInventarioSucursals.Count == 0)
                     {
                         return NoContent();
@@ -57,7 +57,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener el Movimiento Inventario Sucursal. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 

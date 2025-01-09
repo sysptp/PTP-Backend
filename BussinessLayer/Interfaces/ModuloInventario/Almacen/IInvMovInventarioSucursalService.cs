@@ -6,5 +6,6 @@ namespace BussinessLayer.Interfaces.ModuloInventario.Almacen
 {
     public interface IInvMovInventarioSucursalService : IGenericService<InvMovInventarioSucursalRequest, InvMovInventarioSucursalReponse, InvMovInventarioSucursal>
     {
+        Task<List<InvMovInventarioSucursalReponse>> GetAllByFilters(long? idSucursal, long? idCompany);
     }
 }

@@ -34,7 +34,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Almacenes", Description = "Obtiene una lista de todos los Almacenes o un almacen específico si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, long? idCompany)
         {
             try
             {
@@ -49,17 +49,19 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
                 }
                 else
                 {
-                    var Almaceness = await _almacenesService.GetAllDto();
-                    if (Almaceness == null || Almaceness.Count == 0)
+                    var almacenes = await _almacenesService.GetAllDto();
+                    if (almacenes == null || almacenes.Count == 0)
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<InvAlmacenesReponse>>.Success(Almaceness, "Almacenes obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<InvAlmacenesReponse>>.Success(idCompany != null ? 
+                         almacenes.Where(x => x.IdEmpresa == idCompany).ToList()
+                         : almacenes, "Almacenes obtenidos correctamente."));
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener el Almacen. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 

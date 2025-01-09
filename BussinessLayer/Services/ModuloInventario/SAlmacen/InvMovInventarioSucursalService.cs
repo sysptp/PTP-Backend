@@ -18,5 +18,21 @@ namespace BussinessLayer.Services.ModuloInventario.SAlmacen
             _repository = repository;
             _mapper = mapper;
         }
+
+        public async Task<List<InvMovInventarioSucursalReponse>> GetAllByFilters(long? idSucursal, long? idCompany)
+        {
+            var inventarioSucursal = await _repository.GetAllWithIncludeAsync(new List<string> { "GnSucursal" });
+           
+            if (idCompany.HasValue) 
+            { 
+                inventarioSucursal.Where(x => x.GnSucursal.CodigoEmp == idCompany.Value).ToList();
+            }
+
+            if (idSucursal.HasValue)
+            {
+                inventarioSucursal.Where(x => x.IdSucursal == idSucursal.Value).ToList();
+            }
+            return _mapper.Map<List<InvMovInventarioSucursalReponse>>(inventarioSucursal);
+        }
     }
 }
