@@ -29,6 +29,8 @@ using DataLayer.Models.ModuloHelpDesk;
 using DataLayer.Models.Clients;
 using DataLayer.EntitiesConfiguration;
 using DataLayer.Models.Contactos;
+using DataLayer.Models.ModuloCampaña;
+using DataLayer.EntitiesConfiguration.ModuloCampaña;
 
 namespace DataLayer.PDbContex
 {
@@ -64,6 +66,9 @@ namespace DataLayer.PDbContex
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ClientConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpClienteConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpTipoContactoConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpContactosConfiguration());
             modelBuilder.ApplyConfiguration(new ClientContactConfiguration());
             modelBuilder.ApplyConfiguration(new TypeContactConfiguration());
         }
@@ -74,6 +79,13 @@ namespace DataLayer.PDbContex
         public DbSet<TypeContact> TypeContacts { get; set; }
 
         public DbSet<Client> Clients { get; set; }
+
+        #endregion
+
+        #region Campaña
+        public DbSet<CmpCliente> CmpClientes { get; set; }
+        public DbSet<CmpTipoContacto> CmpTipoContactos { get; set; }
+        public DbSet<CmpContactos> CmpContactos { get; set; }
 
         #endregion
 

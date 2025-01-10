@@ -60,6 +60,8 @@ using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
 using BussinessLayer.Interfaces.IClient;
 using BussinessLayer.Services.SCliente;
 using BussinessLayer.Services.SContactos;
+using BussinessLayer.Interfaces.IModuloCampaña;
+using BussinessLayer.Services.SModuloCampaña;
 
 
 public static class ServiceRegistration
@@ -122,14 +124,18 @@ public static class ServiceRegistration
         services.AddScoped<EntityMapper>();
         services.AddScoped<CsvProcessor>();
         services.AddScoped<IGnPerfilService, GnPerfilService>();
+
         services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IGnSucursalService, GnSucursalService>();
+
         services.AddScoped<INcfService, NcfService>();
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IGnPermisoService, GnPermisoService>();
+
         services.AddTransient<IClientService, ClientService>();
         services.AddTransient<IContactService, ContactService>();
+        services.AddTransient<ICmpClientService, CmpClientService>();
 
         #region Geografia
 

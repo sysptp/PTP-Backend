@@ -20,6 +20,8 @@ using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 using BussinessLayer.Repository.RClient;
 using BussinessLayer.Services.SCliente;
+using BussinessLayer.Interfaces.ModuloCampaña;
+using BussinessLayer.Repository.RCampaña;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -34,6 +36,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<INcfRepository, NcfRepository>();
             services.AddTransient<IClientRepository,ClientRepository>();
             services.AddTransient<IClientContactRepository,ClientContactRepository>();
+            services.AddScoped<ICmpClienteRepository,CmpClienteRepository>();
+            services.AddScoped<ICmpTipoContactoRepository,CmpTipoContactoRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

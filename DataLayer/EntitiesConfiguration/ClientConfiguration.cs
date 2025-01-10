@@ -1,11 +1,6 @@
 ﻿using DataLayer.Models.Clients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.EntitiesConfiguration
 {
@@ -31,7 +26,6 @@ namespace DataLayer.EntitiesConfiguration
             builder.Property(x => x.ModifiedBy).HasColumnName("UsuarioModificacion");
             builder.Property(x => x.DateAdded).HasColumnName("FechaAdicion").HasColumnType("DateTime");
             builder.Property(x => x.DateModified).HasColumnName("FechaModificacion").HasColumnType("DateTime");
-
         }
     }
 }

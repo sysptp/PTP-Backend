@@ -35,6 +35,7 @@
     <Folder Include="DTOs\ModuloAuditoria\" />
     <Folder Include="DTOs\ModuloCitas\" />
     <Folder Include="DTOs\ModuloContabilidad\" />
+    <Folder Include="DTOs\NewFolder\" />
     <Folder Include="FluentValidations\ModuloAuditoria\" />
     <Folder Include="FluentValidations\ModuloCitas\" />
     <Folder Include="FluentValidations\ModuloContabilidad\" />
