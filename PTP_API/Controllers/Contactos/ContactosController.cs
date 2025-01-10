@@ -1,5 +1,5 @@
-﻿using BussinessLayer.DTOs.Cliente;
-using BussinessLayer.DTOs.Contactos;
+﻿using BussinessLayer.DTOs.Contactos.ClienteContacto;
+using BussinessLayer.DTOs.Contactos.TypeContact;
 using BussinessLayer.Services.SCliente;
 using BussinessLayer.Services.SContactos;
 using BussinessLayer.Wrappers;

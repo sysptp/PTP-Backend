@@ -4,9 +4,9 @@ using Swashbuckle.AspNetCore.Annotations;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using BussinessLayer.Interfaces.IGeografia;
-using BussinessLayer.DTOs.Configuracion.Geografia.DRegion;
 using FluentValidation;
 using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Geografia.DRegion;
 
 namespace PTP_API.Controllers.ModuloGeneral.Geografia
 {

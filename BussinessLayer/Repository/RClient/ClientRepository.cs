@@ -15,7 +15,6 @@ namespace BussinessLayer.Repository.RClient
                 client.DateModified = new DateTime(1793, 1, 1);
                 await _context.Clients.AddAsync(client);
                 await _context.SaveChangesAsync();
-                _context.Dispose();
                 return client;
             }
             catch (Exception ex)
@@ -29,7 +28,7 @@ namespace BussinessLayer.Repository.RClient
             try
             {
                 return await _context.Clients
-                    .Where(x=> !x.IsDeleted && x.CodeBussines == bussinesId)
+                    .Where(x=> x.IsDeleted != 1 && string.Equals(x.CodeBussines,bussinesId))
                     .OrderBy(c=> c.Id)
                     .Skip((pageSize - 1) * pageCount)
                     .Take(pageCount)

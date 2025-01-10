@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Cliente;
-using BussinessLayer.DTOs.Contactos;
+using BussinessLayer.DTOs.Contactos.ClienteContacto;
+using BussinessLayer.DTOs.Contactos.TypeContact;
 using DataLayer.Models.Contactos;
 
 namespace BussinessLayer.Mapping

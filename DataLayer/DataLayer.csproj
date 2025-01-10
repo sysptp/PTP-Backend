@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Models\HelpDesk\" />
     <Folder Include="Models\ModuloAuditoria\" />
-    <Folder Include="Models\ModuloCitas\" />
     <Folder Include="Models\ModuloContabilidad\" />
   </ItemGroup>
 

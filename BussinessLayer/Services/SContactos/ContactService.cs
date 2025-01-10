@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Contactos;
+using BussinessLayer.DTOs.Contactos.TypeContact;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.Contactos;
 using DataLayer.PDbContex;

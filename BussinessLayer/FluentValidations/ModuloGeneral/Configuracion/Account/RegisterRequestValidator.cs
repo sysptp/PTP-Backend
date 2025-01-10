@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using BussinessLayer.Interfaces.Repository.Empresa;
 using BussinessLayer.Repository.RSeguridad;
-using BussinessLayer.DTOs.Configuracion.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 
 namespace BussinessLayer.FluentValidations.ModuloGeneral.Configuracion.Account
 {

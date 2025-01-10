@@ -10,8 +10,8 @@ using BussinessLayer.Settings;
 using System.Security.Cryptography;
 using BussinessLayer.Interface.IAccount;
 using BussinessLayer.Interfaces.Repository.Empresa;
-using BussinessLayer.DTOs.Configuracion.Account;
-using BussinessLayer.DTOs.Configuracion.Seguridad.Usuario;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Usuario;
 
 namespace IdentityLayer.Services
 {

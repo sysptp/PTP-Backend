@@ -15,7 +15,7 @@ namespace DataLayer.Models.Clients
         public string? Description { get; set; }
         public int CodeTypeIdentification { get; set; }
         public long CodeBussines { get; set; }
-        public bool IsDeleted { get; set; }
+        public int IsDeleted { get; set; }
         public string? AddedBy { get; set; }
         public DateTime DateAdded { get; set; }
         public string? ModifiedBy { get; set; }
