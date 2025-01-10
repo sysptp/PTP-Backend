@@ -13,6 +13,7 @@ namespace BussinessLayer.DTOs.ModuloInventario.Otros
         public int ProductoId { get; set; }
 
         public int SuplidorId { get; set; }
+        public long IdEmpresa { get; set; }
 
         public int IdMoneda { get; set; }
 

@@ -1,11 +1,8 @@
-﻿using BussinessLayer.DTOs.ModuloGeneral.Monedas;
-using BussinessLayer.DTOs.ModuloInventario.Otros;
+﻿using BussinessLayer.DTOs.ModuloInventario.Otros;
 using BussinessLayer.Interfaces.Services.ModuloInventario.Otros;
-using BussinessLayer.Services.ModuloInventario.Otros;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
@@ -39,32 +36,37 @@ namespace PTP_API.Controllers.ModuloInventario.Otros
         }
         #endregion
 
-        [HttpGet("api/v1/[controller]/ObtenerProdSupli/{id}")]
+        [HttpGet("api/v1/[controller]/ObtenerProdSupli")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerOperation(Summary = "Obtener Producto Suplidor", Description = "Obtiene un producto suplidor en especifico por su id.")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetAllByFilters(int? id, long? idCompany)
         {
             try
             {
-                var validationResult = await _validateNumbers.ValidateAsync(id);
-
-                if (!validationResult.IsValid)
+                if (id.HasValue)
                 {
-                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                    return BadRequest(Response<string>.BadRequest(errors, 400));
+                    var productoSuplidor = await _invProductoSuplidorService.GetById((int)id);
+                    if (productoSuplidor != null)
+                    {
+                        return Ok(Response<List<ViewInvProductoSuplidorDTO>>.Success(new List<ViewInvProductoSuplidorDTO> { productoSuplidor }, "Registro encontrado."));
+                    }
+                    else
+                    {
+                        return Ok(Response<ViewInvProductoSuplidorDTO>.NotFound("No se han encontrado Registros."));
+                    }
+                }
+                var productoSuplidores = await _invProductoSuplidorService.GetAll();
+
+                if (productoSuplidores == null || productoSuplidores.Count == 0)
+                {
+                    return Ok(Response<List<ViewInvProductoSuplidorDTO>>.NoContent("No se econtraron productos suplidores"));
                 }
 
-                var data = await _invProductoSuplidorService.GetById(id);
+                return Ok(Response<List<ViewInvProductoSuplidorDTO>>.Success(
+                    idCompany != null ?
+                    productoSuplidores.Where(x => x.IdEmpresa == idCompany).ToList() : productoSuplidores, "Registro encontrado."));
 
-                if (data != null)
-                {
 
-                    return Ok(Response<ViewInvProductoSuplidorDTO>.Success(data, "Registro encontrado."));
-                }
-                else
-                {
-                    return Ok(Response<ViewInvProductoSuplidorDTO>.NotFound("No se han encontrado Registros."));
-                }
             }
             catch (Exception)
             {

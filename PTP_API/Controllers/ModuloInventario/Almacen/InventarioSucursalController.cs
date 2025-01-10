@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Inventario Sucursal", Description = "Obtiene una lista de todos los Inventarios Sucursales o un Inventario Sucursal específico si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id,long? idCompany)
         {
             try
             {
@@ -53,7 +53,9 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<InvInventarioSucursalReponse>>.Success(inventarioSucursals, "Inventarios Sucursales obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<InvInventarioSucursalReponse>>.Success(
+                        idCompany != null ? inventarioSucursals.Where(x => x.IdEmpresa == idCompany).ToList()
+                        : inventarioSucursals, "Inventarios Sucursales obtenidos correctamente."));
                 }
             }
             catch (Exception ex)

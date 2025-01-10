@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using DataLayer.Models.ModuloGeneral.Monedas;
 using DataLayer.Models.ModuloInventario.Productos;
+using DataLayer.Models.ModuloGeneral.Empresa;
 
 namespace DataLayer.Models.ModuloInventario.Otros
 {
@@ -14,7 +15,9 @@ namespace DataLayer.Models.ModuloInventario.Otros
         public int? ProductoId { get; set; }
 
         public int? SuplidorId { get; set; }
-
+        public long IdEmpresa { get; set; }
+        [ForeignKey("IdEmpresa")]
+        public GnEmpresa? GnEmpresa { get; set; }
         public int? IdMoneda { get; set; }
 
         public decimal? ValorCompra { get; set; }

@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Movimiento Almacen", Description = "Obtiene una lista de todos los Inventarios Sucursales o un Movimiento Almacen específico si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, long? idCompany)
         {
             try
             {
@@ -53,12 +53,14 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<InvMovimientoAlmacenReponse>>.Success(MovimientoAlmacens, "Inventarios Sucursales obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<InvMovimientoAlmacenReponse>>.Success
+                        (idCompany != null ? MovimientoAlmacens.Where(x => x.IdEmpresa == idCompany).ToList() 
+                        : MovimientoAlmacens, "Inventarios Sucursales obtenidos correctamente."));
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener el Movimiento Almacen. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 

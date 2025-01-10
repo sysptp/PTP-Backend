@@ -61,6 +61,7 @@ using BussinessLayer.Interfaces.Services.ModuloVentas.ICaja;
 using BussinessLayer.Interfaces.Services.ModuloVentas.ICotizaciones;
 using BussinessLayer.Interfaces.ModuloInventario.Almacen;
 using BussinessLayer.Services.ModuloInventario.SAlmacen;
+using DataLayer.Models.ModuloInventario.Almacen;
 
 public static class ServiceRegistration
 {
@@ -108,6 +109,11 @@ public static class ServiceRegistration
         services.AddScoped<IInvProductoSuplidorService, InvProductoSuplidorService>();
         services.AddScoped<IInvAlmacenInventarioService, InvAlmacenInventarioService>();
         services.AddScoped<IInvMovInventarioSucursalService, InvMovInventarioSucursalService>();
+        services.AddScoped<IInvInventarioSucursalService, InvInventarioSucursalService>();
+        services.AddScoped<IInvMovAlmacenSucursalService, InvMovAlmacenSucursalService>();
+        services.AddScoped<IInvMovAlmacenSucursalDetalleService, InvMovAlmacenSucursalDetalleService>();
+        services.AddScoped<IInvMovimientoAlmacenService, InvMovimientoAlmacenService>();
+        services.AddScoped<IInvMovimientoAlmacenDetalleService, InvMovimientoAlmacenDetalleService>();
         #endregion
 
         #region Auditoria
