@@ -5,21 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BussinessLayer.Repository.RCampaña
 {
-    public class CmpClienteRepository : ICmpClienteRepository
+    public class CmpClienteRepository(PDbContext context) : ICmpClienteRepository
     {
-        private readonly PDbContext _context;
-
-        public CmpClienteRepository(PDbContext context)
+        public async Task<IEnumerable<CmpCliente>> GetAllAsync(long empresaId)
         {
-            _context = context;
+            return await context.CmpClientes.Where(c => !c.Borrado
+            && c.EmpresaId == empresaId)
+                .ToListAsync();
         }
-        public async Task<IEnumerable<CmpCliente>> GetAllAsync(int empresaId)
+        public async Task<CmpCliente?> GetByIdAsync(int id, long empresaId)
         {
-            return await _context.Set<CmpCliente>().Where(c => !c.Borrado && c.EmpresaId == empresaId).ToListAsync();
-        }
-        public async Task<CmpCliente?> GetByIdAsync(int id, int empresaId)
-        {
-            return await _context.Set<CmpCliente>().FirstOrDefaultAsync(c => c.ClientId == id && !c.Borrado && c.EmpresaId == empresaId);
+            return await context.CmpClientes.FirstOrDefaultAsync(c => c.ClientId == id
+            && !c.Borrado
+            && c.EmpresaId == empresaId);
         }
         public async Task AddAsync(CmpCliente cliente)
         {
@@ -27,18 +25,17 @@ namespace BussinessLayer.Repository.RCampaña
             {
                 cliente.FechaCreacion = DateTime.UtcNow;
                 cliente.FechaModificacion = DateTime.UtcNow;
-                _context.CmpClientes.Add(cliente);
-                await _context.SaveChangesAsync();
+                context.CmpClientes.Add(cliente);
+                await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 throw new ApplicationException(ex.Message, ex);
             }
-
         }
         public async Task UpdateAsync(CmpCliente cliente)
         {
-            var existing = await _context.Set<CmpCliente>().FindAsync(cliente.ClientId);
+            var existing = await context.Set<CmpCliente>().FindAsync(cliente.ClientId);
             if (existing != null)
             {
                 existing.Nombre = cliente.Nombre;
@@ -47,19 +44,19 @@ namespace BussinessLayer.Repository.RCampaña
                 existing.UsuarioModificacion = cliente.UsuarioModificacion;
                 existing.Borrado = cliente.Borrado;
                 existing.EmpresaId = cliente.EmpresaId;
-                _context.Update(existing);
-                await _context.SaveChangesAsync();
+                context.Update(existing);
+                await context.SaveChangesAsync();
             }
         }
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(long id)
         {
-            var cliente = await _context.CmpClientes.FindAsync(id);
+            var cliente = await context.CmpClientes.FindAsync(id);
             if (cliente != null)
             {
                 cliente.Borrado = true;
                 cliente.FechaModificacion = DateTime.UtcNow;
-                _context.Update(cliente);
-                await _context.SaveChangesAsync();
+                context.Update(cliente);
+                await context.SaveChangesAsync();
             }
         }
     }

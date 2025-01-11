@@ -70,6 +70,9 @@ using BussinessLayer.DTOs.ModuloCitas.CtaState;
 using BussinessLayer.Validations.ModuloCitas.CtaState;
 using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
 using BussinessLayer.Validations.ModuloCitas.CtaUnwanted;
+using BussinessLayer.FluentValidations.ModuloInventario;
+using BussinessLayer.DTOs.ModuloCampaña.CmpCliente;
+using BussinessLayer.FluentValidations.ModuloCampaña.CmpClientes;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -82,7 +85,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
 
-            services.AddScoped<IValidator<CreateProductsDto>,CreateProductosRequestValidator>();
+            services.AddScoped<IValidator<CreateProductsDto>, CreateProductosRequestValidator>();
             services.AddScoped<IValidator<EditProductDto>, EditProductosRequestValidator>();
             services.AddScoped<IValidator<CreatePreciosDto>, CreatePreciosRequestValidator>();
             services.AddScoped<IValidator<EditPricesDto>, EditPreciosRequestValidator>();
@@ -102,6 +105,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CreateOrderDto>, CreateOrderRequestValidator>();
             services.AddScoped<IValidator<CreateCurrencyDTO>, CreateCurrencyRequestValidator>();
             services.AddScoped<IValidator<EditCurrencyDTO>, EditCurrencyRequestValidator>();
+
+            services.AddScoped<IValidator<CmpClientCreateDto>, CmpClientCreateDtoValidation>();
 
             services.AddScoped<IValidator<EditInvProductoSuplidorDTO>, EditInvProductoSuplidorRequestValidator>();
             services.AddScoped<IValidator<CreateInvProductoSuplidorDTO>, CreateInvProductoSuplidorRequestValidator>();
@@ -126,6 +131,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<string>, StringsRequestValidator>();
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
             services.AddScoped<IValidator<decimal>, DecimalsRequestValidator>();
+
+            services.AddScoped(typeof(IValidateService<>),typeof(ValidateService<>));
 
 
             #region Modulo General
@@ -157,8 +164,8 @@ namespace BussinessLayer.DendeciesInjections
             #endregion
 
             #region Modulo General
-            
-                services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+
+            services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
             #endregion
 
             #region Modulo Citas

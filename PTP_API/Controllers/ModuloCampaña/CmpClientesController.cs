@@ -1,9 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloCampaña.CmpCliente;
 using BussinessLayer.Interfaces.IModuloCampaña;
-using BussinessLayer.Interfaces.ModuloCampaña;
 using BussinessLayer.Wrappers;
-using DataLayer.Models.ModuloCampaña;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PTP_API.Controllers.ModuloCampaña
@@ -15,44 +12,77 @@ namespace PTP_API.Controllers.ModuloCampaña
         [HttpGet]
         public async Task<IActionResult> GetAll(int idEmpresa)
         {
-            Response<List<CmpClienteDto>> clientes = await clientService.GetClientsAsync(idEmpresa);
+            try
+            {
+                Response<List<CmpClienteDto>> clientes = await clientService.GetClientsAsync(idEmpresa);
 
-            if (!clientes.Succeeded) return BadRequest(clientes);
+                if (!clientes.Succeeded) return BadRequest(clientes);
 
-            return clientes.Data != null ? Ok(clientes) : NoContent();
-
+                return clientes.Data != null ? Ok(clientes) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, int idEmprsa)
         {
-            var cliente = await clientService.GetClientsAsync(id);
-            if (cliente == null) return NotFound();
-            return Ok(cliente);
+            try
+            {
+                var cliente = await clientService.GetClientByIdAsync(id, idEmprsa);
+                if (cliente == null) return NotFound();
+                return Ok(cliente);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CmpClientCreateDto cliente)
         {
-            Response<CmpClientCreateDto> response = await clientService.CreateClientAsync(cliente);
+            try
+            {
+                Response<CmpClientCreateDto> response = await clientService.CreateClientAsync(cliente);
 
-            return response.Succeeded ? Created(response.Message, response) : BadRequest(response);
-
+                return response.Succeeded ? Created(response.Message, response) : BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, CmpClienteUpdateDto cliente)
         {
-            if (id != cliente.ClienteId) return BadRequest();
-            await clientService.UpdateClientAsync(id, cliente);
-            return NoContent();
+            try
+            {
+                if (id != cliente.ClientId) return BadRequest("Client ID mismatch.");
+                await clientService.UpdateClientAsync(id, cliente);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await clientService.DeleteClientAsync(id, id);
-            return NoContent();
+            try
+            {
+                await clientService.DeleteClientAsync(id, id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
     }
 }
