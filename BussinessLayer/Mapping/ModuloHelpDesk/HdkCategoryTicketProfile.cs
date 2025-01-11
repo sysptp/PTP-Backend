@@ -8,19 +8,10 @@ namespace BussinessLayer.Mapping.ModuloHelpDesk
     {
         public HdkCategoryTicketProfile()
         {
-            CreateMap<HdkCategoryTicketRequest, HdkCategoryTicket>()
-            .ForMember(dest => dest.Descripcion, opt => opt.MapFrom(src => src.Descripcion))
-            .ForMember(dest => dest.IdEmpresa, opt => opt.MapFrom(src => src.IdEmpresa)).ReverseMap();
+            CreateMap<HdkCategoryTicketRequest, HdkCategoryTicket>().ReverseMap();
 
-            CreateMap<HdkCategoryTicketReponse, HdkCategoryTicket>()
-            .ForMember(dest => dest.IdCategoria, opt => opt.MapFrom(src => src.IdCategoria))
-            .ForMember(dest => dest.Descripcion, opt => opt.MapFrom(src => src.Descripcion))
-            .ForMember(dest => dest.FechaAdicion, opt => opt.MapFrom(src => src.FechaAdicion))
-            .ForMember(dest => dest.FechaModificacion, opt => opt.MapFrom(src => src.FechaModificacion))
-            .ForMember(dest => dest.UsuarioAdicion, opt => opt.MapFrom(src => src.UsuarioAdicion))
-            .ForMember(dest => dest.UsuarioModificacion, opt => opt.MapFrom(src => src.UsuarioModificacion))
-            .ForMember(dest => dest.Borrado, opt => opt.MapFrom(src => src.Borrado))
-            .ForMember(dest => dest.IdEmpresa, opt => opt.MapFrom(src => src.IdEmpresa)).ReverseMap();
+            CreateMap<HdkCategoryTicket,HdkCategoryTicketReponse>()
+            .ForMember(dest => dest.NombreEmpresa, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP)).ReverseMap();
 
 
         }

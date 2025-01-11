@@ -1,10 +1,7 @@
-﻿using DataLayer.Models.Otros;
-using System;
-using System.Collections.Generic;
+﻿using DataLayer.Models.ModuloGeneral.Empresa;
+using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.ModuloHelpDesk
 {
@@ -12,10 +9,10 @@ namespace DataLayer.Models.ModuloHelpDesk
     {
         [Key]
         public int IdNota { get; set; }
-        public string Notas { get; set; }
+        public string Notas { get; set; } = null!;
         public int IdTicket { get; set; }
         public long IdEmpresa { get; set; }
-
-
+        [ForeignKey("IdEmpresa")]
+        public GnEmpresa? GnEmpresa { get; set; }
     }
 }

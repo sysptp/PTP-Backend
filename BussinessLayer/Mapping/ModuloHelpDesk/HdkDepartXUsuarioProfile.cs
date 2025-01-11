@@ -10,19 +10,15 @@ namespace BussinessLayer.Mapping.ModuloHelpDesk
         public HdkDepartXUsuarioProfile()
         {
             CreateMap<HdkDepartXUsuarioRequest, HdkDepartXUsuario>()
-           .ForMember(dest => dest.IdDepartamento, opt => opt.MapFrom(src => src.IdDepartamento))
-           .ForMember(dest => dest.IdEmpresa, opt => opt.MapFrom(src => src.IdEmpresa))
            .ReverseMap();
 
-            CreateMap<HdkDepartXUsuarioReponse, HdkDepartXUsuario>()
-            .ForMember(dest => dest.IdDepartamento, opt => opt.MapFrom(src => src.IdDepartamento))
-            .ForMember(dest => dest.FechaAdicion, opt => opt.MapFrom(src => src.FechaAdicion))
-            .ForMember(dest => dest.FechaModificacion, opt => opt.MapFrom(src => src.FechaModificacion))
-            .ForMember(dest => dest.UsuarioAdicion, opt => opt.MapFrom(src => src.UsuarioAdicion))
-            .ForMember(dest => dest.UsuarioModificacion, opt => opt.MapFrom(src => src.UsuarioModificacion))
-            .ForMember(dest => dest.Borrado, opt => opt.MapFrom(src => src.Borrado))
-            .ForMember(dest => dest.IdEmpresa, opt => opt.MapFrom(src => src.IdEmpresa)).ReverseMap();
+            CreateMap<HdkDepartXUsuario, HdkDepartXUsuarioReponse>()
+            .ForMember(dest => dest.NombreEmpresa, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP))
+            .ForMember(dest => dest.NombreUsuario, opt => opt.MapFrom(src => src.Usuario.Nombre))
+            .ForMember(dest => dest.HdkDepartamentsReponse, opt => opt.MapFrom(src => src.HdkDepartaments))
+            .ReverseMap();
 
         }
+
     }
 }

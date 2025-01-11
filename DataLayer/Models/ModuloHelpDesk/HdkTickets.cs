@@ -1,7 +1,5 @@
 ﻿using DataLayer.Models.ModuloGeneral.Empresa;
 using DataLayer.Models.Otros;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
