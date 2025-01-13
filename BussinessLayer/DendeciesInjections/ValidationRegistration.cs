@@ -73,6 +73,8 @@ using BussinessLayer.Validations.ModuloCitas.CtaUnwanted;
 using BussinessLayer.FluentValidations.ModuloInventario;
 using BussinessLayer.DTOs.ModuloCampaña.CmpCliente;
 using BussinessLayer.FluentValidations.ModuloCampaña.CmpClientes;
+using BussinessLayer.DTOs.ModuloCampaña.CmpContacto;
+using BussinessLayer.FluentValidations.ModuloCampaña.CmpContactos;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -132,6 +134,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
             services.AddScoped<IValidator<decimal>, DecimalsRequestValidator>();
 
+            #region Campaña
+            services.AddScoped<IValidator<CmpContactoCreateDto>,CmpContactoCreateValidator>();
+            services.AddScoped<IValidator<CmpContactoUpdateDto>,CmpContactoUpdateValidator>();
+            #endregion
             services.AddScoped(typeof(IValidateService<>),typeof(ValidateService<>));
 
 

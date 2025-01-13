@@ -14,12 +14,12 @@ namespace BussinessLayer.Repository.RCampaña
             _context = context;
         }
 
-        public async Task<IEnumerable<CmpContactos>> GetAllAsync(int empresaId)
+        public async Task<IEnumerable<CmpContactos>> GetAllAsync(long empresaId)
         {
             return await _context.CmpContactos.Where(c => !c.Borrado).ToListAsync();
         }
 
-        public async Task<CmpContactos?> GetByIdAsync(int id, int empresaId)
+        public async Task<CmpContactos?> GetByIdAsync(long id, long empresaId)
         {
             return await _context.CmpContactos
                 .FirstOrDefaultAsync(c => c.ContactoId == id && !c.Borrado);
@@ -51,7 +51,7 @@ namespace BussinessLayer.Repository.RCampaña
             }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(long id)
         {
             var contacto = await _context.Set<CmpContactos>().FindAsync(id);
             if (contacto != null)

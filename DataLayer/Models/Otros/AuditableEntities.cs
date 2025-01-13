@@ -4,10 +4,10 @@ namespace DataLayer.Models.Otros
 {
     public class AuditableEntities
     {
-        public DateTime FechaAdicion { get; set; } = DateTime.Now;
-        public string UsuarioAdicion { get; set; } = null!;
-        public DateTime? FechaModificacion { get; set; }
-        public string? UsuarioModificacion { get; set; }
+        public DateTime FechaCreacion { get; set; }
+        public DateTime FechaModificacion { get; set; }
+        public string UsuarioCreacion { get; set; } = string.Empty;
+        public string UsuarioModificacion { get; set; } = string.Empty;
         public bool Borrado { get; set; }
 
     }

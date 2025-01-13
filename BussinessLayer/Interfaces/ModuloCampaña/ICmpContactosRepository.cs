@@ -4,10 +4,10 @@ namespace BussinessLayer.Interfaces.ModuloCampaña
 {
     public interface ICmpContactosRepository
     {
-        Task<IEnumerable<CmpContactos>> GetAllAsync(int empresaId);
-        Task<CmpContactos?> GetByIdAsync(int id,int empresaId);
+        Task<IEnumerable<CmpContactos>> GetAllAsync(long empresaId);
+        Task<CmpContactos?> GetByIdAsync(long id, long empresaId);
         Task AddAsync(CmpContactos contacto);
         Task UpdateAsync(CmpContactos contacto);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(long id);
     }
 }

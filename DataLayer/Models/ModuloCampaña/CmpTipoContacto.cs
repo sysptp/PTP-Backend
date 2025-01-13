@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataLayer.Models.ModuloCampaña
+﻿namespace DataLayer.Models.ModuloCampaña
 {
     public class CmpTipoContacto
     {
@@ -16,7 +10,6 @@ namespace DataLayer.Models.ModuloCampaña
         public string UsuarioModificacion { get; set; } = string.Empty;
         public bool Borrado { get; set; }
         public long EmpresaId { get; set; }
-
         public virtual ICollection<CmpContactos> Contactos { get; set; } = new HashSet<CmpContactos>();
 
     }

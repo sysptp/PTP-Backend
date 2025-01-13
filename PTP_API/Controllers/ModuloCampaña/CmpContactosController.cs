@@ -1,56 +1,85 @@
-﻿using BussinessLayer.Interfaces.ModuloCampaña;
-using DataLayer.Models.ModuloCampaña;
-using Microsoft.AspNetCore.Http;
+﻿using BussinessLayer.DTOs.ModuloCampaña.CmpContacto;
+using BussinessLayer.DTOs.ModuloCampaña.CmpContactos;
+using BussinessLayer.Interfaces.IModuloCampaña;
+using BussinessLayer.Services.SModuloCampaña;
+using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PTP_API.Controllers.ModuloCampaña
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CmpContactosController : ControllerBase
+    public class CmpContactosController(ICmpContactoService contactosService) : ControllerBase
     {
-        private readonly ICmpContactosRepository _repository;
-
-        public CmpContactosController(ICmpContactosRepository repository)
-        {
-            _repository = repository;
-        }
-
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CmpContactos>>> GetAll(int idEmpresa)
+        public async Task<IActionResult> GetAll(int idEmpresa)
         {
-            var contactos = await _repository.GetAllAsync(idEmpresa);
-            return Ok(contactos);
+            try
+            {
+                var response = await contactosService.GetContactosAsync(idEmpresa);
+                return response.Succeeded ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CmpContactos>> GetById(int id,int idEmpresa)
+        public async Task<IActionResult> GetById(int id, int idEmpresa)
         {
-            var contacto = await _repository.GetByIdAsync(id,idEmpresa);
-            if (contacto == null) return NotFound();
-            return Ok(contacto);
+            try
+            {
+                var response = await contactosService.GetContactoByIdAsync(id, idEmpresa);
+                return response.Succeeded ? Ok(response) : NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CmpContactos contacto)
+        public async Task<IActionResult> Create(CmpContactoCreateDto contacto)
         {
-            await _repository.AddAsync(contacto);
-            return CreatedAtAction(nameof(GetById), new { id = contacto.ContactoId }, contacto);
+            try
+            {
+                var response = await contactosService.CreateContactoAsync(contacto);
+                return response.Succeeded ? Created(response.Message, response) : BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, CmpContactos contacto)
+        public async Task<IActionResult> Update(int id, CmpContactoUpdateDto contacto)
         {
-            if (id != contacto.ContactoId) return BadRequest();
-            await _repository.UpdateAsync(contacto);
-            return NoContent();
+            try
+            {
+                if (id != contacto.ContactoId) return BadRequest("ID mismatch");
+                var response = await contactosService.UpdateContactoAsync(id, contacto);
+                return response.Succeeded ? NoContent() : BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, int idEmpresa)
         {
-            await _repository.DeleteAsync(id);
-            return NoContent();
+            try
+            {
+                var response = await contactosService.DeleteContactoAsync(id, idEmpresa);
+                return response.Succeeded ? NoContent() : BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }
