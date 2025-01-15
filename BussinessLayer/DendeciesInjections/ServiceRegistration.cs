@@ -130,7 +130,7 @@ public static class ServiceRegistration
         services.AddScoped<ICtaAppointmentManagementService, CtaAppointmentManagementService>();
         services.AddScoped<ICtaAppointmentMovementsService, CtaAppointmentMovementsService>();
         services.AddScoped<ICtaAppointmentReasonService, CtaAppointmentReasonService>();
-        services.AddScoped<ICtaAppointmentsService, CtaAppointmentsService>();
+        services.AddScoped<ICtaAppointmentsRepository, CtaAppointmentsService>();
         services.AddScoped<ICtaConfiguracionService, CtaConfiguracionService>();
         services.AddScoped<ICtaEmailConfiguracionService, CtaEmailConfiguracionService>();
         services.AddScoped<ICtaMeetingPlaceService, CtaMeetingPlaceService>();

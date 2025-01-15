@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
@@ -18,10 +19,10 @@ namespace PTP_API.Controllers.ModuloCita
     [EnableBitacora]
     public class CtaAppointmentsController : ControllerBase
     {
-        private readonly ICtaAppointmentsService _appointmentService;
+        private readonly ICtaAppointmentsRepository _appointmentService;
         private readonly IValidator<CtaAppointmentsRequest> _validator;
 
-        public CtaAppointmentsController(ICtaAppointmentsService appointmentService, IValidator<CtaAppointmentsRequest> validator)
+        public CtaAppointmentsController(ICtaAppointmentsRepository appointmentService, IValidator<CtaAppointmentsRequest> validator)
         {
             _appointmentService = appointmentService;
             _validator = validator;
