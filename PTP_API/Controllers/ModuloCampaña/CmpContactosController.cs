@@ -1,5 +1,4 @@
 ﻿using BussinessLayer.DTOs.ModuloCampaña.CmpContacto;
-using BussinessLayer.DTOs.ModuloCampaña.CmpContactos;
 using BussinessLayer.Interfaces.IModuloCampaña;
 using BussinessLayer.Services.SModuloCampaña;
 using BussinessLayer.Wrappers;

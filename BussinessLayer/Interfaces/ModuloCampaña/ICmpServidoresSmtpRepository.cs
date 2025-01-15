@@ -1,13 +1,11 @@
-﻿using BussinessLayer.FluentValidations.ModuloCampaña.CmpSmtpConfiguraciones;
+﻿
+using DataLayer.Models.ModuloCampaña;
 
-namespace BussinessLayer.Interfaces.ModuloCampaña
+public interface ICmpServidoresSmtpRepository
 {
-    public interface ICmpServidoresSmtpRepository
-    {
-        Task<CmpServidoresSmtp> GetByIdAsync(int id);
-        Task<List<CmpServidoresSmtp>> GetAllAsync();
-        Task CreateAsync(CmpServidoresSmtp servidor);
-        Task UpdateAsync(CmpServidoresSmtp servidor);
-        Task DeleteAsync(int id);
-    }
+    Task AddAsync(CmpServidoresSmtp servidor);
+    Task DeleteAsync(long id);
+    Task<List<CmpServidoresSmtp>> GetAllAsync();
+    Task<CmpServidoresSmtp?> GetByIdAsync(long id);
+    Task UpdateAsync(CmpServidoresSmtp servidor);
 }

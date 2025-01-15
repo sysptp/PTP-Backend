@@ -75,6 +75,8 @@ using BussinessLayer.DTOs.ModuloCampaña.CmpCliente;
 using BussinessLayer.FluentValidations.ModuloCampaña.CmpClientes;
 using BussinessLayer.DTOs.ModuloCampaña.CmpContacto;
 using BussinessLayer.FluentValidations.ModuloCampaña.CmpContactos;
+using BussinessLayer.DTOs.ModuloCampaña.CmpEmail;
+using BussinessLayer.FluentValidations.ModuloCampaña.CmpSmtpConfiguraciones;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -137,6 +139,8 @@ namespace BussinessLayer.DendeciesInjections
             #region Campaña
             services.AddScoped<IValidator<CmpContactoCreateDto>,CmpContactoCreateValidator>();
             services.AddScoped<IValidator<CmpContactoUpdateDto>,CmpContactoUpdateValidator>();
+            services.AddScoped<IValidator<CmpServidoresSmtpUpdateDto>,CmpServidoresSmtpUpdateValidator>();
+            services.AddScoped<IValidator<CmpServidoresSmtpCreateDto>,CmpServidoresSmtpCreateValidator>();
             #endregion
             services.AddScoped(typeof(IValidateService<>),typeof(ValidateService<>));
 

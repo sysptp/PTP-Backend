@@ -135,10 +135,13 @@ public static class ServiceRegistration
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IGnPermisoService, GnPermisoService>();
 
-        services.AddTransient<IClientService, ClientService>();
-        services.AddTransient<IContactService, ContactService>();
-        services.AddTransient<ICmpClientService, CmpClientService>();
+        services.AddScoped<IClientService, ClientService>();
+        services.AddScoped<IContactService, ContactService>();
 
+        #region ModuloCampaña
+        services.AddScoped<ICmpClientService, CmpClientService>();
+        services.AddScoped<ICmpServidoresSmtpService, CmpServidoresSmtpService>();
+        #endregion
         #region Geografia
 
         services.AddTransient<IPaisService, PaisService>();
