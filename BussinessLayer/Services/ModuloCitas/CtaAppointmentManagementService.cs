@@ -22,7 +22,7 @@ namespace DataLayer.Models.Modulo_Citas
             var appointmentManagementList = await _repository.GetAllWithIncludeAsync(new List<string> { "Appointments"});
             var mappedAppointmentManagementList = _mapper.Map<List<CtaAppointmentManagementResponse>>(appointmentManagementList);
 
-            if (id != null && appointmentId != 0)
+            if (id != null && id != 0)
             {
                 appointmentManagementList.Where(x => x.IdManagementAppointment == id).ToList();
                 return mappedAppointmentManagementList;
@@ -30,7 +30,7 @@ namespace DataLayer.Models.Modulo_Citas
 
             if (appointmentId != null && appointmentId != 0)
             {
-                appointmentManagementList.Where(x => x.IdAppointment == appointmentId).ToList();
+                appointmentManagementList.Where(x => x.AppointmentId == appointmentId).ToList();
             }
 
             return mappedAppointmentManagementList;

@@ -1,8 +1,4 @@
-﻿using DataLayer.Models.ModuloInventario.Impuesto;
-using DataLayer.Models.ModuloInventario.Precios;
-using DataLayer.Models.ModuloInventario.Productos;
-using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace BussinessLayer.DTOs.ModuloGeneral.Monedas
 {
     public class ViewCurrencyDTO
@@ -26,6 +22,7 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Monedas
         public bool? Borrado { get; set; }
 
         public bool? Activo { get; set; }
+        public string? RutaImagen { get; set; }
 
         public DateTime? FechaCreacion { get; set; }
 

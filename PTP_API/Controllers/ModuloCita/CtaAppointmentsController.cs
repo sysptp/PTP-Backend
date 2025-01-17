@@ -33,13 +33,13 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener citas", Description = "Devuelve una lista de citas o una cita específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllAppointments([FromQuery] int? idAppointment)
+        public async Task<IActionResult> GetAllAppointments([FromQuery] string? appointmentCode, int? appointmentId, long? companyId)
         {
             try
             {
-                if (idAppointment.HasValue)
+                if (appointmentId.HasValue)
                 {
-                    var appointment = await _appointmentService.GetByIdResponse(idAppointment.Value);
+                    var appointment = await _appointmentService.GetByIdResponse(appointmentId);
                     if (appointment == null)
                         return NotFound(Response<CtaAppointmentsResponse>.NotFound("Cita no encontrada."));
 
@@ -51,7 +51,10 @@ namespace PTP_API.Controllers.ModuloCita
                     if (appointments == null || !appointments.Any())
                         return StatusCode(204, Response<IEnumerable<CtaAppointmentsResponse>>.NoContent("No hay citas disponibles."));
 
-                    return Ok(Response<IEnumerable<CtaAppointmentsResponse>>.Success(appointments, "Citas obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<CtaAppointmentsResponse>>.Success(
+                        companyId.HasValue ? appointments.Where(x => x.CompanyId == companyId).ToList() : 
+                        (appointmentCode != null ? appointments.Where(x => x.AppointmentCode == appointmentCode).ToList() : appointments), 
+                        "Citas obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
@@ -109,7 +112,7 @@ namespace PTP_API.Controllers.ModuloCita
                 if (existingAppointment == null)
                     return NotFound(Response<string>.NotFound("Cita no encontrada."));
 
-                appointmentDto.IdAppointment = id;
+                appointmentDto.AppointmentId = id;
                 await _appointmentService.Update(appointmentDto, id);
                 return Ok(Response<string>.Success(null, "Cita actualizada correctamente."));
             }

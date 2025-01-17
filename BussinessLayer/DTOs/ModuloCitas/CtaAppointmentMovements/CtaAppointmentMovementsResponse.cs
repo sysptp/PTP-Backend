@@ -13,7 +13,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements
         public int? IdState { get; set; }
         public CtaStateResponse? State { get; set; }
         public int? IdMessage { get; set; }
-        public int? IdAppointment { get; set; }
+        public int AppointmentId { get; set; } 
         public CtaAppointmentsResponse? Appointments { get; set; }
         public bool Sent { get; set; } = true;
     }
