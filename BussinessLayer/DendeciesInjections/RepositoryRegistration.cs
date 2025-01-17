@@ -20,10 +20,10 @@ using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 using BussinessLayer.Repository.RClient;
 using BussinessLayer.Services.SCliente;
-using BussinessLayer.Interfaces.ModuloCampaña;
 using BussinessLayer.Repository.RCampaña;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
 using BussinessLayer.Repository.Modulo_Citas;
+using BussinessLayer.Interfaces.ModuloCampaña.Repository;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -48,6 +48,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICmpClienteRepository,CmpClienteRepository>();
             services.AddScoped<ICmpTipoContactoRepository,CmpTipoContactoRepository>();
             services.AddScoped<ICmpServidoresSmtpRepository,CmpServidoresSmtpRepository>();
+            services.AddScoped<ICmpConfiguracionesSmtpRepository, CmpConfiguracionesSmtpRepository>();
+            services.AddScoped<ICmpPlantillaRepository, CmpPlantillasRepository>();
+            services.AddScoped<ICmpTipoPlantillaRepository, CmpTipoPlantillaRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

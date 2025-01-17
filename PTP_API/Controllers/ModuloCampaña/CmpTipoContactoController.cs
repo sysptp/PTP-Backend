@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interfaces.ModuloCampaña;
+﻿using BussinessLayer.Interfaces.ModuloCampaña.Repository;
 using DataLayer.Models.ModuloCampaña;
 using Microsoft.AspNetCore.Mvc;
 

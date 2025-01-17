@@ -1,5 +1,5 @@
 ﻿using BussinessLayer.DTOs.ModuloCampaña.CmpCliente;
-using BussinessLayer.Interfaces.IModuloCampaña;
+using BussinessLayer.Interfaces.ModuloCampaña.Services;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 

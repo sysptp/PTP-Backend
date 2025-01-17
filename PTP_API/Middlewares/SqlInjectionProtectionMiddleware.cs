@@ -13,6 +13,13 @@ public class SqlInjectionProtectionMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
+        // Excluir validaciones si el contenido es multipart/form-data
+        if (context.Request.ContentType?.Contains("multipart/form-data") == true)
+        {
+            await _next(context); // Ignorar validaciones en este caso
+            return;
+        }
+
         context.Request.EnableBuffering();
 
         if (context.Request.Method == HttpMethods.Post || context.Request.Method == HttpMethods.Put)

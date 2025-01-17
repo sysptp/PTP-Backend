@@ -1,4 +1,4 @@
-﻿using BussinessLayer.DTOs.ModuloCampaña.CmpEmail;
+﻿using BussinessLayer.DTOs.ModuloCampaña.CmpServidores;
 using FluentValidation;
 
 namespace BussinessLayer.FluentValidations.ModuloCampaña.CmpSmtpConfiguraciones

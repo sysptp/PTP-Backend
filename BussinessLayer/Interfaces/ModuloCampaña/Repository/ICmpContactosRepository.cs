@@ -1,6 +1,6 @@
 ﻿using DataLayer.Models.ModuloCampaña;
 
-namespace BussinessLayer.Interfaces.ModuloCampaña
+namespace BussinessLayer.Interfaces.ModuloCampaña.Repository
 {
     public interface ICmpContactosRepository
     {

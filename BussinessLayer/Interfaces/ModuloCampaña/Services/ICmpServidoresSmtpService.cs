@@ -1,7 +1,8 @@
 ﻿using BussinessLayer.DTOs.ModuloCampaña.CmpEmail;
+using BussinessLayer.DTOs.ModuloCampaña.CmpServidores;
 using BussinessLayer.Wrappers;
 
-namespace BussinessLayer.Interfaces.IModuloCampaña
+namespace BussinessLayer.Interfaces.ModuloCampaña.Services
 {
     public interface ICmpServidoresSmtpService
     {

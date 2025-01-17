@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCampaña.CmpContacto;
 using BussinessLayer.FluentValidations;
-using BussinessLayer.Interfaces.IModuloCampaña;
-using BussinessLayer.Interfaces.ModuloCampaña;
+using BussinessLayer.Interfaces.ModuloCampaña.Repository;
 using BussinessLayer.Repository.RCampaña;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCampaña;
@@ -10,7 +9,7 @@ using FluentValidation;
 
 namespace BussinessLayer.Services.SModuloCampaña
 {
-    
+
 
     public class CmpContactoService(ICmpContactosRepository cmpContactoRepository, IMapper mapper, IValidateService<CmpContactoCreateDto> validator) : ICmpContactoService
     {

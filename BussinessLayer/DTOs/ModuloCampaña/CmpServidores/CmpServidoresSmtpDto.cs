@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BussinessLayer.DTOs.ModuloCampaña.CmpEmail
+namespace BussinessLayer.DTOs.ModuloCampaña.CmpServidores
 {
     public class CmpServidoresSmtpDto
     {

@@ -6,6 +6,7 @@ namespace DataLayer.Models.ModuloCampaña
     {
         public int ConfiguracionId {  get; set; }
         public string? Usuario { get; set; }
+        public string? Email { get; set; }
         public string? Contraseña { get; set; }
         public int ServidorId { get; set; }
         public long EmpresaId { get; set; }

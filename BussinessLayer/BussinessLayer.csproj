@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs\ModuloCampaña\CmpPlantillas\" />
     <Folder Include="DTOs\ModuloHelpDesk\" />
     <Folder Include="DTOs\ModuloAuditoria\" />
     <Folder Include="DTOs\ModuloContabilidad\" />

@@ -61,10 +61,11 @@ using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
 using BussinessLayer.Interfaces.IClient;
 using BussinessLayer.Services.SCliente;
 using BussinessLayer.Services.SContactos;
-using BussinessLayer.Interfaces.IModuloCampaña;
 using BussinessLayer.Services.SModuloCampaña;
 using BussinessLayer.Interface.Modulo_Citas;
 using DataLayer.Models.Modulo_Citas;
+using BussinessLayer.Interfaces.ModuloCampaña.Services;
+using BussinessLayer.FluentValidations.Generic;
 
 public static class ServiceRegistration
 {
@@ -138,10 +139,15 @@ public static class ServiceRegistration
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IContactService, ContactService>();
 
+        #region
+        services.AddScoped<IGenericValidation,GenericValidation>();
+        #endregion
+        
         #region ModuloCampaña
         services.AddScoped<ICmpClientService, CmpClientService>();
         services.AddScoped<ICmpServidoresSmtpService, CmpServidoresSmtpService>();
         #endregion
+
         #region Geografia
 
         services.AddTransient<IPaisService, PaisService>();

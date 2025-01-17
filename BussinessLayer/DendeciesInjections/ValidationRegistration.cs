@@ -77,6 +77,10 @@ using BussinessLayer.DTOs.ModuloCampaña.CmpContacto;
 using BussinessLayer.FluentValidations.ModuloCampaña.CmpContactos;
 using BussinessLayer.DTOs.ModuloCampaña.CmpEmail;
 using BussinessLayer.FluentValidations.ModuloCampaña.CmpSmtpConfiguraciones;
+using BussinessLayer.DTOs.ModuloCampaña.CmpServidores;
+using BussinessLayer.DTOs.ModuloCampaña.CmpConfiguraciones;
+using BussinessLayer.DTOs.ModuloCampaña.CmpTipoPlantillas;
+using BussinessLayer.FluentValidations.ModuloCampaña.CmpTipoPlantilla;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -137,12 +141,14 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<decimal>, DecimalsRequestValidator>();
 
             #region Campaña
-            services.AddScoped<IValidator<CmpContactoCreateDto>,CmpContactoCreateValidator>();
-            services.AddScoped<IValidator<CmpContactoUpdateDto>,CmpContactoUpdateValidator>();
-            services.AddScoped<IValidator<CmpServidoresSmtpUpdateDto>,CmpServidoresSmtpUpdateValidator>();
-            services.AddScoped<IValidator<CmpServidoresSmtpCreateDto>,CmpServidoresSmtpCreateValidator>();
+            services.AddScoped<IValidator<CmpContactoCreateDto>, CmpContactoCreateValidator>();
+            services.AddScoped<IValidator<CmpContactoUpdateDto>, CmpContactoUpdateValidator>();
+            services.AddScoped<IValidator<CmpServidoresSmtpUpdateDto>, CmpServidoresSmtpUpdateValidator>();
+            services.AddScoped<IValidator<CmpServidoresSmtpCreateDto>, CmpServidoresSmtpCreateValidator>();
+            services.AddScoped<IValidator<CmpConfiguracionCreateDto>, CmpConfiguracionesSmtpCreateValidator>();
+            services.AddScoped<IValidator<CmpTipoPlantillaCreateDto>, CmpTipoPlantillaCreateValidator>();
             #endregion
-            services.AddScoped(typeof(IValidateService<>),typeof(ValidateService<>));
+            services.AddScoped(typeof(IValidateService<>), typeof(ValidateService<>));
 
 
             #region Modulo General

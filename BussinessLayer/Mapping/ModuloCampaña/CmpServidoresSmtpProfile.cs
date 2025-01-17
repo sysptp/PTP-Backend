@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCampaña.CmpEmail;
+using BussinessLayer.DTOs.ModuloCampaña.CmpServidores;
 using DataLayer.Models.ModuloCampaña;
 using System;
 using System.Collections.Generic;

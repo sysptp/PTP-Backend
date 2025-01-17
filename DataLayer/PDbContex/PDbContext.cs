@@ -49,16 +49,19 @@ namespace DataLayer.PDbContex
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entry in ChangeTracker.Entries<EntityAuditable>())
+            foreach (var entry in ChangeTracker.Entries<AuditableEntities>())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.DateAdded = DateTime.Now;
-                        entry.Entity.DateUpdated = new DateTime(1793, 1, 1);
+                        entry.Entity.FechaAdicion = DateTime.Now;
+                        entry.Entity.FechaModificacion = new DateTime(1793, 1, 1);
                         break;
                     case EntityState.Modified:
-                        entry.Entity.DateUpdated = DateTime.Now;
+                        entry.Entity.FechaModificacion = DateTime.Now;
+                        break;
+                    case EntityState.Deleted:
+                        entry.Entity.FechaModificacion = DateTime.Now;
                         break;
                 }
             }
@@ -73,6 +76,8 @@ namespace DataLayer.PDbContex
             modelBuilder.ApplyConfiguration(new CmpContactosConfiguration());
             modelBuilder.ApplyConfiguration(new CmpServidoresSmtpConfiguration());
             modelBuilder.ApplyConfiguration(new CmpConfiguracionesSmtpConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpTipoPlantillaConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpPlantillasConfiguration());
             modelBuilder.ApplyConfiguration(new ClientContactConfiguration());
             modelBuilder.ApplyConfiguration(new TypeContactConfiguration());
         }
@@ -92,6 +97,8 @@ namespace DataLayer.PDbContex
         public DbSet<CmpContactos> CmpContactos { get; set; }
         public DbSet<CmpConfiguracionesSmtp> CmpConfiguracionesSmtps { get; set; }
         public DbSet<CmpServidoresSmtp> CmpServidoresSmtps { get; set; }
+        public DbSet<CmpPlantillas> CmpPlantillas { get; set; }
+        public DbSet<CmpTipoPlantilla> CmpTipoPlantillas { get; set; }
 
         #endregion
 
@@ -292,6 +299,6 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
-        
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.DTOs.ModuloCampaña.CmpEmail;
-using BussinessLayer.Interfaces.IModuloCampaña;
+using BussinessLayer.DTOs.ModuloCampaña.CmpServidores;
+using BussinessLayer.Interfaces.ModuloCampaña.Services;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

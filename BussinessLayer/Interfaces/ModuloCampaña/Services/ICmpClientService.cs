@@ -1,7 +1,7 @@
 ﻿using BussinessLayer.DTOs.ModuloCampaña.CmpCliente;
 using BussinessLayer.Wrappers;
 
-namespace BussinessLayer.Interfaces.IModuloCampaña
+namespace BussinessLayer.Interfaces.ModuloCampaña.Services
 {
     public interface ICmpClientService
     {
