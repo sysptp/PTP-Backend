@@ -31,7 +31,7 @@ namespace DataLayer.Models.ModuloGeneral.Monedas
         public bool? EsLocal { get; set; }
 
         public decimal? TasaCambio { get; set; }
-
+        public string? RutaImagen { get; set; }
         [Required]
         public bool? Borrado { get; set; }
 

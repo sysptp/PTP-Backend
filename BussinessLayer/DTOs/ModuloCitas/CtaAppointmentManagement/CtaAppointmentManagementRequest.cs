@@ -6,7 +6,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement
     {
         [JsonIgnore]
         public int IdManagementAppointment { get; set; }
-        public int IdAppointment { get; set; }
+        public int AppointmentId { get; set; } 
         public string? Comment { get; set; }
     }
 }

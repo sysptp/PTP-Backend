@@ -24,6 +24,7 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Monedas
         public bool? Activo { get; set; }
 
         public bool? EsLocal { get; set; }
+        public string? RutaImagen { get; set; }
 
         public decimal? TasaCambio { get; set; }
 

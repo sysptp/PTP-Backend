@@ -16,8 +16,8 @@ namespace DataLayer.Models.Modulo_Citas
         [ForeignKey("IdState")]
          public CtaState? CtaState { get; set; }
         public int? IdMessage { get; set; }
-        public int? IdAppointment { get; set; }
-        [ForeignKey("IdAppointment")]
+        public int AppointmentId { get; set; }
+        [ForeignKey("AppointmentId")]
         public CtaAppointments? CtaAppointments { get; set; }
         public bool Sent { get; set; } = true;
     }

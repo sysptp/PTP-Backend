@@ -9,8 +9,8 @@ namespace DataLayer.Models.Modulo_Citas
     {
         [Key]
         public int IdManagementAppointment { get; set; }
-        public int IdAppointment { get; set; }
-        [ForeignKey("IdAppointment")]
+        public int AppointmentId { get; set; }
+        [ForeignKey("AppointmentId")]
         public CtaAppointments? Appointments { get; set; }
         public string? Comment { get; set; }
       
