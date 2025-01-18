@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCampaña.CmpConfiguraciones;
 using BussinessLayer.DTOs.ModuloCampaña.CmpEmail;
-using BussinessLayer.FluentValidations;
+using BussinessLayer.FluentValidations.Generic;
 using BussinessLayer.Interfaces.ModuloCampaña.Repository;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCampaña;

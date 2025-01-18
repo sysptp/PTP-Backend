@@ -22,7 +22,10 @@ namespace BussinessLayer.FluentValidations.ModuloCampaña.CmpSmtpConfiguraciones
                 .MinimumLength(10).WithMessage("Contraseña debe ser minimo de 10 caracteres");
 
             RuleFor(x => x.Usuario).NotNull().WithMessage("Usuario no puede ser nulo o vacio")
-                .MinimumLength(10).WithMessage("Usuario debe ser minimo de 10 caracteres");
+                .MinimumLength(10).WithMessage("Usuario debe ser minimo de 10 caracteres"); 
+            
+            //RuleFor(x => x.Em).NotNull().WithMessage("Usuario no puede ser nulo o vacio")
+            //    .MinimumLength(10).WithMessage("Usuario debe ser minimo de 10 caracteres");
 
             RuleFor(x => x.UsuarioAdicion).NotNull().WithMessage("Usuario Adicion no puede ser nulo o vacio")
             .MinimumLength(5).WithMessage("Usuario Adicion debe ser minimo de 5 caracteres");

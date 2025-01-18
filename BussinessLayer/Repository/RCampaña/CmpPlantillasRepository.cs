@@ -2,6 +2,7 @@
 using DataLayer.Models.ModuloCampaña;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
+using static Dapper.SqlMapper;
 
 namespace BussinessLayer.Repository.RCampaña
 {
@@ -36,7 +37,7 @@ namespace BussinessLayer.Repository.RCampaña
             }
         }
 
-        public async Task<List<CmpPlantillas>> GetAllAsync(int empresaId)
+        public async Task<List<CmpPlantillas>> GetAllAsync(long empresaId)
         {
             try
             {
@@ -51,7 +52,7 @@ namespace BussinessLayer.Repository.RCampaña
             }
         }
 
-        public async Task<CmpPlantillas> GetByIdAsync(int id, int empresaId)
+        public async Task<CmpPlantillas> GetByIdAsync(int id, long empresaId)
         {
             try
             {
@@ -71,7 +72,10 @@ namespace BussinessLayer.Repository.RCampaña
         {
             try
             {
-                dbContext.CmpPlantillas.Update(plantilla);
+                CmpPlantillas entry = await dbContext.CmpPlantillas.FindAsync(plantilla.Id);
+                plantilla.UsuarioAdicion = entry.UsuarioAdicion;
+                plantilla.FechaAdicion = entry.FechaAdicion;
+                dbContext.Entry(entry).CurrentValues.SetValues(plantilla);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

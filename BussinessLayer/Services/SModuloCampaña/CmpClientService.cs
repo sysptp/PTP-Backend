@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCampaña.CmpCliente;
-using BussinessLayer.FluentValidations;
+using BussinessLayer.FluentValidations.Generic;
 using BussinessLayer.Interfaces.ModuloCampaña.Repository;
 using BussinessLayer.Interfaces.ModuloCampaña.Services;
 using BussinessLayer.Wrappers;

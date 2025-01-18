@@ -81,6 +81,9 @@ using BussinessLayer.DTOs.ModuloCampaña.CmpServidores;
 using BussinessLayer.DTOs.ModuloCampaña.CmpConfiguraciones;
 using BussinessLayer.DTOs.ModuloCampaña.CmpTipoPlantillas;
 using BussinessLayer.FluentValidations.ModuloCampaña.CmpTipoPlantilla;
+using BussinessLayer.FluentValidations.Generic;
+using BussinessLayer.DTOs.ModuloCampaña.CmpPlantillas;
+using BussinessLayer.FluentValidations.ModuloCampaña.CmpPlantilla;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -88,6 +91,7 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddValidationInjections(this IServiceCollection services)
         {
+            #region General
             services.AddTransient<IValidator<GnEmpresaRequest>, SaveGnEmpresaRequestValidator>();
             services.AddScoped<IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
@@ -139,17 +143,19 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<string>, StringsRequestValidator>();
             services.AddScoped<IValidator<long>, NumbersRequestValidator>();
             services.AddScoped<IValidator<decimal>, DecimalsRequestValidator>();
+            #endregion
 
             #region Campaña
+            services.AddScoped(typeof(IValidateService<>), typeof(ValidateService<>));
             services.AddScoped<IValidator<CmpContactoCreateDto>, CmpContactoCreateValidator>();
             services.AddScoped<IValidator<CmpContactoUpdateDto>, CmpContactoUpdateValidator>();
             services.AddScoped<IValidator<CmpServidoresSmtpUpdateDto>, CmpServidoresSmtpUpdateValidator>();
             services.AddScoped<IValidator<CmpServidoresSmtpCreateDto>, CmpServidoresSmtpCreateValidator>();
             services.AddScoped<IValidator<CmpConfiguracionCreateDto>, CmpConfiguracionesSmtpCreateValidator>();
             services.AddScoped<IValidator<CmpTipoPlantillaCreateDto>, CmpTipoPlantillaCreateValidator>();
+            services.AddScoped<IValidator<CmpPlantillaCreateDto>, CmpPlantillaCreateValidator>();
+            services.AddScoped<IValidator<CmpPlantillaUpdateDto>, CmpPlantillaUpdateValidator>();
             #endregion
-            services.AddScoped(typeof(IValidateService<>), typeof(ValidateService<>));
-
 
             #region Modulo General
             services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();

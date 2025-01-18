@@ -1,4 +1,4 @@
-﻿namespace BussinessLayer.FluentValidations
+﻿namespace BussinessLayer.FluentValidations.Generic
 {
     public interface IValidateService<T> where T : class
     {

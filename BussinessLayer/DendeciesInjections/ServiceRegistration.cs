@@ -71,7 +71,7 @@ public static class ServiceRegistration
 {
     public static void AddServiceRegistration(this IServiceCollection services)
     {
-
+        #region General
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
         services.AddScoped<IRepositorySection, RepositorySection>();
@@ -138,14 +138,16 @@ public static class ServiceRegistration
 
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IContactService, ContactService>();
+        #endregion
 
-        #region
+        #region FluentValidation
         services.AddScoped<IGenericValidation,GenericValidation>();
         #endregion
         
         #region ModuloCampaña
         services.AddScoped<ICmpClientService, CmpClientService>();
         services.AddScoped<ICmpServidoresSmtpService, CmpServidoresSmtpService>();
+        services.AddScoped<ICmpPlantillaService, CmpPlantillaService>();
         #endregion
 
         #region Geografia

@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCampaña.CmpTipoPlantillas;
-using BussinessLayer.FluentValidations;
+using BussinessLayer.FluentValidations.Generic;
 using BussinessLayer.Interfaces.ModuloCampaña.Repository;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCampaña;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PTP_API.Controllers.ModuloCampaña

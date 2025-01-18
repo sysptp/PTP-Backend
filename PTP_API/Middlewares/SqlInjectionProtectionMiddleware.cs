@@ -13,10 +13,11 @@ public class SqlInjectionProtectionMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
+
         // Excluir validaciones si el contenido es multipart/form-data
         if (context.Request.ContentType?.Contains("multipart/form-data") == true)
         {
-            await _next(context); // Ignorar validaciones en este caso
+            await _next(context);
             return;
         }
 
@@ -24,6 +25,13 @@ public class SqlInjectionProtectionMiddleware
 
         if (context.Request.Method == HttpMethods.Post || context.Request.Method == HttpMethods.Put)
         {
+            //Esto debido a que las plantillas HTML estaban explotando como SqlInjection.
+            if (context.Request.Path.Value.Contains("CmpPlantilla"))
+            {
+                await _next(context);
+                return;
+            }
+
             var requestBody = await new StreamReader(context.Request.Body).ReadToEndAsync();
             context.Request.Body.Position = 0;
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BussinessLayer.FluentValidations
+namespace BussinessLayer.FluentValidations.Generic
 {
     public class ValidateService<T>(IValidator<T> validator) : IValidateService<T> where T : class
     {
@@ -16,9 +16,9 @@ namespace BussinessLayer.FluentValidations
             try
             {
                 var model = validator.Validate(entity);
-                if(!model.IsValid)
+                if (!model.IsValid)
                 {
-                    foreach(var error in model.Errors)
+                    foreach (var error in model.Errors)
                     {
                         errors.Add(error.ErrorMessage);
                     }
