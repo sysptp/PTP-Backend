@@ -11,7 +11,7 @@ namespace BussinessLayer.Mapping.ModuloHelpDesk
             CreateMap<HdkCategoryTicketRequest, HdkCategoryTicket>().ReverseMap();
 
             CreateMap<HdkCategoryTicket,HdkCategoryTicketReponse>()
-            .ForMember(dest => dest.NombreEmpresa, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP)).ReverseMap();
+            .ForPath(dest => dest.NombreEmpresa, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP)).ReverseMap();
 
 
         }

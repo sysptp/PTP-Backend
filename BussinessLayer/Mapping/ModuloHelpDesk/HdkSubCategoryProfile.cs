@@ -32,8 +32,8 @@ namespace BussinessLayer.Mapping.ModuloHelpDesk
               .ForMember(dest => dest.UsuarioModificacion, opt => opt.MapFrom(src => src.UsuarioModificacion))
               .ForMember(dest => dest.Borrado, opt => opt.MapFrom(src => src.Borrado))
               .ForMember(dest => dest.IdEmpresa, opt => opt.MapFrom(src => src.IdEmpresa))
-              .ForMember(dest => dest.GnEmpresa.NOMBRE_EMP, opt => opt.MapFrom(src => src.NombreEmpresa))
-              .ForMember(dest => dest.Usuario.Nombre, opt => opt.MapFrom(src => src.NombreUsuario))
+              .ForPath(dest => dest.GnEmpresa.NOMBRE_EMP, opt => opt.MapFrom(src => src.NombreEmpresa))
+              .ForPath(dest => dest.Usuario.Nombre, opt => opt.MapFrom(src => src.NombreUsuario))
               .ForMember(dest => dest.HdkDepartaments, opt => opt.MapFrom(src => src.HdkDepartamentsReponse))
               .ReverseMap();
         }

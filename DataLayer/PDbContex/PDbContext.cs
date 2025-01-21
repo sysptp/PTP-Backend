@@ -25,6 +25,7 @@ using DataLayer.Models.ModuloVentas.Boveda;
 using DataLayer.Models.ModuloVentas.Bancos;
 using DataLayer.Models.ModuloVentas.Cotizaciones;
 using DataLayer.Models.Modulo_Citas;
+using DataLayer.Models.ModuloCitas;
 
 namespace DataLayer.PDbContex
 {
@@ -151,6 +152,7 @@ namespace DataLayer.PDbContex
         public DbSet<CtaSessions> CtaSessions { get; set; }
         public DbSet<CtaState> CtaState { get; set; }
         public DbSet<CtaUnwanted> CtaUnwanted { get; set; }
+        public DbSet<CtaAppointmentSequence> CtaAppointmentSequence { get; set; }
 
         #endregion 
         public DbSet<Pais> Pais { get; set; }

@@ -12,7 +12,7 @@ namespace BussinessLayer.Mapping.ModuloHelpDesk
            .ReverseMap();
 
             CreateMap<HdkDepartaments,HdkDepartamentsReponse>()
-            .ForMember(dest => dest.NombreEmpresa, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP)).ReverseMap();
+            .ForPath(dest => dest.NombreEmpresa, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP)).ReverseMap();
         }
     }
 }

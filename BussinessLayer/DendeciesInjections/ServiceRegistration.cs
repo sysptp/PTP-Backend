@@ -62,6 +62,7 @@ using BussinessLayer.Interfaces.Services.ModuloVentas.ICotizaciones;
 using BussinessLayer.Interfaces.ModuloInventario.Almacen;
 using BussinessLayer.Services.ModuloInventario.SAlmacen;
 using DataLayer.Models.ModuloInventario.Almacen;
+using BussinessLayer.Services.ModuloCitas;
 
 public static class ServiceRegistration
 {
@@ -130,7 +131,7 @@ public static class ServiceRegistration
         services.AddScoped<ICtaAppointmentManagementService, CtaAppointmentManagementService>();
         services.AddScoped<ICtaAppointmentMovementsService, CtaAppointmentMovementsService>();
         services.AddScoped<ICtaAppointmentReasonService, CtaAppointmentReasonService>();
-        services.AddScoped<ICtaAppointmentsRepository, CtaAppointmentsService>();
+        services.AddScoped<ICtaAppointmentsService, CtaAppointmentsService>();
         services.AddScoped<ICtaConfiguracionService, CtaConfiguracionService>();
         services.AddScoped<ICtaEmailConfiguracionService, CtaEmailConfiguracionService>();
         services.AddScoped<ICtaMeetingPlaceService, CtaMeetingPlaceService>();
@@ -138,6 +139,9 @@ public static class ServiceRegistration
         services.AddScoped<ICtaSessionsService, CtaSessionsService>();
         services.AddScoped<ICtaStateService, CtaStateService>();
         services.AddScoped<ICtaUnwantedService, CtaUnwantedService>();
+        services.AddScoped<ICtaAppointmentSequenceService, CtaAppointmentSequenceService>();
+        services.AddScoped<ICtaAppointmentAreaService, CtaAppointmentAreaService>();
+        services.AddScoped<ICtaAreaXUserService, CtaAreaXUserService>();
 
         #endregion
         #region Modulo Contabilidad

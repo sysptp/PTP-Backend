@@ -2,7 +2,9 @@
 using Dapper;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Data;
 
 
@@ -12,11 +14,18 @@ namespace BussinessLayer.Repository.ROtros
     {
         private readonly ITokenService _tokenService;
         protected readonly PDbContext _context;
+        private readonly string _connectionString;
 
         public GenericRepository(PDbContext dbContext, ITokenService tokenService)
         {
             _context = dbContext;
             _tokenService = tokenService;
+
+            var configuration = new ConfigurationBuilder()
+       .SetBasePath(Directory.GetCurrentDirectory())
+       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)  
+       .Build();
+            _connectionString = configuration.GetConnectionString("POS_CONN") ?? "Server=SQL5112.site4now.net;Database=db_aae658_sysptp;User Id=db_aae658_sysptp_admin;Password=Anthony0010.;Encrypt=True;TrustServerCertificate=True;";
         }
 
         public virtual async Task<T> GetById(int id)
@@ -87,12 +96,9 @@ namespace BussinessLayer.Repository.ROtros
             VALUES ({values})";
 
                 // Ejecuta la consulta y obtén el valor de la clave primaria
-                using (var connection = _context.Database.GetDbConnection())
+                using (var connection = new SqlConnection(_connectionString))
                 {
-                    if (connection.State == ConnectionState.Closed)
-                        await connection.OpenAsync();
 
-                   
                     await connection.ExecuteAsync(sql, entity);
 
                 

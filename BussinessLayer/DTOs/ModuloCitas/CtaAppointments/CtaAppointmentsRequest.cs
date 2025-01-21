@@ -28,6 +28,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public bool IsClient { get; set; } = false;
         public string FullName { get; set; } = null!;
         public string Phone { get; set; } = null!;
+        public int? AreaId { get; set; }
         public string Email { get; set; } = null!;
         public int? IdClient { get; set; }
         public long CompanyId { get; set; }

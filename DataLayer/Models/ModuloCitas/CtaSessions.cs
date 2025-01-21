@@ -24,5 +24,6 @@ namespace DataLayer.Models.Modulo_Citas
         public DateTime SessionEndDate { get; set; }
         public int CompletedAppointments { get; set; }
         public int FrequencyInDays { get; set; }
+        public long CompanyId { get; set; }
     }
 }

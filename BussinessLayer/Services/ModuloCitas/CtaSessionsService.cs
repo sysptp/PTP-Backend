@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
+using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Services;
 
@@ -23,7 +24,7 @@ namespace DataLayer.Models.Modulo_Citas
             _sessionDetailsRepository = sessionDetailsRepository;
         }
 
-        public async Task CreateSessionAndGenerateAppointments(CtaSessionsRequest sessionRequest)
+        public async Task<CtaSessionsRequest> CreateSessionAndGenerateAppointments(CtaSessionsRequest sessionRequest)
         {
             var sessionEntity = _mapper.Map<CtaSessions>(sessionRequest);
 
@@ -31,13 +32,7 @@ namespace DataLayer.Models.Modulo_Citas
 
             if (sessionRequest.FirstSessionDate != default && sessionRequest.FrequencyInDays > 0)
             {
-                var appointments = GenerateAppointmentsForSession(
-                    sessionEntity.IdSession,
-                    sessionRequest.FirstSessionDate,
-                    sessionRequest.SessionEndDate,
-                    sessionRequest.FrequencyInDays,
-                    sessionRequest.IdClient
-                );
+                var appointments = GenerateAppointmentsForSession(sessionRequest);
 
                 foreach (var appointment in appointments)
                 {
@@ -48,35 +43,33 @@ namespace DataLayer.Models.Modulo_Citas
                 {
                     var sessionDetail = new CtaSessionDetails
                     {
-                        IdAppointment = appointment.IdAppointment,
+                        AppointmentId = appointment.AppointmentId,
                         IdSession = sessionEntity.IdSession,
                         IsActive = true
                     };
 
                     await _sessionDetailsRepository.Add(sessionDetail);
                 }
+
             }
+
+            return _mapper.Map<CtaSessionsRequest>(sessionEntity);
         }
 
         private IEnumerable<CtaAppointments> GenerateAppointmentsForSession(CtaSessionsRequest sessionRequest)
         {
             var appointments = new List<CtaAppointments>();
             var currentAppointmentDate = sessionRequest.FirstSessionDate;
-            const int maxAppointments = 100; 
-            int appointmentCount = 0;
 
-            while (currentAppointmentDate <= sessionRequest.EndAppointmentDate && appointmentCount < maxAppointments)
+            while (currentAppointmentDate <= sessionRequest.AppointmentInformation.EndAppointmentDate)
             {
-                var appointment = _mapper.Map<CtaAppointments>(sessionRequest);
+                var appointment = _mapper.Map<CtaAppointments>(sessionRequest.AppointmentInformation);
                 appointments.Add(appointment);
 
                 currentAppointmentDate = currentAppointmentDate.AddDays(sessionRequest.FrequencyInDays);
-                appointmentCount++;
             }
 
             return appointments;
         }
-
-
     }
 }

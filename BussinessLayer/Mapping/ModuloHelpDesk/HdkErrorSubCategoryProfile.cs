@@ -12,7 +12,7 @@ namespace BussinessLayer.Mapping.ModuloHelpDesk
            .ReverseMap();
 
             CreateMap<HdkErrorSubCategoryReponse, HdkErrorSubCategory>()
-            .ForMember(dest => dest.GnEmpresa.NOMBRE_EMP, opt => opt.MapFrom(src => src.NombreEmpresa))
+            .ForPath(dest => dest.GnEmpresa.NOMBRE_EMP, opt => opt.MapFrom(src => src.NombreEmpresa))
             .ForMember(dest => dest.HdkSubCategory, opt => opt.MapFrom(src => src.HdkSubCategoryReponse))
             .ReverseMap();
 

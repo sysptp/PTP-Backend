@@ -40,6 +40,7 @@ namespace DataLayer.Models.Modulo_Citas
         public string Phone { get; set; } = null!;
         public string Email { get; set; } = null!;
         public int? IdClient { get; set; }
+        public int? AreaId {  get; set; }
         public long CompanyId { get; set; }
         [ForeignKey("CompanyId")]
         public GnEmpresa? GnEmpresa { get; set; }

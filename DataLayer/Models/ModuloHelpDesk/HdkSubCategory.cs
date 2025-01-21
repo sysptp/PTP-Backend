@@ -18,7 +18,7 @@ namespace DataLayer.Models.ModuloHelpDesk
         public int IdDepartamento { get; set; }
         [ForeignKey("IdDepartamento")]
         public HdkDepartaments? HdkDepartaments { get; set; }
-        public string IdUsuarioAsignacion { get; set; } = null!;
+        public int IdUsuarioAsignacion { get; set; } 
         [ForeignKey("IdUsuarioAsignacion")]
         public Usuario? Usuario { get; set; }
         public long IdEmpresa { get; set; }

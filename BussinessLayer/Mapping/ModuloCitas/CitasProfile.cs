@@ -59,10 +59,11 @@ namespace BussinessLayer.Mapping.ModuloCitas
                 .ReverseMap();
 
             CreateMap<CtaSessionsRequest, CtaSessions>()
+                .ForPath(dest => dest.CompanyId, opt => opt.MapFrom(src => src.AppointmentInformation.CompanyId))
                 .ReverseMap();
             CreateMap<CtaSessionsResponse, CtaSessions>()
                 .ReverseMap();
-            CreateMap<CtaSessionsRequest, CtaAppointments>()
+            CreateMap<AppointmentInformation, CtaAppointments>()
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.AppointmentDescription))
              .ReverseMap();
 
