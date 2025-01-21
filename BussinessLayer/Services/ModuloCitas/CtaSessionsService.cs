@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
 using BussinessLayer.Interface.Repository.ModuloCitas;
@@ -11,16 +12,16 @@ namespace DataLayer.Models.Modulo_Citas
     {
         private readonly ICtaSessionsRepository _sessionRepository;
         private readonly IMapper _mapper;
-        private readonly ICtaAppointmentsRepository _appointmentsRepository;
+        private readonly ICtaAppointmentsService _appointmentsService;
         private readonly ICtaSessionDetailsRepository _sessionDetailsRepository;
 
         public CtaSessionsService(ICtaSessionsRepository sessionRepository, IMapper mapper,
-            ICtaAppointmentsRepository appointmentsRepository,
+            ICtaAppointmentsService appointmentsService,
             ICtaSessionDetailsRepository sessionDetailsRepository) : base(sessionRepository,mapper)
         {
             _sessionRepository = sessionRepository;
             _mapper = mapper;
-            _appointmentsRepository = appointmentsRepository;
+            _appointmentsService = appointmentsService;
             _sessionDetailsRepository = sessionDetailsRepository;
         }
 
@@ -36,14 +37,10 @@ namespace DataLayer.Models.Modulo_Citas
 
                 foreach (var appointment in appointments)
                 {
-                    await _appointmentsRepository.Add(appointment);
-                }
-
-                foreach (var appointment in appointments)
-                {
+                    var appointmentEntity = await _appointmentsService.Add(appointment);
                     var sessionDetail = new CtaSessionDetails
                     {
-                        AppointmentId = appointment.AppointmentId,
+                        AppointmentId = appointmentEntity.AppointmentId,  
                         IdSession = sessionEntity.IdSession,
                         IsActive = true
                     };
@@ -56,14 +53,14 @@ namespace DataLayer.Models.Modulo_Citas
             return _mapper.Map<CtaSessionsRequest>(sessionEntity);
         }
 
-        private IEnumerable<CtaAppointments> GenerateAppointmentsForSession(CtaSessionsRequest sessionRequest)
+        private IEnumerable<CtaAppointmentsRequest> GenerateAppointmentsForSession(CtaSessionsRequest sessionRequest)
         {
-            var appointments = new List<CtaAppointments>();
+            var appointments = new List<CtaAppointmentsRequest>();
             var currentAppointmentDate = sessionRequest.FirstSessionDate;
 
             while (currentAppointmentDate <= sessionRequest.AppointmentInformation.EndAppointmentDate)
             {
-                var appointment = _mapper.Map<CtaAppointments>(sessionRequest.AppointmentInformation);
+                var appointment = _mapper.Map<CtaAppointmentsRequest>(sessionRequest.AppointmentInformation);
                 appointments.Add(appointment);
 
                 currentAppointmentDate = currentAppointmentDate.AddDays(sessionRequest.FrequencyInDays);

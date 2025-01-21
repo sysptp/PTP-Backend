@@ -54,54 +54,53 @@ namespace BussinessLayer.Repository.ROtros
             return await _context.Set<T>().Where(e => !e.Borrado).ToListAsync();
         }
 
-       
         public virtual async Task<T> Add(T entity)
         {
             try
             {
-                // Asigna valores de auditoría antes de guardar
                 entity.FechaAdicion = DateTime.Now;
                 entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
-
-
-                // Construye una consulta SQL genérica para insertar usando Dapper
                 var tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
-
-                // Obtén el nombre de la clave primaria
                 var primaryKey = _context.Model.FindEntityType(typeof(T))
                                                .FindPrimaryKey()
                                                .Properties
                                                .Select(p => p.Name)
                                                .FirstOrDefault();
+
                 if (string.IsNullOrEmpty(primaryKey))
                 {
                     throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
                 }
-                // Construye dinámicamente las columnas y parámetros para la consulta SQL
+
                 var properties = typeof(T).GetProperties()
-    .Where(p => p.Name != primaryKey &&
-                (p.PropertyType.IsPrimitive ||
-                 p.PropertyType == typeof(string) ||
-                 p.PropertyType == typeof(DateTime) ||
-                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
-                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime)))
-    .Select(p => p.Name);
+                    .Where(p => p.Name != primaryKey &&
+                                (p.PropertyType.IsPrimitive ||
+                                 p.PropertyType == typeof(string) ||
+                                 p.PropertyType == typeof(DateTime) ||
+                                 p.PropertyType == typeof(TimeSpan) ||
+                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
+                    .Select(p => p.Name);
 
                 var columns = string.Join(", ", properties);
                 var values = string.Join(", ", properties.Select(p => $"@{p}"));
-                // Construye la consulta SQL
-                var sql = $@"
-            INSERT INTO {tableName} ({columns})
-            VALUES ({values})";
 
-                // Ejecuta la consulta y obtén el valor de la clave primaria
+                var sql = $@"
+        INSERT INTO {tableName} ({columns})
+        OUTPUT INSERTED.{primaryKey}
+        VALUES ({values})";
+
                 using (var connection = new SqlConnection(_connectionString))
                 {
+                    var id = await connection.ExecuteScalarAsync<object>(sql, entity);
 
-                    await connection.ExecuteAsync(sql, entity);
-
-                
+                    var primaryKeyProperty = typeof(T).GetProperty(primaryKey);
+                    if (primaryKeyProperty != null)
+                    {
+                        primaryKeyProperty.SetValue(entity, Convert.ChangeType(id, primaryKeyProperty.PropertyType));
+                    }
                 }
 
                 return entity;
@@ -111,6 +110,7 @@ namespace BussinessLayer.Repository.ROtros
                 throw new InvalidOperationException(ex.Message, ex);
             }
         }
+
 
         public virtual async Task Update(T entity, Object id)
         {

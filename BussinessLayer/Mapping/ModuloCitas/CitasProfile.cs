@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BussinessLayer.DTOs.ModuloCitas;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
@@ -11,6 +12,7 @@ using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.DTOs.ModuloCitas.CtaState;
 using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
 using DataLayer.Models.Modulo_Citas;
+using DataLayer.Models.ModuloCitas;
 
 namespace BussinessLayer.Mapping.ModuloCitas
 {
@@ -63,7 +65,7 @@ namespace BussinessLayer.Mapping.ModuloCitas
                 .ReverseMap();
             CreateMap<CtaSessionsResponse, CtaSessions>()
                 .ReverseMap();
-            CreateMap<AppointmentInformation, CtaAppointments>()
+            CreateMap<AppointmentInformation, CtaAppointmentsRequest>()
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.AppointmentDescription))
              .ReverseMap();
 
@@ -75,6 +77,21 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaUnwantedRequest, CtaUnwanted>()
                 .ReverseMap();
             CreateMap<CtaUnwantedResponse, CtaUnwanted>()
+               .ReverseMap();
+
+            CreateMap<CtaAppointmentSequenceRequest, CtaAppointmentSequence>()
+                .ReverseMap();
+            CreateMap<CtaAppointmentSequenceResponse, CtaAppointmentSequence>()
+               .ReverseMap();
+
+            CreateMap<CtaAppointmentAreaRequest, CtaAppointmentArea>()
+                .ReverseMap();
+            CreateMap<CtaAppointmentAreaResponse, CtaAppointmentArea>()
+               .ReverseMap();
+
+            CreateMap<CtaAreaXUserRequest, CtaAreaXUser>()
+                .ReverseMap();
+            CreateMap<CtaAreaXUserResponse, CtaAreaXUser>()
                .ReverseMap();
         }
 
