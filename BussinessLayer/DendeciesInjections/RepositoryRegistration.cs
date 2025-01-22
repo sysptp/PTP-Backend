@@ -51,6 +51,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICmpConfiguracionesSmtpRepository, CmpConfiguracionesSmtpRepository>();
             services.AddScoped<ICmpPlantillaRepository, CmpPlantillasRepository>();
             services.AddScoped<ICmpTipoPlantillaRepository, CmpTipoPlantillaRepository>();
+            services.AddScoped<ICmpLogsEnvioRepository, CmpLogsEnvioRepository>();
+            services.AddScoped<ICmpEstadoRepository, CmpEstadoRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

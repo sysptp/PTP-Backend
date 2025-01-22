@@ -3,67 +3,75 @@ using BussinessLayer.Interfaces.ModuloCampaña.Repository;
 using DataLayer.Models.ModuloCampaña;
 using MailKit.Net.Smtp;
 using MimeKit;
-using Org.BouncyCastle.Cms;
 
-public class EmailService
+public class CmpEmailService(ICmpConfiguracionesSmtpRepository cmpConfiguracionesSmtpRepository, ICmpLogsEnvioRepository cmpLogsEnvioRepository) : ICmpEmailService
 {
-    private readonly ICmpConfiguracionesSmtpRepository _cmpConfiguracionesSmtpRepository;
-
-    public EmailService(ICmpConfiguracionesSmtpRepository cmpConfiguracionesSmtpRepository)
-    {
-        _cmpConfiguracionesSmtpRepository = cmpConfiguracionesSmtpRepository;
-    }
-
     public async Task SendEmailAsync(CmpEmailMessageDto emailMessage)
     {
-        // Obtener datos para el envío SMTP.
-        CmpConfiguracionesSmtp configuracionDto = await _cmpConfiguracionesSmtpRepository.GetyByIdAsync(Convert.ToInt32(emailMessage.ConfiguracionId), Convert.ToInt32(emailMessage.EmpresaId));
+        CmpConfiguracionesSmtp configuracionDto = await cmpConfiguracionesSmtpRepository.GetyByIdAsync(emailMessage.ConfiguracionId, emailMessage.EmpresaId);
 
+        MimeMessage email = CreateEmailMessage(emailMessage, configuracionDto);
+
+        using var smtpClient = new SmtpClient();
+        string response = string.Empty;
+
+        try
+        {
+            await smtpClient.ConnectAsync(configuracionDto.ServidoresSmtp.Host, configuracionDto.ServidoresSmtp.Puerto, true);
+            await smtpClient.AuthenticateAsync(configuracionDto.Email, configuracionDto.Contraseña);
+            response = await smtpClient.SendAsync(email);
+        }
+        catch (Exception ex)
+        {
+            response = $"Error al enviar el correo: {ex.Message}";
+        }
+        finally
+        {
+            await smtpClient.DisconnectAsync(true);
+
+            // Registrar log
+            var destinatarios = string.Join(";", emailMessage.To.Concat(emailMessage.Cc));
+
+            var log = new CmpLogsEnvio(
+                emailMessage.Body,
+                emailMessage.Subject,
+                destinatarios,
+                response,
+                configuracionDto.EmpresaId
+            );
+            await cmpLogsEnvioRepository.AddAsync(log);
+        }
+    }
+    private MimeMessage CreateEmailMessage(CmpEmailMessageDto emailMessage, CmpConfiguracionesSmtp configuracionDto)
+    {
         var email = new MimeMessage();
-
         email.From.Add(new MailboxAddress(configuracionDto.Usuario, configuracionDto.Email));
-        foreach (var recipient in emailMessage.To)
-        {
-            email.To.Add(MailboxAddress.Parse(recipient));
-        }
 
+        foreach (var recipient in emailMessage.To)
+            email.To.Add(MailboxAddress.Parse(recipient));
+
+        if(emailMessage.Cc != null)
         foreach (var cc in emailMessage.Cc)
-        {
             email.Cc.Add(MailboxAddress.Parse(cc));
-        }
+
         email.Subject = emailMessage.Subject;
 
         var bodyBuilder = new BodyBuilder
         {
             HtmlBody = emailMessage.IsHtml ? emailMessage.Body : null,
-            TextBody = emailMessage.IsHtml ? emailMessage.Body : null
+            TextBody = emailMessage.IsHtml ? null : emailMessage.Body
         };
 
-        // Procesar y agregar adjuntos
-        if (emailMessage.Attachments != null && emailMessage.Attachments.Count > 0)
+        if (emailMessage.Attachments != null)
         {
             foreach (var attachment in emailMessage.Attachments)
             {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await attachment.CopyToAsync(memoryStream);
-                    bodyBuilder.Attachments.Add(attachment.FileName, memoryStream.ToArray(), ContentType.Parse(attachment.ContentType));
-                }
+                using var memoryStream = new MemoryStream();
+                attachment.CopyTo(memoryStream);
+                bodyBuilder.Attachments.Add(attachment.FileName, memoryStream.ToArray(), ContentType.Parse(attachment.ContentType));
             }
         }
         email.Body = bodyBuilder.ToMessageBody();
-
-        // Enviar correo
-        using var smtpClient = new SmtpClient();
-        try
-        {
-            await smtpClient.ConnectAsync(configuracionDto.ServidoresSmtp.Host, configuracionDto.ServidoresSmtp.Puerto);
-            await smtpClient.AuthenticateAsync(configuracionDto.Email, configuracionDto.Contraseña);
-            await smtpClient.SendAsync(email);
-        }
-        finally
-        {
-            await smtpClient.DisconnectAsync(true);
-        }
+        return email;
     }
 }

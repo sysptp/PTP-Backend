@@ -11,5 +11,7 @@ namespace DataLayer.Models.ModuloCampaña
         public int TipoPlantillaId { get; set; }
         public bool EsHtml { get; set; }
         public CmpTipoPlantilla? CmpTipoPlantilla { get; set; }
+        public ICollection<CmpCampana> Campanas { get; set; } = new List<CmpCampana>();
+
     }
 }

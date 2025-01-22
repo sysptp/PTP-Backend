@@ -78,6 +78,9 @@ namespace DataLayer.PDbContex
             modelBuilder.ApplyConfiguration(new CmpConfiguracionesSmtpConfiguration());
             modelBuilder.ApplyConfiguration(new CmpTipoPlantillaConfiguration());
             modelBuilder.ApplyConfiguration(new CmpPlantillasConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpEstadoConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpCampanaConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpLogsEnvioConfiguration());
             modelBuilder.ApplyConfiguration(new ClientContactConfiguration());
             modelBuilder.ApplyConfiguration(new TypeContactConfiguration());
         }
@@ -99,6 +102,9 @@ namespace DataLayer.PDbContex
         public DbSet<CmpServidoresSmtp> CmpServidoresSmtps { get; set; }
         public DbSet<CmpPlantillas> CmpPlantillas { get; set; }
         public DbSet<CmpTipoPlantilla> CmpTipoPlantillas { get; set; }
+        public DbSet<CmpLogsEnvio> CmpLogsEnvios { get; set; }
+        public DbSet<CmpCampana> CmpCampanas { get; set; }
+        public DbSet<CmpEstado> CmpEstados { get; set; }
 
         #endregion
 

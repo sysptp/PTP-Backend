@@ -32,23 +32,6 @@ namespace PTP_API.Controllers.ModuloCampaña
                 throw new ApplicationException(ex.Message, ex);
             }
         }
-
-        [HttpPost("send-email")]
-        public async Task<IActionResult> SendEmail([FromForm] CmpEmailMessageDto cmpEmailMessageDto)
-        {
-            try
-            {
-                EmailService emailService = new EmailService(repository);
-
-                await emailService.SendEmailAsync(cmpEmailMessageDto);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException(ex.Message, ex);
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> Create(CmpConfiguracionCreateDto cmpConfiguracionCreateDto)
         {
