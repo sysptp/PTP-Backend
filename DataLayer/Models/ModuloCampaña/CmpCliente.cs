@@ -18,6 +18,7 @@ namespace DataLayer.Models.ModuloCampaña
         public bool Borrado { get; set; }
         public long EmpresaId { get; set; }
         public virtual ICollection<CmpContactos> Contactos { get; set; } = new HashSet<CmpContactos>();
+        public virtual ICollection<CmpCampanaDetalle> CampanaDetalles { get; set; } = new HashSet<CmpCampanaDetalle>();
 
     }
 }

@@ -4,7 +4,7 @@ namespace DataLayer.Models.ModuloCampaña
 {
     public class CmpCampana : AuditableEntities
     {
-        public int CampanaId { get; set; }
+        public long CampanaId { get; set; }
         public string? NombreCampana { get; set; }
         public string? Descripcion { get; set; }
         public DateTime FechaInicio { get; set; }
@@ -14,6 +14,9 @@ namespace DataLayer.Models.ModuloCampaña
         public int PlantillaId { get; set; }
         public CmpPlantillas? Plantilla { get; set; }
         public int EmpresaId { get; set; }
+        public virtual ICollection<CmpCampanaDetalle> CampanaDetalles { get; set; } = new HashSet<CmpCampanaDetalle>();
+        public virtual ICollection<CmpAgendarCampana> CmpAgendarCampanas { get; set; } = new HashSet<CmpAgendarCampana>();
+
 
     }
 }

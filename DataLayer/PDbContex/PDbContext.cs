@@ -81,6 +81,11 @@ namespace DataLayer.PDbContex
             modelBuilder.ApplyConfiguration(new CmpEstadoConfiguration());
             modelBuilder.ApplyConfiguration(new CmpCampanaConfiguration());
             modelBuilder.ApplyConfiguration(new CmpLogsEnvioConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpAgendarCampanaConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpCampanaDetalleConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpFrecuenciaConfiguration());
+
+
             modelBuilder.ApplyConfiguration(new ClientContactConfiguration());
             modelBuilder.ApplyConfiguration(new TypeContactConfiguration());
         }
@@ -105,6 +110,9 @@ namespace DataLayer.PDbContex
         public DbSet<CmpLogsEnvio> CmpLogsEnvios { get; set; }
         public DbSet<CmpCampana> CmpCampanas { get; set; }
         public DbSet<CmpEstado> CmpEstados { get; set; }
+        public DbSet<CmpFrecuencia> CmpFrecuencias { get; set; }
+        public DbSet<CmpAgendarCampana> CmpAgendarCampanas { get; set; }
+        public DbSet<CmpCampanaDetalle> CmpCampanaDetalles { get; set; }
 
         #endregion
 
@@ -221,7 +229,9 @@ namespace DataLayer.PDbContex
         public DbSet<CtaState> CtaState { get; set; }
         public DbSet<CtaUnwanted> CtaUnwanted { get; set; }
 
-        #endregion 
+        #endregion
+
+        #region Otros 
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }
@@ -305,6 +315,8 @@ namespace DataLayer.PDbContex
         public DbSet<MovimientoBanco> MovimientoBancoes { get; set; }
 
         public DbSet<TipoMovimientoBanco> TipoMovimientoBancoes { get; set; }
+
+        #endregion
 
     }
 }

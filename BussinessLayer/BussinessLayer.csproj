@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.Features" Version="8.0.10" />
     <PackageReference Include="MimeKit" Version="4.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SendGrid" Version="9.29.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
   </ItemGroup>
 
@@ -36,7 +37,6 @@
     <Folder Include="DTOs\ModuloHelpDesk\" />
     <Folder Include="DTOs\ModuloAuditoria\" />
     <Folder Include="DTOs\ModuloContabilidad\" />
-    <Folder Include="DTOs\NewFolder\" />
     <Folder Include="FluentValidations\ModuloAuditoria\" />
     <Folder Include="FluentValidations\ModuloContabilidad\" />
     <Folder Include="FluentValidations\ModuloInventario\Almacenes\" />
