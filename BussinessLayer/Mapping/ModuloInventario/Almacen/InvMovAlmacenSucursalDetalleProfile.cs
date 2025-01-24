@@ -9,9 +9,9 @@ namespace BussinessLayer.Mapping.ModuloInventario.Almacen
         public InvMovAlmacenSucursalDetalleProfile()
         {
 
-            CreateMap<InvMovAlmacenSucursalRequest, InvMovAlmacenSucursal>().ReverseMap();
+            CreateMap<InvMovAlmacenSucursalDetalleRequest, InvMovAlmacenSucursalDetalle>().ReverseMap();
 
-            CreateMap<InvMovAlmacenSucursalReponse, InvMovAlmacenSucursal>().ReverseMap();
+            CreateMap<InvMovAlmacenSucursalDetalleReponse, InvMovAlmacenSucursalDetalle>().ReverseMap();
 
         }
     }

@@ -87,7 +87,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear la Categoria del Ticket. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 

@@ -58,7 +58,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al obtener el Movimiento Almacen Sucursal Detalle. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -85,7 +85,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear un Movimiento Almacen Sucursal Detalle. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -119,7 +119,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al actualizar el Movimiento Almacen Sucursal Detalle. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
         [HttpDelete("{id}")]
@@ -142,7 +142,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar el Movimiento Almacen Sucursal Detalle. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
     }

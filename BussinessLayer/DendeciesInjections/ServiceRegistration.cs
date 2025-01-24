@@ -115,6 +115,7 @@ public static class ServiceRegistration
         services.AddScoped<IInvMovAlmacenSucursalDetalleService, InvMovAlmacenSucursalDetalleService>();
         services.AddScoped<IInvMovimientoAlmacenService, InvMovimientoAlmacenService>();
         services.AddScoped<IInvMovimientoAlmacenDetalleService, InvMovimientoAlmacenDetalleService>();
+        services.AddScoped<IInvMovimientoSucursalDetalleService, InvMovimientoSucursalDetalleService>();
         #endregion
 
         #region Auditoria

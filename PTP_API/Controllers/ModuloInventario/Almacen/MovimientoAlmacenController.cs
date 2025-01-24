@@ -87,7 +87,7 @@ namespace PTP_API.Controllers.ModuloInventario.Almacen
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear un Movimiento Almacen. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError("ex.Message un Movimiento Almacen. Por favor, intente nuevamente."));
             }
         }
 

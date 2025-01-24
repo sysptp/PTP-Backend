@@ -132,7 +132,7 @@ namespace PTP_API.Controllers.ModuloAuditoria
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("Ocurrió un error al crear la Bitacora Sistema. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError("ex.Message la Bitacora Sistema. Por favor, intente nuevamente."));
             }
         }
 
