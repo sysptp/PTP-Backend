@@ -114,6 +114,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICtaAppointmentSequenceRepository, CtaAppointmentSequenceRepository>();
             services.AddScoped<ICtaAppointmentAreaRepository, CtaAppointmentAreaRepository>();
             services.AddScoped<ICtaAreaXUserRepository, CtaAreaXUserRepository>();
+            services.AddScoped<ICtaContactTypeRepository, CtaContactTypeRepository>();
+            services.AddScoped<ICtaAppointmentContactsRepository, CtaAppointmentContactsRepository>();
+            services.AddScoped<ICtaAppointmentUsersRepository, CtaAppointmentUsersRepository>();
 
             #endregion
         }

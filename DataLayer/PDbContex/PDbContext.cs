@@ -153,6 +153,9 @@ namespace DataLayer.PDbContex
         public DbSet<CtaState> CtaState { get; set; }
         public DbSet<CtaUnwanted> CtaUnwanted { get; set; }
         public DbSet<CtaAppointmentSequence> CtaAppointmentSequence { get; set; }
+        public DbSet<CtaAppointmentUsers> CtaAppointmentUsers { get; set; }
+        public DbSet<CtaContactType> CtaContactType { get; set; }
+        public DbSet<CtaAppointmentContacts> CtaAppointmentContacts { get; set; }
 
         #endregion 
         public DbSet<Pais> Pais { get; set; }

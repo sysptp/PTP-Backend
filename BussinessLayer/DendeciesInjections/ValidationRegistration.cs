@@ -111,6 +111,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaAppointmentSequenceRequest>, CtaAppointmentSequenceRequestValidation>();
             services.AddScoped<IValidator<CtaAppointmentAreaRequest>, CtaAppointmentAreaRequestValidator>();
             services.AddScoped<IValidator<CtaAreaXUserRequest>, CtaAreaXUserRequestValidator>();
+            services.AddScoped<IValidator<CtaContactTypeRequest>, CtaContactTypeRequestValidator>();
 
             #endregion
 
