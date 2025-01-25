@@ -13,5 +13,6 @@
         public bool IsActive { get; set; }
         public long MaxValue { get; set; }
         public long MinValue { get; set; }
+        public int? AreaId { get; set; }
     }
 }

@@ -5,7 +5,9 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
     public class CtaAppointmentsRequest
     {
         [JsonIgnore]
-        public int AppointmentId { get; set; } 
+        public int AppointmentId { get; set; }
+        [JsonIgnore]
+        public string AppointmentCode { get; set; } = null!;
         public string? Description { get; set; }
         public int IdReasonAppointment { get; set; }
         public DateTime AppointmentDate { get; set; }

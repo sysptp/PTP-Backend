@@ -6,28 +6,36 @@ using DataLayer.Models.ModuloCitas;
 
 namespace BussinessLayer.Services.ModuloCitas
 {
-    public class CtaAppointmentSequenceService : GenericService<CtaAppointmentSequenceRequest, CtaAppointmentSequenceResponse, CtaAppointmentSequence>, ICtaAppointmentSequenceService
+    public class CtaAppointmentSequenceService : GenericService<CtaAppointmentSequenceRequest, CtaAppointmentSequenceResponse, CtaAppointmentSequence>,
+        ICtaAppointmentSequenceService
     {
         private readonly ICtaAppointmentSequenceRepository _repository;
-        private readonly IMapper _mapper;
 
         public CtaAppointmentSequenceService(ICtaAppointmentSequenceRepository repository, IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
-            _mapper = mapper;
         }
 
         public override Task<CtaAppointmentSequenceResponse> Add(CtaAppointmentSequenceRequest vm)
         {
             vm.SequenceNumber = vm.MinValue;
+            vm.LastUsed = DateTime.Now;
             return base.Add(vm);
         }
 
-        public async Task<string> GetFormattedSequenceAsync(long companyId)
+        public async Task<string> GetFormattedSequenceAsync(long companyId, int? areaId)
         {
             var sequences = await _repository.GetAll();
+            var sequence = new CtaAppointmentSequence();
             
-          var sequence = sequences.FirstOrDefault(s => s.CompanyId == companyId && s.IsActive);
+            if (areaId != null && areaId > 0) 
+            {
+                 sequence = sequences.FirstOrDefault(s => s.CompanyId == companyId && s.IsActive && areaId == s.AreaId);
+            }
+            else
+            {
+                sequence = sequences.FirstOrDefault(s => s.CompanyId == companyId && s.IsActive);
+            }
 
             if (sequence == null)
                 throw new InvalidOperationException("No existe una secuencia activa para esta compañía.");
@@ -36,11 +44,11 @@ namespace BussinessLayer.Services.ModuloCitas
             return formattedSequence;
         }
 
-        public async Task UpdateSequenceAsync(long companyId)
+        public async Task UpdateSequenceAsync(long companyId,int? areaId)
         {
             var sequences = await _repository.GetAll();
 
-            var sequence = sequences.FirstOrDefault(s => s.CompanyId == companyId && s.IsActive);
+           var sequence = GetSequenceByCompanyIdOrCompanyIdAndAreaId(companyId, areaId, sequences);
 
             if (sequence == null)
                 throw new InvalidOperationException("No existe una secuencia activa para esta compañía.");
@@ -52,6 +60,22 @@ namespace BussinessLayer.Services.ModuloCitas
             sequence.LastUsed = DateTime.UtcNow;
 
             await _repository.Update(sequence, sequence.Id);
+        }
+
+        private CtaAppointmentSequence GetSequenceByCompanyIdOrCompanyIdAndAreaId(long companyId, int? areaId, IList<CtaAppointmentSequence> sequences)
+        {
+            var sequence = new CtaAppointmentSequence();
+
+            if (areaId != null && areaId > 0)
+            {
+                sequence = sequences.FirstOrDefault(s => s.CompanyId == companyId && s.IsActive && areaId == s.AreaId);
+            }
+            else
+            {
+                sequence = sequences.FirstOrDefault(s => s.CompanyId == companyId && s.IsActive);
+            }
+
+            return sequence;
         }
     }
 }
