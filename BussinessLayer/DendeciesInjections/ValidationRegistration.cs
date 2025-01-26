@@ -108,7 +108,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaSessionsRequest>, CtaSessionsRequestValidation>();
             services.AddScoped<IValidator<CtaStateRequest>, CtaStateRequestValidation>();
             services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
-            services.AddScoped<IValidator<CtaAppointmentSequenceRequest>, CtaAppointmentSequenceRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentSequenceRequest>, CtaAppointmentSequenceRequestValidator>();
             services.AddScoped<IValidator<CtaAppointmentAreaRequest>, CtaAppointmentAreaRequestValidator>();
             services.AddScoped<IValidator<CtaAreaXUserRequest>, CtaAreaXUserRequestValidator>();
             services.AddScoped<IValidator<CtaContactTypeRequest>, CtaContactTypeRequestValidator>();

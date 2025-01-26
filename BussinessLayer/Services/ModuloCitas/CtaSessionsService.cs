@@ -58,9 +58,9 @@ namespace DataLayer.Models.Modulo_Citas
             var appointments = new List<CtaAppointmentsRequest>();
             var currentAppointmentDate = sessionRequest.FirstSessionDate;
 
-            while (currentAppointmentDate <= sessionRequest.AppointmentInformation.EndAppointmentDate)
+            while (currentAppointmentDate <= sessionRequest.CtaAppointmentsRequest.EndAppointmentDate)
             {
-                var appointment = _mapper.Map<CtaAppointmentsRequest>(sessionRequest.AppointmentInformation);
+                var appointment = _mapper.Map<CtaAppointmentsRequest>(sessionRequest.CtaAppointmentsRequest);
                 appointments.Add(appointment);
 
                 currentAppointmentDate = currentAppointmentDate.AddDays(sessionRequest.FrequencyInDays);

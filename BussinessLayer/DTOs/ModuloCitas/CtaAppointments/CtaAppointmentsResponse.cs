@@ -1,7 +1,9 @@
 ﻿
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
 using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
 using BussinessLayer.DTOs.ModuloCitas.CtaState;
+using System.Text.Json.Serialization;
 
 namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
 {
@@ -28,16 +30,17 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public int? DaysInAdvance { get; set; }
         public TimeSpan NotificationTime { get; set; }
         public bool NotifyClosure { get; set; } = false;
-        public string? AssignedUserAppointment { get; set; }
         public bool NotifyAssignedUserEmail { get; set; } = false;
         public bool NotifyAssignedUserSms { get; set; } = false;
-        public bool IsClient { get; set; } = false;
-        public string FullName { get; set; } = null!;
-        public string Phone { get; set; } = null!;
         public int? AreaId { get; set; }
-        public string Email { get; set; } = null!;
-        public int? IdClient { get; set; }
+        public int UserId { get; set; }
         public long CompanyId { get; set; }
-        public string? CompanyName { get; set;} 
+        public string? CompanyName { get; set;}
+        [JsonPropertyName("Management")]
+        public List<CtaAppointmentManagementResponse>? CtaAppointmentManagement { get; set; }
+        [JsonPropertyName("Contacts")]
+        public List<CtaAppointmentContactsResponse>? CtaAppointmentContacts { get; set; }
+        [JsonPropertyName("UsersInvited")]
+        public List<CtaAppointmentUsersResponse>? CtaAppointmentUsers { get; set; }
     }
 }

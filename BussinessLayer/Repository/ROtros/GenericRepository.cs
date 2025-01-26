@@ -111,6 +111,54 @@ namespace BussinessLayer.Repository.ROtros
             }
         }
 
+        public virtual async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    entity.FechaAdicion = DateTime.Now;
+                    entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+                }
+
+                var tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
+                var primaryKey = _context.Model.FindEntityType(typeof(T))
+                                               .FindPrimaryKey()
+                                               .Properties
+                                               .Select(p => p.Name)
+                                               .FirstOrDefault();
+
+                if (string.IsNullOrEmpty(primaryKey))
+                {
+                    throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
+                }
+
+                var columns = typeof(T).GetProperties()
+                     .Where(p => p.Name != primaryKey &&
+                                (p.PropertyType.IsPrimitive ||
+                                 p.PropertyType == typeof(string) ||
+                                 p.PropertyType == typeof(DateTime) ||
+                                 p.PropertyType == typeof(TimeSpan) ||
+                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
+                    .Select(p => p.Name);
+
+                var values = string.Join(", ", columns.Select(c => $"@{c}"));
+                var sql = $@"
+        INSERT INTO {tableName} ({string.Join(", ", columns)})
+        VALUES ({values})";
+
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.ExecuteAsync(sql, entities);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message, ex);
+            }
+        }
 
         public virtual async Task Update(T entity, Object id)
         {
@@ -146,13 +194,15 @@ namespace BussinessLayer.Repository.ROtros
 
                 // Construye dinámicamente las columnas a actualizar
                 var properties = typeof(T).GetProperties()
-                                          .Where(p => p.Name != primaryKey && p.Name != "FechaAdicion" && p.Name != "UsuarioAdicion" &&
-                (p.PropertyType.IsPrimitive ||
-                 p.PropertyType == typeof(string) ||
-                 p.PropertyType == typeof(DateTime) ||
-                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
-                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime)))
-                                          .Select(p => $"{p.Name} = @{p.Name}");
+                    .Where(p => p.Name != primaryKey &&
+                                (p.PropertyType.IsPrimitive ||
+                                 p.PropertyType == typeof(string) ||
+                                 p.PropertyType == typeof(DateTime) ||
+                                 p.PropertyType == typeof(TimeSpan) ||
+                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
+                    .Select(p => p.Name);
                 var updateColumns = string.Join(", ", properties);
 
                 // Construye la consulta SQL
@@ -179,7 +229,7 @@ namespace BussinessLayer.Repository.ROtros
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error al actualizar la entidad con Dapper", ex);
+                throw new InvalidOperationException(ex.Message, ex);
             }
         }
 
@@ -251,7 +301,7 @@ namespace BussinessLayer.Repository.ROtros
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error al actualizar la entidad con Dapper", ex);
+                throw new InvalidOperationException(ex.Message, ex);
             }
         }
 

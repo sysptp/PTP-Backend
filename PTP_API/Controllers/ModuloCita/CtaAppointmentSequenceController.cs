@@ -107,6 +107,7 @@ namespace PTP_API.Controllers.ModuloCita
                     return NotFound(Response<string>.NotFound("Secuencia no encontrada."));
 
                 sequenceRequest.Id = id;
+                sequenceRequest.LastUsed = existingSequence.LastUsed;
                 await _appointmentSequenceService.Update(sequenceRequest, id);
                 return Ok(Response<string>.Success(null, "Secuencia actualizada correctamente."));
             }

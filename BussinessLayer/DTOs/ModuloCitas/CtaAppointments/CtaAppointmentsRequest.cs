@@ -7,7 +7,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         [JsonIgnore]
         public int AppointmentId { get; set; }
         [JsonIgnore]
-        public string AppointmentCode { get; set; } = null!;
+        public string? AppointmentCode { get; set; } 
         public string? Description { get; set; }
         public int IdReasonAppointment { get; set; }
         public DateTime AppointmentDate { get; set; }
@@ -24,15 +24,14 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public int? DaysInAdvance { get; set; }
         public TimeSpan NotificationTime { get; set; }
         public bool NotifyClosure { get; set; } = false;
-        public string? AssignedUserAppointment { get; set; }
         public bool NotifyAssignedUserEmail { get; set; } = false;
         public bool NotifyAssignedUserSms { get; set; } = false;
-        public bool IsClient { get; set; } = false;
-        public string FullName { get; set; } = null!;
-        public string Phone { get; set; } = null!;
         public int? AreaId { get; set; }
-        public string Email { get; set; } = null!;
-        public int? IdClient { get; set; }
+        public int UserId { get; set; }
         public long CompanyId { get; set; }
+        [JsonPropertyName("Contacts")]
+        public List<CtaAppointmentContactsRequest>? CtaAppointmentContacts { get; set; }
+        [JsonPropertyName("UsersInvited")]
+        public List<CtaAppointmentUsersRequest>? CtaAppointmentUsers { get; set; }
     }
 }

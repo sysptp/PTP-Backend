@@ -7,6 +7,7 @@ namespace BussinessLayer.Interfaces.Repositories
         Task<T> GetById(object id);
         Task<IList<T>> GetAll();
         Task<T> Add(T entity);
+        Task AddRangeAsync(IEnumerable<T> entities);
         Task Update(T oldentity, int id);
         Task Update(T entity, object id);
         Task Delete(int id);
