@@ -37,6 +37,7 @@ namespace DataLayer.Models.Modulo_Citas
         public bool NotifyAssignedUserEmail { get; set; } = false;
         public bool NotifyAssignedUserSms { get; set; } = false;
         public int UserId { get; set; }
+        [ForeignKey("UserId")]
         public Usuario? Usuario { get; set; }
         public int? AreaId {  get; set; }
         public long CompanyId { get; set; }
