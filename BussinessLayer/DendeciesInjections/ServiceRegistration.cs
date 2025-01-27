@@ -30,6 +30,11 @@ using BussinessLayer.Services.ModuloVentas.Caja;
 using BussinessLayer.Services.ModuloVentas.Cotizaciones;
 using BussinessLayer.Services.ModuloVentas.Facturacion;
 using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
+using BussinessLayer.Interfaces.IClient;
+using BussinessLayer.Services.SCliente;
+using BussinessLayer.Services.SContactos;
+using BussinessLayer.Services.SModuloCampaña;
+using BussinessLayer.Interface.Modulo_Citas;
 using DataLayer.Models.Modulo_Citas;
 using BussinessLayer.Interfaces.Services.IAutenticacion;
 using BussinessLayer.Interfaces.Services.ICargaMasiva;
@@ -62,6 +67,8 @@ using BussinessLayer.Interfaces.Services.ModuloVentas.ICotizaciones;
 using BussinessLayer.Interfaces.ModuloInventario.Almacen;
 using BussinessLayer.Services.ModuloInventario.SAlmacen;
 using DataLayer.Models.ModuloInventario.Almacen;
+using BussinessLayer.Interfaces.ModuloCampaña.Services;
+using BussinessLayer.FluentValidations.Generic;
 
 public static class ServiceRegistration
 {
@@ -71,6 +78,12 @@ public static class ServiceRegistration
 
         #region Modulo Inventario
         services.AddScoped<IInvAlmacenesService, InvAlmacenesService>();
+        #region General
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
+        services.AddScoped<IRepositorySection, RepositorySection>();
+        //services.AddScoped<, >();
+        services.AddScoped<IAlmacenesService, AlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
        // services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
@@ -155,6 +168,34 @@ public static class ServiceRegistration
         #region Language
         services.AddScoped<ITranslationFieldService, TranslationFieldService>();
         services.AddScoped<IJsonTranslationService, JsonTranslationService>();
+        #endregion
+        services.AddScoped<EntityMapper>();
+        services.AddScoped<CsvProcessor>();
+        services.AddScoped<IGnPerfilService, GnPerfilService>();
+
+        services.AddScoped<IGnEmpresaservice, GnEmpresaservice>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IGnSucursalService, GnSucursalService>();
+
+        services.AddScoped<INcfService, NcfService>();
+        services.AddScoped<IUsuarioService, UsuarioService>();
+        services.AddScoped<IGnPermisoService, GnPermisoService>();
+
+        services.AddScoped<IClientService, ClientService>();
+        services.AddScoped<IContactService, ContactService>();
+        #endregion
+
+        #region FluentValidation
+        services.AddScoped<IGenericValidation,GenericValidation>();
+        #endregion
+        
+        #region ModuloCampaña
+        services.AddScoped<ICmpClientService, CmpClientService>();
+        services.AddScoped<ICmpServidoresSmtpService, CmpServidoresSmtpService>();
+        services.AddScoped<ICmpPlantillaService, CmpPlantillaService>();
+        services.AddScoped<ICmpEmailService, CmpEmailService>();
+        services.AddScoped<ICmpCampanaService, CmpCampanaService>();
+        services.AddScoped<ICmpCampanaDetalleService, CmpCampanaDetalleService>();
         #endregion
 
         #region Geografia

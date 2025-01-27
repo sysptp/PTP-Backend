@@ -24,6 +24,11 @@ using DataLayer.Models.ModuloVentas.Caja;
 using DataLayer.Models.ModuloVentas.Boveda;
 using DataLayer.Models.ModuloVentas.Bancos;
 using DataLayer.Models.ModuloVentas.Cotizaciones;
+using DataLayer.Models.Clients;
+using DataLayer.EntitiesConfiguration;
+using DataLayer.Models.Contactos;
+using DataLayer.Models.ModuloCampaña;
+using DataLayer.EntitiesConfiguration.ModuloCampaña;
 using DataLayer.Models.Modulo_Citas;
 
 namespace DataLayer.PDbContex
@@ -41,6 +46,76 @@ namespace DataLayer.PDbContex
 
         }
        
+
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in ChangeTracker.Entries<AuditableEntities>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.FechaAdicion = DateTime.Now;
+                        entry.Entity.FechaModificacion = new DateTime(1793, 1, 1);
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.FechaModificacion = DateTime.Now;
+                        break;
+                    case EntityState.Deleted:
+                        entry.Entity.FechaModificacion = DateTime.Now;
+                        break;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new ClientConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpClienteConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpTipoContactoConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpContactosConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpServidoresSmtpConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpConfiguracionesSmtpConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpTipoPlantillaConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpPlantillasConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpEstadoConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpCampanaConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpLogsEnvioConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpAgendarCampanaConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpCampanaDetalleConfiguration());
+            modelBuilder.ApplyConfiguration(new CmpFrecuenciaConfiguration());
+
+
+            modelBuilder.ApplyConfiguration(new ClientContactConfiguration());
+            modelBuilder.ApplyConfiguration(new TypeContactConfiguration());
+        }
+
+        #region Cliente
+
+        public DbSet<ClientContact> ClientContacts { get; set; }
+        public DbSet<TypeContact> TypeContacts { get; set; }
+
+        public DbSet<Client> Clients { get; set; }
+
+        #endregion
+
+        #region Campaña
+        public DbSet<CmpCliente> CmpClientes { get; set; }
+        public DbSet<CmpTipoContacto> CmpTipoContactos { get; set; }
+        public DbSet<CmpContactos> CmpContactos { get; set; }
+        public DbSet<CmpConfiguracionesSmtp> CmpConfiguracionesSmtps { get; set; }
+        public DbSet<CmpServidoresSmtp> CmpServidoresSmtps { get; set; }
+        public DbSet<CmpPlantillas> CmpPlantillas { get; set; }
+        public DbSet<CmpTipoPlantilla> CmpTipoPlantillas { get; set; }
+        public DbSet<CmpLogsEnvio> CmpLogsEnvios { get; set; }
+        public DbSet<CmpCampana> CmpCampanas { get; set; }
+        public DbSet<CmpEstado> CmpEstados { get; set; }
+        public DbSet<CmpFrecuencia> CmpFrecuencias { get; set; }
+        public DbSet<CmpAgendarCampana> CmpAgendarCampanas { get; set; }
+        public DbSet<CmpCampanaDetalle> CmpCampanaDetalles { get; set; }
+
+        #endregion
 
         #region Reporteria
 
@@ -88,7 +163,7 @@ namespace DataLayer.PDbContex
         #endregion
 
         #region Seguridad
-        public DbSet<GnPerfil> GnPerfil {get; set; }
+        public DbSet<GnPerfil> GnPerfil { get; set; }
         public DbSet<GnPermiso> GnPermiso { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
         #endregion
@@ -152,7 +227,9 @@ namespace DataLayer.PDbContex
         public DbSet<CtaState> CtaState { get; set; }
         public DbSet<CtaUnwanted> CtaUnwanted { get; set; }
 
-        #endregion 
+        #endregion
+
+        #region Otros 
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<Region> Region { get; set; }
@@ -168,8 +245,6 @@ namespace DataLayer.PDbContex
         public DbSet<CuentasPorPagar> CuentasPorPagar { get; set; }
 
         public DbSet<DetalleCuentaPorPagar> DetalleCuentaPorPagar { get; set; }
-
-        public DbSet<Clientes> Clientes { get; set; }
 
         public DbSet<DgiiNcfSecuencia> DgiiNcfSecuencia { get; set; }
 
@@ -249,6 +324,8 @@ namespace DataLayer.PDbContex
         public DbSet<InvMovimientoAlmacenDetalle> InvMovimientoAlmacenDetalle { get; set; }
         public DbSet<InvMovimientoSucursalDetalle> InvMovimientoSucursalDetalle { get; set; }
         public DbSet<InvMovInventarioSucursal> InvMovInventarioSucursal { get; set; }
+        #endregion
+
         #endregion
 
     }

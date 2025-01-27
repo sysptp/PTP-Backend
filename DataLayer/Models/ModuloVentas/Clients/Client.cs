@@ -1,7 +1,10 @@
-﻿namespace DataLayer.Models.ModuloVentas.Clients
+﻿using DataLayer.Models.Contactos;
+
+namespace DataLayer.Models.Clients
 {
     public class Client
     {
+        public int Id { get; set; }
         public string? Name { get; set; }
         public string? LastName { get; set; }
         public string? Identification { get; set; }
@@ -12,6 +15,12 @@
         public string? Description { get; set; }
         public int CodeTypeIdentification { get; set; }
         public long CodeBussines { get; set; }
-        public int AddedBy { get; set; }
+        public int IsDeleted { get; set; }
+        public string? AddedBy { get; set; }
+        public DateTime DateAdded { get; set; }
+        public string? ModifiedBy { get; set; }
+        public DateTime DateModified { get; set; }
+        public ICollection<ClientContact>? ClientContacts { get; set; }
+
     }
 }

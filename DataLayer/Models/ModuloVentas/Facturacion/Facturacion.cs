@@ -1,4 +1,5 @@
-﻿using DataLayer.Models.ModuloVentas.Caja;
+﻿using DataLayer.Models.Clients;
+using DataLayer.Models.ModuloVentas.Caja;
 using DataLayer.Models.Otros;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -24,7 +25,7 @@ using System.ComponentModel.DataAnnotations.Schema;
         public int ClienteId { get; set; }
 
         [ForeignKey("ClienteId")]
-        public virtual Clientes Cliente { get; set; }
+        public virtual Client Cliente { get; set; }
 
         public string NoFactura { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace BussinessLayer.FluentValidations
+namespace BussinessLayer.FluentValidations.ModuloInventario
 {
     public class NumbersRequestValidator : AbstractValidator<long>
     {
@@ -11,7 +11,7 @@ namespace BussinessLayer.FluentValidations
                 .WithMessage("El valor no puede ser nulo.");
 
             RuleFor(x => x)
-                .GreaterThan(0)  
+                .GreaterThan(0)
                 .WithMessage("El valor debe ser un número mayor que cero.");
         }
     }

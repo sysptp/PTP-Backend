@@ -16,10 +16,14 @@ using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
 using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
+using BussinessLayer.Repository.RClient;
+using BussinessLayer.Services.SCliente;
+using BussinessLayer.Repository.RCampaña;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
 using BussinessLayer.Repository.Modulo_Citas;
 using BussinessLayer.Interfaces.Repository.Inventario.Almacenes;
 using BussinessLayer.Repository.Almacen;
+using BussinessLayer.Interfaces.ModuloCampaña.Repository;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -34,9 +38,23 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IGnPerfilRepository, GnPerfilRepository>();
             services.AddTransient<IGnEmpresaRepository, GnEmpresaRepository>();
             services.AddTransient<IGnSucursalRepository, GnSucursalRepository>();
+            services.AddTransient<INcfRepository, NcfRepository>();
+            services.AddTransient<IClientRepository,ClientRepository>();
+            services.AddTransient<IClientContactRepository,ClientContactRepository>();
             services.AddTransient<IGnScheduleRepository, GnScheduleRepository>();
             services.AddTransient<IGnScheduleUserRepository, GnScheduleUserRepository>();
 
+            services.AddScoped<ICmpClienteRepository,CmpClienteRepository>();
+            services.AddScoped<ICmpTipoContactoRepository,CmpTipoContactoRepository>();
+            services.AddScoped<ICmpServidoresSmtpRepository,CmpServidoresSmtpRepository>();
+            services.AddScoped<ICmpConfiguracionesSmtpRepository, CmpConfiguracionesSmtpRepository>();
+            services.AddScoped<ICmpPlantillaRepository, CmpPlantillasRepository>();
+            services.AddScoped<ICmpTipoPlantillaRepository, CmpTipoPlantillaRepository>();
+            services.AddScoped<ICmpLogsEnvioRepository, CmpLogsEnvioRepository>();
+            services.AddScoped<ICmpEstadoRepository, CmpEstadoRepository>();
+            services.AddScoped<ICmpCampanaRepository, CmpCampanaRepository>();
+            services.AddScoped<ICmpFrecuenciaRepository, CmpFrecuenciaRepository>();
+            services.AddScoped<ICmpCampanaDetalleRepository, CmpCampanaDetalleRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

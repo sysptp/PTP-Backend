@@ -1,4 +1,7 @@
 ﻿namespace BussinessLayer.DTOs.ModuloVentas.Cliente
+using BussinessLayer.DTOs.Contactos.ClienteContacto;
+
+namespace BussinessLayer.DTOs.Cliente
 {
     public class CreateClientDto
     {
@@ -12,7 +15,7 @@
         public string? Description { get; set; }
         public int CodeTypeIdentification { get; set; }
         public long CodeBussines { get; set; }
-        public List<ClientContact>? Contacts { get; set; }
-        public int AddedBy { get; set; }
+        public string? AddedBy { get; set; }
+        public List<ClientContactDto>? ClientContacts { get; set; }
     }
 }
