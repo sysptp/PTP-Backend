@@ -68,6 +68,7 @@ using DataLayer.Models.ModuloInventario.Almacen;
 using BussinessLayer.Interfaces.ModuloCampaña.Services;
 using BussinessLayer.FluentValidations.Generic;
 using BussinessLayer.Interfaces.Services.ModuloVentas.IClient;
+using BussinessLayer.Services.ModuloCitas;
 
 public static class ServiceRegistration
 {
@@ -126,6 +127,7 @@ public static class ServiceRegistration
         services.AddScoped<IInvMovAlmacenSucursalDetalleService, InvMovAlmacenSucursalDetalleService>();
         services.AddScoped<IInvMovimientoAlmacenService, InvMovimientoAlmacenService>();
         services.AddScoped<IInvMovimientoAlmacenDetalleService, InvMovimientoAlmacenDetalleService>();
+        services.AddScoped<IInvMovimientoSucursalDetalleService, InvMovimientoSucursalDetalleService>();
         #endregion
 
         #region Auditoria
@@ -150,6 +152,12 @@ public static class ServiceRegistration
         services.AddScoped<ICtaSessionsService, CtaSessionsService>();
         services.AddScoped<ICtaStateService, CtaStateService>();
         services.AddScoped<ICtaUnwantedService, CtaUnwantedService>();
+        services.AddScoped<ICtaAppointmentSequenceService, CtaAppointmentSequenceService>();
+        services.AddScoped<ICtaAppointmentAreaService, CtaAppointmentAreaService>();
+        services.AddScoped<ICtaAreaXUserService, CtaAreaXUserService>();
+        services.AddScoped<ICtaContactTypeService, CtaContactTypeService>();
+        services.AddScoped<ICtaAppointmentContactsService, CtaAppointmentContactsService>();
+        services.AddScoped<ICtaAppointmentUsersService, CtaAppointmentUsersService>();
 
         #endregion
         #region Modulo Contabilidad

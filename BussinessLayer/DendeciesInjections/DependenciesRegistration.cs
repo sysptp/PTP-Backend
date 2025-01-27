@@ -11,8 +11,10 @@ namespace BussinessLayer.DendeciesInjections
         public static void AddDependenciesRegistration(this IServiceCollection services, IConfiguration configuration)
         {
             #region DbContex
-            services.AddDbContext<PDbContext>(option =>
-            option.UseSqlServer(configuration.GetConnectionString("POS_CONN")));
+            services.AddDbContext<PDbContext>(options =>
+     options.UseSqlServer(configuration.GetConnectionString("POS_CONN")),
+     ServiceLifetime.Scoped);
+
             #endregion
 
             #region AutoMapper

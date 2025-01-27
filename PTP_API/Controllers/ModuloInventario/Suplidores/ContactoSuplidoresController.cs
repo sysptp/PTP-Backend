@@ -61,9 +61,9 @@ namespace PTP_API.Controllers.ModuloInventario.Suplidores
                     return Ok(Response<ViewContactosSuplidoresDto>.NotFound("No se encontró el contacto."));
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al obtener el contacto. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -93,9 +93,9 @@ namespace PTP_API.Controllers.ModuloInventario.Suplidores
                     return Ok(Response<List<ViewContactosSuplidoresDto>>.NotFound("No se encontraron contactos para la empresa."));
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al obtener los contactos. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -118,9 +118,9 @@ namespace PTP_API.Controllers.ModuloInventario.Suplidores
 
                 return Ok(Response<int>.Created(created, "Contacto creado exitosamente."));
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al crear el contacto. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -153,9 +153,9 @@ namespace PTP_API.Controllers.ModuloInventario.Suplidores
 
                 return Ok(Response<string>.Success("Contacto editado correctamente."));
             }
-            catch
+            catch (Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al editar el contacto. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError(ex.Message));
             }
         }
 
@@ -178,9 +178,9 @@ namespace PTP_API.Controllers.ModuloInventario.Suplidores
 
                 return Ok(Response<int>.Success(id, "Contacto eliminado correctamente."));
             }
-            catch
+            catch(Exception ex)
             {
-                return Ok(Response<string>.ServerError("Ocurrió un error al eliminar el contacto. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError(ex.Message));
             }
         }
         #endregion

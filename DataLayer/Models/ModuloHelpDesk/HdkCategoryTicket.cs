@@ -10,10 +10,10 @@ namespace DataLayer.Models.ModuloHelpDesk
     {
         [Key]
         public int IdCategoria { get; set; }
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = null!;
         public long IdEmpresa { get; set; }
         [ForeignKey("IdEmpresa")]
-        public virtual GnEmpresa GnEmpresa { get; set; }
+        public virtual GnEmpresa? GnEmpresa { get; set; }
 
     }
 }

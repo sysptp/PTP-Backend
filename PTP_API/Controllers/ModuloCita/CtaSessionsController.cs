@@ -78,7 +78,7 @@ namespace PTP_API.Controllers.ModuloCita
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var response = await _sessionsService.Add(sessionDto);
+                var response = await _sessionsService.CreateSessionAndGenerateAppointments(sessionDto);
                 return CreatedAtAction(nameof(GetAllSessions), response);
             }
             catch (Exception ex)

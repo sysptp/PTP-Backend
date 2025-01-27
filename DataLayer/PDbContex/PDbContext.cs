@@ -30,6 +30,7 @@ using DataLayer.Models.Contactos;
 using DataLayer.Models.ModuloCampaña;
 using DataLayer.EntitiesConfiguration.ModuloCampaña;
 using DataLayer.Models.Modulo_Citas;
+using DataLayer.Models.ModuloCitas;
 
 namespace DataLayer.PDbContex
 {
@@ -226,6 +227,12 @@ namespace DataLayer.PDbContex
         public DbSet<CtaSessions> CtaSessions { get; set; }
         public DbSet<CtaState> CtaState { get; set; }
         public DbSet<CtaUnwanted> CtaUnwanted { get; set; }
+        public DbSet<CtaAppointmentSequence> CtaAppointmentSequence { get; set; }
+        public DbSet<CtaAppointmentUsers> CtaAppointmentUsers { get; set; }
+        public DbSet<CtaContactType> CtaContactType { get; set; }
+        public DbSet<CtaAppointmentContacts> CtaAppointmentContacts { get; set; }
+        public DbSet<CtaAppointmentArea> CtaAppointmentArea { get; set; }
+        public DbSet<CtaAppointmentSequence> CtaAreaXUser { get; set; }
 
         #endregion
 

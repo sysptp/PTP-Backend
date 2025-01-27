@@ -2,7 +2,9 @@
 using Dapper;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Data;
 
 
@@ -12,11 +14,18 @@ namespace BussinessLayer.Repository.ROtros
     {
         private readonly ITokenService _tokenService;
         protected readonly PDbContext _context;
+        private readonly string _connectionString;
 
         public GenericRepository(PDbContext dbContext, ITokenService tokenService)
         {
             _context = dbContext;
             _tokenService = tokenService;
+
+            var configuration = new ConfigurationBuilder()
+       .SetBasePath(Directory.GetCurrentDirectory())
+       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)  
+       .Build();
+            _connectionString = configuration.GetConnectionString("POS_CONN") ?? "Server=SQL5112.site4now.net;Database=db_aae658_sysptp;User Id=db_aae658_sysptp_admin;Password=Anthony0010.;Encrypt=True;TrustServerCertificate=True;";
         }
 
         public virtual async Task<T> GetById(int id)
@@ -45,60 +54,105 @@ namespace BussinessLayer.Repository.ROtros
             return await _context.Set<T>().Where(e => !e.Borrado).ToListAsync();
         }
 
-       
         public virtual async Task<T> Add(T entity)
         {
             try
             {
-                // Asigna valores de auditoría antes de guardar
                 entity.FechaAdicion = DateTime.Now;
                 entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
-
-
-                // Construye una consulta SQL genérica para insertar usando Dapper
                 var tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
-
-                // Obtén el nombre de la clave primaria
                 var primaryKey = _context.Model.FindEntityType(typeof(T))
                                                .FindPrimaryKey()
                                                .Properties
                                                .Select(p => p.Name)
                                                .FirstOrDefault();
+
                 if (string.IsNullOrEmpty(primaryKey))
                 {
                     throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
                 }
-                // Construye dinámicamente las columnas y parámetros para la consulta SQL
+
                 var properties = typeof(T).GetProperties()
-    .Where(p => p.Name != primaryKey &&
-                (p.PropertyType.IsPrimitive ||
-                 p.PropertyType == typeof(string) ||
-                 p.PropertyType == typeof(DateTime) ||
-                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
-                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime)))
-    .Select(p => p.Name);
+                    .Where(p => p.Name != primaryKey &&
+                                (p.PropertyType.IsPrimitive ||
+                                 p.PropertyType == typeof(string) ||
+                                 p.PropertyType == typeof(DateTime) ||
+                                 p.PropertyType == typeof(TimeSpan) ||
+                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
+                    .Select(p => p.Name);
 
                 var columns = string.Join(", ", properties);
                 var values = string.Join(", ", properties.Select(p => $"@{p}"));
-                // Construye la consulta SQL
+
                 var sql = $@"
-            INSERT INTO {tableName} ({columns})
-            VALUES ({values})";
+        INSERT INTO {tableName} ({columns})
+        OUTPUT INSERTED.{primaryKey}
+        VALUES ({values})";
 
-                // Ejecuta la consulta y obtén el valor de la clave primaria
-                using (var connection = _context.Database.GetDbConnection())
+                using (var connection = new SqlConnection(_connectionString))
                 {
-                    if (connection.State == ConnectionState.Closed)
-                        await connection.OpenAsync();
+                    var id = await connection.ExecuteScalarAsync<object>(sql, entity);
 
-                   
-                    await connection.ExecuteAsync(sql, entity);
-
-                
+                    var primaryKeyProperty = typeof(T).GetProperty(primaryKey);
+                    if (primaryKeyProperty != null)
+                    {
+                        primaryKeyProperty.SetValue(entity, Convert.ChangeType(id, primaryKeyProperty.PropertyType));
+                    }
                 }
 
                 return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message, ex);
+            }
+        }
+
+        public virtual async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    entity.FechaAdicion = DateTime.Now;
+                    entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+                }
+
+                var tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
+                var primaryKey = _context.Model.FindEntityType(typeof(T))
+                                               .FindPrimaryKey()
+                                               .Properties
+                                               .Select(p => p.Name)
+                                               .FirstOrDefault();
+
+                if (string.IsNullOrEmpty(primaryKey))
+                {
+                    throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
+                }
+
+                var columns = typeof(T).GetProperties()
+                     .Where(p => p.Name != primaryKey &&
+                                (p.PropertyType.IsPrimitive ||
+                                 p.PropertyType == typeof(string) ||
+                                 p.PropertyType == typeof(DateTime) ||
+                                 p.PropertyType == typeof(TimeSpan) ||
+                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
+                    .Select(p => p.Name);
+
+                var values = string.Join(", ", columns.Select(c => $"@{c}"));
+                var sql = $@"
+        INSERT INTO {tableName} ({string.Join(", ", columns)})
+        VALUES ({values})";
+
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.ExecuteAsync(sql, entities);
+                }
             }
             catch (Exception ex)
             {
@@ -140,13 +194,15 @@ namespace BussinessLayer.Repository.ROtros
 
                 // Construye dinámicamente las columnas a actualizar
                 var properties = typeof(T).GetProperties()
-                                          .Where(p => p.Name != primaryKey && p.Name != "FechaAdicion" && p.Name != "UsuarioAdicion" &&
-                (p.PropertyType.IsPrimitive ||
-                 p.PropertyType == typeof(string) ||
-                 p.PropertyType == typeof(DateTime) ||
-                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
-                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime)))
-                                          .Select(p => $"{p.Name} = @{p.Name}");
+                    .Where(p => p.Name != primaryKey &&
+                                (p.PropertyType.IsPrimitive ||
+                                 p.PropertyType == typeof(string) ||
+                                 p.PropertyType == typeof(DateTime) ||
+                                 p.PropertyType == typeof(TimeSpan) ||
+                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
+                    .Select(p => p.Name);
                 var updateColumns = string.Join(", ", properties);
 
                 // Construye la consulta SQL
@@ -173,7 +229,7 @@ namespace BussinessLayer.Repository.ROtros
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error al actualizar la entidad con Dapper", ex);
+                throw new InvalidOperationException(ex.Message, ex);
             }
         }
 
@@ -245,7 +301,7 @@ namespace BussinessLayer.Repository.ROtros
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error al actualizar la entidad con Dapper", ex);
+                throw new InvalidOperationException(ex.Message, ex);
             }
         }
 

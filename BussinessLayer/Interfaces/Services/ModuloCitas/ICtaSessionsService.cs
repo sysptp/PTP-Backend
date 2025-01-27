@@ -6,5 +6,6 @@ namespace BussinessLayer.Interfaces.Services.ModuloCitas
 {
     public interface ICtaSessionsService : IGenericService<CtaSessionsRequest, CtaSessionsResponse, CtaSessions>
     {
+        Task<CtaSessionsRequest> CreateSessionAndGenerateAppointments(CtaSessionsRequest sessionRequest);
     }
 }

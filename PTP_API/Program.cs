@@ -47,6 +47,7 @@ app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
+    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
     c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None); // Todos los endpoints estarán colapsados
     c.RoutePrefix = string.Empty;

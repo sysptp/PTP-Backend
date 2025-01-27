@@ -36,7 +36,6 @@ using BussinessLayer.DTOs.ModuloInventario.Otros;
 using BussinessLayer.FluentValidations.ModuloInventario.Otros;
 using BussinessLayer.Validations.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
-using BussinessLayer.Validations.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
 using BussinessLayer.Validations.ModuloCitas.CtaAppointmentMovements;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
@@ -76,6 +75,9 @@ using BussinessLayer.FluentValidations.ModuloInventario.Almacen;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
 using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
+using DataLayer.Models.ModuloCitas;
+using BussinessLayer.FluentValidations.ModuloCitas;
+using BussinessLayer.DTOs.ModuloCitas;
 using BussinessLayer.FluentValidations.ModuloInventario;
 using BussinessLayer.DTOs.ModuloCampaña.CmpCliente;
 using BussinessLayer.FluentValidations.ModuloCampaña.CmpClientes;
@@ -121,6 +123,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaSessionsRequest>, CtaSessionsRequestValidation>();
             services.AddScoped<IValidator<CtaStateRequest>, CtaStateRequestValidation>();
             services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
+            services.AddScoped<IValidator<CtaAppointmentSequenceRequest>, CtaAppointmentSequenceRequestValidator>();
+            services.AddScoped<IValidator<CtaAppointmentAreaRequest>, CtaAppointmentAreaRequestValidator>();
+            services.AddScoped<IValidator<CtaAreaXUserRequest>, CtaAreaXUserRequestValidator>();
+            services.AddScoped<IValidator<CtaContactTypeRequest>, CtaContactTypeRequestValidator>();
 
             #endregion
 

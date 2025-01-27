@@ -24,6 +24,9 @@ using BussinessLayer.Interfaces.Repository.Inventario.Almacenes;
 using BussinessLayer.Repository.Almacen;
 using BussinessLayer.Interfaces.ModuloCampaña.Repository;
 using BussinessLayer.Repository.ModuloVentas.RClient;
+using BussinessLayer.Interface.Repository.ModuloCitas;
+using BussinessLayer.Interfaces.Repository.ModuloCitas;
+using BussinessLayer.Repository.ModuloCitas;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -126,6 +129,12 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICtaSessionsRepository, CtaSessionsRepository>();
             services.AddScoped<ICtaStateRepository, CtaStateRepository>();
             services.AddScoped<ICtaUnwantedRepository,CtaUnwantedRepository>();
+            services.AddScoped<ICtaAppointmentSequenceRepository, CtaAppointmentSequenceRepository>();
+            services.AddScoped<ICtaAppointmentAreaRepository, CtaAppointmentAreaRepository>();
+            services.AddScoped<ICtaAreaXUserRepository, CtaAreaXUserRepository>();
+            services.AddScoped<ICtaContactTypeRepository, CtaContactTypeRepository>();
+            services.AddScoped<ICtaAppointmentContactsRepository, CtaAppointmentContactsRepository>();
+            services.AddScoped<ICtaAppointmentUsersRepository, CtaAppointmentUsersRepository>();
 
             #endregion
         }

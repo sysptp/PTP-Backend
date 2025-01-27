@@ -1,5 +1,6 @@
-﻿
+﻿using DataLayer.Models.ModuloCitas;
 using DataLayer.Models.ModuloGeneral.Empresa;
+using DataLayer.Models.ModuloGeneral.Seguridad;
 using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,7 +10,8 @@ namespace DataLayer.Models.Modulo_Citas
     public class CtaAppointments : AuditableEntities
     {
         [Key]
-        public int AppointmentId { get; set; } 
+        public int AppointmentId { get; set; }
+        public string AppointmentCode { get; set; } = null!;
         public string? Description { get; set; }
         public int IdReasonAppointment { get; set; }
         [ForeignKey("IdReasonAppointment")]
@@ -32,16 +34,16 @@ namespace DataLayer.Models.Modulo_Citas
         public int? DaysInAdvance { get; set; }
         public TimeSpan NotificationTime { get; set; }
         public bool NotifyClosure { get; set; } = false;
-        public string? AssignedUserAppointment { get; set; }
         public bool NotifyAssignedUserEmail { get; set; } = false;
         public bool NotifyAssignedUserSms { get; set; } = false;
-        public bool IsClient { get; set; } = false;
-        public string FullName { get; set; } = null!;
-        public string Phone { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public int? IdClient { get; set; }
+        public int UserId { get; set; }
+        public Usuario? Usuario { get; set; }
+        public int? AreaId {  get; set; }
         public long CompanyId { get; set; }
         [ForeignKey("CompanyId")]
         public GnEmpresa? GnEmpresa { get; set; }
+        public List<CtaAppointmentManagement>? CtaAppointmentManagement { get; set; }
+        public List<CtaAppointmentContacts>? CtaAppointmentContacts { get; set; }
+        public List<CtaAppointmentUsers>? CtaAppointmentUsers { get; set; }
     }
 }

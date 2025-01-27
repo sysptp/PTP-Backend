@@ -126,7 +126,7 @@ namespace PTP_API.Controllers.ModuloInventario.Marcas
             catch
             {
 
-                return Ok(Response<string>.ServerError("Ocurrió un error al crear la marca. Por favor, intente nuevamente."));
+                return Ok(Response<string>.ServerError("ex.Message la marca. Por favor, intente nuevamente."));
             }
         }
 

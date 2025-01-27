@@ -1,4 +1,4 @@
-﻿using BussinessLayer.Interface.Repository.Modulo_Citas;
+﻿using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Repository.ROtros;
 using DataLayer.Models.Modulo_Citas;
 using DataLayer.PDbContex;

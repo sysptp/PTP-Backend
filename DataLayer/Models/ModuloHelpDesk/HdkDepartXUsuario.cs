@@ -1,10 +1,9 @@
-﻿using DataLayer.Models.Otros;
-using System;
-using System.Collections.Generic;
+﻿using DataLayer.Models.ModuloGeneral.Empresa;
+using DataLayer.Models.ModuloGeneral.Seguridad;
+using DataLayer.Models.Otros;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models.ModuloHelpDesk
 {
@@ -12,9 +11,15 @@ namespace DataLayer.Models.ModuloHelpDesk
     {
         [Key]
         public int IdDepartXUsuario { get; set; }
-        public string IdUsuarioDepto { get; set; }
+        public int IdUsuarioDepto { get; set; } 
+        [ForeignKey("IdUsuarioDepto")]
+        public Usuario? Usuario { get; set; }
         public int IdDepartamento { get; set; }
+        [ForeignKey("IdDeparmento")]
+        public HdkDepartaments? HdkDepartaments { get; set; }
         public long IdEmpresa { get; set; }
+        [ForeignKey("IdEmpresa")]
+        public GnEmpresa? GnEmpresa { get; set; }
 
     }
 }
