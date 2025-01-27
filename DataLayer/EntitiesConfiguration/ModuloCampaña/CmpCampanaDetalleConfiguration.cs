@@ -11,12 +11,12 @@ namespace DataLayer.EntitiesConfiguration.ModuloCampaña
             builder.ToTable("CmpCampanaDetalle");
             builder.HasKey(x=> x.CampanaDetalleId);
 
-            builder.HasOne(x=> x.CmpCliente)
+            builder.HasOne(x=> x.Cliente)
                 .WithMany(x=> x.CampanaDetalles)
                 .HasForeignKey(x=> x.ClientId)
                 .OnDelete(DeleteBehavior.Restrict); 
             
-            builder.HasOne(x=> x.CmpCampana)
+            builder.HasOne(x=> x.Campana)
                 .WithMany(x=> x.CampanaDetalles)
                 .HasForeignKey(x=> x.CampanaId)
                 .OnDelete(DeleteBehavior.Restrict);

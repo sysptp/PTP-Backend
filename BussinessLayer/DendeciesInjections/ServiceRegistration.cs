@@ -150,6 +150,7 @@ public static class ServiceRegistration
         services.AddScoped<ICmpPlantillaService, CmpPlantillaService>();
         services.AddScoped<ICmpEmailService, CmpEmailService>();
         services.AddScoped<ICmpCampanaService, CmpCampanaService>();
+        services.AddScoped<ICmpCampanaDetalleService, CmpCampanaDetalleService>();
         #endregion
 
         #region Geografia

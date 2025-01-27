@@ -55,6 +55,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICmpEstadoRepository, CmpEstadoRepository>();
             services.AddScoped<ICmpCampanaRepository, CmpCampanaRepository>();
             services.AddScoped<ICmpFrecuenciaRepository, CmpFrecuenciaRepository>();
+            services.AddScoped<ICmpCampanaDetalleRepository, CmpCampanaDetalleRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();
