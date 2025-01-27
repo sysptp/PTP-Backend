@@ -30,11 +30,9 @@ using BussinessLayer.Services.ModuloVentas.Caja;
 using BussinessLayer.Services.ModuloVentas.Cotizaciones;
 using BussinessLayer.Services.ModuloVentas.Facturacion;
 using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
-using BussinessLayer.Interfaces.IClient;
 using BussinessLayer.Services.SCliente;
 using BussinessLayer.Services.SContactos;
 using BussinessLayer.Services.SModuloCampaña;
-using BussinessLayer.Interface.Modulo_Citas;
 using DataLayer.Models.Modulo_Citas;
 using BussinessLayer.Interfaces.Services.IAutenticacion;
 using BussinessLayer.Interfaces.Services.ICargaMasiva;
@@ -69,6 +67,7 @@ using BussinessLayer.Services.ModuloInventario.SAlmacen;
 using DataLayer.Models.ModuloInventario.Almacen;
 using BussinessLayer.Interfaces.ModuloCampaña.Services;
 using BussinessLayer.FluentValidations.Generic;
+using BussinessLayer.Interfaces.Services.ModuloVentas.IClient;
 
 public static class ServiceRegistration
 {
@@ -83,7 +82,7 @@ public static class ServiceRegistration
         services.AddScoped(typeof(IGenericService<,,>), typeof(GenericService<,,>));
         services.AddScoped<IRepositorySection, RepositorySection>();
         //services.AddScoped<, >();
-        services.AddScoped<IAlmacenesService, AlmacenesService>();
+        //services.AddScoped<IAlmacenesService, AlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
        // services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
@@ -181,7 +180,7 @@ public static class ServiceRegistration
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IGnPermisoService, GnPermisoService>();
 
-        services.AddScoped<IClientService, ClientService>();
+        //services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IContactService, ContactService>();
         #endregion
 

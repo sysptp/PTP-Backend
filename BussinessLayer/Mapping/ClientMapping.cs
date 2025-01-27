@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.Cliente;
+using BussinessLayer.DTOs.ModuloVentas.Cliente;
 using DataLayer.Models.Clients;
 
 namespace BussinessLayer.Mapping

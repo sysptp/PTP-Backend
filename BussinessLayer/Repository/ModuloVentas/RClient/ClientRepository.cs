@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BussinessLayer.Repository.ModuloVentas.RClient
 {
-    public class ClientRepository(PDbContext context) : IClientRepository
+    public class ClientRepository(PDbContext context,IConfiguration _configuration) : IClientRepository
     {
         private readonly PDbContext _context = context;
         public async Task<Client> AddAsync(Client client)
@@ -49,6 +49,11 @@ namespace BussinessLayer.Repository.ModuloVentas.RClient
             {
                 throw new ApplicationException(ex.Message, ex);
             }
+        }
+
+        public Task CreateAsync(CreateClientDto client)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<List<Client>> GetAllAsync(int bussinesId,int pageSize,int pageCount)

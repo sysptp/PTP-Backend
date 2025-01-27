@@ -1,21 +1,21 @@
-﻿namespace BussinessLayer.DTOs.ModuloVentas.Cliente
-using BussinessLayer.DTOs.Contactos.ClienteContacto;
+﻿using BussinessLayer.DTOs.Contactos.ClienteContacto;
 
-namespace BussinessLayer.DTOs.Cliente
+namespace BussinessLayer.DTOs.ModuloVentas.Cliente;
+
+
+public class CreateClientDto
 {
-    public class CreateClientDto
-    {
-        public string? Name { get; set; }
-        public string? LastName { get; set; }
-        public string? Identification { get; set; }
-        public string? Address { get; set; }
-        public string? Email { get; set; }
-        public string? Phone { get; set; }
-        public string? WebSite { get; set; }
-        public string? Description { get; set; }
-        public int CodeTypeIdentification { get; set; }
-        public long CodeBussines { get; set; }
-        public string? AddedBy { get; set; }
-        public List<ClientContactDto>? ClientContacts { get; set; }
-    }
+    public string? Name { get; set; }
+    public string? LastName { get; set; }
+    public string? Identification { get; set; }
+    public string? Address { get; set; }
+    public string? Email { get; set; }
+    public string? Phone { get; set; }
+    public string? WebSite { get; set; }
+    public string? Description { get; set; }
+    public int CodeTypeIdentification { get; set; }
+    public long CodeBussines { get; set; }
+    public string? AddedBy { get; set; }
+    public List<ClientContactDto>? ClientContacts { get; set; }
 }
+
