@@ -5,7 +5,7 @@ namespace BussinessLayer.DTOs.ModuloInventario.Almacenes
     public class InvMovimientoAlmacenReponse:AuditableEntitiesReponse
     {
         public int Id { get; set; }
-        public int IdSuplidor { get; set; }
+        public long IdSuplidor { get; set; }
         public int IdTipoMovimiento { get; set; }
         public long IdEmpresa { get; set; }
         public int IdAlmacen { get; set; }

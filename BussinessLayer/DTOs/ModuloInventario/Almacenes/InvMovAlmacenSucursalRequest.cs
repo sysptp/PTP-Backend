@@ -6,9 +6,12 @@ namespace BussinessLayer.DTOs.ModuloInventario.Almacenes
     {
         [JsonIgnore]
         public int Id { get; set; }
-        public int IdProducto { get; set; }
-        public int IdMovAlmacenSucursal { get; set; }
+        public int IdAlmacen { get; set; }
+        public long IdSucursal { get; set; }
+        public int IdTransaccion { get; set; }
+        public int IdTipoMovimiento { get; set; }
         public int CantidadProducto { get; set; }
+        public string? Motivo { get; set; }
         public bool Activo { get; set; }
     }
 }

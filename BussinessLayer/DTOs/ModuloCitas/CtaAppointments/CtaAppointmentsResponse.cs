@@ -1,5 +1,4 @@
-﻿
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
+﻿using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
 using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
 using BussinessLayer.DTOs.ModuloCitas.CtaState;
@@ -36,11 +35,12 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public int UserId { get; set; }
         public long CompanyId { get; set; }
         public string? CompanyName { get; set;}
-        [JsonPropertyName("Management")]
-        public List<CtaAppointmentManagementResponse>? CtaAppointmentManagement { get; set; }
-        [JsonPropertyName("Contacts")]
-        public List<CtaAppointmentContactsResponse>? CtaAppointmentContacts { get; set; }
+         [JsonPropertyName("Contacts")]
+        public List<CtaAppointmentContactsResponse>? CtaAppointmentContacts { get; set; } = new();
         [JsonPropertyName("UsersInvited")]
-        public List<CtaAppointmentUsersResponse>? CtaAppointmentUsers { get; set; }
+        public List<CtaAppointmentUsersResponse>? CtaAppointmentUsers { get; set; } = new();
+        [JsonPropertyName("Management")]
+        public List<CtaAppointmentManagementResponse>? CtaAppointmentManagement { get; set; } = new();
+
     }
 }

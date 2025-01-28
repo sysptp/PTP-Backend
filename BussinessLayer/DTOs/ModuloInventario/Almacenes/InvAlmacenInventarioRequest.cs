@@ -7,7 +7,7 @@ namespace BussinessLayer.DTOs.ModuloInventario.Almacenes
         [JsonIgnore]
         public int Id { get; set; }
         public int IdProducto { get; set; }
-        public int IdEmpresa { get; set; }
+        public long IdEmpresa { get; set; }
         public int IdAlmacen { get; set; }
         public int CantidadProducto { get; set; }
         public int CantidadMinima { get; set; }

@@ -1,10 +1,22 @@
-﻿using AutoMapper;
+﻿using System.Text.Json.Serialization;
+using AutoMapper;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
+using BussinessLayer.DTOs.ModuloCitas;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.DTOs.ModuloCitas.CtaState;
+using BussinessLayer.Interface.Repository.Modulo_Citas;
 using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Services;
 using DataLayer.Models.ModuloCitas;
+using DataLayer.Models.ModuloGeneral.Empresa;
+using DataLayer.Models.ModuloGeneral.Seguridad;
+using DataLayer.Models.Otros;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.Modulo_Citas
 {
@@ -14,15 +26,17 @@ namespace DataLayer.Models.Modulo_Citas
         private readonly IMapper _mapper;
         private readonly ICtaAppointmentContactsRepository _contactsRepository;
         private readonly ICtaAppointmentUsersRepository _usersRepository;
+        private readonly ICtaAppointmentsRepository _repository;
 
-        public CtaAppointmentsService(ICtaAppointmentSequenceService sequenceService, IMapper mapper, 
-            ICtaAppointmentsRepository repository, ICtaAppointmentContactsRepository contactsRepository, 
-            ICtaAppointmentUsersRepository usersRepository) : base(repository,mapper)
+        public CtaAppointmentsService(ICtaAppointmentSequenceService sequenceService, IMapper mapper,
+            ICtaAppointmentsRepository repository, ICtaAppointmentContactsRepository contactsRepository,
+            ICtaAppointmentUsersRepository usersRepository) : base(repository, mapper)
         {
             _sequenceService = sequenceService;
             _mapper = mapper;
             _contactsRepository = contactsRepository;
             _usersRepository = usersRepository;
+            _repository = repository;
         }
 
         public override async Task<CtaAppointmentsResponse> Add(CtaAppointmentsRequest vm)
@@ -63,6 +77,16 @@ namespace DataLayer.Models.Modulo_Citas
 
             return _mapper.Map<CtaAppointmentsResponse>(appointmentEntity);
         }
+
+        //public override async Task<List<CtaAppointmentsResponse>> GetAllDto()
+        //{
+        //    var appointments = await _repository.GetAllWithIncludeAsync(new List<string>
+        //    { "CtaAppointmentReason", "CtaMeetingPlace","CtaState", "CtaAppointmentContacts", "CtaAppointmentUsers", "CtaAppointmentManagement"});
+
+        //    var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments);
+
+        //    return appointmentDtoList;
+        //}
 
     }
 }
