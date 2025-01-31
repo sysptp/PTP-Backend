@@ -7,7 +7,6 @@ namespace DataLayer.Models.ModuloCitas
     {
         [Key]
         public int Id { get; set; }
-        public int ContactTypeId { get; set; }
         public int ContactId { get; set; }
         public int AppointmentId { get; set; }
         public long CompanyId { get; set; }

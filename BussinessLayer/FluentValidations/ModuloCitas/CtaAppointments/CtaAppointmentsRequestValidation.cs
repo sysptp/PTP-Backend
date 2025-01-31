@@ -74,9 +74,7 @@ namespace BussinessLayer.Validations.ModuloCitas.CtaAppointments
                 {
                     contact.RuleFor(c => c.ContactId)
                         .GreaterThan(0).WithMessage("El identificador de contacto (ContactId) es obligatorio.");
-                    contact.RuleFor(c => c.ContactTypeId)
-                        .GreaterThan(0).WithMessage("El tipo de contacto (ContactTypeId) es obligatorio.");
-                });
+                 });
 
             RuleForEach(x => x.CtaAppointmentUsers)
                 .ChildRules(user =>

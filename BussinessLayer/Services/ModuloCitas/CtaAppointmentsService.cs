@@ -54,7 +54,6 @@ namespace DataLayer.Models.Modulo_Citas
             {
                 var contactsToInsert = vm.CtaAppointmentContacts.Select(contact => new CtaAppointmentContacts
                 {
-                    ContactTypeId = contact.ContactTypeId,
                     ContactId = contact.ContactId,
                     AppointmentId = appointmentId,
                     CompanyId = appointmentEntity.CompanyId

@@ -45,6 +45,11 @@ namespace BussinessLayer.Mapping.ModuloCitas
                .ForPath(dest => dest.CtaAppointmentContacts, opt => opt.MapFrom(src => src.CtaAppointmentContacts))
                .ReverseMap();
 
+               CreateMap<AppointmentInformation, CtaAppointmentsRequest>()
+               .ForPath(dest => dest.CtaAppointmentUsers, opt => opt.MapFrom(src => src.CtaAppointmentUsers))
+               .ForPath(dest => dest.CtaAppointmentContacts, opt => opt.MapFrom(src => src.CtaAppointmentContacts))
+               .ReverseMap();
+
             CreateMap<CtaAppointmentsResponse, CtaAppointments>()
                .ReverseMap();
 
@@ -71,7 +76,9 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaSessionsRequest, CtaSessions>()
                 .ForPath(dest => dest.CompanyId, opt => opt.MapFrom(src => src.AppointmentInformation.CompanyId))
                 .ForPath(dest => dest.Description, opt => opt.MapFrom(src => src.AppointmentInformation.Description))
-                .ReverseMap();
+                .ForMember(dest => dest.IdUser, opt => opt.MapFrom(src => src.IdUser))
+                .ReverseMap()
+                .ForPath(dest => dest.AppointmentInformation.UserId, opt => opt.MapFrom(src => src.IdUser));
 
             CreateMap<CtaSessionsResponse, CtaSessions>()
                 .ReverseMap();

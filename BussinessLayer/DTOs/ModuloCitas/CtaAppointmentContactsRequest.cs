@@ -7,7 +7,6 @@ namespace BussinessLayer.DTOs.ModuloCitas
     {
         [JsonIgnore]
         public int Id { get; set; }
-        public int ContactTypeId { get; set; }
         public int ContactId { get; set; }
         [JsonIgnore]
         public int AppointmentId { get; set; }
