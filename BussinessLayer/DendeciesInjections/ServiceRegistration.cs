@@ -30,7 +30,6 @@ using BussinessLayer.Services.ModuloVentas.Caja;
 using BussinessLayer.Services.ModuloVentas.Cotizaciones;
 using BussinessLayer.Services.ModuloVentas.Facturacion;
 using BussinessLayer.Services.SModuloGeneral.SParametrosGenerales;
-using BussinessLayer.Services.SCliente;
 using BussinessLayer.Services.SContactos;
 using BussinessLayer.Services.SModuloCampaña;
 using DataLayer.Models.Modulo_Citas;
@@ -64,11 +63,11 @@ using BussinessLayer.Interfaces.Services.ModuloVentas.ICaja;
 using BussinessLayer.Interfaces.Services.ModuloVentas.ICotizaciones;
 using BussinessLayer.Interfaces.ModuloInventario.Almacen;
 using BussinessLayer.Services.ModuloInventario.SAlmacen;
-using DataLayer.Models.ModuloInventario.Almacen;
 using BussinessLayer.Interfaces.ModuloCampaña.Services;
 using BussinessLayer.FluentValidations.Generic;
-using BussinessLayer.Interfaces.Services.ModuloVentas.IClient;
 using BussinessLayer.Services.ModuloCitas;
+using BussinessLayer.Interfaces.Services.ModuloGeneral;
+using BussinessLayer.Services.ModuloGeneral;
 
 public static class ServiceRegistration
 {
@@ -251,6 +250,11 @@ public static class ServiceRegistration
 
         #region NCFs
         #endregion
+
+        #region Modulo General
+
+        services.AddScoped<IGnRepeatUnitService,GnRepeatUnitService>();
+        #endregion 
 
         #region Otros
         #endregion

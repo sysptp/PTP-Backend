@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
+using BussinessLayer.Enums;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
-using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Services;
 
@@ -31,7 +31,7 @@ namespace DataLayer.Models.Modulo_Citas
 
             sessionEntity = await _sessionRepository.Add(sessionEntity);
 
-            if (sessionRequest.FirstSessionDate != default && sessionRequest.FrequencyInDays > 0)
+            if (sessionRequest.FirstSessionDate != default && sessionRequest.RepeatEvery > 0)
             {
                 var appointments = GenerateAppointmentsForSession(sessionRequest);
 
@@ -61,12 +61,30 @@ namespace DataLayer.Models.Modulo_Citas
             while (currentAppointmentDate <= sessionRequest.SessionEndDate)
             {
                 var appointment = _mapper.Map<CtaAppointmentsRequest>(sessionRequest.AppointmentInformation);
+                appointment.AppointmentDate = currentAppointmentDate; 
                 appointments.Add(appointment);
 
-                currentAppointmentDate = currentAppointmentDate.AddDays(sessionRequest.FrequencyInDays);
+                currentAppointmentDate = CalculateNextAppointmentDate(currentAppointmentDate, sessionRequest.RepeatEvery, sessionRequest.RepeatUnitId);
             }
 
             return appointments;
+        }
+
+        private DateTime CalculateNextAppointmentDate(DateTime currentDate, int repeatEvery, int repeatUnitId)
+        {
+            switch (repeatUnitId)
+            {
+                case (int)RepeatUnitEnum.Dia: 
+                    return currentDate.AddDays(repeatEvery);
+                case (int)RepeatUnitEnum.Semana: 
+                    return currentDate.AddDays(repeatEvery * 7);
+                case (int)RepeatUnitEnum.Mes: 
+                    return currentDate.AddMonths(repeatEvery);
+                case (int)RepeatUnitEnum.Año: 
+                    return currentDate.AddYears(repeatEvery);
+                default:
+                    throw new ArgumentException("Unidad de repetición no válida");
+            }
         }
     }
 }

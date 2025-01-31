@@ -46,5 +46,6 @@ namespace DataLayer.Models.Modulo_Citas
         public List<CtaAppointmentManagement>? CtaAppointmentManagement { get; set; }
         public List<CtaAppointmentContacts>? CtaAppointmentContacts { get; set; }
         public List<CtaAppointmentUsers>? CtaAppointmentUsers { get; set; }
+        public List<CtaGuest>? CtaGuest { get; set; }
     }
 }

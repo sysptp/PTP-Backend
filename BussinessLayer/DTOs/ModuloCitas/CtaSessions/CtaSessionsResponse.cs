@@ -1,4 +1,7 @@
 ﻿
+using DataLayer.Models.ModuloGeneral;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
 {
     public class CtaSessionsResponse
@@ -10,11 +13,12 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
         public string? UserEmail { get; set; }
         public string? UserPhoneNumber { get; set; }
         public DateTime FirstSessionDate { get; set; }
-        public int TotalAppointments { get; set; }
         public DateTime LastSessionDate { get; set; }
         public DateTime SessionEndDate { get; set; }
         public int CompletedAppointments { get; set; }
-        public int FrequencyInDays { get; set; }
+        public int RepeatEvery { get; set; }
+        public int RepeatUnitId { get; set; }
+        public string RepeatUnitDescription { get; set; } = null!;
         public long CompanyId { get; set; }
     }
 }

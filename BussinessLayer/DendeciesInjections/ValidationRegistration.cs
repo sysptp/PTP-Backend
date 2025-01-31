@@ -75,7 +75,6 @@ using BussinessLayer.FluentValidations.ModuloInventario.Almacen;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
 using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
-using DataLayer.Models.ModuloCitas;
 using BussinessLayer.FluentValidations.ModuloCitas;
 using BussinessLayer.DTOs.ModuloCitas;
 using BussinessLayer.FluentValidations.ModuloInventario;
@@ -92,6 +91,8 @@ using BussinessLayer.FluentValidations.ModuloCampaña.CmpTipoPlantilla;
 using BussinessLayer.FluentValidations.Generic;
 using BussinessLayer.DTOs.ModuloCampaña.CmpPlantillas;
 using BussinessLayer.FluentValidations.ModuloCampaña.CmpPlantilla;
+using BussinessLayer.DTOs.ModuloGeneral.Utils;
+using BussinessLayer.Validations.ModuloGeneral.GnRepeatUnit;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -255,6 +256,8 @@ namespace BussinessLayer.DendeciesInjections
             #region Modulo General
             services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
             services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
+            services.AddScoped<IValidator<GnRepeatUnitRequest>, GnRepeatUnitRequestValidation>();
+            
             #endregion
 
             #region HelpDesk

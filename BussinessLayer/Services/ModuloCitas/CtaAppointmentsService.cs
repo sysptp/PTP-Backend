@@ -1,22 +1,10 @@
-﻿using System.Text.Json.Serialization;
-using AutoMapper;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
-using BussinessLayer.DTOs.ModuloCitas;
+﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
-using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
-using BussinessLayer.DTOs.ModuloCitas.CtaState;
-using BussinessLayer.Interface.Repository.Modulo_Citas;
 using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Services;
 using DataLayer.Models.ModuloCitas;
-using DataLayer.Models.ModuloGeneral.Empresa;
-using DataLayer.Models.ModuloGeneral.Seguridad;
-using DataLayer.Models.Otros;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.Modulo_Citas
 {

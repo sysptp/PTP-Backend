@@ -27,6 +27,9 @@ using BussinessLayer.Repository.ModuloVentas.RClient;
 using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Repository.ModuloCitas;
+using BussinessLayer.Interfaces.Services.ModuloGeneral;
+using BussinessLayer.Interface.Repository.ModuloGeneral;
+using BussinessLayer.Repository.ModuloGeneral;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -58,6 +61,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICmpCampanaRepository, CmpCampanaRepository>();
             services.AddScoped<ICmpFrecuenciaRepository, CmpFrecuenciaRepository>();
             services.AddScoped<ICmpCampanaDetalleRepository, CmpCampanaDetalleRepository>();
+            services.AddScoped<IGnRepeatUnitRepository, GnRepeatUnitRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

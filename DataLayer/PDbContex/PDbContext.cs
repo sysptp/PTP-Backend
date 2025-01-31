@@ -31,6 +31,7 @@ using DataLayer.Models.ModuloCampaña;
 using DataLayer.EntitiesConfiguration.ModuloCampaña;
 using DataLayer.Models.Modulo_Citas;
 using DataLayer.Models.ModuloCitas;
+using DataLayer.Models.ModuloGeneral;
 
 namespace DataLayer.PDbContex
 {
@@ -203,6 +204,7 @@ namespace DataLayer.PDbContex
         public DbSet<GnScheduleUser> GnScheduleUser { get; set; }
         public DbSet<GnUploadFileParametro> GnUploadFileParametro { get; set; }
         public DbSet<GnTecnoAlmacenExterno> GnTecnoAlmacenExterno { get; set; }
+        public DbSet<GnRepeatUnit> GnRepeatUnit { get; set; }
         #endregion
 
         #region Auditoria
