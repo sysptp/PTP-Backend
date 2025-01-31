@@ -1,4 +1,5 @@
 ﻿
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentGuest;
 using System.Text.Json.Serialization;
 
 namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
@@ -32,5 +33,8 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
         public List<CtaAppointmentContactsRequest>? CtaAppointmentContacts { get; set; }
         [JsonPropertyName("UsersInvited")]
         public List<CtaAppointmentUsersRequest>? CtaAppointmentUsers { get; set; }
+
+        [JsonPropertyName("Guests")]
+        public List<CtaAppointmentGuestRequest>? CtaAppointmentGuestRequest { get; set; }
     }
 }
