@@ -14,5 +14,6 @@ namespace DataLayer.Models.Modulo_Citas
         public Usuario? Usuario { get; set; }
         public bool IsMailbox { get; set; } = false;
         public string Email { get; set; } = null!;
+        public long CompanyId { get; set; }
     }
 }
