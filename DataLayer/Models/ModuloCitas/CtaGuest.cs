@@ -3,6 +3,7 @@ using DataLayer.Models.ModuloGeneral.Empresa;
 using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using DataLayer.Models.Modulo_Citas;
 
 namespace DataLayer.Models.ModuloCitas
 {
@@ -19,5 +20,8 @@ namespace DataLayer.Models.ModuloCitas
 
         [ForeignKey("CompanyId")]
         public virtual GnEmpresa? Company { get; set; }
+        public int AppointmentId { get; set; }
+        [ForeignKey("AppointmentId")]
+        public CtaAppointments? CtaAppointments { get; set; }
     }
 }

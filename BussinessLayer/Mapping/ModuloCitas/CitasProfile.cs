@@ -13,19 +13,20 @@ using BussinessLayer.DTOs.ModuloCitas.CtaState;
 using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
 using DataLayer.Models.Modulo_Citas;
 using DataLayer.Models.ModuloCitas;
+using DataLayer.Models.ModuloGeneral.Seguridad;
 
 namespace BussinessLayer.Mapping.ModuloCitas
 {
     public class CitasProfile : Profile
     {
-        public CitasProfile() 
+        public CitasProfile()
         {
             CreateMap<CtaAppointmentManagementRequest, CtaAppointmentManagement>()
                 .ReverseMap();
             CreateMap<CtaAppointmentManagementResponse, CtaAppointmentManagement>()
                .ReverseMap();
 
-            CreateMap<CtaAppointmentMovementsRequest,  CtaAppointmentMovements>()
+            CreateMap<CtaAppointmentMovementsRequest, CtaAppointmentMovements>()
                 .ReverseMap();
             CreateMap<CtaAppointmentMovementsResponse, CtaAppointmentMovements>()
                 .ReverseMap();
@@ -45,13 +46,43 @@ namespace BussinessLayer.Mapping.ModuloCitas
                .ForPath(dest => dest.CtaAppointmentContacts, opt => opt.MapFrom(src => src.CtaAppointmentContacts))
                .ReverseMap();
 
-               CreateMap<AppointmentInformation, CtaAppointmentsRequest>()
-               .ForPath(dest => dest.CtaAppointmentUsers, opt => opt.MapFrom(src => src.CtaAppointmentUsers))
-               .ForPath(dest => dest.CtaAppointmentContacts, opt => opt.MapFrom(src => src.CtaAppointmentContacts))
-               .ReverseMap();
+            CreateMap<AppointmentInformation, CtaAppointmentsRequest>()
+            .ForPath(dest => dest.CtaAppointmentUsers, opt => opt.MapFrom(src => src.CtaAppointmentUsers))
+            .ForPath(dest => dest.CtaAppointmentContacts, opt => opt.MapFrom(src => src.CtaAppointmentContacts))
+            .ReverseMap();
 
-            CreateMap<CtaAppointmentsResponse, CtaAppointments>()
-               .ReverseMap();
+            #region AppointmentResponse
+            CreateMap<CtaAppointments, CtaAppointmentsResponse>()
+    .ForMember(dest => dest.ReasonDescription, opt => opt.MapFrom(src => src.CtaAppointmentReason.Description))
+    .ForMember(dest => dest.MeetingPlaceDescription, opt => opt.MapFrom(src => src.CtaMeetingPlace.Description))
+    .ForMember(dest => dest.StateDescription, opt => opt.MapFrom(src => src.CtaState.Description))
+    .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP))
+    .ForMember(dest => dest.CtaAppointmentContacts, opt => opt.MapFrom(src => src.CtaAppointmentContacts))
+    .ForMember(dest => dest.CtaGuest, opt => opt.MapFrom(src => src.CtaAppointmentGuest))
+    .ForMember(dest => dest.CtaAppointmentManagement, opt => opt.MapFrom(src => src.CtaAppointmentManagement))
+    .ForMember(dest => dest.CtaAppointmentUsers, opt => opt.MapFrom(src => src.CtaAppointmentUsers.Select(x => x.Usuario))); // 🔥 Mapear Usuario directamente
+
+
+            CreateMap<CtaAppointmentContacts, CtaContactInformation>();
+            CreateMap<CtaGuest, CtaGuestInformation>();
+            CreateMap<CtaAppointmentManagement, CtaManagmentInformation>();
+
+            // Mapeo de la tabla intermedia `CtaAppointmentUsers`
+            CreateMap<CtaAppointmentUsers, CtaUserInformation>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Usuario.Id))
+                .ForMember(dest => dest.CodigoEmp, opt => opt.MapFrom(src => src.Usuario.CodigoEmp))
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Usuario.Nombre))
+                .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Usuario.Apellido))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Usuario.Email))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.Usuario.IsActive))
+                .ReverseMap();
+
+            CreateMap<CtaUserInformation, Usuario>().ReverseMap();
+            CreateMap<CtaContactInformation, CtaAppointmentContacts>().ReverseMap();
+            CreateMap<CtaGuestInformation, CtaGuest>().ReverseMap();
+            CreateMap<CtaManagmentInformation, CtaAppointmentManagement>().ReverseMap();
+
+            #endregion
 
             CreateMap<CtaConfiguracionRequest, CtaConfiguration>()
                 .ReverseMap();

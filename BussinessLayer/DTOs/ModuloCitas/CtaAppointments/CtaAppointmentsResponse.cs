@@ -1,9 +1,4 @@
-﻿using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentGuest;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
-using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
-using BussinessLayer.DTOs.ModuloCitas.CtaState;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
 {
@@ -13,13 +8,13 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public string AppointmentCode { get; set; } = null!;
         public string? Description { get; set; }
         public int IdReasonAppointment { get; set; }
-        public CtaAppointmentReasonResponse? AppointmentReason { get; set; }
+        public string? ReasonDescription { get; set; }
         public DateTime AppointmentDate { get; set; }
         public TimeSpan AppointmentTime { get; set; }
         public int IdPlaceAppointment { get; set; }
-        public CtaMeetingPlaceResponse? MeetingPlace { get; set; }
+        public string? MeetingPlaceDescription { get; set; }
         public int IdState { get; set; }
-        public CtaStateResponse? State { get; set; }
+        public string? StateDescription { get; set; }
         public bool IsConditionedTime { get; set; }
         public DateTime EndAppointmentDate { get; set; }
         public TimeSpan EndAppointmentTime { get; set; }
@@ -37,13 +32,13 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public long CompanyId { get; set; }
         public string? CompanyName { get; set;}
          [JsonPropertyName("Contacts")]
-        public List<CtaAppointmentContactsResponse>? CtaAppointmentContacts { get; set; } = new();
+        public List<CtaContactInformation>? CtaAppointmentContacts { get; set; } = new();
         [JsonPropertyName("UsersInvited")]
-        public List<CtaAppointmentUsersResponse>? CtaAppointmentUsers { get; set; } = new();
+        public List<CtaUserInformation>? CtaAppointmentUsers { get; set; } = new();
         [JsonPropertyName("Management")]
-        public List<CtaAppointmentManagementResponse>? CtaAppointmentManagement { get; set; } = new();
+        public List<CtaManagmentInformation>? CtaAppointmentManagement { get; set; } = new();
         [JsonPropertyName("Guests")]
-        public List<CtaAppointmentGuestResponse>? CtaAppointmentGuestResponse { get; set; } = new();
+        public List<CtaGuestInformation>? CtaGuest { get; set; } = new();
 
     }
 }

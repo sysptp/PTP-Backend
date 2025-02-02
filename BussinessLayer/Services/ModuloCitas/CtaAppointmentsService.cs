@@ -65,15 +65,23 @@ namespace DataLayer.Models.Modulo_Citas
             return _mapper.Map<CtaAppointmentsResponse>(appointmentEntity);
         }
 
-        //public override async Task<List<CtaAppointmentsResponse>> GetAllDto()
-        //{
-        //    var appointments = await _repository.GetAllWithIncludeAsync(new List<string>
-        //    { "CtaAppointmentReason", "CtaMeetingPlace","CtaState", "CtaAppointmentContacts", "CtaAppointmentUsers", "CtaAppointmentManagement"});
+        public override async Task<List<CtaAppointmentsResponse>> GetAllDto()
+        {
+            var appointments = await _repository.GetAllWithIncludeAsync(new List<string>
+            { "CtaAppointmentReason", 
+                "CtaMeetingPlace",
+                "CtaState",
+                "CtaAppointmentContacts",
+                "CtaAppointmentUsers",
+                "CtaAppointmentManagement",
+                 "CtaAppointmentContacts.Contact",  
+                 "CtaAppointmentUsers.Usuario",
+                 "CtaAppointmentGuest.Guest"});
 
-        //    var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments);
+            var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments);
 
-        //    return appointmentDtoList;
-        //}
+            return appointmentDtoList;
+        }
 
     }
 }
