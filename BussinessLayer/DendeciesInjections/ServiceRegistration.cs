@@ -68,6 +68,8 @@ using BussinessLayer.FluentValidations.Generic;
 using BussinessLayer.Services.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloGeneral;
 using BussinessLayer.Services.ModuloGeneral;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Email;
+using BussinessLayer.Services.ModuloGeneral.Email;
 
 public static class ServiceRegistration
 {
@@ -254,6 +256,7 @@ public static class ServiceRegistration
         #region Modulo General
 
         services.AddScoped<IGnRepeatUnitService,GnRepeatUnitService>();
+        services.AddScoped<IGnEmailGenericSerivce,GnEmailService>();
         #endregion 
 
         #region Otros

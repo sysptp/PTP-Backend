@@ -5,15 +5,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using IdentityLayer.Entities;
-using AutoMapper;
 using BussinessLayer.Settings;
 using System.Security.Cryptography;
-using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
-using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 using BussinessLayer.DTOs.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using Microsoft.EntityFrameworkCore;
 using BussinessLayer.Interfaces.Services.IAccount;
+using Microsoft.AspNetCore.WebUtilities;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Email;
+using Microsoft.AspNetCore.Identity.Data;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 
 namespace IdentityLayer.Services
 {
@@ -22,15 +23,18 @@ namespace IdentityLayer.Services
         private readonly UserManager<Usuario> _userManager;
         private readonly JWTSettings _jwtSettings;
         private readonly RoleManager<GnPerfil> _roleManager;
+        private readonly IGnEmailGenericSerivce _emailService;
 
         public AccountService(
               UserManager<Usuario> userManager,
               RoleManager<GnPerfil> roleManager,
-              IOptions<JWTSettings> jwtSettings)
+              IOptions<JWTSettings> jwtSettings,
+              IGnEmailGenericSerivce emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
+            _emailService = emailService;
         }
 
         public async Task<bool> VerifyUser(string UserName)
@@ -130,7 +134,7 @@ namespace IdentityLayer.Services
                 signingCredentials: creds);
         }
 
-        public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin)
+        public async Task<RegisterResponse> RegisterUserAsync(BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest request, string origin)
         {
             try
             {
@@ -200,7 +204,7 @@ namespace IdentityLayer.Services
 
             return BitConverter.ToString(ramdomBytes).Replace("-", "");
         }
-        private Usuario MapRegisterRequestToUsuario(RegisterRequest request)
+        private Usuario MapRegisterRequestToUsuario(BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest request)
         {
             return new Usuario
             {
@@ -216,6 +220,207 @@ namespace IdentityLayer.Services
                 IpAdiccion = request.UserIP
             };
         }
+        #endregion
+
+        #region New AddOns
+        public async Task<string> SendConfirmationEmailAsync(string email, string origin)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return $"No accounts registered with {email}.";
+            }
+
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var route = "api/account/confirm-email";
+            var verificationUri = QueryHelpers.AddQueryString($"{origin}/{route}", "userId", user.Id.ToString());
+            verificationUri = QueryHelpers.AddQueryString(verificationUri, "token", code);
+
+            await _emailService.SendAsync();
+
+            //await _emailService.SendAsync(new EmailRequest
+            //{
+            //    To = user.Email,
+            //    Subject = "Confirm your email",
+            //    Body = $"Please confirm your account by visiting this URL: {verificationUri}"
+            //});
+
+            return "Confirmation email sent. Please check your email.";
+        }
+
+        public async Task<string> SendPasswordResetEmailAsync(string email, string origin)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return $"No accounts registered with {email}.";
+            }
+
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var route = "api/account/reset-password";
+            var resetUri = QueryHelpers.AddQueryString($"{origin}/{route}", "token", code);
+
+            await _emailService.SendAsync();
+
+            //await _emailService.SendAsync(new EmailRequest
+            //{
+            //    To = user.Email,
+            //    Subject = "Confirm your email",
+            //    Body = $"Please confirm your account by visiting this URL: {verificationUri}"
+            //});
+
+            return "Password reset email sent. Please check your email.";
+        }
+
+        public async Task<string> EnableTwoFactorAuthenticationAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return "User not found.";
+            }
+
+            await _userManager.SetTwoFactorEnabledAsync(user, true);
+            return "Two-factor authentication has been enabled.";
+        }
+
+        public async Task<RegisterResponse> RegisterExternalUserAsync(ExternalLoginInfo info, string origin)
+        {
+            var response = new RegisterResponse { HasError = false };
+
+            var user = new Usuario
+            {
+                UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                EmailConfirmed = true,
+                Nombre = info.Principal.FindFirstValue(ClaimTypes.GivenName),
+                Apellido = info.Principal.FindFirstValue(ClaimTypes.Surname)
+            };
+
+            var result = await _userManager.CreateAsync(user);
+            if (!result.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = string.Join(", ", result.Errors.Select(e => e.Description));
+                return response;
+            }
+
+            await _userManager.AddLoginAsync(user, info);
+            return response;
+        }
+
+        public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request, string origin)
+        {
+            ForgotPasswordResponse response = new()
+            {
+                HasError = false
+            };
+
+            // Buscar al usuario por su correo electrónico
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                response.HasError = true;
+                response.Error = $"No hay ninguna cuenta registrada con el correo {request.Email}.";
+                return response;
+            }
+
+            // Generar el token de reseteo de contraseña
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            resetToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken)); // Codificar el token para URL
+
+            // Construir la URL de reseteo de contraseña
+            var resetUri = QueryHelpers.AddQueryString($"{origin}/reset-password", "token", resetToken);
+
+            // Enviar el correo electrónico con el enlace de reseteo
+            //await _emailService.SendAsync(new EmailRequest
+            //{
+            //    To = user.Email,
+            //    Subject = "Restablecer contraseña",
+            //    Body = $"Para restablecer tu contraseña, haz clic en el siguiente enlace: {resetUri}"
+            //});
+
+            return response;
+        }
+
+        public async Task<ResetPasswordResponse> ResetPasswordAsync(BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario.ResetPasswordRequest request)
+        {
+            ResetPasswordResponse response = new()
+            {
+                HasError = false
+            };
+
+            // Buscar al usuario por su correo electrónico
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                response.HasError = true;
+                response.Error = $"No hay ninguna cuenta registrada con el correo {request.Email}.";
+                return response;
+            }
+
+            // Decodificar el token de reseteo
+            var resetToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
+
+            // Restablecer la contraseña
+            var result = await _userManager.ResetPasswordAsync(user, resetToken, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = "Ocurrió un error al restablecer la contraseña. Asegúrate de que el token sea válido y que la nueva contraseña cumpla con los requisitos.";
+                return response;
+            }
+
+            return response;
+        }
+
+        //public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
+        //{
+        //    var response = new AuthenticationResponse();
+
+        //    var user = await _userManager.FindByEmailAsync(request.Email) ?? await _userManager.FindByNameAsync(request.Email);
+        //    if (user == null)
+        //    {
+        //        response.HasError = true;
+        //        response.Error = $"No accounts registered with {request.Email}.";
+        //        return response;
+        //    }
+
+        //    if (!await _userManager.CheckPasswordAsync(user, request.Password))
+        //    {
+        //        response.HasError = true;
+        //        response.Error = "Invalid credentials.";
+        //        return response;
+        //    }
+
+        //    var empresaParametros = await _dbContext.EmpresaParametros.FirstOrDefaultAsync(ep => ep.EmpresaId == user.CodigoEmp);
+        //    if (empresaParametros?.Requiere2FA == true && await _userManager.GetTwoFactorEnabledAsync(user))
+        //    {
+        //        var providers = await _userManager.GetValidTwoFactorProvidersAsync(user);
+        //        if (providers.Contains("Email"))
+        //        {
+        //            var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+        //            await _emailService.SendAsync(new EmailRequest
+        //            {
+        //                To = user.Email,
+        //                Subject = "Your 2FA Code",
+        //                Body = $"Your two-factor authentication code is: {token}"
+        //            });
+
+        //            response.Requires2FA = true;
+        //            response.UserId = user.Id;
+        //            return response;
+        //        }
+        //    }
+
+        //    // Generar JWT y refrescar token si no se requiere 2FA o ya se ha verificado
+        //    response.JWToken = new JwtSecurityTokenHandler().WriteToken(GenerateJWToken(user));
+        //    response.RefreshToken = GenerateRefreshToken().Token;
+        //    return response;
+        //}
+
 
 
         #endregion

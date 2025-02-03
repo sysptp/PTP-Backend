@@ -4,6 +4,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.Interfaces.Services.IAccount;
 using BussinessLayer.Wrappers;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
@@ -16,7 +17,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
     public class AutenticacionController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly IValidator<RegisterRequest> _validator;
+        private readonly IValidator<BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest> _validator;
         private readonly IValidator<LoginRequestDTO> _validatorLogin;
 
         public AutenticacionController(IAccountService accountService, IValidator<LoginRequestDTO> validatorLogin, IValidator<RegisterRequest> validator)
@@ -69,7 +70,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "Registro de Usuarios", Description = "Endpoint para registrar los usuarios")]
-        public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request)
+        public async Task<IActionResult> RegisterAsync([FromBody] BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest request)
         {
             try
             {
@@ -86,6 +87,102 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 
                 return registrationResponse.HasError ? BadRequest(Response<string>.BadRequest(new List<string> { registrationResponse?.Error }, 400))
                     : Ok(Response<object>.Created(registrationResponse, "Registro de usuario exitoso"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
+            }
+        }
+
+        [HttpPost("ForgotPassword")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "Olvidé mi contraseña", Description = "Envía un correo para restablecer la contraseña")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            try
+            {
+                var origin = Request?.Headers["origin"].ToString() ?? string.Empty;
+                var response = await _accountService.ForgotPasswordAsync(request, origin);
+
+                if (response.HasError)
+                {
+                    return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
+                }
+
+                return Ok(Response<string>.Success("Correo de restablecimiento enviado. Por favor, revisa tu bandeja de entrada."));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
+            }
+        }
+
+        [HttpPost("ResetPassword")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "Restablecer contraseña", Description = "Restablece la contraseña del usuario")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            try
+            {
+                var response = await _accountService.ResetPasswordAsync(request);
+
+                if (response.HasError)
+                {
+                    return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
+                }
+
+                return Ok(Response<string>.Success("Contraseña restablecida exitosamente."));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
+            }
+        }
+
+        [HttpGet("ConfirmEmail")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "Confirmar correo electrónico", Description = "Confirma el correo electrónico del usuario")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
+        {
+            try
+            {
+                var result = await _accountService.ConfirmAccountAsync(userId, token);
+
+                if (result.Contains("error", StringComparison.OrdinalIgnoreCase))
+                {
+                    return BadRequest(Response<string>.BadRequest(new List<string> { result }, 400));
+                }
+
+                return Ok(Response<string>.Success(result));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
+            }
+        }
+
+        [HttpPost("ExternalLogin")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "Autenticación externa", Description = "Autentica al usuario mediante proveedores externos (Google, Microsoft, Facebook)")]
+        public async Task<IActionResult> ExternalLogin([FromBody] ExternalLoginRequest request)
+        {
+            try
+            {
+                var response = await _accountService.AuthenticateExternalAsync(request.Provider, request.Token);
+
+                if (response.HasError)
+                {
+                    return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
+                }
+
+                return Ok(Response<object>.Success(response, "Autenticación externa exitosa"));
             }
             catch (Exception ex)
             {

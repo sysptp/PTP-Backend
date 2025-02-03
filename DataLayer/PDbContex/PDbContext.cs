@@ -205,6 +205,7 @@ namespace DataLayer.PDbContex
         public DbSet<GnUploadFileParametro> GnUploadFileParametro { get; set; }
         public DbSet<GnTecnoAlmacenExterno> GnTecnoAlmacenExterno { get; set; }
         public DbSet<GnRepeatUnit> GnRepeatUnit { get; set; }
+        public DbSet<GnParametrosGenerales> GnParametrosGenerales { get; set; }
         #endregion
 
         #region Auditoria

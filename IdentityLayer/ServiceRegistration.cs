@@ -88,6 +88,23 @@ namespace IdentityLayer
 
             });
 
+            services.AddAuthentication()
+        .AddGoogle(options =>
+        {
+            options.ClientId = configuration["Authentication:Google:ClientId"];
+            options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+        })
+        .AddMicrosoftAccount(options =>
+        {
+            options.ClientId = configuration["Authentication:Microsoft:ClientId"];
+            options.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
+        })
+        .AddFacebook(options =>
+        {
+            options.AppId = configuration["Authentication:Facebook:AppId"];
+            options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+        });
+
             #endregion
             ServiceConfiguration(services);
 
