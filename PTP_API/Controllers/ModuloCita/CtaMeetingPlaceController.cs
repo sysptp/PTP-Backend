@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener lugares de reunión", Description = "Devuelve una lista de lugares de reunión o un lugar específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAllMeetingPlaces([FromQuery] int? IdMeetingPlace)
+        public async Task<IActionResult> GetAllMeetingPlaces([FromQuery] int? IdMeetingPlace,long companyId)
         {
             try
             {
@@ -51,7 +51,8 @@ namespace PTP_API.Controllers.ModuloCita
                     if (places == null || !places.Any())
                         return StatusCode(204, Response<IEnumerable<CtaMeetingPlaceResponse>>.NoContent("No hay lugares de reunión disponibles."));
 
-                    return Ok(Response<IEnumerable<CtaMeetingPlaceResponse>>.Success(places, "Lugares de reunión obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<CtaMeetingPlaceResponse>>.Success(
+                        companyId != null ? places.Where(x => x.CompanyId == companyId).ToList() : places, "Lugares de reunión obtenidos correctamente."));
                 }
             }
             catch (Exception ex)

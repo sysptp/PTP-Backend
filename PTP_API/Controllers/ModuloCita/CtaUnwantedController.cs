@@ -32,7 +32,7 @@ namespace PTP_API.Controllers.ModuloCitas
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener contactos no deseados", Description = "Devuelve una lista de contactos no deseados o un contacto específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAllUnwanted([FromQuery] int? IdUnwanted)
+        public async Task<IActionResult> GetAllUnwanted([FromQuery] int? IdUnwanted, long? companyId)
         {
             try
             {
@@ -50,7 +50,8 @@ namespace PTP_API.Controllers.ModuloCitas
                     if (unwanteds == null || !unwanteds.Any())
                         return StatusCode(204, Response<IEnumerable<CtaUnwantedResponse>>.NoContent("No hay contactos no deseados disponibles."));
 
-                    return Ok(Response<IEnumerable<CtaUnwantedResponse>>.Success(unwanteds, "Contactos no deseados obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<CtaUnwantedResponse>>.Success(
+                        companyId != null ? unwanteds.Where(x => x.CompanyId == companyId).ToList() : unwanteds, "Contactos no deseados obtenidos correctamente."));
                 }
             }
             catch (Exception ex)
