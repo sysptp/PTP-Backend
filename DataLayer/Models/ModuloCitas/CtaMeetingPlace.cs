@@ -1,5 +1,4 @@
-﻿
-using DataLayer.Models.Otros;
+﻿using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models.Modulo_Citas
@@ -10,6 +9,6 @@ namespace DataLayer.Models.Modulo_Citas
         public int IdMeetingPlace { get; set; }
         public string? Description { get; set; }
         public string? Comment { get; set; }
-       
+        public long? CompanyId { get; set; }
     }
 }

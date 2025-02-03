@@ -32,7 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener configuraciones de correo electrónico", Description = "Devuelve una lista de configuraciones de correo electrónico o una configuración específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllConfigurations([FromQuery] int? IdEmailConfiguration)
+        public async Task<IActionResult> GetAllConfigurations([FromQuery] int? IdEmailConfiguration, long? companyId)
         {
             try
             {
@@ -50,7 +50,8 @@ namespace PTP_API.Controllers.ModuloCita
                     if (configurations == null || !configurations.Any())
                         return StatusCode(204, Response<IEnumerable<CtaEmailConfiguracionResponse>>.NoContent("No hay configuraciones disponibles."));
 
-                    return Ok(Response<IEnumerable<CtaEmailConfiguracionResponse>>.Success(configurations, "Configuraciones obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<CtaEmailConfiguracionResponse>>.Success(
+                        companyId != null ? configurations.Where(x => x.CompanyId == companyId).ToList() : configurations, "Configuraciones obtenidas correctamente."));
                 }
             }
             catch (Exception ex)

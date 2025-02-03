@@ -7,5 +7,6 @@
         public bool Email { get; set; } = false;
         public bool Sms { get; set; } = false;
         public bool Whatsapp { get; set; } = false;
+        public long? CompanyId { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener razones de citas", Description = "Devuelve una lista de razones de citas o una razón específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllReasons([FromQuery] int? IdReason)
+        public async Task<IActionResult> GetAllReasons([FromQuery] int? IdReason,long? companyId)
         {
             try
             {
@@ -51,7 +51,8 @@ namespace PTP_API.Controllers.ModuloCita
                     if (reasons == null || !reasons.Any())
                         return StatusCode(204, Response<IEnumerable<CtaAppointmentReasonResponse>>.NoContent("No hay razones disponibles."));
 
-                    return Ok(Response<IEnumerable<CtaAppointmentReasonResponse>>.Success(reasons, "Razones obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<CtaAppointmentReasonResponse>>.Success(
+                        companyId != null ? reasons.Where(x => x.CompanyId == companyId).ToList() : reasons, "Razones obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
