@@ -10,11 +10,10 @@ using System.Security.Cryptography;
 using BussinessLayer.DTOs.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using Microsoft.EntityFrameworkCore;
-using BussinessLayer.Interfaces.Services.IAccount;
 using Microsoft.AspNetCore.WebUtilities;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Email;
-using Microsoft.AspNetCore.Identity.Data;
-using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
+using BussinessLayer.Services.Otros.AutenticationStrategy;
+using BussinessLayer.Interfaces.Services.IAccount;
 
 namespace IdentityLayer.Services
 {
@@ -24,17 +23,20 @@ namespace IdentityLayer.Services
         private readonly JWTSettings _jwtSettings;
         private readonly RoleManager<GnPerfil> _roleManager;
         private readonly IGnEmailGenericSerivce _emailService;
+        private readonly TokenVerificationFactory _tokenVerificationFactory;
 
         public AccountService(
               UserManager<Usuario> userManager,
               RoleManager<GnPerfil> roleManager,
               IOptions<JWTSettings> jwtSettings,
-              IGnEmailGenericSerivce emailService)
+              IGnEmailGenericSerivce emailService,
+              TokenVerificationFactory tokenVerificationFactory)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
             _emailService = emailService;
+            _tokenVerificationFactory = tokenVerificationFactory;
         }
 
         public async Task<bool> VerifyUser(string UserName)
@@ -59,9 +61,9 @@ namespace IdentityLayer.Services
             var response = new AuthenticationResponse();
 
             var user = await _userManager.Users
-     .Include(u => u.GnPerfil) 
-     .Include(u => u.GnEmpresa) 
-     .Include(u => u.GnSucursal) 
+     .Include(u => u.GnPerfil)
+     .Include(u => u.GnEmpresa)
+     .Include(u => u.GnSucursal)
      .FirstOrDefaultAsync(u => u.Email == request.UserCredential || u.UserName == request.UserCredential);
 
             if (user == null)
@@ -70,7 +72,7 @@ namespace IdentityLayer.Services
                 response.Error = $"{request.UserCredential} no tiene cuenta registrada";
                 return response;
             }
-            if (!user.IsActive) 
+            if (!user.IsActive)
             {
                 response.HasError = true;
                 response.Error = $"{request.UserCredential} se encuentra inactivo";
@@ -345,7 +347,7 @@ namespace IdentityLayer.Services
             return response;
         }
 
-        public async Task<ResetPasswordResponse> ResetPasswordAsync(BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario.ResetPasswordRequest request)
+        public async Task<ResetPasswordResponse> ResetPasswordAsync(BussinessLayer.DTOs.Account.ResetPasswordRequest request)
         {
             ResetPasswordResponse response = new()
             {
@@ -421,6 +423,69 @@ namespace IdentityLayer.Services
         //    return response;
         //}
 
+
+        #region External Register Logic
+        public async Task<RegisterResponse> RegisterExternalUserAsync(ExternalRegisterRequest request)
+        {
+            var response = new RegisterResponse { HasError = false };
+
+            try
+            {
+                // 1. Verificación de token usando Strategy
+                var strategy = _tokenVerificationFactory.CreateStrategy(request.Provider);
+                var userInfo = await strategy.VerifyTokenAsync(request.Token);
+
+                // 2. Creación/Actualización de usuario
+                var user = await FindOrCreateUserAsync(userInfo);
+
+                // 3. Asignación de roles y compañía
+                await AssignEnterpriseDataAsync(user, request);
+
+                response.UserId = user.Id;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.HasError = true;
+                response.Error = ex.Message;
+                return response;
+            }
+        }
+
+        private async Task<Usuario> FindOrCreateUserAsync(ExternalUserInfo userInfo)
+        {
+            var user = await _userManager.FindByEmailAsync(userInfo.Email) ?? new Usuario
+            {
+                UserName = userInfo.Email,
+                Email = userInfo.Email,
+                Nombre = userInfo.FirstName,
+                Apellido = userInfo.LastName,
+                EmailConfirmed = true,
+                PhoneNumber = userInfo.PhoneNumber
+            };
+
+            if (user.Id == 0)
+            {
+                var result = await _userManager.CreateAsync(user);
+                if (!result.Succeeded) throw new Exception(string.Join(", ", result.Errors));
+            }
+
+            return user;
+        }
+
+        private async Task AssignEnterpriseDataAsync(Usuario user, ExternalRegisterRequest request)
+        {
+            var role = await _roleManager.FindByIdAsync(request.RoleId.ToString());
+            if (role == null) throw new Exception("Rol no encontrado");
+
+            await _userManager.AddToRoleAsync(user, role.Name);
+
+            user.CodigoEmp = request.CompanyId;
+            user.CodigoSuc = request.SucursalId;
+            await _userManager.UpdateAsync(user);
+        }
+
+        #endregion
 
 
         #endregion

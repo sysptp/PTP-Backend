@@ -1,5 +1,4 @@
-﻿
-namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario
+﻿namespace BussinessLayer.DTOs.Account
 {
     public class ResetPasswordRequest
     {

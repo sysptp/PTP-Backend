@@ -13,6 +13,8 @@ using BussinessLayer.Settings;
 using Identity.Context;
 using BussinessLayer.Wrappers;
 using BussinessLayer.Interfaces.Services.IAccount;
+using BussinessLayer.Interfaces.Services.IOtros;
+using BussinessLayer.Services.Otros.AutenticationStrategy;
 
 namespace IdentityLayer
 {
@@ -32,7 +34,7 @@ namespace IdentityLayer
          .AddDefaultTokenProviders();
 
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
-           
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -108,6 +110,20 @@ namespace IdentityLayer
             #endregion
             ServiceConfiguration(services);
 
+            #region Autentication Provider
+
+            services.AddHttpClient();
+            services.AddScoped<ITokenVerificationStrategy, GoogleTokenVerificationStrategy>(sp =>
+     new GoogleTokenVerificationStrategy(
+         sp.GetRequiredService<IHttpClientFactory>().CreateClient(),
+         //configuration["Authentication:Google:ClientId"]
+         "948778261203-vav00sppe1hiofu893chpem98qsfvirv.apps.googleusercontent.com"
+     )
+ );
+
+            services.AddScoped<TokenVerificationFactory>();
+            #endregion
+
         }
 
         #region "Private methods"
@@ -135,6 +151,7 @@ namespace IdentityLayer
             #endregion
         }
         #endregion
+
 
     }
 }

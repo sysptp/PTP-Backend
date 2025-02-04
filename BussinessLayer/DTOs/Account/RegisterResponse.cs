@@ -4,6 +4,6 @@ namespace BussinessLayer.DTOs.Account
     {
         public bool HasError { get; set; }
         public string? Error { get; set; }
-        public string? UserId { get; set; }
+        public int? UserId { get; set; }
     }
 }

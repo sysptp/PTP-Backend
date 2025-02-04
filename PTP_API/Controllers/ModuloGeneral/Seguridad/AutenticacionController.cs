@@ -1,13 +1,16 @@
 ﻿
+using BussinessLayer.DTOs.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.Interfaces.Services.IAccount;
 using BussinessLayer.Wrappers;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
+using ForgotPasswordRequest = BussinessLayer.DTOs.Account.ForgotPasswordRequest;
+using RegisterRequest = BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest;
+using ResetPasswordRequest = BussinessLayer.DTOs.Account.ResetPasswordRequest;
 
 namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 {
@@ -143,51 +146,75 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
             }
         }
 
-        [HttpGet("ConfirmEmail")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation(Summary = "Confirmar correo electrónico", Description = "Confirma el correo electrónico del usuario")]
-        public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
-        {
-            try
-            {
-                var result = await _accountService.ConfirmAccountAsync(userId, token);
+        //[HttpGet("ConfirmEmail")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[SwaggerOperation(Summary = "Confirmar correo electrónico", Description = "Confirma el correo electrónico del usuario")]
+        //public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
+        //{
+        //    try
+        //    {
+        //        var result = await _accountService.ConfirmAccountAsync(userId, token);
 
-                if (result.Contains("error", StringComparison.OrdinalIgnoreCase))
-                {
-                    return BadRequest(Response<string>.BadRequest(new List<string> { result }, 400));
-                }
+        //        if (result.Contains("error", StringComparison.OrdinalIgnoreCase))
+        //        {
+        //            return BadRequest(Response<string>.BadRequest(new List<string> { result }, 400));
+        //        }
 
-                return Ok(Response<string>.Success(result));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, Response<string>.ServerError(ex.Message));
-            }
-        }
+        //        return Ok(Response<string>.Success(result));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, Response<string>.ServerError(ex.Message));
+        //    }
+        //}
 
-        [HttpPost("ExternalLogin")]
+        [HttpPost("RegisterExternal")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation(Summary = "Autenticación externa", Description = "Autentica al usuario mediante proveedores externos (Google, Microsoft, Facebook)")]
-        public async Task<IActionResult> ExternalLogin([FromBody] ExternalLoginRequest request)
+        [SwaggerOperation(Summary = "Registro de usuarios mediante proveedores externos", Description = "Endpoint para registrar usuarios utilizando Google, Microsoft o Facebook")]
+        public async Task<IActionResult> RegisterExternalAsync([FromBody] ExternalRegisterRequest request)
         {
             try
             {
-                var response = await _accountService.AuthenticateExternalAsync(request.Provider, request.Token);
+                var response = await _accountService.RegisterExternalUserAsync(request);
 
                 if (response.HasError)
                 {
                     return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
                 }
 
-                return Ok(Response<object>.Success(response, "Autenticación externa exitosa"));
+                return Ok(Response<object>.Created(response, "Registro de usuario externo exitoso"));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
+
+        //[HttpPost("ExternalLogin")]
+        //[Consumes(MediaTypeNames.Application.Json)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[SwaggerOperation(Summary = "Autenticación externa", Description = "Autentica al usuario mediante proveedores externos (Google, Microsoft, Facebook)")]
+        //public async Task<IActionResult> ExternalLogin([FromBody] ExternalLoginRequest request)
+        //{
+        //    try
+        //    {
+        //        var response = await _accountService.AuthenticateExternalAsync(request.Provider, request.Token);
+
+        //        if (response.HasError)
+        //        {
+        //            return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
+        //        }
+
+        //        return Ok(Response<object>.Success(response, "Autenticación externa exitosa"));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, Response<string>.ServerError(ex.Message));
+        //    }
+        //}
     }
 }
