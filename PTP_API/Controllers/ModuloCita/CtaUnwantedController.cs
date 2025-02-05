@@ -79,7 +79,7 @@ namespace PTP_API.Controllers.ModuloCitas
                 }
 
                 var response = await _unwantedService.Add(unwantedDto);
-                return CreatedAtAction(nameof(GetAllUnwanted), response);
+                return CreatedAtAction(nameof(GetAllUnwanted), Response<CtaUnwantedResponse>.Created(response));
             }
             catch (Exception ex)
             {

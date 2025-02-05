@@ -89,10 +89,6 @@ namespace BussinessLayer.Validations.ModuloCitas.CtaAppointments
                 .GreaterThan(DateTime.Now.Date)
                 .WithMessage("La fecha de la cita (AppointmentDate) debe ser en el futuro.");
 
-            RuleFor(x => x.EndAppointmentDate)
-                .GreaterThanOrEqualTo(x => x.AppointmentDate)
-                .WithMessage("La fecha de finalización (EndAppointmentDate) debe ser igual o posterior a la fecha de la cita.");
-
             RuleFor(x => x.AppointmentTime)
       .NotEmpty().WithMessage("El tiempo de inicio (AppointmentTime) es obligatorio.");
 

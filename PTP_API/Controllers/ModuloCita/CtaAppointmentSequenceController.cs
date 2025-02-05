@@ -76,7 +76,7 @@ namespace PTP_API.Controllers.ModuloCita
                 }
 
                 var response = await _appointmentSequenceService.Add(sequenceRequest);
-                return CreatedAtAction(nameof(GetAllSequences), response);
+                return CreatedAtAction(nameof(GetAllSequences), Response<CtaAppointmentSequenceResponse>.Created(response));
             }
             catch (Exception ex)
             {

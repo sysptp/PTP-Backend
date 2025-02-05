@@ -12,7 +12,6 @@ using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.WebUtilities;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Email;
-using BussinessLayer.Services.Otros.AutenticationStrategy;
 using BussinessLayer.Interfaces.Services.IAccount;
 
 namespace IdentityLayer.Services
@@ -22,21 +21,21 @@ namespace IdentityLayer.Services
         private readonly UserManager<Usuario> _userManager;
         private readonly JWTSettings _jwtSettings;
         private readonly RoleManager<GnPerfil> _roleManager;
-        private readonly IGnEmailGenericSerivce _emailService;
-        private readonly TokenVerificationFactory _tokenVerificationFactory;
+        private readonly IGnEmailSerivce _emailService;
+        //private readonly TokenVerificationFactory _tokenVerificationFactory;
 
         public AccountService(
               UserManager<Usuario> userManager,
               RoleManager<GnPerfil> roleManager,
               IOptions<JWTSettings> jwtSettings,
-              IGnEmailGenericSerivce emailService,
-              TokenVerificationFactory tokenVerificationFactory)
+              IGnEmailSerivce emailService
+              /*TokenVerificationFactory tokenVerificationFactory*/)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
             _emailService = emailService;
-            _tokenVerificationFactory = tokenVerificationFactory;
+            //_tokenVerificationFactory = tokenVerificationFactory;
         }
 
         public async Task<bool> VerifyUser(string UserName)
@@ -425,32 +424,32 @@ namespace IdentityLayer.Services
 
 
         #region External Register Logic
-        public async Task<RegisterResponse> RegisterExternalUserAsync(ExternalRegisterRequest request)
-        {
-            var response = new RegisterResponse { HasError = false };
+        //public async Task<RegisterResponse> RegisterExternalUserAsync(ExternalRegisterRequest request)
+        //{
+        //    var response = new RegisterResponse { HasError = false };
 
-            try
-            {
-                // 1. Verificación de token usando Strategy
-                var strategy = _tokenVerificationFactory.CreateStrategy(request.Provider);
-                var userInfo = await strategy.VerifyTokenAsync(request.Token);
+        //    try
+        //    {
+        //        // 1. Verificación de token usando Strategy
+        //        //var strategy = _tokenVerificationFactory.CreateStrategy(request.Provider);
+        //        var userInfo = await strategy.VerifyTokenAsync(request.Token);
 
-                // 2. Creación/Actualización de usuario
-                var user = await FindOrCreateUserAsync(userInfo);
+        //        // 2. Creación/Actualización de usuario
+        //        var user = await FindOrCreateUserAsync(userInfo);
 
-                // 3. Asignación de roles y compañía
-                await AssignEnterpriseDataAsync(user, request);
+        //        // 3. Asignación de roles y compañía
+        //        await AssignEnterpriseDataAsync(user, request);
 
-                response.UserId = user.Id;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response.HasError = true;
-                response.Error = ex.Message;
-                return response;
-            }
-        }
+        //        response.UserId = user.Id;
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.HasError = true;
+        //        response.Error = ex.Message;
+        //        return response;
+        //    }
+        //}
 
         private async Task<Usuario> FindOrCreateUserAsync(ExternalUserInfo userInfo)
         {
@@ -486,8 +485,8 @@ namespace IdentityLayer.Services
         }
 
         #endregion
-
-
         #endregion
+
+
     }
 }

@@ -82,7 +82,7 @@ namespace PTP_API.Controllers.ModuloCita
                 }
 
                 var response = await _emailConfigService.Add(request);
-                return CreatedAtAction(nameof(GetAllConfigurations), response);
+                return CreatedAtAction(nameof(GetAllConfigurations), Response<CtaContactTypeResponse>.Created(response));
             }
             catch (Exception ex)
             {

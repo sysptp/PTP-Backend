@@ -169,29 +169,29 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         //    }
         //}
 
-        [HttpPost("RegisterExternal")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation(Summary = "Registro de usuarios mediante proveedores externos", Description = "Endpoint para registrar usuarios utilizando Google, Microsoft o Facebook")]
-        public async Task<IActionResult> RegisterExternalAsync([FromBody] ExternalRegisterRequest request)
-        {
-            try
-            {
-                var response = await _accountService.RegisterExternalUserAsync(request);
+        //[HttpPost("RegisterExternal")]
+        //[Consumes(MediaTypeNames.Application.Json)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[SwaggerOperation(Summary = "Registro de usuarios mediante proveedores externos", Description = "Endpoint para registrar usuarios utilizando Google, Microsoft o Facebook")]
+        //public async Task<IActionResult> RegisterExternalAsync([FromBody] ExternalRegisterRequest request)
+        //{
+        //    try
+        //    {
+        //        var response = await _accountService.RegisterExternalUserAsync(request);
 
-                if (response.HasError)
-                {
-                    return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
-                }
+        //        if (response.HasError)
+        //        {
+        //            return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
+        //        }
 
-                return Ok(Response<object>.Created(response, "Registro de usuario externo exitoso"));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, Response<string>.ServerError(ex.Message));
-            }
-        }
+        //        return Ok(Response<object>.Created(response, "Registro de usuario externo exitoso"));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, Response<string>.ServerError(ex.Message));
+        //    }
+        //}
 
         //[HttpPost("ExternalLogin")]
         //[Consumes(MediaTypeNames.Application.Json)]

@@ -76,7 +76,7 @@ namespace PTP_API.Controllers.ModuloCita
                 }
 
                 var response = await _appointmentAreaService.Add(areaRequest);
-                return CreatedAtAction(nameof(GetAllAreas), response);
+                return CreatedAtAction(nameof(GetAllAreas), Response<CtaAppointmentAreaResponse>.Created(response));
             }
             catch (Exception ex)
             {

@@ -84,7 +84,7 @@ namespace PTP_API.Controllers.ModuloCita
 
                 var response = await _appointmentService.Add(appointmentDto);
 
-                return CreatedAtAction(nameof(GetAllAppointments), response);
+                return CreatedAtAction(nameof(GetAllAppointments), Response<CtaAppointmentManagementResponse>.Created(response));
             }
             catch (Exception ex)
             {

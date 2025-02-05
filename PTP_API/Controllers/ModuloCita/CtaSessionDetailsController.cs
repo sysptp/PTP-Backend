@@ -78,7 +78,7 @@ namespace PTP_API.Controllers.ModuloCita
                 }
 
                 var response = await _sessionDetailsService.Add(sessionDetailDto);
-                return CreatedAtAction(nameof(GetAllSessionDetails), response);
+                return CreatedAtAction(nameof(GetAllSessionDetails), Response<CtaSessionDetailsResponse>.Created(response));
             }
             catch (Exception ex)
             {

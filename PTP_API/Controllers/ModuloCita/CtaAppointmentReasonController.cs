@@ -80,7 +80,7 @@ namespace PTP_API.Controllers.ModuloCita
                 }
 
                 var response = await _reasonService.Add(reasonDto);
-                return CreatedAtAction(nameof(GetAllReasons), response);
+                return CreatedAtAction(nameof(GetAllReasons), Response<CtaAppointmentReasonResponse>.Created(response));
             }
             catch (Exception ex)
             {

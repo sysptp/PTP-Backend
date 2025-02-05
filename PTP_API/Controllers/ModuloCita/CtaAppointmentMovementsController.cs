@@ -80,7 +80,7 @@ namespace PTP_API.Controllers.ModuloCita
 
                 var response = await _movementsService.Add(movementDto);
 
-                return CreatedAtAction(nameof(GetAllMovements), response);
+                return CreatedAtAction(nameof(GetAllMovements), Response<CtaAppointmentMovementsResponse>.Created(response));
             }
             catch (Exception ex)
             {

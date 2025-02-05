@@ -10,7 +10,7 @@ namespace BussinessLayer.Interfaces.Services.IAccount
         Task<string> EnableTwoFactorAuthenticationAsync(string userId);
         Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request, string origin);
         Task<RegisterResponse> RegisterExternalUserAsync(ExternalLoginInfo info, string origin);
-        Task<RegisterResponse> RegisterExternalUserAsync(ExternalRegisterRequest request);
+        //Task<RegisterResponse> RegisterExternalUserAsync(ExternalRegisterRequest request);
         Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin);
         Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request);
         Task<string> SendConfirmationEmailAsync(string email, string origin);

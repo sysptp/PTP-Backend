@@ -42,7 +42,8 @@ namespace DataLayer.Models.Modulo_Citas
                     {
                         AppointmentId = appointmentEntity.AppointmentId,  
                         IdSession = sessionEntity.IdSession,
-                        IsActive = true
+                        IsActive = true,
+                        
                     };
 
                     await _sessionDetailsRepository.Add(sessionDetail);
@@ -61,7 +62,8 @@ namespace DataLayer.Models.Modulo_Citas
             while (currentAppointmentDate <= sessionRequest.SessionEndDate)
             {
                 var appointment = _mapper.Map<CtaAppointmentsRequest>(sessionRequest.AppointmentInformation);
-                appointment.AppointmentDate = currentAppointmentDate; 
+                appointment.AppointmentDate = currentAppointmentDate;
+                appointment.UserId = sessionRequest.IdUser;
                 appointments.Add(appointment);
 
                 currentAppointmentDate = CalculateNextAppointmentDate(currentAppointmentDate, sessionRequest.RepeatEvery, sessionRequest.RepeatUnitId);

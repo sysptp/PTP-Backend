@@ -90,38 +90,38 @@ namespace IdentityLayer
 
             });
 
-            services.AddAuthentication()
-        .AddGoogle(options =>
-        {
-            options.ClientId = configuration["Authentication:Google:ClientId"];
-            options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-        })
-        .AddMicrosoftAccount(options =>
-        {
-            options.ClientId = configuration["Authentication:Microsoft:ClientId"];
-            options.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
-        })
-        .AddFacebook(options =>
-        {
-            options.AppId = configuration["Authentication:Facebook:AppId"];
-            options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
-        });
+        //    services.AddAuthentication()
+        //.AddGoogle(options =>
+        //{
+        //    options.ClientId = configuration["Authentication:Google:ClientId"];
+        //    options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+        //})
+        //.AddMicrosoftAccount(options =>
+        //{
+        //    options.ClientId = configuration["Authentication:Microsoft:ClientId"];
+        //    options.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
+        //})
+        //.AddFacebook(options =>
+        //{
+        //    options.AppId = configuration["Authentication:Facebook:AppId"];
+        //    options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+        //});
 
             #endregion
             ServiceConfiguration(services);
 
             #region Autentication Provider
 
-            services.AddHttpClient();
-            services.AddScoped<ITokenVerificationStrategy, GoogleTokenVerificationStrategy>(sp =>
-     new GoogleTokenVerificationStrategy(
-         sp.GetRequiredService<IHttpClientFactory>().CreateClient(),
-         //configuration["Authentication:Google:ClientId"]
-         "948778261203-vav00sppe1hiofu893chpem98qsfvirv.apps.googleusercontent.com"
-     )
- );
+ //           services.AddHttpClient();
+ //           services.AddScoped<ITokenVerificationStrategy, GoogleTokenVerificationStrategy>(sp =>
+ //    new GoogleTokenVerificationStrategy(
+ //        sp.GetRequiredService<IHttpClientFactory>().CreateClient(),
+ //        //configuration["Authentication:Google:ClientId"]
+ //        "948778261203-vav00sppe1hiofu893chpem98qsfvirv.apps.googleusercontent.com"
+ //    )
+ //);
 
-            services.AddScoped<TokenVerificationFactory>();
+            //services.AddScoped<TokenVerificationFactory>();
             #endregion
 
         }

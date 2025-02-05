@@ -84,7 +84,7 @@ namespace PTP_API.Controllers.ModuloCita
 
                 var response = await _ctaConfigurationService.Add(configurationDto);
 
-                return CreatedAtAction(nameof(GetAllCtaConfiguration), response);
+                return CreatedAtAction(nameof(GetAllCtaConfiguration), Response<CtaConfiguracionResponse>.Created(response));
             }
             catch (Exception ex)
             {

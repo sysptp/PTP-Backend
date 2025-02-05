@@ -16,7 +16,6 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public int IdPlaceAppointment { get; set; }
         public int IdState { get; set; }
         public bool IsConditionedTime { get; set; }
-        public DateTime EndAppointmentDate { get; set; }
         public TimeSpan EndAppointmentTime { get; set; }
         public bool SendEmail { get; set; } = false;
         public bool SendSms { get; set; } = false;

@@ -75,7 +75,7 @@ public class CtaAreaXUserController : ControllerBase
             }
 
             var response = await _areaXUserService.Add(assignmentRequest);
-            return CreatedAtAction(nameof(GetAllAssignments), response);
+            return CreatedAtAction(nameof(GetAllAssignments), Response<CtaAreaXUserResponse>.Created(response));
         }
         catch (Exception ex)
         {

@@ -78,7 +78,7 @@ namespace PTP_API.Controllers.ModuloCitas
                 }
 
                 var response = await _stateService.Add(stateDto);
-                return CreatedAtAction(nameof(GetAllStates), response);
+                return CreatedAtAction(nameof(GetAllStates), Response<CtaStateResponse>.Created(response));
             }
             catch (Exception ex)
             {

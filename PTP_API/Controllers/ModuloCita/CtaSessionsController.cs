@@ -79,7 +79,7 @@ namespace PTP_API.Controllers.ModuloCita
                 }
 
                 var response = await _sessionsService.CreateSessionAndGenerateAppointments(sessionDto);
-                return CreatedAtAction(nameof(GetAllSessions), response);
+                return CreatedAtAction(nameof(GetAllSessions), Response<CtaSessionsRequest>.Created(response));
             }
             catch (Exception ex)
             {

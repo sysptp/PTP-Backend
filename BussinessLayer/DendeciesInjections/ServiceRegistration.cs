@@ -256,7 +256,7 @@ public static class ServiceRegistration
         #region Modulo General
 
         services.AddScoped<IGnRepeatUnitService,GnRepeatUnitService>();
-        services.AddScoped<IGnEmailGenericSerivce,GnEmailService>();
+        services.AddScoped<IGnEmailSerivce,GnEmailService>();
         #endregion 
 
         #region Otros

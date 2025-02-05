@@ -25,7 +25,6 @@ namespace DataLayer.Models.Modulo_Citas
         [ForeignKey("IdState")]
         public CtaState? CtaState { get; set; }
         public bool IsConditionedTime { get; set; }
-        public DateTime EndAppointmentDate { get; set; }
         public TimeSpan EndAppointmentTime { get; set; }
         public bool SendEmail { get; set; } = false;
         public bool SendSms { get; set; } = false;
