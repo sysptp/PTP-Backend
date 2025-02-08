@@ -81,7 +81,7 @@ namespace PTP_API.Controllers.ModuloCita
             catch (Exception ex)
             {
                 return StatusCode(500, Response<string>.ServerError(ex.Message));
-            }
+            } 
         }
 
         [HttpPut("{id}")]

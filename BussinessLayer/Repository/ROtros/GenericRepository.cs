@@ -48,10 +48,18 @@ namespace BussinessLayer.Repository.ROtros
             }
             return entity.Borrado == true ? null : entity;
         }
-
+ 
         public virtual async Task<IList<T>> GetAll()
         {
-            return await _context.Set<T>().Where(e => !e.Borrado).ToListAsync();
+            try
+            {
+                return await _context.Set<T>().Where(e => !e.Borrado).ToListAsync();
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
         public virtual async Task<T> Add(T entity)
@@ -216,7 +224,7 @@ namespace BussinessLayer.Repository.ROtros
                 parameters.Add("PrimaryKey", id);
 
                 // Ejecuta la consulta
-                using (var connection = _context.Database.GetDbConnection())
+                using (var connection = new SqlConnection(_connectionString))
                 {
                     if (connection.State == ConnectionState.Closed)
                         await connection.OpenAsync();
@@ -288,7 +296,7 @@ namespace BussinessLayer.Repository.ROtros
                 parameters.Add("PrimaryKey", id);
 
                 // Ejecuta la consulta
-                using (var connection = _context.Database.GetDbConnection())
+                using (var connection = new SqlConnection(_connectionString))
                 {
                     if (connection.State == ConnectionState.Closed)
                         await connection.OpenAsync();
