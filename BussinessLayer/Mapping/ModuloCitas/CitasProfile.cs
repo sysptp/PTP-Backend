@@ -5,7 +5,9 @@ using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentReason;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion;
+using BussinessLayer.DTOs.ModuloCitas.CtaContacts;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
+using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
 using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
@@ -156,6 +158,16 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaAreaXUserRequest, CtaAreaXUser>()
                 .ReverseMap();
             CreateMap<CtaAreaXUserResponse, CtaAreaXUser>()
+               .ReverseMap();
+
+            CreateMap<CtaGuestRequest, CtaGuest>()
+               .ReverseMap();
+            CreateMap<CtaGuestResponse, CtaGuest>()
+               .ReverseMap();
+
+            CreateMap<CtaContactRequest, CtaContacts>()
+             .ReverseMap();
+            CreateMap<CtaContactResponse, CtaContacts>()
                .ReverseMap();
         }
 

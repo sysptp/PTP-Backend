@@ -16,9 +16,6 @@ namespace DataLayer.Models.ModuloCitas
         public int ContactTypeId { get; set; }
         [ForeignKey("ContactTypeId")]
         public CtaContactType? ContactType { get; set; }
-        public int AppointmentId { get; set; }
-        [ForeignKey("AppointmentId")]
-        public CtaAppointments? Appointments { get; set; }
         public long CompanyId { get; set; }
 
     }

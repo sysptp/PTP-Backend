@@ -94,6 +94,7 @@ using BussinessLayer.FluentValidations.ModuloCampaña.CmpPlantilla;
 using BussinessLayer.DTOs.ModuloGeneral.Utils;
 using BussinessLayer.Validations.ModuloGeneral.GnRepeatUnit;
 using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
+using BussinessLayer.DTOs.ModuloCitas.CtaContacts;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -314,6 +315,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaStateRequest>, CtaStateRequestValidation>();
             services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
             services.AddScoped<IValidator<CtaGuestRequest>, CtaGuestRequestValidator>();
+            services.AddScoped<IValidator<CtaContactRequest>, CtaContactRequestValidator>();
 
             #endregion
         }
