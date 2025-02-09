@@ -93,6 +93,7 @@ using BussinessLayer.DTOs.ModuloCampaña.CmpPlantillas;
 using BussinessLayer.FluentValidations.ModuloCampaña.CmpPlantilla;
 using BussinessLayer.DTOs.ModuloGeneral.Utils;
 using BussinessLayer.Validations.ModuloGeneral.GnRepeatUnit;
+using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -312,8 +313,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaSessionsRequest>, CtaSessionsRequestValidation>();
             services.AddScoped<IValidator<CtaStateRequest>, CtaStateRequestValidation>();
             services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
+            services.AddScoped<IValidator<CtaGuestRequest>, CtaGuestRequestValidator>();
 
             #endregion
         }
-    }
+    } 
 }
