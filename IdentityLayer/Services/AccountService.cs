@@ -11,8 +11,8 @@ using BussinessLayer.DTOs.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.WebUtilities;
-using BussinessLayer.Interfaces.Repository.ModuloGeneral.Email;
 using BussinessLayer.Interfaces.Services.IAccount;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 
 namespace IdentityLayer.Services
 {
@@ -21,14 +21,14 @@ namespace IdentityLayer.Services
         private readonly UserManager<Usuario> _userManager;
         private readonly JWTSettings _jwtSettings;
         private readonly RoleManager<GnPerfil> _roleManager;
-        private readonly IGnEmailSerivce _emailService;
+        private readonly IGnEmailService _emailService;
         //private readonly TokenVerificationFactory _tokenVerificationFactory;
 
         public AccountService(
               UserManager<Usuario> userManager,
               RoleManager<GnPerfil> roleManager,
               IOptions<JWTSettings> jwtSettings,
-              IGnEmailSerivce emailService
+              IGnEmailService emailService
               /*TokenVerificationFactory tokenVerificationFactory*/)
         {
             _userManager = userManager;
@@ -238,7 +238,7 @@ namespace IdentityLayer.Services
             var verificationUri = QueryHelpers.AddQueryString($"{origin}/{route}", "userId", user.Id.ToString());
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "token", code);
 
-            await _emailService.SendAsync();
+            //await _emailService.SendAsync();
 
             //await _emailService.SendAsync(new EmailRequest
             //{
@@ -263,7 +263,7 @@ namespace IdentityLayer.Services
             var route = "api/account/reset-password";
             var resetUri = QueryHelpers.AddQueryString($"{origin}/{route}", "token", code);
 
-            await _emailService.SendAsync();
+            //await _emailService.SendAsync();
 
             //await _emailService.SendAsync(new EmailRequest
             //{

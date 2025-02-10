@@ -39,6 +39,7 @@
     <Folder Include="FluentValidations\ModuloRRHH\" />
     <Folder Include="Interfaces\ModuloContabilidad\" />
     <Folder Include="Interfaces\ModuloRRHH\" />
+    <Folder Include="Interfaces\Repository\ModuloGeneral\Email\" />
     <Folder Include="Mapping\ModuloCitas\" />
     <Folder Include="Mapping\ModuloContabilidad\" />
     <Folder Include="Mapping\ModuloRRHH\" />

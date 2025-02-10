@@ -1,6 +1,8 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+using BussinessLayer.DTOs.ModuloGeneral.Email;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using BussinessLayer.Wrappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -19,12 +21,14 @@ namespace PTP_API.Controllers.ModuloCita
     public class CtaAppointmentsController : ControllerBase
     {
         private readonly ICtaAppointmentsService _appointmentService;
+        private readonly IGnEmailService _gnEmailService;
         private readonly IValidator<CtaAppointmentsRequest> _validator;
 
-        public CtaAppointmentsController(ICtaAppointmentsService appointmentService, IValidator<CtaAppointmentsRequest> validator)
+        public CtaAppointmentsController(ICtaAppointmentsService appointmentService, IValidator<CtaAppointmentsRequest> validator, IGnEmailService gnEmailService)
         {
             _appointmentService = appointmentService;
             _validator = validator;
+            _gnEmailService = gnEmailService;
         }
 
         [HttpGet]
@@ -82,6 +86,18 @@ namespace PTP_API.Controllers.ModuloCita
                 }
 
                 var response = await _appointmentService.Add(appointmentDto);
+                var emailMessage = new GnEmailMessageDto
+                {
+                    To = new List<string> { "domingojruiz21@gmail.com" },
+                    Cc = new List<string> { "cc1@example.com", "cc2@example.com" },
+                    Subject = "PRUEBA PTP",
+                    Body = "<p>Este es el contenido del correo en formato HTML.</p>",
+                    IsHtml = true,
+                    Attachments = null,
+                    EmpresaId = 123,
+                    ConfiguracionId = 456
+                };
+                _gnEmailService.SendAsync(emailMessage, response.CompanyId);
                 return CreatedAtAction(nameof(GetAllAppointments), Response<CtaAppointmentsResponse>.Created(response));
             }
             catch (Exception ex)

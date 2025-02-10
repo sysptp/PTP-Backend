@@ -68,8 +68,10 @@ using BussinessLayer.FluentValidations.Generic;
 using BussinessLayer.Services.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloGeneral;
 using BussinessLayer.Services.ModuloGeneral;
-using BussinessLayer.Interfaces.Repository.ModuloGeneral.Email;
 using BussinessLayer.Services.ModuloGeneral.Email;
+using BussinessLayer.Interfaces.Services.IModuloGeneral.SMTP;
+using BussinessLayer.Services.ModuloGeneral.SMTP;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 
 public static class ServiceRegistration
 {
@@ -129,6 +131,8 @@ public static class ServiceRegistration
         services.AddScoped<IInvMovimientoAlmacenService, InvMovimientoAlmacenService>();
         services.AddScoped<IInvMovimientoAlmacenDetalleService, InvMovimientoAlmacenDetalleService>();
         services.AddScoped<IInvMovimientoSucursalDetalleService, InvMovimientoSucursalDetalleService>();
+        services.AddScoped<IGnSmtpConfiguracionService, GnSmtpConfiguracionService>();
+       
         #endregion
 
         #region Auditoria
@@ -258,7 +262,7 @@ public static class ServiceRegistration
         #region Modulo General
 
         services.AddScoped<IGnRepeatUnitService,GnRepeatUnitService>();
-        services.AddScoped<IGnEmailSerivce,GnEmailService>();
+        services.AddScoped<IGnEmailService,GnEmailService>();
         #endregion 
 
         #region Otros

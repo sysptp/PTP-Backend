@@ -9,9 +9,11 @@ using BussinessLayer.DTOs.ModuloGeneral.Menu;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
+using BussinessLayer.DTOs.ModuloGeneral.Smtp;
 using DataLayer.Models.ModuloGeneral.Geografia;
 using DataLayer.Models.ModuloGeneral.Menu;
 using DataLayer.Models.ModuloGeneral.Seguridad;
+using DataLayer.Models.ModuloGeneral.SMTP;
 
 namespace BussinessLayer.Mapping.ModuloGeneral
 {
@@ -174,6 +176,14 @@ namespace BussinessLayer.Mapping.ModuloGeneral
                 .ForMember(dest => dest.NameOfUser, opt => opt.MapFrom(src => $"{src.Usuario.Nombre} {src.Usuario.Apellido}"))
                 .ReverseMap();
             #endregion
+
+            #region SMTP
+            CreateMap<GnSmtpConfiguracionRequest, GnSmtpConfiguracion>()
+            .ReverseMap();
+            CreateMap<GnSmtpConfiguracionResponse, GnSmtpConfiguracion>()
+                .ReverseMap();
+            #endregion
+
 
             #endregion
 

@@ -1,9 +1,11 @@
-﻿using DataLayer.Models.Otros;
+﻿using System.ComponentModel.DataAnnotations;
+using DataLayer.Models.Otros;
 
 namespace DataLayer.Models.ModuloGeneral.SMTP
 {
     public class GnSmtpConfiguracion : AuditableEntities
     {
+        [Key]
         public int IdSmtp { get; set; }
         public string Servidor { get; set; } = null!;
         public int Puerto { get; set; }

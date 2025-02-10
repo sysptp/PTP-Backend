@@ -30,6 +30,8 @@ using BussinessLayer.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloGeneral;
 using BussinessLayer.Interface.Repository.ModuloGeneral;
 using BussinessLayer.Repository.ModuloGeneral;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.SMTP;
+using BussinessLayer.Repository.ModuloGeneral.SMTP;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -62,6 +64,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<ICmpFrecuenciaRepository, CmpFrecuenciaRepository>();
             services.AddScoped<ICmpCampanaDetalleRepository, CmpCampanaDetalleRepository>();
             services.AddScoped<IGnRepeatUnitRepository, GnRepeatUnitRepository>();
+            services.AddScoped<IGnSmtpConfiguracionRepository, GnSmtpConfiguracionRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

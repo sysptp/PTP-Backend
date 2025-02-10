@@ -32,6 +32,7 @@ using DataLayer.EntitiesConfiguration.ModuloCampaña;
 using DataLayer.Models.Modulo_Citas;
 using DataLayer.Models.ModuloCitas;
 using DataLayer.Models.ModuloGeneral;
+using DataLayer.Models.ModuloGeneral.SMTP;
 
 namespace DataLayer.PDbContex
 {
@@ -206,6 +207,7 @@ namespace DataLayer.PDbContex
         public DbSet<GnTecnoAlmacenExterno> GnTecnoAlmacenExterno { get; set; }
         public DbSet<GnRepeatUnit> GnRepeatUnit { get; set; }
         public DbSet<GnParametrosGenerales> GnParametrosGenerales { get; set; }
+        public DbSet<GnSmtpConfiguracion> GnSmtpConfiguracion { get; set; }
         #endregion
 
         #region Auditoria

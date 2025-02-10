@@ -95,6 +95,8 @@ using BussinessLayer.DTOs.ModuloGeneral.Utils;
 using BussinessLayer.Validations.ModuloGeneral.GnRepeatUnit;
 using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
 using BussinessLayer.DTOs.ModuloCitas.CtaContacts;
+using BussinessLayer.DTOs.ModuloGeneral.Smtp;
+using BussinessLayer.FluentValidations.ModuloGeneral.SMTP;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -287,6 +289,7 @@ namespace BussinessLayer.DendeciesInjections
             #region Modulo General
 
             services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
+            services.AddScoped<IValidator<GnSmtpConfiguracionRequest>, GnSmtpConfiguracionRequestValidator>();
             #endregion
 
             #region Almacen
