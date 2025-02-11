@@ -76,6 +76,19 @@ namespace DataLayer.Models.Modulo_Citas
                 await _appointmentContactsRepository.AddRangeAsync(contactsToInsert);
             }
 
+            if (vm.CtaAppointmentGuests != null && vm.CtaAppointmentGuests.Any())
+            {
+                var guestToInsert = vm.CtaAppointmentGuests.Select(guest => new CtaAppointmentGuest
+                {
+                    Id = guest.Id,
+                    AppointmentId = appointmentId,
+                    CompanyId = appointmentEntity.CompanyId,
+                    GuestId = guest.GuestId
+                }).ToList();
+
+                await _ctaAppointmentGuestRepository.AddRangeAsync(guestToInsert);
+            }
+
             await SendAppointmentEmailsAsync(vm, vm.CompanyId);
 
             return _mapper.Map<CtaAppointmentsResponse>(appointmentEntity);
@@ -98,28 +111,47 @@ namespace DataLayer.Models.Modulo_Citas
 
             return appointmentDtoList;
         }
-
         private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId)
         {
-            var creator = await _userRepository.GetById(appointment.UserId);
-            var contacts = appointment.CtaAppointmentContacts?.co.Select(c => c.co).ToList() ?? new List<string>();
-            var users = appointment.CtaAppointmentUsers?.Select(u => u.Email).ToList() ?? new List<string>();
-            var guests = appointment.CtaAppointvmentsRequest?.Select(g => g.Email).ToList() ?? new List<string>();
-
-            if (contacts.Any())
+            _ = Task.Run(async () =>
             {
-                await SendEmailAsync(contacts, "Usted ha creado una cita", "Detalles de la cita...", companyId);
-            }
+                var creator = await _userRepository.GetById(appointment.UserId);
 
-            if (users.Any())
-            {
-                await SendEmailAsync(users, "Se requiere su asistencia a una cita", "Detalles de la cita...", companyId);
-            }
+                var allContacts = await _contactRepository.GetAll();
+                var allUsers = await _userRepository.GetAll();
+                var allGuests = await _guestRepository.GetAll();
 
-            if (guests.Any())
-            {
-                await SendEmailAsync(guests, "Usted fue invitado a una cita", "Detalles de la cita...", companyId);
-            }
+                var contactEmails = (appointment.CtaAppointmentContacts?
+                    .Select(c => allContacts.FirstOrDefault(x => x.Id == c.ContactId)?.ContactEmail)
+                    .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+
+                var userEmails = (appointment.CtaAppointmentUsers?
+                    .Select(u => allUsers.FirstOrDefault(x => x.Id == u.UserId)?.Email)
+                    .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+
+                var guestEmails = (appointment.CtaAppointmentGuests?
+                    .Select(g => allGuests.FirstOrDefault(x => x.Id == g.GuestId)?.Email)
+                    .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+
+                var emailTasks = new List<Task>();
+
+                if (contactEmails.Any())
+                {
+                    emailTasks.Add(SendEmailAsync(contactEmails, "Usted ha creado una cita", "Detalles de la cita...", companyId));
+                }
+
+                if (userEmails.Any())
+                {
+                    emailTasks.Add(SendEmailAsync(userEmails, "Se requiere su asistencia a una cita", "Detalles de la cita...", companyId));
+                }
+
+                if (guestEmails.Any())
+                {
+                    emailTasks.Add(SendEmailAsync(guestEmails, "Usted fue invitado a una cita", "Detalles de la cita...", companyId));
+                }
+
+                await Task.WhenAll(emailTasks);
+            });
         }
 
         private async Task SendEmailAsync(List<string> recipients, string subject, string body, long companyId)
@@ -134,8 +166,9 @@ namespace DataLayer.Models.Modulo_Citas
                 EmpresaId = companyId,
             };
 
-            await _gnE.SendAsync(emailMessage, companyId);
+            await _gnEmailService.SendAsync(emailMessage, companyId);
         }
+
 
     }
 }

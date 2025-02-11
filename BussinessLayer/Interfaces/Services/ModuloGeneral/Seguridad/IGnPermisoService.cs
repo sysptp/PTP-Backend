@@ -7,7 +7,7 @@ namespace BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad
 {
     public interface IGnPermisoService : IGenericService<GnPermisoRequest, GnPermisoResponse, GnPermiso>
     {
-        Task<List<GnPermisoResponse>> GetAllPermisosByFilter(long? companyId, int? roleId, int? menuId);
+        Task<List<GnPermisoResponse>> GetAllPermisosByFilter(long? companyId, int? roleId, int? menuId = null);
         Task<Response<object>> AddOrUpdatePermissionAsync(GnPermisoRequest permisoDto);
 
     }

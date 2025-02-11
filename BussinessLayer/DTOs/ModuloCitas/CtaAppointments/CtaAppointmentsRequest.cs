@@ -34,6 +34,6 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         [JsonPropertyName("UsersInvited")]
         public List<CtaAppointmentUsersRequest>? CtaAppointmentUsers { get; set; }
         [JsonPropertyName("Guests")]
-        public List<CtaAppointmentGuestRequest>? CtaAppointvmentsRequest { get; set; }
+        public List<CtaAppointmentGuestRequest>? CtaAppointmentGuests { get; set; }
     }
 }

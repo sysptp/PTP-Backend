@@ -21,7 +21,7 @@ namespace BussinessLayer.Services.ModuloGeneral.Seguridad
             _mapper = mapper;
         }
 
-        public async Task<List<GnPermisoResponse>> GetAllPermisosByFilter(long? companyId, int? roleId, int? menuId)
+        public async Task<List<GnPermisoResponse>> GetAllPermisosByFilter(long? companyId, int? roleId, int? menuId = null)
         {
             var permisos = await _permisoRepository.GetAllWithIncludeAsync(new List<string> { "GnMenu", "GnPerfil", "GnEmpresa" });
 

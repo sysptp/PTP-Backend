@@ -165,8 +165,11 @@ public static class ServiceRegistration
         services.AddScoped<ICtaAppointmentUsersService, CtaAppointmentUsersService>();
         services.AddScoped<ICtaGuestService, CtaGuestService>();
         services.AddScoped<ICtaContactService, CtaContactService>();
+        services.AddScoped<ICtaGuestService, CtaGuestService>();
+        services.AddScoped<ICtaAppointmentGuestService, CtaAppointmentGuestService>();
 
         #endregion
+
         #region Modulo Contabilidad
         #endregion
 

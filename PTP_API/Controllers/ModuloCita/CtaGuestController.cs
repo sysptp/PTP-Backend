@@ -1,5 +1,5 @@
 ﻿using System.Net.Mime;
-using BussinessLayer.DTOs.ModuloCitas.CtaContacts;
+using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
@@ -10,46 +10,46 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace PTP_API.Controllers.ModuloCita
 {
     [ApiController]
-    [SwaggerTag("Gestión de Contactos de Citas")]
+    [SwaggerTag("Gestión de Invitados de Citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    public class CtaContactController : ControllerBase
+    public class CtaGuestController : ControllerBase
     {
-        private readonly ICtaContactService _contactService;
-        private readonly IValidator<CtaContactRequest> _validator;
+        private readonly ICtaGuestService _guestService;
+        private readonly IValidator<CtaGuestRequest> _validator;
 
-        public CtaContactController(ICtaContactService contactService, IValidator<CtaContactRequest> validator)
+        public CtaGuestController(ICtaGuestService guestService, IValidator<CtaGuestRequest> validator)
         {
-            _contactService = contactService;
+            _guestService = guestService;
             _validator = validator;
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Response<IEnumerable<CtaContactResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<IEnumerable<CtaGuestResponse>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Obtener Contactos de Citas", Description = "Devuelve una lista de Contactos de Citas o un contacto específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAllContacts([FromQuery] int? id, long? companyId)
+        [SwaggerOperation(Summary = "Obtener Invitados de Citas", Description = "Devuelve una lista de invitados o un invitado específico si se proporciona un ID")]
+        public async Task<IActionResult> GetAllGuests([FromQuery] int? id, long? companyId)
         {
             try
             {
                 if (id.HasValue)
                 {
-                    var contact = await _contactService.GetByIdResponse(id.Value);
-                    if (contact == null)
-                        return NotFound(Response<CtaContactResponse>.NotFound("Contacto no encontrado."));
+                    var guest = await _guestService.GetByIdResponse(id.Value);
+                    if (guest == null)
+                        return NotFound(Response<CtaGuestResponse>.NotFound("Invitado no encontrado."));
 
-                    return Ok(Response<CtaContactResponse>.Success(contact, "Contacto encontrado."));
+                    return Ok(Response<CtaGuestResponse>.Success(guest, "Invitado encontrado."));
                 }
                 else
                 {
-                    var contacts = await _contactService.GetAllDto();
-                    if (contacts == null || !contacts.Any())
-                        return StatusCode(204, Response<IEnumerable<CtaContactResponse>>.NoContent("No hay contactos disponibles."));
+                    var guests = await _guestService.GetAllDto();
+                    if (guests == null || !guests.Any())
+                        return StatusCode(204, Response<IEnumerable<CtaGuestResponse>>.NoContent("No hay invitados disponibles."));
 
-                    return Ok(Response<IEnumerable<CtaContactResponse>>.Success(
-                        companyId != null ? contacts.Where(x => x.CompanyId == companyId).ToList() : contacts, "Contactos obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<CtaGuestResponse>>.Success(
+                        companyId != null ? guests.Where(x => x.CompanyId == companyId).ToList() : guests, "Invitados obtenidos correctamente."));
                 }
             }
             catch (Exception ex)
@@ -63,12 +63,12 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Agregar un nuevo contacto", Description = "Endpoint para registrar un contacto")]
-        public async Task<IActionResult> CreateContact([FromBody] CtaContactRequest contactDto)
+        [SwaggerOperation(Summary = "Agregar un nuevo invitado", Description = "Endpoint para registrar un invitado")]
+        public async Task<IActionResult> CreateGuest([FromBody] CtaGuestRequest guestDto)
         {
             try
             {
-                var validationResult = await _validator.ValidateAsync(contactDto);
+                var validationResult = await _validator.ValidateAsync(guestDto);
 
                 if (!validationResult.IsValid)
                 {
@@ -76,8 +76,8 @@ namespace PTP_API.Controllers.ModuloCita
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var response = await _contactService.Add(contactDto);
-                return CreatedAtAction(nameof(GetAllContacts), Response<CtaContactResponse>.Created(response));
+                var response = await _guestService.Add(guestDto);
+                return CreatedAtAction(nameof(GetAllGuests), Response<CtaGuestResponse>.Created(response));
             }
             catch (Exception ex)
             {
@@ -90,12 +90,12 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Actualizar un contacto", Description = "Endpoint para actualizar un contacto")]
-        public async Task<IActionResult> UpdateContact(int id, [FromBody] CtaContactRequest contactDto)
+        [SwaggerOperation(Summary = "Actualizar un invitado", Description = "Endpoint para actualizar un invitado")]
+        public async Task<IActionResult> UpdateGuest(int id, [FromBody] CtaGuestRequest guestDto)
         {
             try
             {
-                var validationResult = await _validator.ValidateAsync(contactDto);
+                var validationResult = await _validator.ValidateAsync(guestDto);
 
                 if (!validationResult.IsValid)
                 {
@@ -103,13 +103,13 @@ namespace PTP_API.Controllers.ModuloCita
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var existingContact = await _contactService.GetByIdRequest(id);
-                if (existingContact == null)
-                    return NotFound(Response<string>.NotFound("Contacto no encontrado."));
+                var existingGuest = await _guestService.GetByIdRequest(id);
+                if (existingGuest == null)
+                    return NotFound(Response<string>.NotFound("Invitado no encontrado."));
 
-                contactDto.Id = id;
-                await _contactService.Update(contactDto, id);
-                return Ok(Response<string>.Success(null, "Contacto actualizado correctamente."));
+                guestDto.Id = id;
+                await _guestService.Update(guestDto, id);
+                return Ok(Response<string>.Success(null, "Invitado actualizado correctamente."));
             }
             catch (Exception ex)
             {
@@ -121,17 +121,17 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Eliminar un contacto", Description = "Endpoint para eliminar un contacto")]
-        public async Task<IActionResult> DeleteContact(int id)
+        [SwaggerOperation(Summary = "Eliminar un invitado", Description = "Endpoint para eliminar un invitado")]
+        public async Task<IActionResult> DeleteGuest(int id)
         {
             try
             {
-                var existingContact = await _contactService.GetByIdRequest(id);
-                if (existingContact == null)
-                    return NotFound(Response<string>.NotFound("Contacto no encontrado."));
+                var existingGuest = await _guestService.GetByIdRequest(id);
+                if (existingGuest == null)
+                    return NotFound(Response<string>.NotFound("Invitado no encontrado."));
 
-                await _contactService.Delete(id);
-                return Ok(Response<string>.Success(null, "Contacto eliminado correctamente."));
+                await _guestService.Delete(id);
+                return Ok(Response<string>.Success(null, "Invitado eliminado correctamente."));
             }
             catch (Exception ex)
             {

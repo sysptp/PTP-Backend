@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.WebUtilities;
 using BussinessLayer.Interfaces.Services.IAccount;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
+using MimeKit.Cryptography;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
 
 namespace IdentityLayer.Services
 {
@@ -23,18 +25,22 @@ namespace IdentityLayer.Services
         private readonly RoleManager<GnPerfil> _roleManager;
         private readonly IGnEmailService _emailService;
         //private readonly TokenVerificationFactory _tokenVerificationFactory;
+        private readonly IGnPermisoService _gnmisoService;
 
         public AccountService(
               UserManager<Usuario> userManager,
               RoleManager<GnPerfil> roleManager,
               IOptions<JWTSettings> jwtSettings,
               IGnEmailService emailService
-              /*TokenVerificationFactory tokenVerificationFactory*/)
+,
+              IGnPermisoService gnmisoService
+/*TokenVerificationFactory tokenVerificationFactory*/)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
             _emailService = emailService;
+            _gnmisoService = gnmisoService;
             //_tokenVerificationFactory = tokenVerificationFactory;
         }
 
@@ -101,6 +107,7 @@ namespace IdentityLayer.Services
             response.RoleName = user.GnPerfil.Name;
             response.CompanyName = user.GnEmpresa.NOMBRE_EMP;
             response.SucursalName = user.GnSucursal.NombreSuc;
+            response.GnPermisoResponses = await _gnmisoService.GetAllPermisosByFilter(user.CodigoEmp,user.IdPerfil);
 
             JwtSecurityToken jwtToken = GenerateJWToken(user);
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);

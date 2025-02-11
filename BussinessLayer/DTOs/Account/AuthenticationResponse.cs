@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 
 namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
 {
@@ -28,5 +29,7 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
         public string? Error { get; set; }
         [JsonIgnore]
         public bool HasError { get; set; }
+        [JsonPropertyName("Privileges")]
+        public List<GnPermisoResponse>? GnPermisoResponses { get; set; }
     }
 }

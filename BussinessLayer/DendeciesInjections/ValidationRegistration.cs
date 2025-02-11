@@ -319,6 +319,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaUnwantedRequest>, CtaUnwantedRequestValidation>();
             services.AddScoped<IValidator<CtaGuestRequest>, CtaGuestRequestValidator>();
             services.AddScoped<IValidator<CtaContactRequest>, CtaContactRequestValidator>();
+            services.AddScoped<IValidator<CtaGuestRequest>, CtaGuestRequestValidator>();
 
             #endregion
         }

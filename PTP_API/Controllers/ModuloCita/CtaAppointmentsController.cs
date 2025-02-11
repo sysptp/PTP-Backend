@@ -86,18 +86,6 @@ namespace PTP_API.Controllers.ModuloCita
                 }
 
                 var response = await _appointmentService.Add(appointmentDto);
-                var emailMessage = new GnEmailMessageDto
-                {
-                    To = new List<string> { "domingojruiz21@gmail.com" },
-                    Cc = new List<string> { "cc1@example.com", "cc2@example.com" },
-                    Subject = "PRUEBA PTP",
-                    Body = "<p>Este es el contenido del correo en formato HTML.</p>",
-                    IsHtml = true,
-                    Attachments = null,
-                    EmpresaId = 123,
-                    ConfiguracionId = 456
-                };
-                _gnEmailService.SendAsync(emailMessage, response.CompanyId);
                 return CreatedAtAction(nameof(GetAllAppointments), Response<CtaAppointmentsResponse>.Created(response));
             }
             catch (Exception ex)
