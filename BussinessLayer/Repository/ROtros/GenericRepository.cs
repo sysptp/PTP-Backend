@@ -365,7 +365,7 @@ namespace BussinessLayer.Repository.ROtros
                 });
 
                 // Ejecuta la consulta
-                using (var connection = _context.Database.GetDbConnection())
+                using (var connection = new SqlConnection(_connectionString))
                 {
                     if (connection.State == ConnectionState.Closed)
                         await connection.OpenAsync();
@@ -431,7 +431,7 @@ namespace BussinessLayer.Repository.ROtros
                 });
 
                 // Ejecuta la consulta
-                using (var connection = _context.Database.GetDbConnection())
+                using (var connection = new SqlConnection(_connectionString))
                 {
                     if (connection.State == ConnectionState.Closed)
                         await connection.OpenAsync();

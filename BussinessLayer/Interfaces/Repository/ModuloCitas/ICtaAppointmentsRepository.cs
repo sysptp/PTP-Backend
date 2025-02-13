@@ -5,5 +5,6 @@ namespace BussinessLayer.Interface.Repository.ModuloCitas
 {
     public interface ICtaAppointmentsRepository : IGenericRepository<CtaAppointments>
     {
+        Task<List<CtaAppointments>> GetAppointmentsByDate(DateTime date, long companyId);
     }
 }

@@ -1,10 +1,13 @@
 ﻿using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.Interfaces.Services.IOtros;
+using BussinessLayer.Wrappers;
 using DataLayer.Models.Modulo_Citas;
 
 namespace BussinessLayer.Interfaces.Services.ModuloCitas
 {
     public interface ICtaAppointmentsService : IGenericService<CtaAppointmentsRequest, CtaAppointmentsResponse, CtaAppointments>
     {
+        Task<DetailMessage> ExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto);
+        Task DeleteExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto);
     }
 }

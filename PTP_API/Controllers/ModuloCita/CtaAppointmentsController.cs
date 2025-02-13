@@ -73,7 +73,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Crear una nueva cita", Description = "Endpoint para registrar una cita")]
-        public async Task<IActionResult> CreateAppointment([FromBody] CtaAppointmentsRequest appointmentDto)
+        public async Task<IActionResult> CreateAppointment([FromBody] CtaAppointmentsRequest appointmentDto,bool deleteExistingAppointment = false)
         {
             try
             {
@@ -83,6 +83,20 @@ namespace PTP_API.Controllers.ModuloCita
                 {
                     var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                     return BadRequest(Response<string>.BadRequest(errors, 400));
+                }
+
+                if (deleteExistingAppointment)
+                {
+                    await _appointmentService.DeleteExistsAppointmentInTimeRange(appointmentDto);
+                }
+                else
+                {
+
+                    var existsMessage = await _appointmentService.ExistsAppointmentInTimeRange(appointmentDto);
+                    if (existsMessage != null)
+                    {
+                        return Ok(Response<DetailMessage>.Success(existsMessage));
+                    }
                 }
 
                 var response = await _appointmentService.Add(appointmentDto);

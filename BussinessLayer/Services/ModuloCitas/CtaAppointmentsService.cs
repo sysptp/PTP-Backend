@@ -7,7 +7,9 @@ using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using BussinessLayer.Services;
+using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCitas;
+using Newtonsoft.Json;
 
 namespace DataLayer.Models.Modulo_Citas
 {
@@ -169,6 +171,46 @@ namespace DataLayer.Models.Modulo_Citas
             await _gnEmailService.SendAsync(emailMessage, companyId);
         }
 
+        public async Task<DetailMessage> ExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto)
+        {
+            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId);
+
+            var existAppointment = existingAppointments.Any(a =>
+                (appointmentDto.AppointmentTime >= a.AppointmentTime && appointmentDto.AppointmentTime < a.EndAppointmentTime) ||
+                (appointmentDto.EndAppointmentTime > a.AppointmentTime && appointmentDto.EndAppointmentTime <= a.EndAppointmentTime) ||
+                (appointmentDto.AppointmentTime <= a.AppointmentTime && appointmentDto.EndAppointmentTime >= a.EndAppointmentTime));
+
+            if (existAppointment)
+            {
+                return new DetailMessage()
+                {
+                    Message = "La cita que desea crear posee conflicto con otra cita.",
+                    Details = $"{appointmentDto.Description} programada de {appointmentDto.AppointmentTime} a {appointmentDto.EndAppointmentTime}",
+                    Action = "¿Desea eliminar esta cita y proceder con la creación?"
+                };
+            }
+
+            return null;
+        }
+
+        public async Task DeleteExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto)
+        {
+            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId);
+
+            var existAppointment = existingAppointments.Any(a =>
+                (appointmentDto.AppointmentTime >= a.AppointmentTime && appointmentDto.AppointmentTime < a.EndAppointmentTime) ||
+                (appointmentDto.EndAppointmentTime > a.AppointmentTime && appointmentDto.EndAppointmentTime <= a.EndAppointmentTime) ||
+                (appointmentDto.AppointmentTime <= a.AppointmentTime && appointmentDto.EndAppointmentTime >= a.EndAppointmentTime));
+
+            if(existingAppointments.Count() > 0)
+            {
+                foreach (var appointment in existingAppointments)
+                {
+                    await _appointmentRepository.Delete(appointment.AppointmentId);
+                }
+            }
+          
+        }
 
     }
 }
