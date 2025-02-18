@@ -20,6 +20,7 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public string? LanguageCode { get; set; }
+        public string? DefaultUrl { get; set; }
         public bool IsActive { get; set; }
     }
 }
