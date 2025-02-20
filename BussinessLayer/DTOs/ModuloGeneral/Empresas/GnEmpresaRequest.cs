@@ -19,5 +19,6 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Empresas
         [JsonIgnore]
         public long CODIGO_EMP { get; set; }
         public string? LanguageCode { get; set; }
+        public string? DefaultUrl { get; set; }
     }
 }

@@ -27,6 +27,7 @@ namespace DataLayer.Models.ModuloGeneral.Seguridad
         public bool IsActive = true;
         public string Email { get; set; } = null!;
         public string? LanguageCode { get; set; } 
+        public string? DefaultUrl { get; set; } 
         public string? UserName { get; set; }
         [ForeignKey("CodigoSuc")]
         public GnSucursal? GnSucursal { get; set; }

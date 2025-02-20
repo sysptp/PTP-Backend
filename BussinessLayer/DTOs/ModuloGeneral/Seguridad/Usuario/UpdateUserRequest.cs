@@ -18,5 +18,6 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario
         [JsonIgnore]
         public int Id { get; set; }
         public string? LanguageCode { get; set; }
+        public string? DefaultUrl { get; set; }
     }
 }

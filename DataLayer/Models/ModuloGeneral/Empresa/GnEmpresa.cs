@@ -19,5 +19,6 @@ namespace DataLayer.Models.ModuloGeneral.Empresa
         public int CANT_USUARIO { get; set; }
         public string? WEB_URL { get; set; }
         public string? LanguageCode { get; set; }
+        public string? DefaultUrl { get; set; }
     }
 }

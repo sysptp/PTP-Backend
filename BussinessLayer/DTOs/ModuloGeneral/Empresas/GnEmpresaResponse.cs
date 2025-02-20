@@ -14,6 +14,7 @@
         public int SucursalCount { get; set; }
         public int UserCount { get; set; }
         public string? WebsiteUrl { get; set; }
-        public string? LanguageCode { get; set; } 
+        public string? LanguageCode { get; set; }
+        public string? DefaultUrl { get; set; }
     }
 }
