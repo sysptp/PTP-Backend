@@ -32,7 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener secuencias de citas", Description = "Devuelve una lista de secuencias de citas o una secuencia específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllSequences([FromQuery] int? id)
+        public async Task<IActionResult> GetAllSequences([FromQuery] int? id, long? companyId)
         {
             try
             {
@@ -49,7 +49,8 @@ namespace PTP_API.Controllers.ModuloCita
                 if (sequences == null || !sequences.Any())
                     return StatusCode(204, Response<IEnumerable<CtaAppointmentSequenceResponse>>.NoContent("No hay secuencias disponibles."));
 
-                return Ok(Response<IEnumerable<CtaAppointmentSequenceResponse>>.Success(sequences, "Secuencias obtenidas correctamente."));
+                return Ok(Response<IEnumerable<CtaAppointmentSequenceResponse>>.Success(
+                    companyId != null ? sequences.Where(x => x.CompanyId == companyId) : sequences, "Secuencias obtenidas correctamente."));
             }
             catch (Exception ex)
             {

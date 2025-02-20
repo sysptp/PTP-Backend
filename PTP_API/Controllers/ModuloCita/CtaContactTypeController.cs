@@ -21,12 +21,12 @@ namespace PTP_API.Controllers.ModuloCita
     public class CtaContactTypeController : ControllerBase
     {
 
-        private readonly ICtaContactTypeService _emailConfigService;
+        private readonly ICtaContactTypeService _contactTypeService;
         private readonly IValidator<CtaContactTypeRequest> _validator;
 
         public CtaContactTypeController(ICtaContactTypeService emailConfigService, IValidator<CtaContactTypeRequest> validator)
         {
-            _emailConfigService = emailConfigService;
+            _contactTypeService = emailConfigService;
             _validator = validator;
         }
 
@@ -36,13 +36,13 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener tipo de contactos", Description = "Devuelve una lista de tipos de contactos o un tipo de contacto específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllConfigurations([FromQuery] int? id)
+        public async Task<IActionResult> GetAllConfigurations([FromQuery] int? id, long? companyId)
         {
             try
             {
                 if (id.HasValue)
                 {
-                    var contactType = await _emailConfigService.GetByIdResponse(id.Value);
+                    var contactType = await _contactTypeService.GetByIdResponse(id.Value);
                     if (contactType == null)
                         return NotFound(Response<CtaEmailConfiguracionResponse>.NotFound("Tipo de Contacto no encontrado."));
 
@@ -50,11 +50,12 @@ namespace PTP_API.Controllers.ModuloCita
                 }
                 else
                 {
-                    var configurations = await _emailConfigService.GetAllDto();
-                    if (configurations == null || !configurations.Any())
+                    var contactTypes = await _contactTypeService.GetAllDto();
+                    if (contactTypes == null || !contactTypes.Any())
                         return StatusCode(204, Response<IEnumerable<CtaContactTypeResponse>>.NoContent("No hay Tipo de Contactos disponibles."));
 
-                    return Ok(Response<IEnumerable<CtaContactTypeResponse>>.Success(configurations, "Tipo de Contactos obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<CtaContactTypeResponse>>.Success(
+                        companyId != null ? contactTypes.Where(x => x.CompanyId == companyId) : contactTypes, "Tipo de Contactos obtenidos correctamente."));
                 }
             }
             catch (Exception ex)
@@ -81,7 +82,7 @@ namespace PTP_API.Controllers.ModuloCita
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var response = await _emailConfigService.Add(request);
+                var response = await _contactTypeService.Add(request);
                 return CreatedAtAction(nameof(GetAllConfigurations), Response<CtaContactTypeResponse>.Created(response));
             }
             catch (Exception ex)
@@ -108,12 +109,12 @@ namespace PTP_API.Controllers.ModuloCita
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
-                var contactType = await _emailConfigService.GetByIdRequest(id);
+                var contactType = await _contactTypeService.GetByIdRequest(id);
                 if (contactType == null)
                     return NotFound(Response<string>.NotFound("Tipo de Contacto no encontrado."));
 
                 contactTypeDto.Id = id;
-                await _emailConfigService.Update(contactTypeDto, id);
+                await _contactTypeService.Update(contactTypeDto, id);
                 return Ok(Response<string>.Success(null, "Tipo de Contacto actualizado correctamente."));
             }
             catch (Exception ex)
@@ -131,11 +132,11 @@ namespace PTP_API.Controllers.ModuloCita
         {
             try
             {
-                var existingConfig = await _emailConfigService.GetByIdRequest(id);
+                var existingConfig = await _contactTypeService.GetByIdRequest(id);
                 if (existingConfig == null)
                     return NotFound(Response<string>.NotFound("Tipo de Contacto no encontrado."));
 
-                await _emailConfigService.Delete(id);
+                await _contactTypeService.Delete(id);
                 return Ok(Response<string>.Success(null, "Tipo de Contacto eliminado correctamente."));
             }
             catch (Exception ex)

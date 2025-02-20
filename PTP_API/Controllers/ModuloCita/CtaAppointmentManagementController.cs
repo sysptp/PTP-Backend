@@ -34,7 +34,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener citas", Description = "Devuelve una lista de citas o una cita específica si se proporciona un ID")]
         [DisableBitacora]
-        public async Task<IActionResult> GetAllAppointments([FromQuery] int? IdManagmentAppoinment)
+        public async Task<IActionResult> GetAllAppointments([FromQuery] int? IdManagmentAppoinment, long? companyId)
         {
             try
             {

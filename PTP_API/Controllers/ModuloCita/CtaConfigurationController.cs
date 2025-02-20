@@ -34,7 +34,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener configuraciones de cuentas", Description = "Devuelve una lista de configuraciones o una configuración específica si se proporciona un ID")]
         [DisableBitacora]
-        public async Task<IActionResult> GetAllCtaConfiguration([FromQuery] int? IdConfiguration)
+        public async Task<IActionResult> GetAllCtaConfiguration([FromQuery] int? IdConfiguration, long? companyId)
         {
             try
             {
@@ -55,7 +55,8 @@ namespace PTP_API.Controllers.ModuloCita
                     {
                         return StatusCode(204, Response<IEnumerable<CtaConfiguracionResponse>>.NoContent("No hay configuraciones disponibles."));
                     }
-                    return Ok(Response<IEnumerable<CtaConfiguracionResponse>>.Success(configurations, "Configuraciones obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<CtaConfiguracionResponse>>.Success(
+                        companyId != null ? configurations.Where(x => x.CompanyId == companyId) : configurations, "Configuraciones obtenidas correctamente."));
                 }
             }
             catch (Exception ex)

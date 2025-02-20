@@ -37,7 +37,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener citas", Description = "Devuelve una lista de citas o una cita específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllAppointments([FromQuery] string? appointmentCode, int? appointmentId, long? companyId)
+        public async Task<IActionResult> GetAllAppointments([FromQuery] string? appointmentCode, int? appointmentId, long? companyId, int? userId)
         {
             try
             {
@@ -55,9 +55,20 @@ namespace PTP_API.Controllers.ModuloCita
                     if (appointments == null || !appointments.Any())
                         return StatusCode(204, Response<IEnumerable<CtaAppointmentsResponse>>.NoContent("No hay citas disponibles."));
 
+                    // Aplicando filtros de manera más clara y manejando valores nulos
+                    var filteredAppointments = appointments.AsQueryable();
+
+                    if (companyId.HasValue)
+                        filteredAppointments = filteredAppointments.Where(x => x.CompanyId == companyId.Value);
+
+                    if (!string.IsNullOrEmpty(appointmentCode))
+                        filteredAppointments = filteredAppointments.Where(x => x.AppointmentCode == appointmentCode);
+
+                    if (userId.HasValue)
+                        filteredAppointments = filteredAppointments.Where(x => x.UserId == userId.Value);
+
                     return Ok(Response<IEnumerable<CtaAppointmentsResponse>>.Success(
-                        companyId.HasValue ? appointments.Where(x => x.CompanyId == companyId).ToList() : 
-                        (appointmentCode != null ? appointments.Where(x => x.AppointmentCode == appointmentCode).ToList() : appointments), 
+                        filteredAppointments.ToList(),
                         "Citas obtenidas correctamente."));
                 }
             }

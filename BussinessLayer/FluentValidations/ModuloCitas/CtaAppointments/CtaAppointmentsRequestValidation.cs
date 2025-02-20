@@ -1,10 +1,10 @@
 ﻿using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+using BussinessLayer.Enums;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
 using FluentValidation;
-using System.Globalization;
 
 namespace BussinessLayer.Validations.ModuloCitas.CtaAppointments
 {
@@ -69,21 +69,21 @@ namespace BussinessLayer.Validations.ModuloCitas.CtaAppointments
                 })
                 .WithMessage("El identificador del área (AreaId) no existe en la base de datos.");
 
-            RuleForEach(x => x.CtaAppointmentContacts)
-                .ChildRules(contact =>
-                {
-                    contact.RuleFor(c => c.ContactId)
-                        .GreaterThan(0).WithMessage("El identificador de contacto (ContactId) es obligatorio.");
-                 });
+            //RuleForEach(x => x.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser).ToList())
+            //  .ChildRules(contact =>
+            //    {
+            //        contact.RuleFor(c => c.ParticipantId)
+            //            .GreaterThan(0).WithMessage("El identificador de contacto (ContactId) es obligatorio.");
+            //     });
 
-            RuleForEach(x => x.CtaAppointmentUsers)
-                .ChildRules(user =>
-                {
-                    user.RuleFor(u => u.UserId)
-                        .GreaterThan(0).WithMessage("El identificador de usuario invitado (UserId) es obligatorio.")
-                        .MustAsync(async (id, cancellation) => await _userRepository.GetById(id) != null)
-                        .WithMessage("El usuario invitado (UserId) no existe en la base de datos.");
-                });
+            //RuleForEach(x => x.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser).ToList())
+            //    .ChildRules(user =>
+            //    {
+            //        user.RuleFor(u => u.ParticipantId)
+            //            .GreaterThan(0).WithMessage("El identificador de usuario invitado (UserId) es obligatorio.")
+            //            .MustAsync(async (id, cancellation) => await _userRepository.GetById(id) != null)
+            //            .WithMessage("El usuario invitado (UserId) no existe en la base de datos.");
+            //    });
 
             RuleFor(x => x.AppointmentDate)
                 .GreaterThan(DateTime.Now.Date)

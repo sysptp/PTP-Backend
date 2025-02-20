@@ -107,7 +107,7 @@ namespace IdentityLayer.Services
             response.RoleName = user.GnPerfil.Name;
             response.CompanyName = user.GnEmpresa.NOMBRE_EMP;
             response.SucursalName = user.GnSucursal.NombreSuc;
-            response.GnPermisoResponses = await _gnmisoService.GetAllPermisosByFilter(user.CodigoEmp,user.IdPerfil);
+            //response.GnPermisoResponses = await _gnmisoService.GetAllPermisosByFilter(user.CodigoEmp,user.IdPerfil);
 
             JwtSecurityToken jwtToken = GenerateJWToken(user);
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);

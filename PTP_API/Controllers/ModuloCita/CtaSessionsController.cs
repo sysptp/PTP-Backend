@@ -33,7 +33,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener sesiones", Description = "Devuelve una lista de sesiones o una sesión específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllSessions([FromQuery] int? IdSession)
+        public async Task<IActionResult> GetAllSessions([FromQuery] int? IdSession, long? companyId, int? userId)
         {
             try
             {
@@ -51,7 +51,17 @@ namespace PTP_API.Controllers.ModuloCita
                     if (sessions == null || !sessions.Any())
                         return StatusCode(204, Response<IEnumerable<CtaSessionsResponse>>.NoContent("No hay sesiones disponibles."));
 
-                    return Ok(Response<IEnumerable<CtaSessionsResponse>>.Success(sessions, "Sesiones obtenidas correctamente."));
+                    var filteredSessions = sessions.AsQueryable();
+
+                    if (companyId.HasValue)
+                        filteredSessions = filteredSessions.Where(x => x.CompanyId == companyId.Value);
+
+                    if (userId.HasValue)
+                        filteredSessions = filteredSessions.Where(x => x.IdUser == userId.Value);
+
+                    return Ok(Response<IEnumerable<CtaSessionsResponse>>.Success(
+                        filteredSessions.ToList(),
+                        "Sesiones obtenidas correctamente."));
                 }
             }
             catch (Exception ex)

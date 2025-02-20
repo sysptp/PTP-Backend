@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloGeneral.Email;
+using BussinessLayer.Enums;
 using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
@@ -9,7 +10,6 @@ using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using BussinessLayer.Services;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCitas;
-using Newtonsoft.Json;
 
 namespace DataLayer.Models.Modulo_Citas
 {
@@ -54,58 +54,74 @@ namespace DataLayer.Models.Modulo_Citas
 
             var appointmentId = appointmentEntity.AppointmentId;
 
-            if (vm.CtaAppointmentUsers != null && vm.CtaAppointmentUsers.Any())
-            {
-                var usersToInsert = vm.CtaAppointmentUsers.Select(user => new CtaAppointmentUsers
-                {
-                    UserId = user.UserId,
-                    AppointmentId = appointmentId,
-                    CompanyId = appointmentEntity.CompanyId
-                }).ToList();
-
-                await _userAppointmentRepository.AddRangeAsync(usersToInsert);
-            }
-
-            if (vm.CtaAppointmentContacts != null && vm.CtaAppointmentContacts.Any())
-            {
-                var contactsToInsert = vm.CtaAppointmentContacts.Select(contact => new CtaAppointmentContacts
-                {
-                    ContactId = contact.ContactId,
-                    AppointmentId = appointmentId,
-                    CompanyId = appointmentEntity.CompanyId
-                }).ToList();
-
-                await _appointmentContactsRepository.AddRangeAsync(contactsToInsert);
-            }
-
-            if (vm.CtaAppointmentGuests != null && vm.CtaAppointmentGuests.Any())
-            {
-                var guestToInsert = vm.CtaAppointmentGuests.Select(guest => new CtaAppointmentGuest
-                {
-                    Id = guest.Id,
-                    AppointmentId = appointmentId,
-                    CompanyId = appointmentEntity.CompanyId,
-                    GuestId = guest.GuestId
-                }).ToList();
-
-                await _ctaAppointmentGuestRepository.AddRangeAsync(guestToInsert);
-            }
+            await AddAppointmentParticipants(vm, appointmentId, appointmentEntity);
 
             await SendAppointmentEmailsAsync(vm, vm.CompanyId);
 
             return _mapper.Map<CtaAppointmentsResponse>(appointmentEntity);
         }
 
+        public async Task AddAppointmentParticipants(CtaAppointmentsRequest vm, int appointmentId, CtaAppointmentsResponse appointmentEntity)
+        {
+
+            _ = Task.Run(async () =>
+            {
+
+                if (vm.AppointmentParticipants != null && vm.AppointmentParticipants.Any())
+                {
+
+                    if (vm.AppointmentParticipants.Any(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser))
+                    {
+                        var usersToInsert = vm.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser)
+                        .Select(user => new CtaAppointmentUsers
+                        {
+                            UserId = user.ParticipantId,
+                            AppointmentId = appointmentId,
+                            CompanyId = appointmentEntity.CompanyId
+                        }).ToList();
+
+                        await _userAppointmentRepository.AddRangeAsync(usersToInsert);
+                    }
+
+                    if (vm.AppointmentParticipants.Any(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact))
+                    {
+                        var contactsToInsert = vm.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact)
+                        .Select(contact => new CtaAppointmentContacts
+                        {
+                            ContactId = contact.ParticipantId,
+                            AppointmentId = appointmentId,
+                            CompanyId = appointmentEntity.CompanyId
+                        }).ToList();
+
+                        await _appointmentContactsRepository.AddRangeAsync(contactsToInsert);
+                    }
+
+                    if (vm.AppointmentParticipants.Any(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest))
+                    {
+                        var guestToInsert = vm.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest)
+                        .Select(guest => new CtaAppointmentGuest
+                        {
+                            AppointmentId = appointmentId,
+                            CompanyId = appointmentEntity.CompanyId,
+                            GuestId = guest.ParticipantId
+                        }).ToList();
+
+                        await _ctaAppointmentGuestRepository.AddRangeAsync(guestToInsert);
+                    }
+                }
+            });
+        }
+
         public override async Task<List<CtaAppointmentsResponse>> GetAllDto()
         {
             var appointments = await _appointmentRepository.GetAllWithIncludeAsync(new List<string>
-            { "CtaAppointmentReason", 
+            { "CtaAppointmentReason",
                 "CtaMeetingPlace",
                 "CtaState",
                 "CtaAppointmentContacts",
                 "CtaAppointmentUsers",
                 "CtaAppointmentManagement",
-                 "CtaAppointmentContacts.Contact",  
+                 "CtaAppointmentContacts.Contact",
                  "CtaAppointmentUsers.Usuario",
                  "CtaAppointmentGuest.Guest"});
 
@@ -122,17 +138,17 @@ namespace DataLayer.Models.Modulo_Citas
                 var allContacts = await _contactRepository.GetAll();
                 var allUsers = await _userRepository.GetAll();
                 var allGuests = await _guestRepository.GetAll();
-
-                var contactEmails = (appointment.CtaAppointmentContacts?
-                    .Select(c => allContacts.FirstOrDefault(x => x.Id == c.ContactId)?.ContactEmail)
+               
+                var contactEmails = (appointment.AppointmentParticipants?
+                    .Select(c => allContacts.FirstOrDefault(x => c.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == c.ParticipantId)?.ContactEmail)
                     .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
 
-                var userEmails = (appointment.CtaAppointmentUsers?
-                    .Select(u => allUsers.FirstOrDefault(x => x.Id == u.UserId)?.Email)
+                var userEmails = (appointment.AppointmentParticipants?
+                    .Select(u => allUsers.FirstOrDefault(x => u.ParticipantTypeId == (int)AppointmentParticipant.SystemUser && x.Id == u.ParticipantId)?.Email)
                     .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
 
-                var guestEmails = (appointment.CtaAppointmentGuests?
-                    .Select(g => allGuests.FirstOrDefault(x => x.Id == g.GuestId)?.Email)
+                var guestEmails = (appointment.AppointmentParticipants?
+                    .Select(g => allGuests.FirstOrDefault(x => g.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == g.ParticipantId)?.Email)
                     .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
 
                 var emailTasks = new List<Task>();
@@ -202,14 +218,14 @@ namespace DataLayer.Models.Modulo_Citas
                 (appointmentDto.EndAppointmentTime > a.AppointmentTime && appointmentDto.EndAppointmentTime <= a.EndAppointmentTime) ||
                 (appointmentDto.AppointmentTime <= a.AppointmentTime && appointmentDto.EndAppointmentTime >= a.EndAppointmentTime));
 
-            if(existingAppointments.Count() > 0)
+            if (existingAppointments.Count() > 0)
             {
                 foreach (var appointment in existingAppointments)
                 {
                     await _appointmentRepository.Delete(appointment.AppointmentId);
                 }
             }
-          
+
         }
 
     }

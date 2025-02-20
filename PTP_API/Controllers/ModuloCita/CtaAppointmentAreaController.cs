@@ -32,7 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener áreas de citas", Description = "Devuelve una lista de áreas de citas o un área específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllAreas([FromQuery] int? id)
+        public async Task<IActionResult> GetAllAreas([FromQuery] int? id, long? companyId)
         {
             try
             {
@@ -49,7 +49,8 @@ namespace PTP_API.Controllers.ModuloCita
                 if (areas == null || !areas.Any())
                     return StatusCode(204, Response<IEnumerable<CtaAppointmentAreaResponse>>.NoContent("No hay áreas disponibles."));
 
-                return Ok(Response<IEnumerable<CtaAppointmentAreaResponse>>.Success(areas, "Áreas obtenidas correctamente."));
+                return Ok(Response<IEnumerable<CtaAppointmentAreaResponse>>.Success(
+                   companyId != null ? areas.Where(x => x.CompanyId == companyId) : areas, "Áreas obtenidas correctamente."));
             }
             catch (Exception ex)
             {
