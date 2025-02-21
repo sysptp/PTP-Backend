@@ -15,6 +15,6 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
         public int RepeatEvery { get; set; }
         public int RepeatUnitId { get; set; }
         [JsonPropertyName("AppointmentsInformation")]
-        public AppointmentInformation AppointmentInformation { get; set; } = null!;
+        public AppointmentInformation AppointmentInformation { get; set; } = new();
     }
 }
