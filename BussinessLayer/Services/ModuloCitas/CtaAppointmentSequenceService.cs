@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using DataLayer.Models.ModuloCitas;
@@ -77,5 +78,6 @@ namespace BussinessLayer.Services.ModuloCitas
 
             return sequence;
         }
+
     }
 }

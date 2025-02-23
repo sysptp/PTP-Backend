@@ -17,7 +17,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    [EnableBitacora]
+    //[EnableBitacora]
     public class CtaAppointmentsController : ControllerBase
     {
         private readonly ICtaAppointmentsService _appointmentService;
@@ -84,7 +84,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Crear una nueva cita", Description = "Endpoint para registrar una cita")]
-        public async Task<IActionResult> CreateAppointment([FromBody] CtaAppointmentsRequest appointmentDto,bool deleteExistingAppointment = false)
+        public async Task<IActionResult> CreateAppointment([FromBody] CtaAppointmentsRequest appointmentDto, bool deleteExistingAppointment = false)
         {
             try
             {
@@ -166,6 +166,43 @@ namespace PTP_API.Controllers.ModuloCita
 
                 await _appointmentService.Delete(id);
                 return Ok(Response<string>.Success(null, "Cita eliminada correctamente."));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
+            }
+        }
+
+
+        [HttpGet("GetAllParticipants")]
+        [ProducesResponseType(typeof(Response<IEnumerable<CtaAppointmentsResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Obtener Todos los participantes que pueden particar en Citas", Description = "Devuelve una lista de posibles participantes para citas o un participante específico si se proporciona un ID")]
+        public async Task<IActionResult> GetAlParticipants([FromQuery] int? participantTypeId, int? participantId, long? companyId)
+        {
+            try
+            {
+                var participants = await _appointmentService.GetAllParticipants();
+                if (participants == null || !participants.Any())
+                    return StatusCode(204, Response<IEnumerable<AppointmentParticipantsResponse>>.NoContent("No hay participantes disponibles."));
+
+                var filteredParticipants = participants.AsQueryable();
+
+                if (companyId.HasValue)
+                    filteredParticipants = filteredParticipants.Where(x => x.CompanyId == companyId);
+
+                if (participantId.HasValue)
+                    filteredParticipants = filteredParticipants.Where(x => x.ParticipantId == participantId);
+
+                if (participantTypeId.HasValue)
+                    filteredParticipants = filteredParticipants.Where(x => x.ParticipantTypeId == participantTypeId);
+
+                return Ok(Response<IEnumerable<AppointmentParticipantsResponse>>.Success(
+                    filteredParticipants.ToList(),
+                    "participantes obtenidos correctamente."));
+
             }
             catch (Exception ex)
             {

@@ -1,8 +1,13 @@
 ﻿
-
 namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
 {
-    internal class AppointmentParticipantsResponse
+    public class AppointmentParticipantsResponse
     {
+        public int ParticipantId { get; set; }
+        public int ParticipantTypeId { get; set; }
+        public string ParticipantName { get; set; } = null!;
+        public string ParticipantEmail { get; set; } = null!;
+        public string ParticipantPhone { get; set; } = null!;
+        public long CompanyId { get; set; }
     }
 }

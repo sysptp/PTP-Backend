@@ -9,5 +9,6 @@ namespace BussinessLayer.Interfaces.Services.ModuloCitas
     {
         Task<DetailMessage> ExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto);
         Task DeleteExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto);
+        Task<List<AppointmentParticipantsResponse>> GetAllParticipants();
     }
 }

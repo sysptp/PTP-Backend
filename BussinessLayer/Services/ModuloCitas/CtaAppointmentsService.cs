@@ -225,7 +225,58 @@ namespace DataLayer.Models.Modulo_Citas
                     await _appointmentRepository.Delete(appointment.AppointmentId);
                 }
             }
+        }
 
+        public async Task<List<AppointmentParticipantsResponse>> GetAllParticipants()
+        {
+            var contactList = await _contactRepository.GetAll();
+            var userSystemList = await _userRepository.GetAll();
+            var guestList = await _guestRepository.GetAll();
+            var participantList = new List<AppointmentParticipantsResponse>();
+
+            foreach (var contact in contactList)
+            {
+                var participant = new AppointmentParticipantsResponse
+                {
+                    ParticipantId = contact.Id,
+                    ParticipantTypeId = (int)AppointmentParticipant.Contact,
+                    ParticipantEmail = contact.ContactEmail,
+                    ParticipantName = contact.Name,
+                    ParticipantPhone = contact.ContactNumber,
+                    CompanyId = contact.CompanyId
+                };
+                participantList.Add(participant);
+            }
+
+            foreach (var user in userSystemList)
+            {
+                var participant = new AppointmentParticipantsResponse
+                {
+                    ParticipantId = user.Id,
+                    ParticipantTypeId = (int)AppointmentParticipant.SystemUser,
+                    ParticipantEmail = user.Email,
+                    ParticipantName = user.Nombre+ " " + user.Apellido,
+                    ParticipantPhone = user.TelefonoPersonal,
+                    CompanyId = (long)user.CodigoEmp 
+                };
+                participantList.Add(participant);
+            }
+
+            foreach (var guest in guestList)
+            {
+                var participant = new AppointmentParticipantsResponse
+                {
+                    ParticipantId = guest.Id,
+                    ParticipantTypeId = (int)AppointmentParticipant.Guest,
+                    ParticipantEmail = guest.Email,
+                    ParticipantName = guest.Names,
+                    ParticipantPhone = guest.PhoneNumber,
+                    CompanyId = guest.CompanyId
+                };
+                participantList.Add(participant);
+            }
+
+            return participantList.OrderBy(x => x.ParticipantName).ToList();
         }
 
     }
