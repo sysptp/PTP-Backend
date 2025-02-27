@@ -137,11 +137,11 @@ public static class ServiceRegistration
 
         #region Auditoria
         services.AddScoped<IAleBitacoraService, AleBitacoraService>();
-        services.AddTransient<IAleLogsService, AleLogsService>();
-        services.AddTransient<IAleLoginService, AleLoginService>();
-        services.AddTransient<IAlePrintService, AlePrintService>();
-        services.AddTransient<IAleAuditLogService, AleAuditLogService>();
-        services.AddTransient<IAleAuditTableControlService, AleAuditTableControlService>();
+        services.AddScoped<IAleLogsService, AleLogsService>();
+        services.AddScoped<IAleLoginService, AleLoginService>();
+        services.AddScoped<IAlePrintService, AlePrintService>();
+        services.AddScoped<IAleAuditLogService, AleAuditLogService>();
+        services.AddScoped<IAleAuditTableControlService, AleAuditTableControlService>();
         #endregion
 
         #region Modulo de Citas
@@ -167,6 +167,9 @@ public static class ServiceRegistration
         services.AddScoped<ICtaContactService, CtaContactService>();
         services.AddScoped<ICtaGuestService, CtaGuestService>();
         services.AddScoped<ICtaAppointmentGuestService, CtaAppointmentGuestService>();
+        services.AddScoped<ICtaEmailTemplatesService, CtaEmailTemplatesService>();
+        services.AddScoped<ICtaEmailTemplateTypesService, CtaEmailTemplateTypesService>();
+        services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
 
         #endregion
 
@@ -175,11 +178,11 @@ public static class ServiceRegistration
 
         #region Modulo General
 
-        services.AddTransient<IGnScheduleService, GnScheduleService>();
-        services.AddTransient<IGnScheduleUserService, GnScheduleUserService>();
+        services.AddScoped<IGnScheduleService, GnScheduleService>();
+        services.AddScoped<IGnScheduleUserService, GnScheduleUserService>();
 
         #region Geocalizacion 
-        services.AddTransient<IIpGeolocalitationService, IpWhoisService>();
+        services.AddScoped<IIpGeolocalitationService, IpWhoisService>();
         #endregion
 
         #region Language
@@ -217,34 +220,34 @@ public static class ServiceRegistration
 
         #region Geografia
 
-        services.AddTransient<IPaisService, PaisService>();
-        services.AddTransient<IMunicipioService, MunicipioService>();
-        services.AddTransient<IRegionService, RegionService>();
-        services.AddTransient<IProvinciaService, ProvinciaService>();
+        services.AddScoped<IPaisService, PaisService>();
+        services.AddScoped<IMunicipioService, MunicipioService>();
+        services.AddScoped<IRegionService, RegionService>();
+        services.AddScoped<IProvinciaService, ProvinciaService>();
 
         #endregion
 
         #region Configuracion 
-        services.AddTransient<IGnMenuService, GnMenuService>();
-        services.AddTransient<IGnModuloService, GnModuloService>();
-        services.AddTransient<IGnParametrosGeneralesService, GnParametrosGeneralesService>();
+        services.AddScoped<IGnMenuService, GnMenuService>();
+        services.AddScoped<IGnModuloService, GnModuloService>();
+        services.AddScoped<IGnParametrosGeneralesService, GnParametrosGeneralesService>();
         #endregion
 
         #endregion
 
         #region HelpDesk
-        services.AddTransient<IHdkCategoryTicketService, HdkCategoryTicketService>();
-        services.AddTransient<IHdkDepartamentsService, HdkDepartamentsService>();
-        services.AddTransient<IHdkDepartXUsuarioService, HdkDepartXUsuarioService>();
-        services.AddTransient<IHdkErrorSubCategoryService, HdkErrorSubCategoryService>();
-        services.AddTransient<IHdkFileEvidenceTicketService, HdkFileEvidenceTicketService>();
-        services.AddTransient<IHdkNoteTicketService, HdkNoteTicketService>();
-        services.AddTransient<IHdkPrioridadTicketService, HdkPrioridadTicketService>();
-        services.AddTransient<IHdkSolutionTicketService, HdkSolutionTicketService>();
-        services.AddTransient<IHdkStatusTicketService, HdkStatusTicketService>();
-        services.AddTransient<IHdkSubCategoryService, HdkSubCategoryService>();
-        services.AddTransient<IHdkTicketsService, HdkTicketsService>();
-        services.AddTransient<IHdkTypeTicketService, HdkTypeTicketService>();
+        services.AddScoped<IHdkCategoryTicketService, HdkCategoryTicketService>();
+        services.AddScoped<IHdkDepartamentsService, HdkDepartamentsService>();
+        services.AddScoped<IHdkDepartXUsuarioService, HdkDepartXUsuarioService>();
+        services.AddScoped<IHdkErrorSubCategoryService, HdkErrorSubCategoryService>();
+        services.AddScoped<IHdkFileEvidenceTicketService, HdkFileEvidenceTicketService>();
+        services.AddScoped<IHdkNoteTicketService, HdkNoteTicketService>();
+        services.AddScoped<IHdkPrioridadTicketService, HdkPrioridadTicketService>();
+        services.AddScoped<IHdkSolutionTicketService, HdkSolutionTicketService>();
+        services.AddScoped<IHdkStatusTicketService, HdkStatusTicketService>();
+        services.AddScoped<IHdkSubCategoryService, HdkSubCategoryService>();
+        services.AddScoped<IHdkTicketsService, HdkTicketsService>();
+        services.AddScoped<IHdkTypeTicketService, HdkTypeTicketService>();
         #endregion
 
         #region Modulo Inventario

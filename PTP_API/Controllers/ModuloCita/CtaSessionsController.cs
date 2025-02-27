@@ -76,7 +76,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Crear una nueva sesión", Description = "Endpoint para registrar una sesión")]
-        public async Task<IActionResult> CreateSession([FromBody] CtaSessionsRequest sessionDto)
+        public async Task<IActionResult> CreateSession([FromBody] CtaSessionsRequest sessionDto, bool? deleteExistingAppointmentsWithCoincides)
         {
             try
             {
@@ -88,6 +88,20 @@ namespace PTP_API.Controllers.ModuloCita
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
+                if (deleteExistingAppointmentsWithCoincides != null && deleteExistingAppointmentsWithCoincides == true)
+                {
+                    await _sessionsService.DeleteAppointmentsInSessionRange(sessionDto);
+                }
+                else
+                {
+
+                    var existsMessage = await _sessionsService.GetConflictingAppointmentsInSessionRange(sessionDto);
+                    if (existsMessage != null)
+                    {
+                        return Ok(Response<DetailMessage>.Success(existsMessage));
+                    }
+                }
+
                 var response = await _sessionsService.CreateSessionAndGenerateAppointments(sessionDto);
                 return CreatedAtAction(nameof(GetAllSessions), Response<CtaSessionsRequest>.Created(response));
             }
@@ -96,6 +110,8 @@ namespace PTP_API.Controllers.ModuloCita
                 return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
+
+
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

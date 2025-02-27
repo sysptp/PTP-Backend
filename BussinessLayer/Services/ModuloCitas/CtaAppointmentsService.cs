@@ -64,57 +64,55 @@ namespace DataLayer.Models.Modulo_Citas
         public async Task AddAppointmentParticipants(CtaAppointmentsRequest vm, int appointmentId, CtaAppointmentsResponse appointmentEntity)
         {
 
-            _ = Task.Run(async () =>
+            if (vm.AppointmentParticipants != null && vm.AppointmentParticipants.Any())
             {
 
-                if (vm.AppointmentParticipants != null && vm.AppointmentParticipants.Any())
+                if (vm.AppointmentParticipants.Any(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser))
                 {
-
-                    if (vm.AppointmentParticipants.Any(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser))
+                    var usersToInsert = vm.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser)
+                    .Select(user => new CtaAppointmentUsers
                     {
-                        var usersToInsert = vm.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser)
-                        .Select(user => new CtaAppointmentUsers
-                        {
-                            UserId = user.ParticipantId,
-                            AppointmentId = appointmentId,
-                            CompanyId = appointmentEntity.CompanyId
-                        }).ToList();
+                        UserId = user.ParticipantId,
+                        AppointmentId = appointmentId,
+                        CompanyId = appointmentEntity.CompanyId
+                    }).ToList();
 
-                        await _userAppointmentRepository.AddRangeAsync(usersToInsert);
-                    }
-
-                    if (vm.AppointmentParticipants.Any(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact))
-                    {
-                        var contactsToInsert = vm.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact)
-                        .Select(contact => new CtaAppointmentContacts
-                        {
-                            ContactId = contact.ParticipantId,
-                            AppointmentId = appointmentId,
-                            CompanyId = appointmentEntity.CompanyId
-                        }).ToList();
-
-                        await _appointmentContactsRepository.AddRangeAsync(contactsToInsert);
-                    }
-
-                    if (vm.AppointmentParticipants.Any(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest))
-                    {
-                        var guestToInsert = vm.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest)
-                        .Select(guest => new CtaAppointmentGuest
-                        {
-                            AppointmentId = appointmentId,
-                            CompanyId = appointmentEntity.CompanyId,
-                            GuestId = guest.ParticipantId
-                        }).ToList();
-
-                        await _ctaAppointmentGuestRepository.AddRangeAsync(guestToInsert);
-                    }
+                    await _userAppointmentRepository.AddRangeAsync(usersToInsert);
                 }
-            });
+
+                if (vm.AppointmentParticipants.Any(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact))
+                {
+                    var contactsToInsert = vm.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact)
+                    .Select(contact => new CtaAppointmentContacts
+                    {
+                        ContactId = contact.ParticipantId,
+                        AppointmentId = appointmentId,
+                        CompanyId = appointmentEntity.CompanyId
+                    }).ToList();
+
+                    await _appointmentContactsRepository.AddRangeAsync(contactsToInsert);
+                }
+
+                if (vm.AppointmentParticipants.Any(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest))
+                {
+                    var guestToInsert = vm.AppointmentParticipants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest)
+                    .Select(guest => new CtaAppointmentGuest
+                    {
+                        AppointmentId = appointmentId,
+                        CompanyId = appointmentEntity.CompanyId,
+                        GuestId = guest.ParticipantId
+                    }).ToList();
+
+                    await _ctaAppointmentGuestRepository.AddRangeAsync(guestToInsert);
+                }
+            }
         }
 
         public override async Task<List<CtaAppointmentsResponse>> GetAllDto()
         {
-            var appointments = await _appointmentRepository.GetAllWithIncludeAsync(new List<string>
+            try
+            {
+                var appointments = await _appointmentRepository.GetAllWithIncludeAsync(new List<string>
             { "CtaAppointmentReason",
                 "CtaMeetingPlace",
                 "CtaState",
@@ -125,9 +123,14 @@ namespace DataLayer.Models.Modulo_Citas
                  "CtaAppointmentUsers.Usuario",
                  "CtaAppointmentGuest.Guest"});
 
-            var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments);
+                var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments);
 
-            return appointmentDtoList;
+                return appointmentDtoList;
+            }
+            catch (AutoMapperMappingException ex)
+            {
+                throw new Exception($"Error en el mapeo: {ex.Message}, InnerException: {ex.InnerException?.Message}");
+            }
         }
         private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId)
         {
@@ -138,7 +141,7 @@ namespace DataLayer.Models.Modulo_Citas
                 var allContacts = await _contactRepository.GetAll();
                 var allUsers = await _userRepository.GetAll();
                 var allGuests = await _guestRepository.GetAll();
-               
+
                 var contactEmails = (appointment.AppointmentParticipants?
                     .Select(c => allContacts.FirstOrDefault(x => c.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == c.ParticipantId)?.ContactEmail)
                     .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
@@ -189,7 +192,7 @@ namespace DataLayer.Models.Modulo_Citas
 
         public async Task<DetailMessage> ExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto)
         {
-            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId);
+            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId, appointmentDto.UserId);
 
             var existAppointment = existingAppointments.Any(a =>
                 (appointmentDto.AppointmentTime >= a.AppointmentTime && appointmentDto.AppointmentTime < a.EndAppointmentTime) ||
@@ -211,7 +214,7 @@ namespace DataLayer.Models.Modulo_Citas
 
         public async Task DeleteExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto)
         {
-            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId);
+            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId, appointmentDto.UserId);
 
             var existAppointment = existingAppointments.Any(a =>
                 (appointmentDto.AppointmentTime >= a.AppointmentTime && appointmentDto.AppointmentTime < a.EndAppointmentTime) ||
@@ -255,9 +258,9 @@ namespace DataLayer.Models.Modulo_Citas
                     ParticipantId = user.Id,
                     ParticipantTypeId = (int)AppointmentParticipant.SystemUser,
                     ParticipantEmail = user.Email,
-                    ParticipantName = user.Nombre+ " " + user.Apellido,
+                    ParticipantName = user.Nombre + " " + user.Apellido,
                     ParticipantPhone = user.TelefonoPersonal,
-                    CompanyId = (long)user.CodigoEmp 
+                    CompanyId = (long)user.CodigoEmp
                 };
                 participantList.Add(participant);
             }

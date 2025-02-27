@@ -52,19 +52,19 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IGnScheduleRepository, GnScheduleRepository>();
             services.AddTransient<IGnScheduleUserRepository, GnScheduleUserRepository>();
 
-            services.AddScoped<ICmpClienteRepository,CmpClienteRepository>();
-            services.AddScoped<ICmpTipoContactoRepository,CmpTipoContactoRepository>();
-            services.AddScoped<ICmpServidoresSmtpRepository,CmpServidoresSmtpRepository>();
-            services.AddScoped<ICmpConfiguracionesSmtpRepository, CmpConfiguracionesSmtpRepository>();
-            services.AddScoped<ICmpPlantillaRepository, CmpPlantillasRepository>();
-            services.AddScoped<ICmpTipoPlantillaRepository, CmpTipoPlantillaRepository>();
-            services.AddScoped<ICmpLogsEnvioRepository, CmpLogsEnvioRepository>();
-            services.AddScoped<ICmpEstadoRepository, CmpEstadoRepository>();
-            services.AddScoped<ICmpCampanaRepository, CmpCampanaRepository>();
-            services.AddScoped<ICmpFrecuenciaRepository, CmpFrecuenciaRepository>();
-            services.AddScoped<ICmpCampanaDetalleRepository, CmpCampanaDetalleRepository>();
-            services.AddScoped<IGnRepeatUnitRepository, GnRepeatUnitRepository>();
-            services.AddScoped<IGnSmtpConfiguracionRepository, GnSmtpConfiguracionRepository>();
+            services.AddTransient<ICmpClienteRepository,CmpClienteRepository>();
+            services.AddTransient<ICmpTipoContactoRepository,CmpTipoContactoRepository>();
+            services.AddTransient<ICmpServidoresSmtpRepository,CmpServidoresSmtpRepository>();
+            services.AddTransient<ICmpConfiguracionesSmtpRepository, CmpConfiguracionesSmtpRepository>();
+            services.AddTransient<ICmpPlantillaRepository, CmpPlantillasRepository>();
+            services.AddTransient<ICmpTipoPlantillaRepository, CmpTipoPlantillaRepository>();
+            services.AddTransient<ICmpLogsEnvioRepository, CmpLogsEnvioRepository>();
+            services.AddTransient<ICmpEstadoRepository, CmpEstadoRepository>();
+            services.AddTransient<ICmpCampanaRepository, CmpCampanaRepository>();
+            services.AddTransient<ICmpFrecuenciaRepository, CmpFrecuenciaRepository>();
+            services.AddTransient<ICmpCampanaDetalleRepository, CmpCampanaDetalleRepository>();
+            services.AddTransient<IGnRepeatUnitRepository, GnRepeatUnitRepository>();
+            services.AddTransient<IGnSmtpConfiguracionRepository, GnSmtpConfiguracionRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();
@@ -81,7 +81,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             services.AddTransient<IGnParametrosGeneralesRepository, GnParametrosGeneralesRepository>();
 
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             #endregion
 
             #endregion
@@ -103,7 +103,7 @@ namespace BussinessLayer.DendeciesInjections
             #endregion
 
             #region Auditoria
-            services.AddScoped<IAleBitacoraRepository, AleBitacoraRepository>();
+            services.AddTransient<IAleBitacoraRepository, AleBitacoraRepository>();
             services.AddTransient<IAleLoginRepository, AleLoginRepository>();
             services.AddTransient<IAleLogsRepository, AleLogsRepository>();
             services.AddTransient<IAlePrintRepository, AlePrintRepository>();
@@ -125,27 +125,30 @@ namespace BussinessLayer.DendeciesInjections
 
             #region Modulo de Citas
 
-            services.AddScoped<ICtaAppointmentManagementRepository, CtaAppointmentManagementRepository>();
-            services.AddScoped<ICtaAppointmentMovementsRepository, CtaAppointmentMovementsRepository>();
-            services.AddScoped<ICtaAppointmentReasonRepository, CtaAppointmentReasonRepository>();
-            services.AddScoped<ICtaAppointmentsRepository,CtaAppointmentsRepository>();
-            services.AddScoped<ICtaConfiguracionRepository, CtaConfiguracionRepository>();
-            services.AddScoped<ICtaEmailConfiguracionRepository, CtaEmailConfiguracionRepository>();
-            services.AddScoped<ICtaMeetingPlaceRepository, CtaMeetingPlaceRepository>();
-            services.AddScoped<ICtaSessionDetailsRepository, CtaSessionDetailsRepository>();
-            services.AddScoped<ICtaSessionsRepository, CtaSessionsRepository>();
-            services.AddScoped<ICtaStateRepository, CtaStateRepository>();
-            services.AddScoped<ICtaUnwantedRepository,CtaUnwantedRepository>();
-            services.AddScoped<ICtaAppointmentSequenceRepository, CtaAppointmentSequenceRepository>();
-            services.AddScoped<ICtaAppointmentAreaRepository, CtaAppointmentAreaRepository>();
-            services.AddScoped<ICtaAreaXUserRepository, CtaAreaXUserRepository>();
-            services.AddScoped<ICtaContactTypeRepository, CtaContactTypeRepository>();
-            services.AddScoped<ICtaAppointmentContactsRepository, CtaAppointmentContactsRepository>();
-            services.AddScoped<ICtaAppointmentUsersRepository, CtaAppointmentUsersRepository>();
-            services.AddScoped<ICtaGuestRepository, CtaGuestRepository>();
-            services.AddScoped<ICtaContactRepository, CtaContactRepository>();
-            services.AddScoped<ICtaGuestRepository, CtaGuestRepository>();
-            services.AddScoped<ICtaAppointmentGuestRepository, CtaAppointmentGuestRepository>();
+            services.AddTransient<ICtaAppointmentManagementRepository, CtaAppointmentManagementRepository>();
+            services.AddTransient<ICtaAppointmentMovementsRepository, CtaAppointmentMovementsRepository>();
+            services.AddTransient<ICtaAppointmentReasonRepository, CtaAppointmentReasonRepository>();
+            services.AddTransient<ICtaAppointmentsRepository,CtaAppointmentsRepository>();
+            services.AddTransient<ICtaConfiguracionRepository, CtaConfiguracionRepository>();
+            services.AddTransient<ICtaEmailConfiguracionRepository, CtaEmailConfiguracionRepository>();
+            services.AddTransient<ICtaMeetingPlaceRepository, CtaMeetingPlaceRepository>();
+            services.AddTransient<ICtaSessionDetailsRepository, CtaSessionDetailsRepository>();
+            services.AddTransient<ICtaSessionsRepository, CtaSessionsRepository>();
+            services.AddTransient<ICtaStateRepository, CtaStateRepository>();
+            services.AddTransient<ICtaUnwantedRepository,CtaUnwantedRepository>();
+            services.AddTransient<ICtaAppointmentSequenceRepository, CtaAppointmentSequenceRepository>();
+            services.AddTransient<ICtaAppointmentAreaRepository, CtaAppointmentAreaRepository>();
+            services.AddTransient<ICtaAreaXUserRepository, CtaAreaXUserRepository>();
+            services.AddTransient<ICtaContactTypeRepository, CtaContactTypeRepository>();
+            services.AddTransient<ICtaAppointmentContactsRepository, CtaAppointmentContactsRepository>();
+            services.AddTransient<ICtaAppointmentUsersRepository, CtaAppointmentUsersRepository>();
+            services.AddTransient<ICtaGuestRepository, CtaGuestRepository>();
+            services.AddTransient<ICtaContactRepository, CtaContactRepository>();
+            services.AddTransient<ICtaGuestRepository, CtaGuestRepository>();
+            services.AddTransient<ICtaAppointmentGuestRepository, CtaAppointmentGuestRepository>();
+            services.AddTransient<ICtaEmailTemplateTypesRepository, CtaEmailTemplateTypesRepository>();
+            services.AddTransient<ICtaEmailTemplatesRepository, CtaEmailTemplatesRepository>();
+            services.AddTransient<ICtaNotificationSettingsRepository, CtaNotificationSettingsRepository>();
 
 
             #endregion

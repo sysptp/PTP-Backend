@@ -15,6 +15,10 @@ namespace BussinessLayer.DendeciesInjections
      options.UseSqlServer(configuration.GetConnectionString("POS_CONN")),
      ServiceLifetime.Scoped);
 
+            services.AddDbContextFactory<PDbContext>(options =>
+    options.UseSqlServer(configuration.GetConnectionString("POS_CONN")),
+     ServiceLifetime.Scoped);
+
             #endregion
 
             #region AutoMapper

@@ -7,8 +7,11 @@ using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion;
 using BussinessLayer.DTOs.ModuloCitas.CtaContacts;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateTypes;
 using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
 using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.DTOs.ModuloCitas.CtaState;
@@ -49,19 +52,37 @@ namespace BussinessLayer.Mapping.ModuloCitas
 
             #region AppointmentResponse
             CreateMap<CtaAppointments, CtaAppointmentsResponse>()
-    .ForMember(dest => dest.ReasonDescription, opt => opt.MapFrom(src => src.CtaAppointmentReason.Description))
-    .ForMember(dest => dest.MeetingPlaceDescription, opt => opt.MapFrom(src => src.CtaMeetingPlace.Description))
-    .ForMember(dest => dest.StateDescription, opt => opt.MapFrom(src => src.CtaState.Description))
-    .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.GnEmpresa.NOMBRE_EMP))
-    .ForMember(dest => dest.CtaAppointmentContacts, opt => opt.MapFrom(src => src.CtaAppointmentContacts))
-    .ForMember(dest => dest.CtaGuest, opt => opt.MapFrom(src => src.CtaAppointmentGuest))
-    .ForMember(dest => dest.CtaAppointmentManagement, opt => opt.MapFrom(src => src.CtaAppointmentManagement))
-    .ForMember(dest => dest.CtaAppointmentUsers, opt => opt.MapFrom(src => src.CtaAppointmentUsers.Select(x => x.Usuario))); // 🔥 Mapear Usuario directamente
+            .ForMember(dest => dest.ReasonDescription, opt => opt.MapFrom(src => src.CtaAppointmentReason != null ? src.CtaAppointmentReason.Description : string.Empty))
+            .ForMember(dest => dest.MeetingPlaceDescription, opt => opt.MapFrom(src => src.CtaMeetingPlace != null ? src.CtaMeetingPlace.Description : string.Empty))
+            .ForMember(dest => dest.StateDescription, opt => opt.MapFrom(src => src.CtaState != null ? src.CtaState.Description : string.Empty))
+            .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.GnEmpresa != null ? src.GnEmpresa.NOMBRE_EMP : string.Empty))
+            .ForMember(dest => dest.CtaAppointmentUsers, opt => opt.MapFrom(src => src.CtaAppointmentUsers != null ? src.CtaAppointmentUsers.Select(x => x.Usuario) : new List<Usuario>()))
+            .ForMember(dest => dest.CtaAppointmentContacts, opt => opt.MapFrom(src => src.CtaAppointmentContacts ?? new List<CtaAppointmentContacts>()))
+            .ForMember(dest => dest.CtaAppointmentManagement, opt => opt.MapFrom(src => src.CtaAppointmentManagement ?? new List<CtaAppointmentManagement>()))
+            .ForMember(dest => dest.CtaGuest, opt => opt.MapFrom(src => src.CtaAppointmentGuest != null ?
+                src.CtaAppointmentGuest
+                .Where(g => g.Guest != null)
+                .Select(g => new CtaGuestInformation
+                {
+                    Id = g.Guest.Id,
+                    Names = g.Guest.Names,
+                    LastName = g.Guest.LastName,
+                    PhoneNumber = g.Guest.PhoneNumber,
+                    Email = g.Guest.Email,
+                    NickName = g.Guest.NickName
+                }).ToList() : new List<CtaGuestInformation>()));
 
+            CreateMap<CtaAppointmentGuest, CtaGuestInformation>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Guest.Id))
+                .ForMember(dest => dest.Names, opt => opt.MapFrom(src => src.Guest.Names))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Guest.LastName))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Guest.PhoneNumber))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Guest.Email))
+                .ForMember(dest => dest.NickName, opt => opt.MapFrom(src => src.Guest.NickName));
 
-            CreateMap<CtaAppointmentContacts, CtaContactInformation>();
-            CreateMap<CtaGuest, CtaGuestInformation>();
-            CreateMap<CtaAppointmentManagement, CtaManagmentInformation>();
+            CreateMap<CtaAppointmentContacts, CtaContactInformation>().ReverseMap();
+            CreateMap<CtaGuest, CtaGuestInformation>().ReverseMap();
+            CreateMap<CtaAppointmentManagement, CtaManagmentInformation>().ReverseMap();
 
             // Mapeo de la tabla intermedia `CtaAppointmentUsers`
             CreateMap<CtaAppointmentUsers, CtaUserInformation>()
@@ -162,6 +183,21 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaContactRequest, CtaContacts>()
              .ReverseMap();
             CreateMap<CtaContactResponse, CtaContacts>()
+               .ReverseMap();
+
+            CreateMap<CtaEmailTemplateTypes, CtaEmailTemplateTypesRequest>()
+             .ReverseMap();
+            CreateMap<CtaEmailTemplateTypes, CtaEmailTemplateTypesResponse>()
+               .ReverseMap();
+
+            CreateMap<CtaEmailTemplates, CtaEmailTemplatesRequest>()
+             .ReverseMap();
+            CreateMap<CtaEmailTemplates, CtaEmailTemplatesResponse>()
+               .ReverseMap();
+
+            CreateMap<CtaNotificationSettings, CtaNotificationSettingsRequest>()
+             .ReverseMap();
+            CreateMap<CtaNotificationSettings, CtaNotificationSettingsResponse>()
                .ReverseMap();
         }
 

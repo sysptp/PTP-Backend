@@ -4,6 +4,7 @@ using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
@@ -13,7 +14,7 @@ namespace BussinessLayer.Repository.ROtros
     public class GenericRepository<T> : IGenericRepository<T> where T : AuditableEntities
     {
         private readonly ITokenService _tokenService;
-        protected readonly PDbContext _context;
+        protected readonly PDbContext _context;   
         private readonly string _connectionString;
 
         public GenericRepository(PDbContext dbContext, ITokenService tokenService)
@@ -21,23 +22,18 @@ namespace BussinessLayer.Repository.ROtros
             _context = dbContext;
             _tokenService = tokenService;
 
-            var configuration = new ConfigurationBuilder()
-       .SetBasePath(Directory.GetCurrentDirectory())
-       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)  
-       .Build();
-            _connectionString = configuration.GetConnectionString("POS_CONN") ?? "Server=SQL5112.site4now.net;Database=db_aae658_sysptp;User Id=db_aae658_sysptp_admin;Password=Anthony0010.;Encrypt=True;TrustServerCertificate=True;";
+            _connectionString = GetConnectionString();
         }
 
-        public virtual async Task<T> GetById(int id)
+        private static string GetConnectionString()
         {
-            var entity = await _context.Set<T>().FindAsync(id);
-            if (entity == null)
-            {
-                return null;
-            }
-            return entity.Borrado == true ? null : entity;
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
 
-        }
+            return configuration.GetConnectionString("POS_CONN");
+            }
 
         public virtual async Task<T> GetById(object id)
         {
@@ -61,187 +57,6 @@ namespace BussinessLayer.Repository.ROtros
             }
 
         }
-
-        public virtual async Task<T> Add(T entity)
-        {
-            try
-            {
-                entity.FechaAdicion = DateTime.Now;
-                entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
-
-                var tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
-                var primaryKey = _context.Model.FindEntityType(typeof(T))
-                                               .FindPrimaryKey()
-                                               .Properties
-                                               .Select(p => p.Name)
-                                               .FirstOrDefault();
-
-                if (string.IsNullOrEmpty(primaryKey))
-                {
-                    throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
-                }
-
-                var properties = typeof(T).GetProperties()
-                    .Where(p => p.Name != primaryKey &&
-                                (p.PropertyType.IsPrimitive ||
-                                 p.PropertyType == typeof(string) ||
-                                 p.PropertyType == typeof(DateTime) ||
-                                 p.PropertyType == typeof(TimeSpan) ||
-                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
-                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
-                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
-                    .Select(p => p.Name);
-
-                var columns = string.Join(", ", properties);
-                var values = string.Join(", ", properties.Select(p => $"@{p}"));
-
-                var sql = $@"
-        INSERT INTO {tableName} ({columns})
-        OUTPUT INSERTED.{primaryKey}
-        VALUES ({values})";
-
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    var id = await connection.ExecuteScalarAsync<object>(sql, entity);
-
-                    var primaryKeyProperty = typeof(T).GetProperty(primaryKey);
-                    if (primaryKeyProperty != null)
-                    {
-                        primaryKeyProperty.SetValue(entity, Convert.ChangeType(id, primaryKeyProperty.PropertyType));
-                    }
-                }
-
-                return entity;
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException(ex.Message, ex);
-            }
-        }
-
-        public virtual async Task AddRangeAsync(IEnumerable<T> entities)
-        {
-            try
-            {
-                foreach (var entity in entities)
-                {
-                    entity.FechaAdicion = DateTime.Now;
-                    entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
-                }
-
-                var tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
-                var primaryKey = _context.Model.FindEntityType(typeof(T))
-                                               .FindPrimaryKey()
-                                               .Properties
-                                               .Select(p => p.Name)
-                                               .FirstOrDefault();
-
-                if (string.IsNullOrEmpty(primaryKey))
-                {
-                    throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
-                }
-
-                var columns = typeof(T).GetProperties()
-                     .Where(p => p.Name != primaryKey &&
-                                (p.PropertyType.IsPrimitive ||
-                                 p.PropertyType == typeof(string) ||
-                                 p.PropertyType == typeof(DateTime) ||
-                                 p.PropertyType == typeof(TimeSpan) ||
-                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
-                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
-                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
-                    .Select(p => p.Name);
-
-                var values = string.Join(", ", columns.Select(c => $"@{c}"));
-                var sql = $@"
-        INSERT INTO {tableName} ({string.Join(", ", columns)})
-        VALUES ({values})";
-
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    await connection.ExecuteAsync(sql, entities);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException(ex.Message, ex);
-            }
-        }
-
-        public virtual async Task Update(T entity, Object id)
-        {
-            try
-            {
-                // Verifica que la entidad existe
-                var oldEntity = await GetById(id);
-                if (oldEntity == null)
-                {
-                    throw new InvalidOperationException("La entidad no existe o ha sido eliminada.");
-                }
-
-                // Asigna los valores de auditoría
-                entity.FechaModificacion = DateTime.Now;
-                entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
-                entity.FechaAdicion = oldEntity.FechaAdicion;
-                entity.UsuarioAdicion = oldEntity.UsuarioAdicion;
-
-                // Obtén el nombre de la tabla asociada al tipo T
-                var tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
-
-                // Obtén el nombre de la clave primaria
-                var primaryKey = _context.Model.FindEntityType(typeof(T))
-                                               .FindPrimaryKey()
-                                               .Properties
-                                               .Select(p => p.Name)
-                                               .FirstOrDefault();
-
-                if (string.IsNullOrEmpty(primaryKey))
-                {
-                    throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
-                }
-
-                // Construye dinámicamente las columnas a actualizar
-                var properties = typeof(T).GetProperties()
-                    .Where(p => p.Name != primaryKey &&
-                                (p.PropertyType.IsPrimitive ||
-                                 p.PropertyType == typeof(string) ||
-                                 p.PropertyType == typeof(DateTime) ||
-                                 p.PropertyType == typeof(TimeSpan) ||
-                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
-                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
-                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
-                    .Select(p => p.Name);
-                var updateColumns = string.Join(", ", properties);
-
-                // Construye la consulta SQL
-                var sql = $@"
-            UPDATE {tableName}
-            SET {updateColumns}
-            WHERE {primaryKey} = @PrimaryKey";
-
-                // Prepara los parámetros con Dapper
-                var parameters = new DynamicParameters(entity);
-                parameters.Add("PrimaryKey", id);
-
-                // Ejecuta la consulta
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    if (connection.State == ConnectionState.Closed)
-                        await connection.OpenAsync();
-
-                    var rowsAffected = await connection.ExecuteAsync(sql, parameters);
-
-                    if (rowsAffected == 0)
-                        throw new InvalidOperationException("No se encontró la entidad para actualizar.");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException(ex.Message, ex);
-            }
-        }
-
-
         public virtual async Task Update(T entity, int id)
         {
             try
@@ -312,25 +127,130 @@ namespace BussinessLayer.Repository.ROtros
                 throw new InvalidOperationException(ex.Message, ex);
             }
         }
+        public virtual async Task<T> Add(T entity)
+        {
+            try
+            {
+                entity.FechaAdicion = DateTime.Now;
+                entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
 
+                var tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
+                var primaryKey = _context.Model.FindEntityType(typeof(T))
+                                               .FindPrimaryKey()
+                                               .Properties
+                                               .Select(p => p.Name)
+                                               .FirstOrDefault();
 
+                if (string.IsNullOrEmpty(primaryKey))
+                {
+                    throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
+                }
 
+                var properties = typeof(T).GetProperties()
+                    .Where(p => p.Name != primaryKey &&
+                                (p.PropertyType.IsPrimitive ||
+                                 p.PropertyType == typeof(string) ||
+                                 p.PropertyType == typeof(DateTime) ||
+                                 p.PropertyType == typeof(TimeSpan) ||
+                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
+                    .Select(p => p.Name);
 
-        public virtual async Task Delete(int id)
+                var columns = string.Join(", ", properties);
+                var values = string.Join(", ", properties.Select(p => $"@{p}"));
+
+                var sql = $@"
+        INSERT INTO {tableName} ({columns})
+        OUTPUT INSERTED.{primaryKey}
+        VALUES ({values})";
+
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    var id = await connection.ExecuteScalarAsync<object>(sql, entity);
+
+                    var primaryKeyProperty = typeof(T).GetProperty(primaryKey);
+                    if (primaryKeyProperty != null)
+                    {
+                        primaryKeyProperty.SetValue(entity, Convert.ChangeType(id, primaryKeyProperty.PropertyType));
+                    }
+                }
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message, ex);
+            }
+        }
+
+        public virtual async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    entity.FechaAdicion = DateTime.Now;
+                    entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+                }
+
+                var dbContext = _context;
+
+                var tableName = dbContext.Model.FindEntityType(typeof(T))?.GetTableName();
+                var primaryKey = dbContext.Model.FindEntityType(typeof(T))
+                    ?.FindPrimaryKey()
+                    ?.Properties
+                    ?.Select(p => p.Name)
+                    ?.FirstOrDefault();
+
+                if (string.IsNullOrEmpty(primaryKey))
+                {
+                    throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
+                }
+
+                var columns = typeof(T).GetProperties()
+                    .Where(p => p.Name != primaryKey &&
+                                (p.PropertyType.IsPrimitive ||
+                                 p.PropertyType == typeof(string) ||
+                                 p.PropertyType == typeof(DateTime) ||
+                                 p.PropertyType == typeof(TimeSpan) ||
+                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
+                    .Select(p => p.Name);
+
+                var values = string.Join(", ", columns.Select(c => $"@{c}"));
+                var sql = $@"
+        INSERT INTO {tableName} ({string.Join(", ", columns)})
+        VALUES ({values})";
+
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.ExecuteAsync(sql, entities);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message, ex);
+            }
+        }
+
+        public virtual async Task Update(T entity, Object id)
         {
             try
             {
                 // Verifica que la entidad existe
-                var entity = await GetById(id);
-                if (entity == null)
+                var oldEntity = await GetById(id);
+                if (oldEntity == null)
                 {
                     throw new InvalidOperationException("La entidad no existe o ha sido eliminada.");
                 }
 
                 // Asigna los valores de auditoría
-                entity.Borrado = true;
                 entity.FechaModificacion = DateTime.Now;
                 entity.UsuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+                entity.FechaAdicion = oldEntity.FechaAdicion;
+                entity.UsuarioAdicion = oldEntity.UsuarioAdicion;
 
                 // Obtén el nombre de la tabla asociada al tipo T
                 var tableName = _context.Model.FindEntityType(typeof(T)).GetTableName();
@@ -347,24 +267,34 @@ namespace BussinessLayer.Repository.ROtros
                     throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
                 }
 
-                // Construye la consulta SQL para Soft Delete
+                // Construye dinámicamente las columnas a actualizar
+                var properties = typeof(T).GetProperties()
+                    .Where(p => p.Name != primaryKey &&
+                                (p.PropertyType.IsPrimitive ||
+                                 p.PropertyType == typeof(string) ||
+                                 p.PropertyType == typeof(DateTime) ||
+                                 p.PropertyType == typeof(TimeSpan) ||
+                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                                 Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan)))
+                    .Select(p => p.Name);
+
+                var setColumns = string.Join(", ", properties.Select(p => $"{p} = @{p}"));
+
                 var sql = $@"
             UPDATE {tableName}
-            SET Borrado = @Borrado,
-                FechaModificacion = @FechaModificacion,
-                UsuarioModificacion = @UsuarioModificacion
+            SET {setColumns}
             WHERE {primaryKey} = @PrimaryKey";
 
-                // Prepara los parámetros
-                var parameters = new DynamicParameters(new
+                var parameters = new DynamicParameters();
+                foreach (var property in properties)
                 {
-                    Borrado = true,
-                    FechaModificacion = entity.FechaModificacion,
-                    UsuarioModificacion = entity.UsuarioModificacion,
-                    PrimaryKey = id
-                });
+                    var value = typeof(T).GetProperty(property)?.GetValue(entity);
+                    parameters.Add(property, value);
+                }
 
-                // Ejecuta la consulta
+                parameters.Add("PrimaryKey", id);
+
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     if (connection.State == ConnectionState.Closed)
@@ -373,12 +303,12 @@ namespace BussinessLayer.Repository.ROtros
                     var rowsAffected = await connection.ExecuteAsync(sql, parameters);
 
                     if (rowsAffected == 0)
-                        throw new InvalidOperationException("No se encontró la entidad para eliminar.");
+                        throw new InvalidOperationException("No se encontró la entidad para actualizar.");
                 }
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error al realizar Soft Delete con Dapper", ex);
+                throw new InvalidOperationException(ex.Message, ex);
             }
         }
 
@@ -447,8 +377,6 @@ namespace BussinessLayer.Repository.ROtros
                 throw new InvalidOperationException("Error al realizar Soft Delete con Dapper", ex);
             }
         }
-
-
 
         public virtual async Task<IEnumerable<TResult>> ExecuteStoredProcedureAsync<TResult>(string storedProcedure, object parameters = null)
         {

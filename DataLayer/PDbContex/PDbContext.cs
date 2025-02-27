@@ -49,8 +49,6 @@ namespace DataLayer.PDbContex
 
         }
        
-
-
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var entry in ChangeTracker.Entries<AuditableEntities>())
@@ -241,7 +239,9 @@ namespace DataLayer.PDbContex
         public DbSet<CtaAppointmentGuest> CtaAppointmentGuest { get; set; }
         public DbSet<CtaGuest> CtaGuest { get; set; }
         public DbSet<CtaContacts> CtaContacts { get; set; }
-
+        public DbSet<CtaEmailTemplates> CtaEmailTemplates { get; set; }
+        public DbSet<CtaEmailTemplateTypes> CtaEmailTemplateTypes { get; set; }
+        public DbSet<CtaNotificationSettings> CtaNotificationSettings { get; set; }
 
         #endregion
 

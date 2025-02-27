@@ -97,6 +97,9 @@ using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
 using BussinessLayer.DTOs.ModuloCitas.CtaContacts;
 using BussinessLayer.DTOs.ModuloGeneral.Smtp;
 using BussinessLayer.FluentValidations.ModuloGeneral.SMTP;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateTypes;
+using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -320,6 +323,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaGuestRequest>, CtaGuestRequestValidator>();
             services.AddScoped<IValidator<CtaContactRequest>, CtaContactRequestValidator>();
             services.AddScoped<IValidator<CtaGuestRequest>, CtaGuestRequestValidator>();
+            services.AddScoped<IValidator<CtaEmailTemplatesRequest>, CtaEmailTemplatesRequestValidator>();
+            services.AddScoped<IValidator<CtaNotificationSettingsRequest>, CtaNotificationSettingsRequestValidator>();
 
             #endregion
         }
