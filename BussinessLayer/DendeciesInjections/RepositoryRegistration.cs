@@ -149,6 +149,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICtaEmailTemplateTypesRepository, CtaEmailTemplateTypesRepository>();
             services.AddTransient<ICtaEmailTemplatesRepository, CtaEmailTemplatesRepository>();
             services.AddTransient<ICtaNotificationSettingsRepository, CtaNotificationSettingsRepository>();
+            services.AddTransient<ICtaParticipantTypesRepository, CtaParticipantTypesRepository>();
 
 
             #endregion

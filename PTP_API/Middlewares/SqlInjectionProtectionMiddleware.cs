@@ -26,7 +26,7 @@ public class SqlInjectionProtectionMiddleware
         if (context.Request.Method == HttpMethods.Post || context.Request.Method == HttpMethods.Put)
         {
             //Esto debido a que las plantillas HTML estaban explotando como SqlInjection.
-            if (context.Request.Path.Value.Contains("CmpPlantilla"))
+            if (context.Request.Path.Value.Contains("CmpPlantilla") || context.Request.Path.Value.Contains("CtaEmailTemplates"))
             {
                 await _next(context);
                 return;

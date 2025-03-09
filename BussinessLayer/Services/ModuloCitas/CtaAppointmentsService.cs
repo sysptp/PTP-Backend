@@ -24,12 +24,13 @@ namespace DataLayer.Models.Modulo_Citas
         private readonly ICtaAppointmentUsersRepository _userAppointmentRepository;
         private readonly ICtaAppointmentContactsRepository _appointmentContactsRepository;
         private readonly ICtaAppointmentGuestRepository _ctaAppointmentGuestRepository;
+        private readonly ICtaEmailTemplatesRepository _ctaEmailTemplateRepository;
         private readonly IMapper _mapper;
 
         public CtaAppointmentsService(ICtaAppointmentsRepository appointmentRepository,
             IGnEmailService gnEmailService, IUsuarioRepository userRepository,
             ICtaContactRepository contactRepository,
-            ICtaGuestRepository guestRepository, IMapper mapper, ICtaAppointmentSequenceService appointmentSequenceService, ICtaAppointmentUsersRepository userUsersRepository, ICtaAppointmentGuestRepository ctaAppointmentGuestRepository, ICtaAppointmentContactsRepository appointmentContactsRepository) : base(appointmentRepository, mapper)
+            ICtaGuestRepository guestRepository, IMapper mapper, ICtaAppointmentSequenceService appointmentSequenceService, ICtaAppointmentUsersRepository userUsersRepository, ICtaAppointmentGuestRepository ctaAppointmentGuestRepository, ICtaAppointmentContactsRepository appointmentContactsRepository, ICtaEmailTemplatesRepository ctaEmailTemplateRepository) : base(appointmentRepository, mapper)
         {
             _appointmentRepository = appointmentRepository;
             _gnEmailService = gnEmailService;
@@ -41,6 +42,7 @@ namespace DataLayer.Models.Modulo_Citas
             _ctaAppointmentGuestRepository = ctaAppointmentGuestRepository;
             _appointmentContactsRepository = appointmentContactsRepository;
             _mapper = mapper;
+            _ctaEmailTemplateRepository = ctaEmailTemplateRepository;
         }
 
         public override async Task<CtaAppointmentsResponse> Add(CtaAppointmentsRequest vm)
@@ -132,11 +134,18 @@ namespace DataLayer.Models.Modulo_Citas
                 throw new Exception($"Error en el mapeo: {ex.Message}, InnerException: {ex.InnerException?.Message}");
             }
         }
+      
         private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId)
         {
             _ = Task.Run(async () =>
             {
                 var creator = await _userRepository.GetById(appointment.UserId);
+
+                var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(companyId
+                    ,(int)EmailTemplateTypes.Creacion,true);
+
+                var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(companyId
+                    , (int)EmailTemplateTypes.Creacion,false,true);
 
                 var allContacts = await _contactRepository.GetAll();
                 var allUsers = await _userRepository.GetAll();
@@ -156,19 +165,21 @@ namespace DataLayer.Models.Modulo_Citas
 
                 var emailTasks = new List<Task>();
 
+                emailTasks.Add(SendEmailAsync(new List<string> { creator.Email}, emailTemplateForAssignedUser.Subject, emailTemplateForAssignedUser.Body, companyId));
+
                 if (contactEmails.Any())
                 {
-                    emailTasks.Add(SendEmailAsync(contactEmails, "Usted ha creado una cita", "Detalles de la cita...", companyId));
+                    emailTasks.Add(SendEmailAsync(contactEmails, emailTemplateForParticipant.Subject, emailTemplateForParticipant.Body, companyId));
                 }
 
                 if (userEmails.Any())
                 {
-                    emailTasks.Add(SendEmailAsync(userEmails, "Se requiere su asistencia a una cita", "Detalles de la cita...", companyId));
+                    emailTasks.Add(SendEmailAsync(userEmails, emailTemplateForParticipant.Subject, emailTemplateForParticipant.Body, companyId));
                 }
 
                 if (guestEmails.Any())
                 {
-                    emailTasks.Add(SendEmailAsync(guestEmails, "Usted fue invitado a una cita", "Detalles de la cita...", companyId));
+                    emailTasks.Add(SendEmailAsync(guestEmails, emailTemplateForParticipant.Subject, emailTemplateForParticipant.Body, companyId));
                 }
 
                 await Task.WhenAll(emailTasks);

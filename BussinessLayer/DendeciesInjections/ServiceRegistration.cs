@@ -1,4 +1,5 @@
-﻿using BussinessLayer.Helpers.CargaMasivaHelpers;
+﻿#region Usings
+using BussinessLayer.Helpers.CargaMasivaHelpers;
 using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Repository.ROtros;
 using BussinessLayer.Services;
@@ -72,6 +73,7 @@ using BussinessLayer.Services.ModuloGeneral.Email;
 using BussinessLayer.Interfaces.Services.IModuloGeneral.SMTP;
 using BussinessLayer.Services.ModuloGeneral.SMTP;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
+#endregion
 
 public static class ServiceRegistration
 {
@@ -170,6 +172,8 @@ public static class ServiceRegistration
         services.AddScoped<ICtaEmailTemplatesService, CtaEmailTemplatesService>();
         services.AddScoped<ICtaEmailTemplateTypesService, CtaEmailTemplateTypesService>();
         services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
+        services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
+        services.AddScoped<ICtaParticipantTypesServices, CtaParticipantTypesService>();
 
         #endregion
 
@@ -248,9 +252,6 @@ public static class ServiceRegistration
         services.AddScoped<IHdkSubCategoryService, HdkSubCategoryService>();
         services.AddScoped<IHdkTicketsService, HdkTicketsService>();
         services.AddScoped<IHdkTypeTicketService, HdkTypeTicketService>();
-        #endregion
-
-        #region Modulo Inventario
         #endregion
 
         #region Modulo Reporteria

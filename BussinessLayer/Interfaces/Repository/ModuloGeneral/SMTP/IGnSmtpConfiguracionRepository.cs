@@ -5,6 +5,6 @@ namespace BussinessLayer.Interfaces.Repository.ModuloGeneral.SMTP
 {
     public interface IGnSmtpConfiguracionRepository : IGenericRepository<GnSmtpConfiguracion>
     {
-        Task<GnSmtpConfiguracion> GetSMTPByCompanyId(long companyId);
+        GnSmtpConfiguracion GetSMTPByCompanyId(long companyId);
     }
 }

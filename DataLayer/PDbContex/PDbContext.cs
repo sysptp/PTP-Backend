@@ -242,6 +242,7 @@ namespace DataLayer.PDbContex
         public DbSet<CtaEmailTemplates> CtaEmailTemplates { get; set; }
         public DbSet<CtaEmailTemplateTypes> CtaEmailTemplateTypes { get; set; }
         public DbSet<CtaNotificationSettings> CtaNotificationSettings { get; set; }
+        public DbSet<CtaParticipantTypes> CtaParticipantTypes { get; set; }
 
         #endregion
 
