@@ -134,57 +134,85 @@ namespace DataLayer.Models.Modulo_Citas
                 throw new Exception($"Error en el mapeo: {ex.Message}, InnerException: {ex.InnerException?.Message}");
             }
         }
-      
+
+
+        // 3. Modifica el método SendAppointmentEmailsAsync en tu servicio de Appointments
         private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId)
         {
+            // Captura los datos necesarios antes de iniciar la tarea en segundo plano
+            // para evitar usar el DbContext fuera de su alcance
+            var creator = await _userRepository.GetById(appointment.UserId);
+            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(
+                companyId, (int)EmailTemplateTypes.Creacion, true);
+            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(
+                companyId, (int)EmailTemplateTypes.Creacion, false, true);
+
+            // Copia todos los datos necesarios para evitar acceder al DbContext dentro de Task.Run
+            var allContacts = await _contactRepository.GetAll();
+            var allUsers = await _userRepository.GetAll();
+            var allGuests = await _guestRepository.GetAll();
+
+            // Prepara las listas de correos electrónicos
+            var contactEmails = (appointment.AppointmentParticipants?
+                .Select(c => allContacts.FirstOrDefault(x =>
+                    c.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == c.ParticipantId)?.ContactEmail)
+                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+
+            var userEmails = (appointment.AppointmentParticipants?
+                .Select(u => allUsers.FirstOrDefault(x =>
+                    u.ParticipantTypeId == (int)AppointmentParticipant.SystemUser && x.Id == u.ParticipantId)?.Email)
+                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+
+            var guestEmails = (appointment.AppointmentParticipants?
+                .Select(g => allGuests.FirstOrDefault(x =>
+                    g.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == g.ParticipantId)?.Email)
+                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+
+            // Almacena toda la información necesaria para los correos
+            var creatorEmail = creator.Email;
+            var assignedSubject = emailTemplateForAssignedUser.Subject;
+            var assignedBody = emailTemplateForAssignedUser.Body;
+            var participantSubject = emailTemplateForParticipant.Subject;
+            var participantBody = emailTemplateForParticipant.Body;
+
+            // Inicia la tarea en segundo plano con datos capturados
             _ = Task.Run(async () =>
             {
-                var creator = await _userRepository.GetById(appointment.UserId);
-
-                var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(companyId
-                    ,(int)EmailTemplateTypes.Creacion,true);
-
-                var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(companyId
-                    , (int)EmailTemplateTypes.Creacion,false,true);
-
-                var allContacts = await _contactRepository.GetAll();
-                var allUsers = await _userRepository.GetAll();
-                var allGuests = await _guestRepository.GetAll();
-
-                var contactEmails = (appointment.AppointmentParticipants?
-                    .Select(c => allContacts.FirstOrDefault(x => c.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == c.ParticipantId)?.ContactEmail)
-                    .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-
-                var userEmails = (appointment.AppointmentParticipants?
-                    .Select(u => allUsers.FirstOrDefault(x => u.ParticipantTypeId == (int)AppointmentParticipant.SystemUser && x.Id == u.ParticipantId)?.Email)
-                    .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-
-                var guestEmails = (appointment.AppointmentParticipants?
-                    .Select(g => allGuests.FirstOrDefault(x => g.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == g.ParticipantId)?.Email)
-                    .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-
-                var emailTasks = new List<Task>();
-
-                emailTasks.Add(SendEmailAsync(new List<string> { creator.Email}, emailTemplateForAssignedUser.Subject, emailTemplateForAssignedUser.Body, companyId));
-
-                if (contactEmails.Any())
+                try
                 {
-                    emailTasks.Add(SendEmailAsync(contactEmails, emailTemplateForParticipant.Subject, emailTemplateForParticipant.Body, companyId));
-                }
+                    var emailTasks = new List<Task>();
 
-                if (userEmails.Any())
+                    // Envía correos con los datos ya capturados
+                    emailTasks.Add(SendEmailAsync(new List<string> { creatorEmail },
+                        assignedSubject, assignedBody, companyId));
+
+                    if (contactEmails.Any())
+                    {
+                        emailTasks.Add(SendEmailAsync(contactEmails,
+                            participantSubject, participantBody, companyId));
+                    }
+
+                    if (userEmails.Any())
+                    {
+                        emailTasks.Add(SendEmailAsync(userEmails,
+                            participantSubject, participantBody, companyId));
+                    }
+
+                    if (guestEmails.Any())
+                    {
+                        emailTasks.Add(SendEmailAsync(guestEmails,
+                            participantSubject, participantBody, companyId));
+                    }
+
+                    await Task.WhenAll(emailTasks);
+                }
+                catch (Exception ex)
                 {
-                    emailTasks.Add(SendEmailAsync(userEmails, emailTemplateForParticipant.Subject, emailTemplateForParticipant.Body, companyId));
+                    throw new Exception(ex.Message, ex);
                 }
-
-                if (guestEmails.Any())
-                {
-                    emailTasks.Add(SendEmailAsync(guestEmails, emailTemplateForParticipant.Subject, emailTemplateForParticipant.Body, companyId));
-                }
-
-                await Task.WhenAll(emailTasks);
             });
         }
+
 
         private async Task SendEmailAsync(List<string> recipients, string subject, string body, long companyId)
         {

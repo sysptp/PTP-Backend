@@ -18,9 +18,10 @@ namespace BussinessLayer.Services.ModuloGeneral.Email
         {
             try
             {
-                MimeMessage email = new();
-                var smtpServer =  _configuracionRepository.GetSMTPByCompanyId(companyId);
-                    email.Sender = MailboxAddress.Parse($"{smtpServer.NombreRemitente} <{smtpServer.Remitente}>");
+                MimeMessage email = new(); 
+                var smtpServer = await _configuracionRepository.GetSMTPByCompanyIdAsync(companyId);
+
+                email.Sender = MailboxAddress.Parse($"{smtpServer.NombreRemitente} <{smtpServer.Remitente}>");
                 if (request.To != null)
                 {
                     foreach (var recipient in request.To)
