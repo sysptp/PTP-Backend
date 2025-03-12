@@ -27,7 +27,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Configuraciones de Notificaciones", Description = "Devuelve una lista de configuraciones o una configuración específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllNotificationSettings([FromQuery] long? id, long? companyId)
+        public async Task<IActionResult> GetAllEmailTemplateTypes([FromQuery] long? id, long? companyId)
         {
             try
             {

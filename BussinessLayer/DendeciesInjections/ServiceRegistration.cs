@@ -73,6 +73,7 @@ using BussinessLayer.Services.ModuloGeneral.Email;
 using BussinessLayer.Interfaces.Services.IModuloGeneral.SMTP;
 using BussinessLayer.Services.ModuloGeneral.SMTP;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
+using DataLayer.Models.ModuloCitas;
 #endregion
 
 public static class ServiceRegistration
@@ -146,36 +147,7 @@ public static class ServiceRegistration
         services.AddScoped<IAleAuditTableControlService, AleAuditTableControlService>();
         #endregion
 
-        #region Modulo de Citas
-
-        services.AddScoped<ICtaAppointmentManagementService, CtaAppointmentManagementService>();
-        services.AddScoped<ICtaAppointmentMovementsService, CtaAppointmentMovementsService>();
-        services.AddScoped<ICtaAppointmentReasonService, CtaAppointmentReasonService>();
-        services.AddScoped<ICtaAppointmentsService, CtaAppointmentsService>();
-        services.AddScoped<ICtaConfiguracionService, CtaConfiguracionService>();
-        services.AddScoped<ICtaEmailConfiguracionService, CtaEmailConfiguracionService>();
-        services.AddScoped<ICtaMeetingPlaceService, CtaMeetingPlaceService>();
-        services.AddScoped<ICtaSessionDetailsService, CtaSessionDetailsService>();
-        services.AddScoped<ICtaSessionsService, CtaSessionsService>();
-        services.AddScoped<ICtaStateService, CtaStateService>();
-        services.AddScoped<ICtaUnwantedService, CtaUnwantedService>();
-        services.AddScoped<ICtaAppointmentSequenceService, CtaAppointmentSequenceService>();
-        services.AddScoped<ICtaAppointmentAreaService, CtaAppointmentAreaService>();
-        services.AddScoped<ICtaAreaXUserService, CtaAreaXUserService>();
-        services.AddScoped<ICtaContactTypeService, CtaContactTypeService>();
-        services.AddScoped<ICtaAppointmentContactsService, CtaAppointmentContactsService>();
-        services.AddScoped<ICtaAppointmentUsersService, CtaAppointmentUsersService>();
-        services.AddScoped<ICtaGuestService, CtaGuestService>();
-        services.AddScoped<ICtaContactService, CtaContactService>();
-        services.AddScoped<ICtaGuestService, CtaGuestService>();
-        services.AddScoped<ICtaAppointmentGuestService, CtaAppointmentGuestService>();
-        services.AddScoped<ICtaEmailTemplatesService, CtaEmailTemplatesService>();
-        services.AddScoped<ICtaEmailTemplateTypesService, CtaEmailTemplateTypesService>();
-        services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
-        services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
-        services.AddScoped<ICtaParticipantTypesServices, CtaParticipantTypesService>();
-
-        #endregion
+      
 
         #region Modulo Contabilidad
         #endregion
@@ -252,6 +224,37 @@ public static class ServiceRegistration
         services.AddScoped<IHdkSubCategoryService, HdkSubCategoryService>();
         services.AddScoped<IHdkTicketsService, HdkTicketsService>();
         services.AddScoped<IHdkTypeTicketService, HdkTypeTicketService>();
+        #endregion
+        #region Modulo de Citas
+
+        services.AddScoped<ICtaAppointmentManagementService, CtaAppointmentManagementService>();
+        services.AddScoped<ICtaAppointmentMovementsService, CtaAppointmentMovementsService>();
+        services.AddScoped<ICtaAppointmentReasonService, CtaAppointmentReasonService>();
+        services.AddScoped<ICtaAppointmentsService, CtaAppointmentsService>();
+        services.AddScoped<ICtaConfiguracionService, CtaConfiguracionService>();
+        services.AddScoped<ICtaEmailConfiguracionService, CtaEmailConfiguracionService>();
+        services.AddScoped<ICtaMeetingPlaceService, CtaMeetingPlaceService>();
+        services.AddScoped<ICtaSessionDetailsService, CtaSessionDetailsService>();
+        services.AddScoped<ICtaSessionsService, CtaSessionsService>();
+        services.AddScoped<ICtaStateService, CtaStateService>();
+        services.AddScoped<ICtaUnwantedService, CtaUnwantedService>();
+        services.AddScoped<ICtaAppointmentSequenceService, CtaAppointmentSequenceService>();
+        services.AddScoped<ICtaAppointmentAreaService, CtaAppointmentAreaService>();
+        services.AddScoped<ICtaAreaXUserService, CtaAreaXUserService>();
+        services.AddScoped<ICtaContactTypeService, CtaContactTypeService>();
+        services.AddScoped<ICtaAppointmentContactsService, CtaAppointmentContactsService>();
+        services.AddScoped<ICtaAppointmentUsersService, CtaAppointmentUsersService>();
+        services.AddScoped<ICtaGuestService, CtaGuestService>();
+        services.AddScoped<ICtaContactService, CtaContactService>();
+        services.AddScoped<ICtaGuestService, CtaGuestService>();
+        services.AddScoped<ICtaAppointmentGuestService, CtaAppointmentGuestService>();
+        services.AddScoped<ICtaEmailTemplatesService, CtaEmailTemplatesService>();
+        services.AddScoped<ICtaEmailTemplateTypesService, CtaEmailTemplateTypesService>();
+        services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
+        services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
+        services.AddScoped<ICtaParticipantTypesServices, CtaParticipantTypesService>();
+        services.AddScoped<ICtaEmailTemplateVariablesService, CtaEmailTemplateVariablesService>();
+
         #endregion
 
         #region Modulo Reporteria

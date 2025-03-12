@@ -32,6 +32,7 @@ using BussinessLayer.Interface.Repository.ModuloGeneral;
 using BussinessLayer.Repository.ModuloGeneral;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.SMTP;
 using BussinessLayer.Repository.ModuloGeneral.SMTP;
+using DataLayer.Models.ModuloCitas;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -150,6 +151,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICtaEmailTemplatesRepository, CtaEmailTemplatesRepository>();
             services.AddTransient<ICtaNotificationSettingsRepository, CtaNotificationSettingsRepository>();
             services.AddTransient<ICtaParticipantTypesRepository, CtaParticipantTypesRepository>();
+            services.AddTransient<ICtaEmailTemplateVariablesRepository, CtaEmailTemplateVariablesRepository>();
 
 
             #endregion
