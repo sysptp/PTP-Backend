@@ -8,7 +8,6 @@ using BussinessLayer.DTOs.ModuloCitas.CtaCitaConfiguracion;
 using BussinessLayer.DTOs.ModuloCitas.CtaContacts;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
-using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateTypes;
 using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
 using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
 using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
@@ -184,11 +183,6 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaContactRequest, CtaContacts>()
              .ReverseMap();
             CreateMap<CtaContactResponse, CtaContacts>()
-               .ReverseMap();
-
-            CreateMap<CtaEmailTemplateTypes, CtaEmailTemplateTypesRequest>()
-             .ReverseMap();
-            CreateMap<CtaEmailTemplateTypes, CtaEmailTemplateTypesResponse>()
                .ReverseMap();
 
             CreateMap<CtaEmailTemplates, CtaEmailTemplatesRequest>()

@@ -6,7 +6,6 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateVariables
     {
         [JsonIgnore]
         public long VariableId { get; set; }
-        public int TemplateTypeId { get; set; }
         public string VariableName { get; set; } = null!;
         public string VariableDescription { get; set; } = null!;
     }

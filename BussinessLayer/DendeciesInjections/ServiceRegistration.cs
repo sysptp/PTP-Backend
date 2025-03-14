@@ -249,7 +249,6 @@ public static class ServiceRegistration
         services.AddScoped<ICtaGuestService, CtaGuestService>();
         services.AddScoped<ICtaAppointmentGuestService, CtaAppointmentGuestService>();
         services.AddScoped<ICtaEmailTemplatesService, CtaEmailTemplatesService>();
-        services.AddScoped<ICtaEmailTemplateTypesService, CtaEmailTemplateTypesService>();
         services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
         services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
         services.AddScoped<ICtaParticipantTypesServices, CtaParticipantTypesService>();

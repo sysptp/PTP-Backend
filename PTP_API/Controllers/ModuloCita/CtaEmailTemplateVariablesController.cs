@@ -1,5 +1,4 @@
-﻿using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateTypes;
-using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateVariables;
+﻿using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateVariables;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -22,12 +21,12 @@ namespace PTP_API.Controllers.ModuloCita
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Response<IEnumerable<CtaEmailTemplateTypesResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<IEnumerable<CtaEmailTemplateVariablesResponse>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "ObtenerVariables de Plantillas de Correos", Description = "Devuelve una lista de variables o una variable de Plantillas de Correos  específica si se proporciona un ID")]
-        public async Task<IActionResult> GetAllEmailTemplateVariables([FromQuery] long? id,int templateTypeId)
+        public async Task<IActionResult> GetAllEmailTemplateVariables([FromQuery] long? id)
         {
             try
             {
@@ -45,8 +44,7 @@ namespace PTP_API.Controllers.ModuloCita
                     if (emailTemplateTypes == null || !emailTemplateTypes.Any())
                         return StatusCode(204, Response<IEnumerable<CtaEmailTemplateVariablesResponse>>.NoContent("No hay Variable de plantilla de Correos disponibles."));
 
-                    return Ok(Response<IEnumerable<CtaEmailTemplateVariablesResponse>>.Success((templateTypeId != null && templateTypeId != 0)
-                        ? emailTemplateTypes.Where(x => x.TemplateTypeId == templateTypeId).ToList()  : emailTemplateTypes, "Variable de plantilla de Correos obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<CtaEmailTemplateVariablesResponse>>.Success(emailTemplateTypes, "Variable de plantilla de Correos obtenidas correctamente."));
                 }
             }
             catch (Exception ex)

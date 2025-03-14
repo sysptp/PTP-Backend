@@ -8,7 +8,6 @@ namespace DataLayer.Models.ModuloCitas
         [Key]
         public long Id { get; set; }
         public long CompanyId { get; set; }
-        public int TemplateTypeId { get; set; }
         public bool SendEmail { get; set; }
         public bool SendSMS { get; set; }
         public bool SendWhatsApp { get; set; }

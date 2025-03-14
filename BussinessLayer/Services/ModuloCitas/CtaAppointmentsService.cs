@@ -142,10 +142,8 @@ namespace DataLayer.Models.Modulo_Citas
             // Captura los datos necesarios antes de iniciar la tarea en segundo plano
             // para evitar usar el DbContext fuera de su alcance
             var creator = await _userRepository.GetById(appointment.UserId);
-            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(
-                companyId, (int)EmailTemplateTypes.Creacion, true);
-            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(
-                companyId, (int)EmailTemplateTypes.Creacion, false, true);
+            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(companyId);
+            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(companyId);
 
             // Copia todos los datos necesarios para evitar acceder al DbContext dentro de Task.Run
             var allContacts = await _contactRepository.GetAll();
@@ -175,9 +173,7 @@ namespace DataLayer.Models.Modulo_Citas
             var participantSubject = emailTemplateForParticipant.Subject;
             var participantBody = emailTemplateForParticipant.Body;
 
-            // Inicia la tarea en segundo plano con datos capturados
-            _ = Task.Run(async () =>
-            {
+           
                 try
                 {
                     var emailTasks = new List<Task>();
@@ -210,7 +206,6 @@ namespace DataLayer.Models.Modulo_Citas
                 {
                     throw new Exception(ex.Message, ex);
                 }
-            });
         }
 
 

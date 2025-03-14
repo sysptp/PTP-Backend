@@ -98,7 +98,6 @@ using BussinessLayer.DTOs.ModuloCitas.CtaContacts;
 using BussinessLayer.DTOs.ModuloGeneral.Smtp;
 using BussinessLayer.FluentValidations.ModuloGeneral.SMTP;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
-using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateTypes;
 using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
 
 namespace BussinessLayer.DendeciesInjections

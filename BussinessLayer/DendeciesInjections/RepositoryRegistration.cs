@@ -147,7 +147,6 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICtaContactRepository, CtaContactRepository>();
             services.AddTransient<ICtaGuestRepository, CtaGuestRepository>();
             services.AddTransient<ICtaAppointmentGuestRepository, CtaAppointmentGuestRepository>();
-            services.AddTransient<ICtaEmailTemplateTypesRepository, CtaEmailTemplateTypesRepository>();
             services.AddTransient<ICtaEmailTemplatesRepository, CtaEmailTemplatesRepository>();
             services.AddTransient<ICtaNotificationSettingsRepository, CtaNotificationSettingsRepository>();
             services.AddTransient<ICtaParticipantTypesRepository, CtaParticipantTypesRepository>();

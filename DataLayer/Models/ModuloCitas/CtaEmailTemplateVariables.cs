@@ -7,7 +7,6 @@ namespace DataLayer.Models.ModuloCitas
     {
         [Key]
         public long VariableId { get; set; }
-        public int TemplateTypeId { get; set; }
         public string VariableName { get; set; } = null!;
         public string VariableDescription { get; set; } = null!;
     }

@@ -240,7 +240,6 @@ namespace DataLayer.PDbContex
         public DbSet<CtaGuest> CtaGuest { get; set; }
         public DbSet<CtaContacts> CtaContacts { get; set; }
         public DbSet<CtaEmailTemplates> CtaEmailTemplates { get; set; }
-        public DbSet<CtaEmailTemplateTypes> CtaEmailTemplateTypes { get; set; }
         public DbSet<CtaNotificationSettings> CtaNotificationSettings { get; set; }
         public DbSet<CtaParticipantTypes> CtaParticipantTypes { get; set; }
         public DbSet<CtaEmailTemplateVariables> CtaEmailTemplateVariables { get; set; }

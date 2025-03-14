@@ -13,21 +13,12 @@ namespace BussinessLayer.Repository.ModuloCitas
         {
         }
 
-        public async Task<CtaEmailTemplates?> GetEmailTemplateByFilters(long? companyId, int? templateTypeId, bool appliesToParticipant = false, bool appliesToAssignee = false)
+        public async Task<CtaEmailTemplates?> GetEmailTemplateByFilters(long? companyId)
         {
             var query = _context.CtaEmailTemplates.AsQueryable();
 
             if (companyId.HasValue)
                 query = query.Where(x => x.CompanyId == companyId);
-
-            if (templateTypeId.HasValue)
-                query = query.Where(x => x.TemplateTypeId == templateTypeId);
-
-            if (appliesToParticipant)
-                query = query.Where(x => x.AppliesToParticipant == true);
-
-            if (appliesToAssignee)
-                query = query.Where(x => x.AppliesToAssignee == true);
 
             return await query.FirstOrDefaultAsync().ConfigureAwait(false);
         }
