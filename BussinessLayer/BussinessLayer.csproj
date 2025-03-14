@@ -46,6 +46,8 @@
     <Folder Include="Mapping\ModuloVentas\" />
     <Folder Include="Services\ModuloContabilidad\" />
     <Folder Include="Services\ModuloRRHH\" />
+    <Folder Include="Services\NewFolder\" />
+    <Folder Include="Services\WhatsAppService\Implementations\" />
   </ItemGroup>
 
   <ItemGroup>
