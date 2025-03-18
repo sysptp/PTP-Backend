@@ -25,12 +25,13 @@ namespace DataLayer.Models.Modulo_Citas
         private readonly ICtaAppointmentContactsRepository _appointmentContactsRepository;
         private readonly ICtaAppointmentGuestRepository _ctaAppointmentGuestRepository;
         private readonly ICtaEmailTemplatesRepository _ctaEmailTemplateRepository;
+        private readonly ICtaAppointmentAreaRepository _ctaAppointmentAreaRepository;
         private readonly IMapper _mapper;
 
         public CtaAppointmentsService(ICtaAppointmentsRepository appointmentRepository,
             IGnEmailService gnEmailService, IUsuarioRepository userRepository,
             ICtaContactRepository contactRepository,
-            ICtaGuestRepository guestRepository, IMapper mapper, ICtaAppointmentSequenceService appointmentSequenceService, ICtaAppointmentUsersRepository userUsersRepository, ICtaAppointmentGuestRepository ctaAppointmentGuestRepository, ICtaAppointmentContactsRepository appointmentContactsRepository, ICtaEmailTemplatesRepository ctaEmailTemplateRepository) : base(appointmentRepository, mapper)
+            ICtaGuestRepository guestRepository, IMapper mapper, ICtaAppointmentSequenceService appointmentSequenceService, ICtaAppointmentUsersRepository userUsersRepository, ICtaAppointmentGuestRepository ctaAppointmentGuestRepository, ICtaAppointmentContactsRepository appointmentContactsRepository, ICtaEmailTemplatesRepository ctaEmailTemplateRepository, ICtaAppointmentAreaRepository ctaAppointmentAreaRepository) : base(appointmentRepository, mapper)
         {
             _appointmentRepository = appointmentRepository;
             _gnEmailService = gnEmailService;
@@ -43,6 +44,7 @@ namespace DataLayer.Models.Modulo_Citas
             _appointmentContactsRepository = appointmentContactsRepository;
             _mapper = mapper;
             _ctaEmailTemplateRepository = ctaEmailTemplateRepository;
+            _ctaAppointmentAreaRepository = ctaAppointmentAreaRepository;
         }
 
         public override async Task<CtaAppointmentsResponse> Add(CtaAppointmentsRequest vm)
@@ -126,6 +128,12 @@ namespace DataLayer.Models.Modulo_Citas
                  "CtaAppointmentGuest.Guest"});
 
                 var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments);
+
+                var tasks = appointmentDtoList.Select(async appointmentDto =>
+                {
+                    var area = await _ctaAppointmentAreaRepository.GetById(appointmentDto.AreaId);
+                    appointmentDto.AreaId = area?.AreaId;
+                });
 
                 return appointmentDtoList;
             }

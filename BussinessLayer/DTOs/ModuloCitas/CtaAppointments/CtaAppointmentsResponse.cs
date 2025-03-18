@@ -27,7 +27,9 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public bool NotifyAssignedUserEmail { get; set; } = false;
         public bool NotifyAssignedUserSms { get; set; } = false;
         public int? AreaId { get; set; }
+        public string? Area { get; set; } 
         public int UserId { get; set; }
+        public string? AssignedUser { get; set; }
         public long CompanyId { get; set; }
         public string? CompanyName { get; set;}
          [JsonPropertyName("Contacts")]
