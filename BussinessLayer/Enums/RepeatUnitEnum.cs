@@ -3,7 +3,7 @@ namespace BussinessLayer.Enums
 {
     public enum RepeatUnitEnum
     {
-        Dia,
+        Dia = 1,
         Semana,
         Mes,
         Año
