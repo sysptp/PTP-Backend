@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
-using BussinessLayer.DTOs.ModuloGeneral.Email;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailBackgroundJobData;
 using BussinessLayer.Enums;
+using BussinessLayer.Interface.Repository.Modulo_Citas;
 using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
@@ -10,6 +11,7 @@ using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using BussinessLayer.Services;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCitas;
+using Microsoft.Extensions.Configuration;
 
 namespace DataLayer.Models.Modulo_Citas
 {
@@ -26,12 +28,19 @@ namespace DataLayer.Models.Modulo_Citas
         private readonly ICtaAppointmentGuestRepository _ctaAppointmentGuestRepository;
         private readonly ICtaEmailTemplatesRepository _ctaEmailTemplateRepository;
         private readonly ICtaAppointmentAreaRepository _ctaAppointmentAreaRepository;
+        private readonly ICtaBackgroundEmailService _backgroundEmailService;
+        private readonly ICtaStateRepository _ctaStateRepository;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
         public CtaAppointmentsService(ICtaAppointmentsRepository appointmentRepository,
             IGnEmailService gnEmailService, IUsuarioRepository userRepository,
             ICtaContactRepository contactRepository,
-            ICtaGuestRepository guestRepository, IMapper mapper, ICtaAppointmentSequenceService appointmentSequenceService, ICtaAppointmentUsersRepository userUsersRepository, ICtaAppointmentGuestRepository ctaAppointmentGuestRepository, ICtaAppointmentContactsRepository appointmentContactsRepository, ICtaEmailTemplatesRepository ctaEmailTemplateRepository, ICtaAppointmentAreaRepository ctaAppointmentAreaRepository) : base(appointmentRepository, mapper)
+            ICtaGuestRepository guestRepository, IMapper mapper, ICtaAppointmentSequenceService appointmentSequenceService,
+            ICtaAppointmentUsersRepository userUsersRepository,
+            ICtaAppointmentGuestRepository ctaAppointmentGuestRepository, ICtaAppointmentContactsRepository appointmentContactsRepository,
+            ICtaEmailTemplatesRepository ctaEmailTemplateRepository, ICtaAppointmentAreaRepository ctaAppointmentAreaRepository,
+            ICtaBackgroundEmailService backgroundEmailService, ICtaStateRepository ctaStateRepository, IConfiguration configuration) : base(appointmentRepository, mapper)
         {
             _appointmentRepository = appointmentRepository;
             _gnEmailService = gnEmailService;
@@ -45,6 +54,9 @@ namespace DataLayer.Models.Modulo_Citas
             _mapper = mapper;
             _ctaEmailTemplateRepository = ctaEmailTemplateRepository;
             _ctaAppointmentAreaRepository = ctaAppointmentAreaRepository;
+            _backgroundEmailService = backgroundEmailService;
+            _ctaStateRepository = ctaStateRepository;
+            _configuration = configuration;
         }
 
         public override async Task<CtaAppointmentsResponse> Add(CtaAppointmentsRequest vm)
@@ -143,93 +155,57 @@ namespace DataLayer.Models.Modulo_Citas
             }
         }
 
-
         // 3. Modifica el método SendAppointmentEmailsAsync en tu servicio de Appointments
         private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId)
         {
-            // Captura los datos necesarios antes de iniciar la tarea en segundo plano
-            // para evitar usar el DbContext fuera de su alcance
             var creator = await _userRepository.GetById(appointment.UserId);
-            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(companyId);
-            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetEmailTemplateByFilters(companyId);
+            var appointmentState = await _ctaStateRepository.GetById(appointment.IdState);
 
-            // Copia todos los datos necesarios para evitar acceder al DbContext dentro de Task.Run
+            var configAssignedSubject = _configuration["EmailTemplates:DefaultTemplates:AssignedUserTemplate:Subject"];
+            var configAssignedBody = _configuration["EmailTemplates:DefaultTemplates:AssignedUserTemplate:Body"];
+            var configParticipantSubject = _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Subject"];
+            var configParticipantBody = _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Body"];
+
+            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdIn);
+            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdOut);
+
             var allContacts = await _contactRepository.GetAll();
             var allUsers = await _userRepository.GetAll();
             var allGuests = await _guestRepository.GetAll();
 
-            // Prepara las listas de correos electrónicos
             var contactEmails = (appointment.AppointmentParticipants?
                 .Select(c => allContacts.FirstOrDefault(x =>
                     c.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == c.ParticipantId)?.ContactEmail)
                 .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-
             var userEmails = (appointment.AppointmentParticipants?
                 .Select(u => allUsers.FirstOrDefault(x =>
                     u.ParticipantTypeId == (int)AppointmentParticipant.SystemUser && x.Id == u.ParticipantId)?.Email)
                 .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-
             var guestEmails = (appointment.AppointmentParticipants?
                 .Select(g => allGuests.FirstOrDefault(x =>
                     g.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == g.ParticipantId)?.Email)
                 .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
 
-            // Almacena toda la información necesaria para los correos
-            var creatorEmail = creator.Email;
-            var assignedSubject = emailTemplateForAssignedUser.Subject;
-            var assignedBody = emailTemplateForAssignedUser.Body;
-            var participantSubject = emailTemplateForParticipant.Subject;
-            var participantBody = emailTemplateForParticipant.Body;
+            string assignedBody = emailTemplateForAssignedUser?.Body ?? configAssignedBody;
+            string participantBody = emailTemplateForParticipant?.Body ?? configParticipantBody;
 
-           
-                try
-                {
-                    var emailTasks = new List<Task>();
+            assignedBody = _ctaEmailTemplateRepository.ReplaceEmailTemplateValues(assignedBody, appointment);
+            participantBody = _ctaEmailTemplateRepository.ReplaceEmailTemplateValues(participantBody, appointment);
 
-                    // Envía correos con los datos ya capturados
-                    emailTasks.Add(SendEmailAsync(new List<string> { creatorEmail },
-                        assignedSubject, assignedBody, companyId));
-
-                    if (contactEmails.Any())
-                    {
-                        emailTasks.Add(SendEmailAsync(contactEmails,
-                            participantSubject, participantBody, companyId));
-                    }
-
-                    if (userEmails.Any())
-                    {
-                        emailTasks.Add(SendEmailAsync(userEmails,
-                            participantSubject, participantBody, companyId));
-                    }
-
-                    if (guestEmails.Any())
-                    {
-                        emailTasks.Add(SendEmailAsync(guestEmails,
-                            participantSubject, participantBody, companyId));
-                    }
-
-                    await Task.WhenAll(emailTasks);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message, ex);
-                }
-        }
-
-
-        private async Task SendEmailAsync(List<string> recipients, string subject, string body, long companyId)
-        {
-            var emailMessage = new GnEmailMessageDto
+            var emailData = new CtaEmailBackgroundJobData
             {
-                To = recipients,
-                Subject = subject,
-                Body = body,
-                IsHtml = true,
-                Attachments = null,
-                EmpresaId = companyId,
+                CreatorEmails = new List<string> { creator.Email },
+                ContactEmails = contactEmails,
+                UserEmails = userEmails,
+                GuestEmails = guestEmails,
+                AssignedSubject = emailTemplateForAssignedUser?.Subject ?? configAssignedSubject,
+                AssignedBody = assignedBody,
+                ParticipantSubject = emailTemplateForParticipant?.Subject ?? configParticipantSubject,
+                ParticipantBody = participantBody,
+                CompanyId = companyId
             };
 
-            await _gnEmailService.SendAsync(emailMessage, companyId);
+            _backgroundEmailService.QueueAppointmentEmails(emailData);
         }
 
         public async Task<DetailMessage> ExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto)
