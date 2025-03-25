@@ -73,7 +73,6 @@ using BussinessLayer.Services.ModuloGeneral.Email;
 using BussinessLayer.Interfaces.Services.IModuloGeneral.SMTP;
 using BussinessLayer.Services.ModuloGeneral.SMTP;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
-using DataLayer.Models.ModuloCitas;
 using BussinessLayer.Services.WhatsAppService.Contracts;
 using BussinessLayer.Services.WhatsAppService.Implementations;
 #endregion
@@ -83,6 +82,7 @@ public static class ServiceRegistration
     public static void AddServiceRegistration(this IServiceCollection services)
     {
         services.AddScoped<IWhatsAppConfigurationService, WhatsAppConfigurationService>();
+        services.AddScoped<ITwilioService, TwilioService>();
 
         #region Modulo Inventario
         services.AddScoped<IInvAlmacenesService, InvAlmacenesService>();

@@ -12,20 +12,20 @@ using Microsoft.EntityFrameworkCore;
  
  * @param _context: Contexto de la base de datos para acceder a las entidades
  */
-public class WhatsAppConfigurationRepository : IWhatsAppConfigurationRepository
+public class MessagingConfigurationRepository : IMessagingConfigurationRepository
 {
     private readonly PDbContext _context;
 
-    public WhatsAppConfigurationRepository(PDbContext context)
+    public MessagingConfigurationRepository(PDbContext context)
     {
         _context = context;
     }
-    public async Task<CmpWhatsAppConfiguration> CreateWhatsAppConfigurationAsync(CmpWhatsAppConfiguration configuration)
+    public async Task<MessagingConfiguration> CreateAsync(MessagingConfiguration configuration)
     {
         try
         {
             configuration.FechaAdicion = DateTime.Now;
-            await _context.CmpWhatsAppConfigurations.AddAsync(configuration);
+            await _context.MessagingConfigurations.AddAsync(configuration);
             await _context.SaveChangesAsync();
             return configuration;
         }
@@ -35,18 +35,18 @@ public class WhatsAppConfigurationRepository : IWhatsAppConfigurationRepository
         }
     }
 
-    public async Task<CmpWhatsAppConfiguration> DeleteWhatsAppConfigurationAsync(int configurationId, int BussinessId)
+    public async Task<MessagingConfiguration> DeleteAsync(int configurationId, int BussinessId)
     {
         try
         {
-            var configuration = await _context.CmpWhatsAppConfigurations.FindAsync(configurationId);
+            var configuration = await _context.MessagingConfigurations.FindAsync(configurationId);
             if (configuration == null)
             {
                 throw new Exception("Configuration not found");
             }
             configuration.Borrado = true;
             configuration.FechaModificacion = DateTime.Now;
-            _context.CmpWhatsAppConfigurations.Update(configuration);
+            _context.MessagingConfigurations.Update(configuration);
             await _context.SaveChangesAsync();
             return configuration;
         }
@@ -56,11 +56,11 @@ public class WhatsAppConfigurationRepository : IWhatsAppConfigurationRepository
         }
     }
 
-    public async Task<List<CmpWhatsAppConfiguration>> GetAllWhatsAppConfigurationAsync(int BussinessId)
+    public async Task<List<MessagingConfiguration>> GetAllAsync(int BussinessId)
     {
         try
         {
-            var configurations = await _context.CmpWhatsAppConfigurations
+            var configurations = await _context.MessagingConfigurations
             .Where(c => c.BussinessId == BussinessId && c.Borrado == false)
             .ToListAsync();
             
@@ -72,11 +72,11 @@ public class WhatsAppConfigurationRepository : IWhatsAppConfigurationRepository
         }
     }
 
-    public async Task<CmpWhatsAppConfiguration> GetWhatsAppConfigurationAsync(int configurationId, int BussinessId)
+    public async Task<MessagingConfiguration> GetByIdAsync(int configurationId, int BussinessId)
     {
         try
         {
-            var configuration = await _context.CmpWhatsAppConfigurations.FindAsync(configurationId);
+            var configuration = await _context.MessagingConfigurations.FindAsync(configurationId);
             if (configuration == null)
             {
                 throw new Exception("Configuration not found");
@@ -89,11 +89,11 @@ public class WhatsAppConfigurationRepository : IWhatsAppConfigurationRepository
         }
     }
 
-    public async Task<CmpWhatsAppConfiguration> UpdateWhatsAppConfigurationAsync(CmpWhatsAppConfiguration configuration)
+    public async Task<MessagingConfiguration> UpdateAsync(MessagingConfiguration configuration)
     {
         try
         {
-            _context.CmpWhatsAppConfigurations.Update(configuration);
+            _context.MessagingConfigurations.Update(configuration);
             await _context.SaveChangesAsync();
             return configuration;
         }

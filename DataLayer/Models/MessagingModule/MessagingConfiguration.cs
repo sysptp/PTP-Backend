@@ -1,8 +1,8 @@
 ﻿using DataLayer.Models.Otros;
 
-namespace DataLayer.Models.WhatsAppFeature
+namespace DataLayer.Models.MessagingModule
 {
-    public class CmpWhatsAppConfiguration : AuditableEntities
+    public class MessagingConfiguration : AuditableEntities
     {
         public int ConfigurationId { get; set; }
         public int BussinessId { get; set; }

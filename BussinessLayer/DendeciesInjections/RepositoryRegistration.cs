@@ -42,7 +42,7 @@ namespace BussinessLayer.DendeciesInjections
         public static void AddRepositoryInjections(this IServiceCollection services)
         {
 
-            services.AddScoped<IWhatsAppConfigurationRepository, WhatsAppConfigurationRepository>();
+            services.AddScoped<IMessagingConfigurationRepository, WhatsAppConfigurationRepository>();
 
 
             services.AddTransient<INcfRepository, NcfRepository>();

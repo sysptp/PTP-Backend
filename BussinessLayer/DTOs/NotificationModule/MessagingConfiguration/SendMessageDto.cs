@@ -1,0 +1,1 @@
+public record SendMessageDto(string authToken, string accountSid, string fromNumber, string toNumber,MessageType messageType, string message);

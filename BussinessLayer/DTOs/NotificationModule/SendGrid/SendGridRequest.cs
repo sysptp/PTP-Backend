@@ -1,0 +1,1 @@
+public record SendGridRequest(string To, string Subject, string Body);

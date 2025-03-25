@@ -348,7 +348,7 @@ namespace DataLayer.PDbContex
         #endregion
 
         #region WhatsApp
-        public DbSet<CmpWhatsAppConfiguration> CmpWhatsAppConfigurations { get; set; }
+        public DbSet<MessagingConfiguration> MessagingConfigurations { get; set; }
         #endregion
 
         #endregion

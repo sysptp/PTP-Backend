@@ -10,8 +10,8 @@
  * @param AddedBy: El usuario que agrega la configuración.
 */
 
-namespace BussinessLayer.DTOs.WhatsAppModule.WhatsAppConfiguration{
-public record WhatsAppConfigurationDto(
+namespace BussinessLayer.DTOs.NotificationModule.MessagingConfiguration{
+public record MessagingConfigurationDto(
     int ConfigurationId,
     int BussinessId,
     string AccountSid,

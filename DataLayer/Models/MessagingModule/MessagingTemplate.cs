@@ -1,8 +1,8 @@
 ﻿using DataLayer.Models.Otros;
 
-namespace DataLayer.Models.WhatsAppFeature
+namespace DataLayer.Models.MessagingModule
 {
-    public class CmpWhatsAppTemplate : AuditableEntities
+    public class MessagingTemplate : AuditableEntities
     {
         public int TemplateId { get; set; }
         public string MessageContent { get; set; } = string.Empty!;
