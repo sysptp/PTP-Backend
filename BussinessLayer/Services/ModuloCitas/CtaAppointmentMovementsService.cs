@@ -19,7 +19,7 @@ namespace DataLayer.Models.Modulo_Citas
 
         public override async Task<List<CtaAppointmentMovementsResponse>> GetAllDto()
         {
-            var appointmentMovementList = await _repository.GetAllWithIncludeAsync(new List<string> { "Appointments", "CtaState" });
+            var appointmentMovementList = await _repository.GetAllWithIncludeAsync(new List<string> { "CtaAppointments", "CtaState" });
             return _mapper.Map<List<CtaAppointmentMovementsResponse>>(appointmentMovementList);
 
         }

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements;
 using BussinessLayer.DTOs.ModuloCitas.CtaState;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
-using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Services;
@@ -24,7 +22,7 @@ namespace DataLayer.Models.Modulo_Citas
 
         public override async Task<List<CtaStateResponse>> GetAllDto()
         {
-            var appointmentStateList = await GetAllDto();
+            var appointmentStateList = await base.GetAllDto();
             
             foreach(var state in appointmentStateList)
             {

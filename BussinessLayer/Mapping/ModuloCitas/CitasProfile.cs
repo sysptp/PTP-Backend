@@ -134,7 +134,7 @@ namespace BussinessLayer.Mapping.ModuloCitas
 
             CreateMap<CtaSessionsResponse, CtaSessions>()
                 .ForPath(dest => dest.Usuario.Email, opt => opt.MapFrom(src => src.UserEmail))
-                .ForPath(dest => dest.Usuario.Telefono, opt => opt.MapFrom(src => src.UserPhoneNumber))
+                .ForPath(dest => dest.Usuario.PhoneNumber, opt => opt.MapFrom(src => src.UserPhoneNumber))
                 .ForPath(dest => dest.Usuario.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForPath(dest => dest.GnRepeatUnit.Descripcion, opt => opt.MapFrom(src => src.RepeatUnitDescription))
                 .ReverseMap();
