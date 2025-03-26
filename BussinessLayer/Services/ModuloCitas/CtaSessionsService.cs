@@ -29,6 +29,14 @@ namespace DataLayer.Models.Modulo_Citas
             _appointmentRepository = appointmentRepository;
         }
 
+        public override async Task<List<CtaSessionsResponse>> GetAllDto()
+        {
+            var sessionList = await _sessionRepository.GetAllWithIncludeAsync(new List<string>
+            { "GnRepeatUnit",
+                "Usuario"});
+
+            return _mapper.Map<List<CtaSessionsResponse>>(sessionList);
+        }
         public async Task<CtaSessionsRequest> CreateSessionAndGenerateAppointments(CtaSessionsRequest sessionRequest)
         {
             var sessionEntity = _mapper.Map<CtaSessions>(sessionRequest);

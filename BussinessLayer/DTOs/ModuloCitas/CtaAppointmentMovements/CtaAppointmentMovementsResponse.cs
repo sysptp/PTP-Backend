@@ -12,8 +12,10 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointmentMovements
         public string ToEmail { get; set; } = null!;
         public int? IdState { get; set; }
         public CtaStateResponse? State { get; set; }
+        public string? StateDescription { get; set; }
         public int? IdMessage { get; set; }
         public int AppointmentId { get; set; } 
+        public string? AppointmentSequence { get; set; }
         public CtaAppointmentsResponse? Appointments { get; set; }
         public bool Sent { get; set; } = true;
     }

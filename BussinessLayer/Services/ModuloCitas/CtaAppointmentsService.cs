@@ -140,12 +140,12 @@ namespace DataLayer.Models.Modulo_Citas
                  "CtaAppointmentGuest.Guest"});
 
                 var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments);
-
-                var tasks = appointmentDtoList.Select(async appointmentDto =>
+                
+                foreach(var appointmentDto in appointmentDtoList)
                 {
                     var area = await _ctaAppointmentAreaRepository.GetById(appointmentDto.AreaId);
-                    appointmentDto.AreaId = area?.AreaId;
-                });
+                    appointmentDto.Area = area?.Description;
+                }
 
                 return appointmentDtoList;
             }

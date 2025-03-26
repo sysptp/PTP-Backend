@@ -10,6 +10,7 @@
         public long EmailTemplateIdOut { get; set; }
         public long CompanyId { get; set; }
         public int AreaId { get; set; }
+        public string? AreaDescription { get; set; }
         public bool IsDefault { get; set; }
 
 
