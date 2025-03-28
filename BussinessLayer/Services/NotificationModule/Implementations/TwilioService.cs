@@ -1,25 +1,28 @@
+using BussinessLayer.Services.NotificationModule.Contracts;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
 
-public class TwilioService : ITwilioService
+public class TwilioService(IMessagingLogService messagingLogService) : ITwilioService
 {
-    public MessageResource SendMessage(string authToken, string accountSid, string fromNumber, string toNumber,MessageType messageType, string message)
+    public async Task<MessageResource> SendMessage(SendMessageDto sendMessageDto)
     {
         try
         {
             //Inicializando el cliente de Twilio
-            TwilioClient.Init(accountSid, authToken);
+            TwilioClient.Init(sendMessageDto.AccountSid, sendMessageDto.AuthToken);
 
             //Creando el mensaje
             var messageOptions = new CreateMessageOptions(
-                new PhoneNumber(messageType == MessageType.WhatsApp ? "whatsapp:" + toNumber : toNumber));
-                messageOptions.From = new PhoneNumber(messageType == MessageType.WhatsApp ? "whatsapp:" + fromNumber : fromNumber);
-                messageOptions.Body = message;
+                new PhoneNumber(sendMessageDto.MessageType == MessageType.WhatsApp ? "whatsapp:" + sendMessageDto.ToNumber : sendMessageDto.ToNumber));
+            messageOptions.From = new PhoneNumber(sendMessageDto.MessageType == MessageType.WhatsApp ? "whatsapp:" + sendMessageDto.FromNumber : sendMessageDto.FromNumber);
+            messageOptions.Body = sendMessageDto.Message;
 
-                //Enviando el mensaje
-                var messageResponse = MessageResource.Create(messageOptions);
-                
+            //Enviando el mensaje
+            var messageResponse = MessageResource.Create(messageOptions);
+
+            await LogMessage(sendMessageDto, messageResponse);
+
             //Retornando el resultado
             return messageResponse;
         }
@@ -28,5 +31,17 @@ public class TwilioService : ITwilioService
             throw new Exception(ex.Message);
 
         }
-}
+    }
+
+    private async Task LogMessage(SendMessageDto sendMessageDto, MessageResource messageResponse){
+        CreateMessagingLogDto createMessagingLogDto = new CreateMessagingLogDto (
+            sendMessageDto.FromNumber,
+            sendMessageDto.ToNumber,
+            sendMessageDto.Message,
+            messageResponse.ErrorCode != null ? messageResponse.ErrorCode.ToString() + " " + messageResponse.ErrorMessage : "Enviado correctamente",
+            sendMessageDto.BusinessId
+        );
+
+        await messagingLogService.AddAsync(createMessagingLogDto); 
+    }
 }

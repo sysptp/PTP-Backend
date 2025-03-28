@@ -1,1 +1,10 @@
-public record SendMessageDto(string authToken, string accountSid, string fromNumber, string toNumber,MessageType messageType, string message);
+public record SendMessageDto
+(
+    string AuthToken,
+    string AccountSid,
+    string FromNumber,
+    string ToNumber,
+    MessageType MessageType,
+    string Message,
+    int BusinessId
+);

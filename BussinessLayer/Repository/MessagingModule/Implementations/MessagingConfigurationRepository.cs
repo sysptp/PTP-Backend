@@ -1,4 +1,4 @@
-using DataLayer.Models.WhatsAppFeature;
+using DataLayer.Models.MessagingModule;
 using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 

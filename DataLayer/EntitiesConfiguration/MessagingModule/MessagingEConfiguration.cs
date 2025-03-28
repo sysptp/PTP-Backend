@@ -2,9 +2,9 @@ using DataLayer.Models.MessagingModule;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DataLayer.EntitiesConfiguration.WhatsAppModule
+namespace DataLayer.EntitiesConfiguration.MessagingModule
 {
-    public class CmpWhatsAppEConfiguration : IEntityTypeConfiguration<MessagingConfiguration>
+    public class MessagingEConfiguration : IEntityTypeConfiguration<MessagingConfiguration>
     {
         public void Configure(EntityTypeBuilder<MessagingConfiguration> builder)
         {

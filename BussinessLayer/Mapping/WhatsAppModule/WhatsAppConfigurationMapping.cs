@@ -1,13 +1,16 @@
 using AutoMapper;
-using BussinessLayer.DTOs.WhatsAppModule.WhatsAppConfiguration;
-using DataLayer.Models.WhatsAppFeature;
+using BussinessLayer.DTOs.NotificationModule.MessagingConfiguration;
+using DataLayer.Models.MessagingModule;
 
 public class WhatsAppConfigurationMapping : Profile
 {
     public WhatsAppConfigurationMapping()
     {
-        CreateMap<WhatsAppConfigurationDto, CmpWhatsAppConfiguration>()
-        .ReverseMap();
+            CreateMap<MessagingConfigurationDto, MessagingConfiguration>()
+            .ReverseMap();
+
+                CreateMap<CreateMessagingConfigurationDto, MessagingConfiguration>()
+            .ReverseMap();
 
     }
 }

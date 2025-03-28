@@ -33,6 +33,8 @@ using BussinessLayer.Repository.ModuloGeneral;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.SMTP;
 using BussinessLayer.Repository.ModuloGeneral.SMTP;
 using DataLayer.Models.ModuloCitas;
+using BussinessLayer.Repository.MessagingModule.Contracts;
+using BussinessLayer.Repository.MessagingModule.Implementations;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -42,7 +44,9 @@ namespace BussinessLayer.DendeciesInjections
         public static void AddRepositoryInjections(this IServiceCollection services)
         {
 
-            services.AddScoped<IMessagingConfigurationRepository, WhatsAppConfigurationRepository>();
+            services.AddScoped<IMessagingConfigurationRepository, MessagingConfigurationRepository>();
+            services.AddScoped<IMessagingLogRepository, MessagingLogRepository>();
+
 
 
             services.AddTransient<INcfRepository, NcfRepository>();

@@ -75,14 +75,17 @@ using BussinessLayer.Services.ModuloGeneral.SMTP;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using BussinessLayer.Services.WhatsAppService.Contracts;
 using BussinessLayer.Services.WhatsAppService.Implementations;
+using BussinessLayer.Services.NotificationModule.Contracts;
+using BussinessLayer.Services.NotificationModule.Implementations;
 #endregion
 
 public static class ServiceRegistration
 {
     public static void AddServiceRegistration(this IServiceCollection services)
     {
-        services.AddScoped<IWhatsAppConfigurationService, WhatsAppConfigurationService>();
+        services.AddScoped<IMessagingConfigurationService, MessagingConfigurationService>();
         services.AddScoped<ITwilioService, TwilioService>();
+        services.AddScoped<IMessagingLogService, MessagingLogService>();
 
         #region Modulo Inventario
         services.AddScoped<IInvAlmacenesService, InvAlmacenesService>();
