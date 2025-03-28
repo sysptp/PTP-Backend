@@ -10,5 +10,12 @@ namespace BussinessLayer.Repository.Modulo_Citas
         public CtaSessionDetailsRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
         {
         }
+
+        public List<CtaSessionDetails> GetAllAppointmentsBySessionId(int sessionId)
+        {
+            var sesionList = _context.Set<CtaSessionDetails>().Where(x => x.IdSession == sessionId).ToList();
+
+            return sesionList;
+        }
     }
 }

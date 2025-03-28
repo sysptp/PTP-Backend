@@ -16,6 +16,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
         public DateTime LastSessionDate { get; set; }
         public DateTime SessionEndDate { get; set; }
         public int CompletedAppointments { get; set; }
+        public int TotalAppointments { get; set; }
         public int RepeatEvery { get; set; }
         public int RepeatUnitId { get; set; }
         public string RepeatUnitDescription { get; set; } = null!;

@@ -5,5 +5,6 @@ namespace BussinessLayer.Interface.Repository.Modulo_Citas
 {
     public interface ICtaSessionDetailsRepository : IGenericRepository<CtaSessionDetails>
     {
+        List<CtaSessionDetails> GetAllAppointmentsBySessionId(int sessionId);
     }
 }

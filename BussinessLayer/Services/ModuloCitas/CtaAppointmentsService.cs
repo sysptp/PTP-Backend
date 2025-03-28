@@ -59,7 +59,7 @@ namespace DataLayer.Models.Modulo_Citas
             _configuration = configuration;
         }
 
-        public override async Task<CtaAppointmentsResponse> Add(CtaAppointmentsRequest vm)
+        public async Task<CtaAppointmentsResponse> AddAppointment(CtaAppointmentsRequest vm,bool IsForSession)
         {
             var nextSequence = await _sequenceService.GetFormattedSequenceAsync(vm.CompanyId, vm.AreaId);
             vm.AppointmentCode = nextSequence;
@@ -72,7 +72,10 @@ namespace DataLayer.Models.Modulo_Citas
 
             await AddAppointmentParticipants(vm, appointmentId, appointmentEntity);
 
-            await SendAppointmentEmailsAsync(vm, vm.CompanyId);
+            if (!IsForSession)
+            {
+                await SendAppointmentEmailsAsync(vm, vm.CompanyId);
+            }
 
             return _mapper.Map<CtaAppointmentsResponse>(appointmentEntity);
         }

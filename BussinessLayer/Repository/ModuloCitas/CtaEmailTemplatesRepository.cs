@@ -53,8 +53,7 @@ namespace BussinessLayer.Repository.ModuloCitas
                 .Replace("{MeetingPlaceDescription}", meetingPlace?.Description ?? "No especificado")
                 .Replace("{ReasonDescription}", reason?.Description ?? "No especificado")
                 .Replace("{ParticipantName}", recipientName ?? "Participante")
-                .Replace("{Area}", area.Description ?? "No especificado")
-                .Replace("{AppointmentLink}", appointmentLink);
+                .Replace("{Area}", area?.Description ?? "No especificado");
         }
     }
 }
