@@ -27,6 +27,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.1" />
+    <PackageReference Include="Twilio" Version="7.9.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +48,8 @@
     <Folder Include="Mapping\ModuloVentas\" />
     <Folder Include="Services\ModuloContabilidad\" />
     <Folder Include="Services\ModuloRRHH\" />
+    <Folder Include="Services\NewFolder\" />
+    <Folder Include="Services\WhatsAppService\Implementations\" />
   </ItemGroup>
 
   <ItemGroup>
