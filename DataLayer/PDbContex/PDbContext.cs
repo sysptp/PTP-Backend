@@ -33,6 +33,8 @@ using DataLayer.Models.Modulo_Citas;
 using DataLayer.Models.ModuloCitas;
 using DataLayer.Models.ModuloGeneral;
 using DataLayer.Models.ModuloGeneral.SMTP;
+using DataLayer.Models.MessagingModule;
+using DataLayer.EntitiesConfiguration.MessagingModule;
 
 namespace DataLayer.PDbContex
 {
@@ -86,6 +88,10 @@ namespace DataLayer.PDbContex
             modelBuilder.ApplyConfiguration(new CmpAgendarCampanaConfiguration());
             modelBuilder.ApplyConfiguration(new CmpCampanaDetalleConfiguration());
             modelBuilder.ApplyConfiguration(new CmpFrecuenciaConfiguration());
+
+            modelBuilder.ApplyConfiguration(new MessagingEConfiguration());
+            modelBuilder.ApplyConfiguration(new MessagingLogsConfiguration());
+
 
 
             modelBuilder.ApplyConfiguration(new ClientContactConfiguration());
@@ -341,6 +347,11 @@ namespace DataLayer.PDbContex
         public DbSet<InvMovimientoAlmacenDetalle> InvMovimientoAlmacenDetalle { get; set; }
         public DbSet<InvMovimientoSucursalDetalle> InvMovimientoSucursalDetalle { get; set; }
         public DbSet<InvMovInventarioSucursal> InvMovInventarioSucursal { get; set; }
+        #endregion
+
+        #region WhatsApp
+        public DbSet<MessagingConfiguration> MessagingConfigurations { get; set; }
+        public DbSet<MessagingLogs> MessagingLogs { get; set; }
         #endregion
 
         #endregion
