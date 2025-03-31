@@ -6,6 +6,7 @@ namespace BussinessLayer.DTOs.NotificationModule.MessagingConfiguration
         string AccountSid,
         string AuthToken,
         string WhatsAppNumber,
+        string SmsNumber,
         string AddedBy
     );
 

@@ -84,7 +84,7 @@ namespace PTP_API.Controllers.ModuloAuditoria
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError("ex.Message el control de tabla. Por favor, intente nuevamente."));
+                return StatusCode(500, Response<string>.ServerError($"{ex.Message} el control de tabla. Por favor, intente nuevamente."));
             }
         }
 

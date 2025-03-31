@@ -8,7 +8,7 @@ namespace DataLayer.Models.MessagingModule
         public int BussinessId { get; set; }
         public string AccountSid { get; set; } = string.Empty!;
         public string AuthToken { get; set; } = string.Empty!;
-        public string WhatsAppNumber { get; set; } = string.Empty!;
-
+        public string? WhatsAppNumber { get; set; } = string.Empty!;
+        public string? SmsNumber { get; set; } = string.Empty!;
     }
 }

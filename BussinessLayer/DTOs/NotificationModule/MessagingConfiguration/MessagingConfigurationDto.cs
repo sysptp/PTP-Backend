@@ -17,6 +17,7 @@ public record MessagingConfigurationDto(
     string AccountSid,
     string AuthToken,
     string WhatsAppNumber,
+    string SmsNumber,
     string AddedBy
 );
 }
