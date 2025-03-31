@@ -35,6 +35,8 @@ using DataLayer.Models.ModuloGeneral;
 using DataLayer.Models.ModuloGeneral.SMTP;
 using DataLayer.Models.MessagingModule;
 using DataLayer.EntitiesConfiguration.MessagingModule;
+using DataLayer.EntitiesConfiguration.SendGridModule;
+using DataLayer.Models.SendGridModule;
 
 namespace DataLayer.PDbContex
 {
@@ -92,11 +94,19 @@ namespace DataLayer.PDbContex
             modelBuilder.ApplyConfiguration(new MessagingEConfiguration());
             modelBuilder.ApplyConfiguration(new MessagingLogsConfiguration());
 
-
-
+            modelBuilder.ApplyConfiguration(new SendGridEConfiguration());
+            modelBuilder.ApplyConfiguration(new SendGridLogsConfiguration());
+            modelBuilder.ApplyConfiguration(new SendGridTemplateConfiguration());
+            
             modelBuilder.ApplyConfiguration(new ClientContactConfiguration());
             modelBuilder.ApplyConfiguration(new TypeContactConfiguration());
         }
+
+        #region  SendGridModule
+        public DbSet<SendGridConfiguration> SendGridConfigurations {get;set;}
+         public DbSet<SendGridLogs> SendGridLogs {get;set;}
+          public DbSet<SendGridTemplate> SendGridTemplates {get;set;}
+        #endregion
 
         #region Cliente
 
@@ -107,7 +117,7 @@ namespace DataLayer.PDbContex
 
         #endregion
 
-        #region Campaña
+        #region Modulo Campaña
         public DbSet<CmpCliente> CmpClientes { get; set; }
         public DbSet<CmpTipoContacto> CmpTipoContactos { get; set; }
         public DbSet<CmpContactos> CmpContactos { get; set; }
