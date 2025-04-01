@@ -35,7 +35,7 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaAppointmentMovementsRequest, CtaAppointmentMovements>()
                 .ReverseMap();
             CreateMap<CtaAppointmentMovementsResponse, CtaAppointmentMovements>()
-                 .ForPath(dest => dest.CtaState.Description, opt => opt.MapFrom(src => src.Description))
+                 .ForPath(dest => dest.CtaState.Description, opt => opt.MapFrom(src => src.StateDescription))
                  .ForPath(dest => dest.CtaAppointments.AppointmentCode, opt => opt.MapFrom(src => src.AppointmentSequence))
                 .ReverseMap();
 

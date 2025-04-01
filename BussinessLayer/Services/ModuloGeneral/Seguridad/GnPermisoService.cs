@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
-using BussinessLayer.Interfaces.Repositories;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloGeneral.Seguridad;
-using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Client;
 
 namespace BussinessLayer.Services.ModuloGeneral.Seguridad
 {
@@ -40,6 +37,13 @@ namespace BussinessLayer.Services.ModuloGeneral.Seguridad
                 .ToList();
 
             return permisosResponse;
+        }
+
+        public async Task<List<GnPermisoResponseForLoggin>> GetAllPermisosForLogin(long? companyId, int? roleId, int? menuId = null)
+        {
+            var permisos = _mapper.Map<List<GnPermisoResponseForLoggin>>(await GetAllPermisosByFilter(companyId,roleId,menuId));
+
+            return permisos;
         }
 
         public async Task<Response<object>> AddOrUpdatePermissionAsync(GnPermisoRequest permisoDto)

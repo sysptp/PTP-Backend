@@ -9,6 +9,7 @@ namespace BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad
     {
         Task<List<GnPermisoResponse>> GetAllPermisosByFilter(long? companyId, int? roleId, int? menuId = null);
         Task<Response<object>> AddOrUpdatePermissionAsync(GnPermisoRequest permisoDto);
+        Task<List<GnPermisoResponseForLoggin>> GetAllPermisosForLogin(long? companyId, int? roleId, int? menuId = null);
 
     }
 }
