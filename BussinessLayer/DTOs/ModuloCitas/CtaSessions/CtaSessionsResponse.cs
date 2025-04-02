@@ -1,6 +1,5 @@
-﻿
-using DataLayer.Models.ModuloGeneral;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+using System.Text.Json.Serialization;
 
 namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
 {
@@ -21,5 +20,8 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
         public int RepeatUnitId { get; set; }
         public string RepeatUnitDescription { get; set; } = null!;
         public long CompanyId { get; set; }
+
+        [JsonPropertyName("Participants")]
+        public List<AppointmentParticipantsResponse>? Participants { get; set; } = new();
     }
 }

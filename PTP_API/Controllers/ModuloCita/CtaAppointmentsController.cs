@@ -142,6 +142,7 @@ namespace PTP_API.Controllers.ModuloCita
                     return NotFound(Response<string>.NotFound("Cita no encontrada."));
 
                 appointmentDto.AppointmentId = id;
+                appointmentDto.AppointmentCode = existingAppointment.AppointmentCode;
                 await _appointmentService.Update(appointmentDto, id);
                 return Ok(Response<string>.Success(null, "Cita actualizada correctamente."));
             }

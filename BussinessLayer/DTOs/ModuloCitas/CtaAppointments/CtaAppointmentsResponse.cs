@@ -32,14 +32,8 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public string? AssignedUser { get; set; }
         public long CompanyId { get; set; }
         public string? CompanyName { get; set;}
-         [JsonPropertyName("Contacts")]
-        public List<CtaContactInformation>? CtaAppointmentContacts { get; set; } = new();
-        [JsonPropertyName("UsersInvited")]
-        public List<CtaUserInformation>? CtaAppointmentUsers { get; set; } = new();
-        [JsonPropertyName("Management")]
-        public List<CtaManagmentInformation>? CtaAppointmentManagement { get; set; } = new();
-        [JsonPropertyName("Guests")]
-        public List<CtaGuestInformation>? CtaGuest { get; set; } = new();
+         [JsonPropertyName("Participants")]
+        public List<AppointmentParticipantsResponse>? Participants { get; set; } = new();
 
     }
 }

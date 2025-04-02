@@ -8,6 +8,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public string ParticipantName { get; set; } = null!;
         public string ParticipantEmail { get; set; } = null!;
         public string ParticipantPhone { get; set; } = null!;
+        public int AppointmentId { get; set; }
         public long CompanyId { get; set; }
     }
 }

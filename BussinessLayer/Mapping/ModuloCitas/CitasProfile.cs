@@ -59,22 +59,7 @@ namespace BussinessLayer.Mapping.ModuloCitas
             .ForMember(dest => dest.MeetingPlaceDescription, opt => opt.MapFrom(src => src.CtaMeetingPlace != null ? src.CtaMeetingPlace.Description : string.Empty))
             .ForMember(dest => dest.AssignedUser, opt => opt.MapFrom(src => src.Usuario != null ? src.Usuario.Nombre +" " +src.Usuario.Apellido : string.Empty))
             .ForMember(dest => dest.StateDescription, opt => opt.MapFrom(src => src.CtaState != null ? src.CtaState.Description : string.Empty))
-            .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.GnEmpresa != null ? src.GnEmpresa.NOMBRE_EMP : string.Empty))
-            .ForMember(dest => dest.CtaAppointmentUsers, opt => opt.MapFrom(src => src.CtaAppointmentUsers != null ? src.CtaAppointmentUsers.Select(x => x.Usuario) : new List<Usuario>()))
-            .ForMember(dest => dest.CtaAppointmentContacts, opt => opt.MapFrom(src => src.CtaAppointmentContacts ?? new List<CtaAppointmentContacts>()))
-            .ForMember(dest => dest.CtaAppointmentManagement, opt => opt.MapFrom(src => src.CtaAppointmentManagement ?? new List<CtaAppointmentManagement>()))
-            .ForMember(dest => dest.CtaGuest, opt => opt.MapFrom(src => src.CtaAppointmentGuest != null ?
-                src.CtaAppointmentGuest
-                .Where(g => g.Guest != null)
-                .Select(g => new CtaGuestInformation
-                {
-                    Id = g.Guest.Id,
-                    Names = g.Guest.Names,
-                    LastName = g.Guest.LastName,
-                    PhoneNumber = g.Guest.PhoneNumber,
-                    Email = g.Guest.Email,
-                    NickName = g.Guest.NickName
-                }).ToList() : new List<CtaGuestInformation>()));
+            .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.GnEmpresa != null ? src.GnEmpresa.NOMBRE_EMP : string.Empty));
 
             CreateMap<CtaAppointmentGuest, CtaGuestInformation>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Guest.Id))

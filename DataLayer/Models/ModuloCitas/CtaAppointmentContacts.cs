@@ -12,7 +12,7 @@ namespace DataLayer.Models.ModuloCitas
         public int Id { get; set; }
         public int ContactId { get; set; }
         [ForeignKey("ContactId")]
-        public CtaAppointmentContacts? Contact { get; set; }
+        public CtaContacts? Contact { get; set; }
         public int AppointmentId { get; set; }
         [ForeignKey("AppointmentId")]
         public CtaAppointments? Appointment { get; set; }

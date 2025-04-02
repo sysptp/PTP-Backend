@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Runtime.CompilerServices;
+using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailBackgroundJobData;
 using BussinessLayer.Enums;
@@ -11,6 +12,7 @@ using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using BussinessLayer.Services;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCitas;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
 namespace DataLayer.Models.Modulo_Citas
@@ -135,19 +137,15 @@ namespace DataLayer.Models.Modulo_Citas
             { "CtaAppointmentReason",
                 "CtaMeetingPlace",
                 "CtaState",
-                "CtaAppointmentContacts",
-                "CtaAppointmentUsers",
-                "CtaAppointmentManagement",
-                 "CtaAppointmentContacts.Contact",
-                 "CtaAppointmentUsers.Usuario",
-                 "CtaAppointmentGuest.Guest"});
+                "CtaAppointmentManagement"});
 
-                var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments);
+                var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments.OrderByDescending(x => x.AppointmentId));
                 
                 foreach(var appointmentDto in appointmentDtoList)
                 {
                     var area = await _ctaAppointmentAreaRepository.GetById(appointmentDto.AreaId);
                     appointmentDto.Area = area?.Description;
+                    appointmentDto.Participants = await GetAllParticipantsByAppointmentId(appointmentDto.AppointmentId);
                 }
 
                 return appointmentDtoList;
@@ -156,6 +154,17 @@ namespace DataLayer.Models.Modulo_Citas
             {
                 throw new Exception($"Error en el mapeo: {ex.Message}, InnerException: {ex.InnerException?.Message}");
             }
+        }
+
+        public override async Task<CtaAppointmentsResponse> GetByIdResponse(object id)
+        {
+            var appointment = await base.GetByIdResponse(id);
+            if(appointment != null)
+            {
+                appointment.Participants = await GetAllParticipantsByAppointmentId(appointment.AppointmentId);
+                return appointment;
+            }
+            return null;
         }
 
         // 3. Modifica el método SendAppointmentEmailsAsync en tu servicio de Appointments
@@ -249,6 +258,58 @@ namespace DataLayer.Models.Modulo_Citas
                     await _appointmentRepository.Delete(appointment.AppointmentId);
                 }
             }
+        }
+
+        public async Task<List<AppointmentParticipantsResponse>> GetAllParticipantsByAppointmentId(int appointmentId)
+        {
+            var contactList = await _appointmentContactsRepository.GetAllContactsByAppointmentId(appointmentId);
+            var userSystemList = await _userAppointmentRepository.GetAllUserByAppointmentId(appointmentId);
+            var guestList = await _ctaAppointmentGuestRepository.GetAllGuestByAppointmentId(appointmentId);
+            var participantList = new List<AppointmentParticipantsResponse>();
+
+            foreach (var contact in contactList)
+            {
+                var participant = new AppointmentParticipantsResponse
+                {
+                    ParticipantId = contact.Id,
+                    ParticipantTypeId = (int)AppointmentParticipant.Contact,
+                    ParticipantEmail = contact.ContactEmail,
+                    ParticipantName = contact.Name,
+                    ParticipantPhone = contact.ContactNumber,
+                    CompanyId = contact.CompanyId
+                };
+                participantList.Add(participant);
+            }
+
+            foreach (var user in userSystemList)
+            {
+                var participant = new AppointmentParticipantsResponse
+                {
+                    ParticipantId = user.Id,
+                    ParticipantTypeId = (int)AppointmentParticipant.SystemUser,
+                    ParticipantEmail = user.Email,
+                    ParticipantName = user.Nombre + " " + user.Apellido,
+                    ParticipantPhone = user.TelefonoPersonal,
+                    CompanyId = (long)user.CodigoEmp
+                };
+                participantList.Add(participant);
+            }
+
+            foreach (var guest in guestList)
+            {
+                var participant = new AppointmentParticipantsResponse
+                {
+                    ParticipantId = guest.Id,
+                    ParticipantTypeId = (int)AppointmentParticipant.Guest,
+                    ParticipantEmail = guest.Email,
+                    ParticipantName = guest.Names,
+                    ParticipantPhone = guest.PhoneNumber,
+                    CompanyId = guest.CompanyId
+                };
+                participantList.Add(participant);
+            }
+
+            return participantList.OrderBy(x => x.ParticipantName).ToList();
         }
 
         public async Task<List<AppointmentParticipantsResponse>> GetAllParticipants()
