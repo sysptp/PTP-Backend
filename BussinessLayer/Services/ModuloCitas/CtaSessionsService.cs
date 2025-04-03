@@ -39,15 +39,30 @@ namespace DataLayer.Models.Modulo_Citas
                 "Usuario"});
 
             var sessionDtoList = _mapper.Map<List<CtaSessionsResponse>>(sessionList);
-
+           
             foreach (var session in sessionDtoList)
             {
-                session.TotalAppointments = _sessionDetailsRepository.GetAllAppointmentsBySessionId(session.IdSession).Count();
+                session.TotalAppointments = _sessionDetailsRepository.GetAllSessionDetailsBySessionId(session.IdSession).Count();
+                var appointmentList = await _sessionDetailsRepository.GetAllAppointmentsBySessionId(session.IdSession);
+                if(appointmentList.Count > 0)
+                {
+                session.Participants = await _appointmentsService.GetAllParticipantsByAppointmentId(appointmentList[0].AppointmentId);
+                }
             }
 
-            return sessionDtoList;
-
+            return sessionDtoList.OrderByDescending(x => x.IdSession).ToList();
         }
+
+        public override async Task<CtaSessionsResponse> GetByIdResponse(int id)
+        {
+            var session = await base.GetByIdResponse(id);
+            session.TotalAppointments = _sessionDetailsRepository.GetAllSessionDetailsBySessionId(session.IdSession).Count();
+            var appointmentList = await _sessionDetailsRepository.GetAllAppointmentsBySessionId(session.IdSession);
+            session.Participants = await _appointmentsService.GetAllParticipantsByAppointmentId(appointmentList[0].AppointmentId);
+
+            return session;
+        }
+
         public async Task<CtaSessionsRequest> CreateSessionAndGenerateAppointments(CtaSessionsRequest sessionRequest)
         {
             var sessionEntity = _mapper.Map<CtaSessions>(sessionRequest);

@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using AutoMapper;
+﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailBackgroundJobData;
 using BussinessLayer.Enums;
@@ -12,7 +11,6 @@ using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using BussinessLayer.Services;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCitas;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
 namespace DataLayer.Models.Modulo_Citas
