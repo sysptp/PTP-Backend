@@ -168,7 +168,7 @@ namespace DataLayer.Models.Modulo_Citas
         // 3. Modifica el método SendAppointmentEmailsAsync en tu servicio de Appointments
         private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId)
         {
-            var creator = await _userRepository.GetById(appointment.UserId);
+            var creator = await _userRepository.GetById(appointment.AssignedUser);
             var appointmentState = await _ctaStateRepository.GetById(appointment.IdState);
 
             var configAssignedSubject = _configuration["EmailTemplates:DefaultTemplates:AssignedUserTemplate:Subject"];
@@ -220,7 +220,7 @@ namespace DataLayer.Models.Modulo_Citas
 
         public async Task<DetailMessage> ExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto)
         {
-            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId, appointmentDto.UserId);
+            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId, appointmentDto.AssignedUser);
 
             var existAppointment = existingAppointments.Any(a =>
                 (appointmentDto.AppointmentTime >= a.AppointmentTime && appointmentDto.AppointmentTime < a.EndAppointmentTime) ||
@@ -242,7 +242,7 @@ namespace DataLayer.Models.Modulo_Citas
 
         public async Task DeleteExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto)
         {
-            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId, appointmentDto.UserId);
+            var existingAppointments = await _appointmentRepository.GetAppointmentsByDate(appointmentDto.AppointmentDate, appointmentDto.CompanyId, appointmentDto.AssignedUser);
 
             var existAppointment = existingAppointments.Any(a =>
                 (appointmentDto.AppointmentTime >= a.AppointmentTime && appointmentDto.AppointmentTime < a.EndAppointmentTime) ||

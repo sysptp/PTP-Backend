@@ -17,7 +17,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
-    //[EnableBitacora]
+    [EnableBitacora]
     public class CtaAppointmentsController : ControllerBase
     {
         private readonly ICtaAppointmentsService _appointmentService;
@@ -37,6 +37,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener citas", Description = "Devuelve una lista de citas o una cita específica si se proporciona un ID")]
+        [DisableBitacora]       
         public async Task<IActionResult> GetAllAppointments([FromQuery] string? appointmentCode, int? appointmentId, long? companyId, int? userId)
         {
             try
@@ -110,7 +111,7 @@ namespace PTP_API.Controllers.ModuloCita
                     }
                 }
 
-                var response = await _appointmentService.Add(appointmentDto);
+                var response = await _appointmentService.AddAppointment(appointmentDto,false);
                 return CreatedAtAction(nameof(GetAllAppointments), Response<CtaAppointmentsResponse>.Created(response));
             }
             catch (Exception ex)

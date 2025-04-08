@@ -33,6 +33,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener sesiones", Description = "Devuelve una lista de sesiones o una sesión específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllSessions([FromQuery] int? IdSession, long? companyId, int? userId)
         {
             try

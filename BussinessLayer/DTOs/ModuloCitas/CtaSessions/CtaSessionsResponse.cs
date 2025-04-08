@@ -23,5 +23,8 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
 
         [JsonPropertyName("Participants")]
         public List<AppointmentParticipantsResponse>? Participants { get; set; } = new();
+
+        [JsonPropertyName("AppointmentsInformation")]
+        public AppointmentInformation AppointmentInformation { get; set; } = new();
     }
 }

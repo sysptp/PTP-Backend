@@ -102,7 +102,7 @@ namespace DataLayer.Models.Modulo_Citas
             {
                 var appointment = _mapper.Map<CtaAppointmentsRequest>(sessionRequest.AppointmentInformation);
                 appointment.AppointmentDate = currentAppointmentDate;
-                appointment.UserId = sessionRequest.IdUser;
+                appointment.AssignedUser = sessionRequest.AssignedUser;
                 appointments.Add(appointment);
 
                 currentAppointmentDate = CalculateNextAppointmentDate(currentAppointmentDate, sessionRequest.RepeatEvery, sessionRequest.RepeatUnitId);
@@ -130,7 +130,7 @@ namespace DataLayer.Models.Modulo_Citas
 
         public async Task DeleteAppointmentsInSessionRange(CtaSessionsRequest sessionDto)
         {
-            var existingAppointments = await _appointmentRepository.GetAppointmentsInRange(sessionDto.FirstSessionDate, sessionDto.SessionEndDate, sessionDto.AppointmentInformation.CompanyId, sessionDto.IdUser);
+            var existingAppointments = await _appointmentRepository.GetAppointmentsInRange(sessionDto.FirstSessionDate, sessionDto.SessionEndDate, sessionDto.AppointmentInformation.CompanyId, sessionDto.AssignedUser);
 
             foreach (var appointment in existingAppointments)
             {
@@ -140,7 +140,7 @@ namespace DataLayer.Models.Modulo_Citas
 
         public async Task<DetailMessage> GetConflictingAppointmentsInSessionRange(CtaSessionsRequest sessionDto)
         {
-            var existingAppointments = await _appointmentRepository.GetAppointmentsInRange(sessionDto.FirstSessionDate, sessionDto.SessionEndDate, sessionDto.AppointmentInformation.CompanyId, sessionDto.IdUser);
+            var existingAppointments = await _appointmentRepository.GetAppointmentsInRange(sessionDto.FirstSessionDate, sessionDto.SessionEndDate, sessionDto.AppointmentInformation.CompanyId, sessionDto.AssignedUser);
 
             var conflictingAppointments = existingAppointments.Where(a =>
              (sessionDto.FirstSessionDate.Date.Add(a.AppointmentTime) >= sessionDto.FirstSessionDate &&

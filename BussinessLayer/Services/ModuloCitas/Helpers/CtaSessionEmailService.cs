@@ -46,7 +46,7 @@ namespace BussinessLayer.Services.ModuloCitas
         {
             try
             {
-                var creator = await _userRepository.GetById(sessionRequest.IdUser);
+                var creator = await _userRepository.GetById(sessionRequest.AssignedUser);
                 var appointmentState = await _ctaStateRepository.GetById(sessionRequest.AppointmentInformation.IdState);
 
                 var emailTemplates = await GetEmailTemplates(appointmentState);

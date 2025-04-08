@@ -1,5 +1,4 @@
-﻿using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentGuest;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
 {
@@ -27,14 +26,8 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public bool NotifyAssignedUserEmail { get; set; } = false;
         public bool NotifyAssignedUserSms { get; set; } = false;
         public int? AreaId { get; set; }
-        public int UserId { get; set; }
+        public int AssignedUser { get; set; }
         public long CompanyId { get; set; }
-        //[JsonPropertyName("Contacts")]
-        //public List<CtaAppointmentContactsRequest>? CtaAppointmentContacts { get; set; }
-        //[JsonPropertyName("UsersInvited")]
-        //public List<CtaAppointmentUsersRequest>? CtaAppointmentUsers { get; set; }
-        //[JsonPropertyName("Guests")]
-        //public List<CtaAppointmentGuestRequest>? CtaAppointmentGuests { get; set; }
         [JsonPropertyName("Participants")]
         public List<AppointmentParticipantsRequest> AppointmentParticipants { get; set; } = new();
     }

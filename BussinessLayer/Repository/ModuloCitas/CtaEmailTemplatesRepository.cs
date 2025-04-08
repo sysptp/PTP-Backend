@@ -33,7 +33,7 @@ namespace BussinessLayer.Repository.ModuloCitas
             if (string.IsNullOrEmpty(templateBody))
                 return templateBody;
 
-            var assignedUser = _userRepository.GetById(appointment.UserId).Result;
+            var assignedUser = _userRepository.GetById(appointment.AssignedUser).Result;
             var meetingPlace = _meetingPlaceRepository.GetById(appointment.IdPlaceAppointment).Result;
             var reason = _appointmentReasonRepository.GetById(appointment.IdReasonAppointment).Result;
             var area = _areaRepository.GetById(appointment.AreaId).Result;
