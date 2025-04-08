@@ -10,14 +10,17 @@ namespace BussinessLayer.FluentValidations.Account
         private readonly IGnEmpresaRepository _empresaRepository;
         private readonly IGnPerfilRepository _gnPerfilRepository;
         private readonly IGnSucursalRepository _sucursalRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
         public RegisterRequestValidator(IGnEmpresaRepository empresaRepository,
             IGnPerfilRepository gnPerfilRepository,
-            IGnSucursalRepository sucursalRepository)
+            IGnSucursalRepository sucursalRepository,
+            IUsuarioRepository usuarioRepository)
         {
             _empresaRepository = empresaRepository;
             _gnPerfilRepository = gnPerfilRepository;
             _sucursalRepository = sucursalRepository;
+            _usuarioRepository = usuarioRepository;
 
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("El nombre es requerido.");
@@ -46,6 +49,10 @@ namespace BussinessLayer.FluentValidations.Account
             RuleFor(x => x.Phone)
                 .NotEmpty().WithMessage("El número de teléfono es requerido.");
 
+            RuleFor(x => x.Email)
+               .Must(email => EmailExists(email))
+               .WithMessage("Este email ya ha sido utilizado por otro usuario.");
+
             RuleFor(x => x.CompanyId)
                 .MustAsync(async (companyId, cancellation) => await CompanyExists(companyId))
                 .WithMessage("El ID de la compañía no es válido.");
@@ -57,6 +64,11 @@ namespace BussinessLayer.FluentValidations.Account
             RuleFor(x => x.SucursalId)
                .MustAsync(async (sucursalId, cancellation) => await SucursalExists(sucursalId))
                .WithMessage("El ID de la sucursal no es válido.");
+        }
+
+        private bool EmailExists(string email)
+        {
+            return _usuarioRepository.EmailExists(email);
         }
 
         private async Task<bool> CompanyExists(long companyId)
