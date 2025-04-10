@@ -58,7 +58,7 @@ namespace PTP_API.Controllers.ModuloCita
                         filteredSessions = filteredSessions.Where(x => x.CompanyId == companyId.Value);
 
                     if (userId.HasValue)
-                        filteredSessions = filteredSessions.Where(x => x.IdUser == userId.Value);
+                        filteredSessions = filteredSessions.Where(x => x.AssignedUserId == userId.Value);
 
                     return Ok(Response<IEnumerable<CtaSessionsResponse>>.Success(
                         filteredSessions.ToList(),
