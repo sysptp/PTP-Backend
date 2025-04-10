@@ -7,8 +7,9 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
     {
         public int IdSession { get; set; }
         public string? Description { get; set; }
+        [JsonIgnore]
         public int? IdUser { get; set; }
-        public string? UserName { get; set; }
+        public string? AssignedUser { get; set; }
         public string? UserEmail { get; set; }
         public string? UserPhoneNumber { get; set; }
         public DateTime FirstSessionDate { get; set; }
@@ -25,6 +26,6 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
         public List<AppointmentParticipantsResponse>? Participants { get; set; } = new();
 
         [JsonPropertyName("AppointmentsInformation")]
-        public AppointmentInformation AppointmentInformation { get; set; } = new();
+        public AppointmentInformationForResponse AppointmentInformation { get; set; } = new();
     }
 }

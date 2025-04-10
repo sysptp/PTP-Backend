@@ -4,7 +4,6 @@ using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
@@ -398,6 +397,98 @@ namespace BussinessLayer.Repository.ROtros
                 query = query.Include(property);
             }
             return await query.Where(x => x.Borrado != true).ToListAsync();
+        }
+
+        public virtual async Task RemoveRangeAsync(IEnumerable<T> entities)
+        {
+            try
+            {
+                var dbContext = _context;
+                var tableName = dbContext.Model.FindEntityType(typeof(T))?.GetTableName();
+                var primaryKey = dbContext.Model.FindEntityType(typeof(T))
+                    ?.FindPrimaryKey()
+                    ?.Properties
+                    ?.Select(p => p.Name)
+                    ?.FirstOrDefault();
+
+                if (string.IsNullOrEmpty(primaryKey))
+                {
+                    throw new InvalidOperationException("No se pudo determinar la clave primaria de la tabla.");
+                }
+
+                var fechaModificacion = DateTime.Now;
+                var usuarioModificacion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    if (connection.State == ConnectionState.Closed)
+                        await connection.OpenAsync();
+
+                    foreach (var batch in BatchEntities(entities, 100))
+                    {
+                        var parameters = new DynamicParameters();
+                        var idList = new List<string>();
+                        int i = 0;
+
+                        foreach (var entity in batch)
+                        {
+                            var id = typeof(T).GetProperty(primaryKey)?.GetValue(entity);
+                            if (id != null)
+                            {
+                                var paramName = $"@Id{i}";
+                                idList.Add($"{primaryKey} = {paramName}");
+                                parameters.Add(paramName, id);
+                                i++;
+                            }
+                        }
+
+                        if (idList.Count > 0)
+                        {
+                            var whereClause = string.Join(" OR ", idList);
+                            var sql = $@"
+                        UPDATE {tableName}
+                        SET Borrado = @Borrado,
+                            FechaModificacion = @FechaModificacion,
+                            UsuarioModificacion = @UsuarioModificacion
+                        WHERE {whereClause}";
+
+                            parameters.Add("@Borrado", true);
+                            parameters.Add("@FechaModificacion", fechaModificacion);
+                            parameters.Add("@UsuarioModificacion", usuarioModificacion);
+
+                            await connection.ExecuteAsync(sql, parameters);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error al eliminar múltiples entidades: {ex.Message}", ex);
+            }
+        }
+
+        private IEnumerable<IEnumerable<T>> BatchEntities(IEnumerable<T> entities, int batchSize)
+        {
+            var count = 0;
+            var batch = new List<T>(batchSize);
+
+            foreach (var entity in entities)
+            {
+                batch.Add(entity);
+                count++;
+
+                if (count >= batchSize)
+                {
+                    yield return batch;
+                    batch = new List<T>(batchSize);
+                    count = 0;
+                }
+            }
+
+            if (batch.Count > 0)
+            {
+                yield return batch;
+            }
         }
 
     }

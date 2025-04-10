@@ -12,6 +12,7 @@ using BussinessLayer.Services;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCitas;
 using Microsoft.Extensions.Configuration;
+using SendGrid.Helpers.Errors.Model;
 
 namespace DataLayer.Models.Modulo_Citas
 {
@@ -165,7 +166,104 @@ namespace DataLayer.Models.Modulo_Citas
             return null;
         }
 
-        // 3. Modifica el método SendAppointmentEmailsAsync en tu servicio de Appointments
+        public async override Task<CtaAppointmentsResponse> Update(CtaAppointmentsRequest vm, int id)
+        {
+           
+            await base.Update(vm,id);
+
+            await UpdateAppointmentParticipants(vm, id, _mapper.Map<CtaAppointmentsResponse>(appointmentEntity));
+
+            await SendAppointmentEmailsAsync(vm, vm.CompanyId, isUpdate: true);
+
+            return _mapper.Map<CtaAppointmentsResponse>(vm);
+        }
+
+        public async Task UpdateAppointmentParticipants(CtaAppointmentsRequest vm, int appointmentId, CtaAppointmentsResponse appointmentEntity)
+        {
+            var participants = await GetAllParticipantsByAppointmentId(appointmentId);
+            var currentUsers = participants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser).ToList();
+            var currentContacts = participants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact).ToList();
+            var currentGuests = participants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest).ToList();
+
+            if (vm.AppointmentParticipants != null)
+            {
+                var newSystemUsers = vm.AppointmentParticipants
+                    .Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser)
+                    .Select(user => user.ParticipantId)
+                    .ToList();
+
+                var usersToDelete = currentUsers
+                    .Where(u => !newSystemUsers.Contains(u.ParticipantId))
+                    .ToList();
+
+                var usersToAdd = newSystemUsers
+                    .Where(userId => !currentUsers.Any(u => u.ParticipantId == userId))
+                    .Select(userId => new CtaAppointmentUsers
+                    {
+                        UserId = userId,
+                        AppointmentId = appointmentId,
+                        CompanyId = appointmentEntity.CompanyId
+                    })
+                    .ToList();
+
+                if (usersToDelete.Any())
+                    await _userAppointmentRepository.RemoveRangeAsync(usersToDelete);
+
+                if (usersToAdd.Any())
+                    await _userAppointmentRepository.AddRangeAsync(usersToAdd);
+
+                var newContacts = vm.AppointmentParticipants
+                    .Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact)
+                    .Select(contact => contact.ParticipantId)
+                    .ToList();
+
+                var contactsToDelete = currentContacts
+                    .Where(c => !newContacts.Contains(c.ContactId))
+                    .ToList();
+
+                var contactsToAdd = newContacts
+                    .Where(contactId => !currentContacts.Any(c => c.ContactId == contactId))
+                    .Select(contactId => new CtaAppointmentContacts
+                    {
+                        ContactId = contactId,
+                        AppointmentId = appointmentId,
+                        CompanyId = appointmentEntity.CompanyId
+                    })
+                    .ToList();
+
+                if (contactsToDelete.Any())
+                    await _appointmentContactsRepository.RemoveRangeAsync(contactsToDelete);
+
+                if (contactsToAdd.Any())
+                    await _appointmentContactsRepository.AddRangeAsync(contactsToAdd);
+
+                var newGuests = vm.AppointmentParticipants
+                    .Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest)
+                    .Select(guest => guest.ParticipantId)
+                    .ToList();
+
+                var guestsToDelete = currentGuests
+                    .Where(g => !newGuests.Contains(g.GuestId))
+                    .ToList();
+
+                var guestsToAdd = newGuests
+                    .Where(guestId => !currentGuests.Any(g => g.GuestId == guestId))
+                    .Select(guestId => new CtaAppointmentGuest
+                    {
+                        GuestId = guestId,
+                        AppointmentId = appointmentId,
+                        CompanyId = appointmentEntity.CompanyId
+                    })
+                    .ToList();
+
+                if (guestsToDelete.Any())
+                    await _ctaAppointmentGuestRepository.RemoveRangeAsync(guestsToDelete);
+
+                if (guestsToAdd.Any())
+                    await _ctaAppointmentGuestRepository.AddRangeAsync(guestsToAdd);
+            }
+        }
+
         private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId)
         {
             var creator = await _userRepository.GetById(appointment.AssignedUser);
@@ -361,6 +459,7 @@ namespace DataLayer.Models.Modulo_Citas
 
             return participantList.OrderBy(x => x.ParticipantName).ToList();
         }
+
 
     }
 }
