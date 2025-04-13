@@ -1,5 +1,4 @@
-﻿using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.Enums;
@@ -31,23 +30,20 @@ namespace DataLayer.Models.Modulo_Citas
             _appointmentRepository = appointmentRepository;
             _sessionEmailService = sessionEmailService;
         }
-
         public override async Task<List<CtaSessionsResponse>> GetAllDto()
         {
             var sessionList = await _sessionRepository.GetAllWithIncludeAsync(new List<string>
-            { "GnRepeatUnit",
-                "Usuario"});
+    {
+        "GnRepeatUnit",
+        "Usuario"
+    });
 
             var sessionDtoList = _mapper.Map<List<CtaSessionsResponse>>(sessionList);
-           
+
             foreach (var session in sessionDtoList)
             {
                 session.TotalAppointments = _sessionDetailsRepository.GetAllSessionDetailsBySessionId(session.IdSession).Count();
-                var appointmentList = await _sessionDetailsRepository.GetAllAppointmentsBySessionId(session.IdSession);
-                if(appointmentList.Count > 0)
-                {
-                session.Participants = await _appointmentsService.GetAllParticipantsByAppointmentId(appointmentList[0].AppointmentId);
-                }
+                await MapSessionAppointmentDetailsAsync(session);
             }
 
             return sessionDtoList.OrderByDescending(x => x.IdSession).ToList();
@@ -75,7 +71,7 @@ namespace DataLayer.Models.Modulo_Citas
 
                 foreach (var appointment in appointments)
                 {
-                    var appointmentEntity = await _appointmentsService.AddAppointment(appointment,true);
+                    var appointmentEntity = await _appointmentsService.AddAppointment(appointment, true);
                     createdAppointments.Add(appointmentEntity);
 
                     var sessionDetail = new CtaSessionDetails
@@ -167,6 +163,35 @@ namespace DataLayer.Models.Modulo_Citas
             return null;
         }
 
+        #region Private Methods
+        private async Task MapSessionAppointmentDetailsAsync(CtaSessionsResponse session)
+        {
+            var appointmentList = await _sessionDetailsRepository.GetAllAppointmentsBySessionId(session.IdSession);
 
+            if (appointmentList.Count > 0)
+            {
+                var firstAppointment = appointmentList[0];
+                session.Participants = await _appointmentsService.GetAllParticipantsByAppointmentId(firstAppointment.AppointmentId);
+                session.AppointmentDescription = firstAppointment.Description;
+                session.IdReasonAppointment = firstAppointment.IdReasonAppointment;
+                session.AppointmentTime = firstAppointment.AppointmentTime;
+                session.IdPlaceAppointment = firstAppointment.IdPlaceAppointment;
+                session.IdState = firstAppointment.IdState;
+                session.IsConditionedTime = firstAppointment.IsConditionedTime;
+                session.EndAppointmentTime = firstAppointment.EndAppointmentTime;
+                session.SendEmail = firstAppointment.SendEmail;
+                session.SendSms = firstAppointment.SendSms;
+                session.SendSmsReminder = firstAppointment.SendSmsReminder;
+                session.SendEmailReminder = firstAppointment.SendEmailReminder;
+                session.DaysInAdvance = firstAppointment.DaysInAdvance;
+                session.NotificationTime = firstAppointment.NotificationTime;
+                session.NotifyClosure = firstAppointment.NotifyClosure;
+                session.NotifyAssignedUserEmail = firstAppointment.NotifyAssignedUserEmail;
+                session.NotifyAssignedUserSms = firstAppointment.NotifyAssignedUserSms;
+                session.AreaId = firstAppointment.AreaId;
+            }
         }
+
+        #endregion 
+    }
 }

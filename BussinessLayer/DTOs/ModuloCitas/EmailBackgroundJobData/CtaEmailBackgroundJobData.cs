@@ -13,5 +13,9 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaEmailBackgroundJobData
         public string? ParticipantSubject { get; set; }
         public string? ParticipantBody { get; set; }
         public long CompanyId { get; set; }
+        public bool IsUpdate { get; set; } = false;
+        public bool IsStateChange { get; set; } = false;
+        public string? PreviousState { get; set; }
+        public string? NewState { get; set; }
     }
 }

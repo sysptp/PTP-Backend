@@ -171,128 +171,293 @@ namespace DataLayer.Models.Modulo_Citas
            
             await base.Update(vm,id);
 
-            await UpdateAppointmentParticipants(vm, id, _mapper.Map<CtaAppointmentsResponse>(appointmentEntity));
+            await UpdateAppointmentParticipants(vm, id, _mapper.Map<CtaAppointmentsResponse>(vm));
 
             await SendAppointmentEmailsAsync(vm, vm.CompanyId, isUpdate: true);
 
             return _mapper.Map<CtaAppointmentsResponse>(vm);
         }
-
         public async Task UpdateAppointmentParticipants(CtaAppointmentsRequest vm, int appointmentId, CtaAppointmentsResponse appointmentEntity)
         {
-            var participants = await GetAllParticipantsByAppointmentId(appointmentId);
-            var currentUsers = participants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser).ToList();
-            var currentContacts = participants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact).ToList();
-            var currentGuests = participants.Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest).ToList();
+            // Obtener todos los participantes actuales
+            var currentParticipants = await GetAllParticipantsByAppointmentId(appointmentId);
 
             if (vm.AppointmentParticipants != null)
             {
-                var newSystemUsers = vm.AppointmentParticipants
+                // === USUARIOS DEL SISTEMA ===
+                // Filtrar participantes actuales que son usuarios del sistema
+                var currentUsers = currentParticipants
+                    .Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser)
+                    .ToList();
+
+                // Obtener IDs de nuevos usuarios del sistema
+                var newSystemUserIds = vm.AppointmentParticipants
                     .Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.SystemUser)
                     .Select(user => user.ParticipantId)
                     .ToList();
 
-                var usersToDelete = currentUsers
-                    .Where(u => !newSystemUsers.Contains(u.ParticipantId))
+                // Identificar usuarios a eliminar (están en BD pero no en la petición)
+                var userIdsToDelete = currentUsers
+                    .Where(u => !newSystemUserIds.Contains(u.ParticipantId))
+                    .Select(u => u.ParticipantId)
                     .ToList();
 
-                var usersToAdd = newSystemUsers
+                // Identificar usuarios a agregar (están en la petición pero no en BD)
+                var userIdsToAdd = newSystemUserIds
                     .Where(userId => !currentUsers.Any(u => u.ParticipantId == userId))
-                    .Select(userId => new CtaAppointmentUsers
+                    .ToList();
+
+                // Eliminar usuarios que ya no están en la petición
+                if (userIdsToDelete.Any())
+                {
+                    // Obtener entidades de usuario para eliminar (usando el método existente)
+                    var userEntitiesToDelete = await _userAppointmentRepository.GetAllUserByAppointmentId(appointmentId);
+                    // Filtrar solo los que queremos eliminar
+                    userEntitiesToDelete = userEntitiesToDelete
+                        .Where(u => userIdsToDelete.Contains(u.Id))
+                        .ToList();
+
+                    // Crear entidades de CtaAppointmentUsers para eliminar
+                    var appointmentUsersToDelete = userEntitiesToDelete.Select(u => new CtaAppointmentUsers
                     {
-                        UserId = userId,
+                        UserId = u.Id,
                         AppointmentId = appointmentId,
                         CompanyId = appointmentEntity.CompanyId
-                    })
+                    }).ToList();
+
+                    if (appointmentUsersToDelete.Any())
+                        await _userAppointmentRepository.RemoveRangeAsync(appointmentUsersToDelete);
+                }
+
+                // Agregar nuevos usuarios
+                if (userIdsToAdd.Any())
+                {
+                    var usersToAdd = userIdsToAdd
+                        .Select(userId => new CtaAppointmentUsers
+                        {
+                            UserId = userId,
+                            AppointmentId = appointmentId,
+                            CompanyId = appointmentEntity.CompanyId
+                        })
+                        .ToList();
+
+                    await _userAppointmentRepository.AddRangeAsync(usersToAdd);
+                }
+
+                // === CONTACTOS ===
+                // Filtrar participantes actuales que son contactos
+                var currentContacts = currentParticipants
+                    .Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact)
                     .ToList();
 
-                if (usersToDelete.Any())
-                    await _userAppointmentRepository.RemoveRangeAsync(usersToDelete);
-
-                if (usersToAdd.Any())
-                    await _userAppointmentRepository.AddRangeAsync(usersToAdd);
-
-                var newContacts = vm.AppointmentParticipants
+                // Obtener IDs de nuevos contactos
+                var newContactIds = vm.AppointmentParticipants
                     .Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Contact)
                     .Select(contact => contact.ParticipantId)
                     .ToList();
 
-                var contactsToDelete = currentContacts
-                    .Where(c => !newContacts.Contains(c.ContactId))
+                // Identificar contactos a eliminar
+                var contactIdsToDelete = currentContacts
+                    .Where(c => !newContactIds.Contains(c.ParticipantId))
+                    .Select(c => c.ParticipantId)
                     .ToList();
 
-                var contactsToAdd = newContacts
-                    .Where(contactId => !currentContacts.Any(c => c.ContactId == contactId))
-                    .Select(contactId => new CtaAppointmentContacts
+                // Identificar contactos a agregar
+                var contactIdsToAdd = newContactIds
+                    .Where(contactId => !currentContacts.Any(c => c.ParticipantId == contactId))
+                    .ToList();
+
+                // Eliminar contactos que ya no están en la petición
+                if (contactIdsToDelete.Any())
+                {
+                    // Obtener entidades de contacto para eliminar
+                    var contactEntitiesToDelete = await _appointmentContactsRepository.GetAllContactsByAppointmentId(appointmentId);
+                    // Filtrar solo los que queremos eliminar
+                    contactEntitiesToDelete = contactEntitiesToDelete
+                        .Where(c => contactIdsToDelete.Contains(c.Id))
+                        .ToList();
+
+                    // Crear entidades de CtaAppointmentContacts para eliminar
+                    var appointmentContactsToDelete = contactEntitiesToDelete.Select(c => new CtaAppointmentContacts
                     {
-                        ContactId = contactId,
+                        ContactId = c.Id,
                         AppointmentId = appointmentId,
                         CompanyId = appointmentEntity.CompanyId
-                    })
+                    }).ToList();
+
+                    if (appointmentContactsToDelete.Any())
+                        await _appointmentContactsRepository.RemoveRangeAsync(appointmentContactsToDelete);
+                }
+
+                // Agregar nuevos contactos
+                if (contactIdsToAdd.Any())
+                {
+                    var contactsToAdd = contactIdsToAdd
+                        .Select(contactId => new CtaAppointmentContacts
+                        {
+                            ContactId = contactId,
+                            AppointmentId = appointmentId,
+                            CompanyId = appointmentEntity.CompanyId
+                        })
+                        .ToList();
+
+                    await _appointmentContactsRepository.AddRangeAsync(contactsToAdd);
+                }
+
+                // === INVITADOS ===
+                // Filtrar participantes actuales que son invitados
+                var currentGuests = currentParticipants
+                    .Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest)
                     .ToList();
 
-                if (contactsToDelete.Any())
-                    await _appointmentContactsRepository.RemoveRangeAsync(contactsToDelete);
-
-                if (contactsToAdd.Any())
-                    await _appointmentContactsRepository.AddRangeAsync(contactsToAdd);
-
-                var newGuests = vm.AppointmentParticipants
+                // Obtener IDs de nuevos invitados
+                var newGuestIds = vm.AppointmentParticipants
                     .Where(x => x.ParticipantTypeId == (int)AppointmentParticipant.Guest)
                     .Select(guest => guest.ParticipantId)
                     .ToList();
 
-                var guestsToDelete = currentGuests
-                    .Where(g => !newGuests.Contains(g.GuestId))
+                // Identificar invitados a eliminar
+                var guestIdsToDelete = currentGuests
+                    .Where(g => !newGuestIds.Contains(g.ParticipantId))
+                    .Select(g => g.ParticipantId)
                     .ToList();
 
-                var guestsToAdd = newGuests
-                    .Where(guestId => !currentGuests.Any(g => g.GuestId == guestId))
-                    .Select(guestId => new CtaAppointmentGuest
+                // Identificar invitados a agregar
+                var guestIdsToAdd = newGuestIds
+                    .Where(guestId => !currentGuests.Any(g => g.ParticipantId == guestId))
+                    .ToList();
+
+                // Eliminar invitados que ya no están en la petición
+                if (guestIdsToDelete.Any())
+                {
+                    // Obtener entidades de invitado para eliminar
+                    var guestEntitiesToDelete = await _ctaAppointmentGuestRepository.GetAllGuestByAppointmentId(appointmentId);
+                    // Filtrar solo los que queremos eliminar
+                    guestEntitiesToDelete = guestEntitiesToDelete
+                        .Where(g => guestIdsToDelete.Contains(g.Id))
+                        .ToList();
+
+                    // Crear entidades de CtaAppointmentGuest para eliminar
+                    var appointmentGuestsToDelete = guestEntitiesToDelete.Select(g => new CtaAppointmentGuest
                     {
-                        GuestId = guestId,
+                        GuestId = g.Id,
                         AppointmentId = appointmentId,
                         CompanyId = appointmentEntity.CompanyId
-                    })
-                    .ToList();
+                    }).ToList();
 
-                if (guestsToDelete.Any())
-                    await _ctaAppointmentGuestRepository.RemoveRangeAsync(guestsToDelete);
+                    if (appointmentGuestsToDelete.Any())
+                        await _ctaAppointmentGuestRepository.RemoveRangeAsync(appointmentGuestsToDelete);
+                }
 
-                if (guestsToAdd.Any())
+                // Agregar nuevos invitados
+                if (guestIdsToAdd.Any())
+                {
+                    var guestsToAdd = guestIdsToAdd
+                        .Select(guestId => new CtaAppointmentGuest
+                        {
+                            GuestId = guestId,
+                            AppointmentId = appointmentId,
+                            CompanyId = appointmentEntity.CompanyId
+                        })
+                        .ToList();
+
                     await _ctaAppointmentGuestRepository.AddRangeAsync(guestsToAdd);
+                }
             }
         }
 
-        private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId)
+        #region privateMethods
+        private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId, bool isUpdate = false)
         {
             var creator = await _userRepository.GetById(appointment.AssignedUser);
             var appointmentState = await _ctaStateRepository.GetById(appointment.IdState);
 
-            var configAssignedSubject = _configuration["EmailTemplates:DefaultTemplates:AssignedUserTemplate:Subject"];
-            var configAssignedBody = _configuration["EmailTemplates:DefaultTemplates:AssignedUserTemplate:Body"];
-            var configParticipantSubject = _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Subject"];
-            var configParticipantBody = _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Body"];
+            if (isUpdate)
+            {
+                var currentAppointment = await _appointmentRepository.GetById(appointment.AppointmentId);
+                if (currentAppointment != null && currentAppointment.IdState != appointment.IdState)
+                {
+                    var configStateChangeSubject = _configuration["EmailTemplates:DefaultTemplates:StateChangeTemplate:Subject"];
+                    var configStateChangeBody = _configuration["EmailTemplates:DefaultTemplates:StateChangeTemplate:Body"];
 
-            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdIn);
-            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdOut);
+                    var emailTemplateForStateChange = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdIn != 0);
 
-            var allContacts = await _contactRepository.GetAll();
-            var allUsers = await _userRepository.GetAll();
-            var allGuests = await _guestRepository.GetAll();
+                    var previousState = await _ctaStateRepository.GetById(currentAppointment.IdState);
 
-            var contactEmails = (appointment.AppointmentParticipants?
-                .Select(c => allContacts.FirstOrDefault(x =>
-                    c.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == c.ParticipantId)?.ContactEmail)
-                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-            var userEmails = (appointment.AppointmentParticipants?
-                .Select(u => allUsers.FirstOrDefault(x =>
-                    u.ParticipantTypeId == (int)AppointmentParticipant.SystemUser && x.Id == u.ParticipantId)?.Email)
-                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-            var guestEmails = (appointment.AppointmentParticipants?
-                .Select(g => allGuests.FirstOrDefault(x =>
-                    g.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == g.ParticipantId)?.Email)
-                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+                    var allParticipants = await GetAllEmailsForAppointment(appointment);
+
+                    string stateChangeBody = emailTemplateForStateChange?.Body ?? configStateChangeBody;
+                    stateChangeBody = _ctaEmailTemplateRepository.ReplaceEmailTemplateValues(stateChangeBody, appointment);
+
+                    stateChangeBody = stateChangeBody.Replace("{PreviousState}", previousState?.Description ?? "Estado anterior")
+                                                   .Replace("{NewState}", appointmentState?.Description ?? "Nuevo estado");
+
+                    var emailData = new CtaEmailBackgroundJobData
+                    {
+                        CreatorEmails = new List<string> { creator.Email },
+                        ContactEmails = allParticipants.ContactEmails,
+                        UserEmails = allParticipants.UserEmails,
+                        GuestEmails = allParticipants.GuestEmails,
+                        AssignedSubject = emailTemplateForStateChange?.Subject ?? configStateChangeSubject,
+                        AssignedBody = stateChangeBody,
+                        ParticipantSubject = emailTemplateForStateChange?.Subject ?? configStateChangeSubject,
+                        ParticipantBody = stateChangeBody,
+                        CompanyId = companyId,
+                        IsStateChange = true,
+                        PreviousState = previousState?.Description,
+                        NewState = appointmentState?.Description
+                    };
+
+                    _backgroundEmailService.QueueAppointmentEmails(emailData);
+                }
+                else
+                {
+                    await SendRegularEmailNotification(appointment, creator, appointmentState, companyId, isUpdate);
+                }
+            }
+            else
+            {
+                await SendRegularEmailNotification(appointment, creator, appointmentState, companyId, isUpdate);
+            }
+
+        }
+
+        private async Task SendRegularEmailNotification(
+    CtaAppointmentsRequest appointment,
+    dynamic creator,
+    dynamic appointmentState,
+    long companyId,
+    bool isUpdate)
+        {
+            var configAssignedSubject = isUpdate
+                ? _configuration["EmailTemplates:DefaultTemplates:UpdatedAppointmentTemplate:Subject"]
+                : _configuration["EmailTemplates:DefaultTemplates:AssignedUserTemplate:Subject"];
+
+            var configAssignedBody = isUpdate
+                ? _configuration["EmailTemplates:DefaultTemplates:UpdatedAppointmentTemplate:Body"]
+                : _configuration["EmailTemplates:DefaultTemplates:AssignedUserTemplate:Body"];
+
+            var configParticipantSubject = isUpdate
+                ? _configuration["EmailTemplates:DefaultTemplates:UpdatedParticipantTemplate:Subject"]
+                : _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Subject"];
+
+            var configParticipantBody = isUpdate
+                ? _configuration["EmailTemplates:DefaultTemplates:UpdatedParticipantTemplate:Body"]
+                : _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Body"];
+
+            var emailTemplateIdToUse = isUpdate
+                ? appointmentState.EmailTemplateIdUpdate
+                : appointmentState.EmailTemplateIdIn;
+
+            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetById(emailTemplateIdToUse ?? 0);
+
+            var emailTemplateIdParticipantToUse = isUpdate
+                ? appointmentState.EmailTemplateIdUpdateParticipant
+                : appointmentState.EmailTemplateIdOut;
+
+            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetById(emailTemplateIdParticipantToUse ?? 0);
+
+            var allParticipantEmails = await GetAllEmailsForAppointment(appointment);
 
             string assignedBody = emailTemplateForAssignedUser?.Body ?? configAssignedBody;
             string participantBody = emailTemplateForParticipant?.Body ?? configParticipantBody;
@@ -303,18 +468,46 @@ namespace DataLayer.Models.Modulo_Citas
             var emailData = new CtaEmailBackgroundJobData
             {
                 CreatorEmails = new List<string> { creator.Email },
-                ContactEmails = contactEmails,
-                UserEmails = userEmails,
-                GuestEmails = guestEmails,
+                ContactEmails = allParticipantEmails.ContactEmails,
+                UserEmails = allParticipantEmails.UserEmails,
+                GuestEmails = allParticipantEmails.GuestEmails,
                 AssignedSubject = emailTemplateForAssignedUser?.Subject ?? configAssignedSubject,
                 AssignedBody = assignedBody,
                 ParticipantSubject = emailTemplateForParticipant?.Subject ?? configParticipantSubject,
                 ParticipantBody = participantBody,
-                CompanyId = companyId
+                CompanyId = companyId,
+                IsUpdate = isUpdate
             };
 
             _backgroundEmailService.QueueAppointmentEmails(emailData);
         }
+
+        private async Task<(List<string> ContactEmails, List<string> UserEmails, List<string> GuestEmails)>
+            GetAllEmailsForAppointment(CtaAppointmentsRequest appointment)
+        {
+            var allContacts = await _contactRepository.GetAll();
+            var allUsers = await _userRepository.GetAll();
+            var allGuests = await _guestRepository.GetAll();
+
+            var contactEmails = (appointment.AppointmentParticipants?
+                .Select(c => allContacts.FirstOrDefault(x =>
+                    c.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == c.ParticipantId)?.ContactEmail)
+                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+
+            var userEmails = (appointment.AppointmentParticipants?
+                .Select(u => allUsers.FirstOrDefault(x =>
+                    u.ParticipantTypeId == (int)AppointmentParticipant.SystemUser && x.Id == u.ParticipantId)?.Email)
+                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+
+            var guestEmails = (appointment.AppointmentParticipants?
+                .Select(g => allGuests.FirstOrDefault(x =>
+                    g.ParticipantTypeId == (int)AppointmentParticipant.Guest && x.Id == g.ParticipantId)?.Email)
+                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
+
+            return (contactEmails, userEmails, guestEmails);
+        }
+
+        #endregion
 
         public async Task<DetailMessage> ExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto)
         {
