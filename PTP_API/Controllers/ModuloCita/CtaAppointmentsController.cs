@@ -1,6 +1,5 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
-using BussinessLayer.DTOs.ModuloGeneral.Email;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using BussinessLayer.Wrappers;
