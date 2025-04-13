@@ -166,17 +166,21 @@ namespace DataLayer.Models.Modulo_Citas
             return null;
         }
 
+
         public async override Task<CtaAppointmentsResponse> Update(CtaAppointmentsRequest vm, int id)
         {
-           
-            await base.Update(vm,id);
+            var currentAppointment = await _appointmentRepository.GetById(id);
+            bool stateChanged = currentAppointment != null && currentAppointment.IdState != vm.IdState;
+
+            await base.Update(vm, id);
 
             await UpdateAppointmentParticipants(vm, id, _mapper.Map<CtaAppointmentsResponse>(vm));
 
-            await SendAppointmentEmailsAsync(vm, vm.CompanyId, isUpdate: true);
+            await SendAppointmentEmailsAsync(vm, vm.CompanyId, isUpdate: true, stateChanged);
 
             return _mapper.Map<CtaAppointmentsResponse>(vm);
         }
+
         public async Task UpdateAppointmentParticipants(CtaAppointmentsRequest vm, int appointmentId, CtaAppointmentsResponse appointmentEntity)
         {
             // Obtener todos los participantes actuales
@@ -367,59 +371,64 @@ namespace DataLayer.Models.Modulo_Citas
         }
 
         #region privateMethods
-        private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId, bool isUpdate = false)
+        private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId, bool isUpdate = false, bool stateChanged = false)
         {
             var creator = await _userRepository.GetById(appointment.AssignedUser);
             var appointmentState = await _ctaStateRepository.GetById(appointment.IdState);
 
-            if (isUpdate)
+            if (isUpdate && stateChanged)
             {
-                var currentAppointment = await _appointmentRepository.GetById(appointment.AppointmentId);
-                if (currentAppointment != null && currentAppointment.IdState != appointment.IdState)
-                {
-                    var configStateChangeSubject = _configuration["EmailTemplates:DefaultTemplates:StateChangeTemplate:Subject"];
-                    var configStateChangeBody = _configuration["EmailTemplates:DefaultTemplates:StateChangeTemplate:Body"];
-
-                    var emailTemplateForStateChange = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdIn != 0);
-
-                    var previousState = await _ctaStateRepository.GetById(currentAppointment.IdState);
-
-                    var allParticipants = await GetAllEmailsForAppointment(appointment);
-
-                    string stateChangeBody = emailTemplateForStateChange?.Body ?? configStateChangeBody;
-                    stateChangeBody = _ctaEmailTemplateRepository.ReplaceEmailTemplateValues(stateChangeBody, appointment);
-
-                    stateChangeBody = stateChangeBody.Replace("{PreviousState}", previousState?.Description ?? "Estado anterior")
-                                                   .Replace("{NewState}", appointmentState?.Description ?? "Nuevo estado");
-
-                    var emailData = new CtaEmailBackgroundJobData
-                    {
-                        CreatorEmails = new List<string> { creator.Email },
-                        ContactEmails = allParticipants.ContactEmails,
-                        UserEmails = allParticipants.UserEmails,
-                        GuestEmails = allParticipants.GuestEmails,
-                        AssignedSubject = emailTemplateForStateChange?.Subject ?? configStateChangeSubject,
-                        AssignedBody = stateChangeBody,
-                        ParticipantSubject = emailTemplateForStateChange?.Subject ?? configStateChangeSubject,
-                        ParticipantBody = stateChangeBody,
-                        CompanyId = companyId,
-                        IsStateChange = true,
-                        PreviousState = previousState?.Description,
-                        NewState = appointmentState?.Description
-                    };
-
-                    _backgroundEmailService.QueueAppointmentEmails(emailData);
-                }
-                else
-                {
-                    await SendRegularEmailNotification(appointment, creator, appointmentState, companyId, isUpdate);
-                }
+                // Caso 1: Actualización con cambio de estado - se envía notificación de cambio de estado
+                await SendStateChangeEmailNotification(appointment, creator, appointmentState, companyId);
             }
             else
             {
+                // Caso 2: Creación nueva o actualización sin cambio de estado - se envía notificación regular
                 await SendRegularEmailNotification(appointment, creator, appointmentState, companyId, isUpdate);
             }
 
+        }
+
+        private async Task SendStateChangeEmailNotification(
+    CtaAppointmentsRequest appointment,
+    dynamic creator,
+    dynamic appointmentState,
+    long companyId)
+        {
+            var configStateChangeSubject = _configuration["EmailTemplates:DefaultTemplates:StateChangeTemplate:Subject"] ?? "Cambio de Estado en Cita";
+            var configStateChangeBody = _configuration["EmailTemplates:DefaultTemplates:StateChangeTemplate:Body"] ??
+                "<html><body><p>La cita {AppointmentCode} ha cambiado de estado de {PreviousState} a {NewState}.</p></body></html>";
+
+            var emailTemplateForStateChange = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdStateChange ?? 0);
+
+            var currentAppointment = await _appointmentRepository.GetById(appointment.AppointmentId);
+            var previousState = await _ctaStateRepository.GetById(currentAppointment.IdState);
+
+            var allParticipants = await GetAllEmailsForAppointment(appointment);
+
+            string stateChangeBody = emailTemplateForStateChange?.Body ?? configStateChangeBody;
+            stateChangeBody = _ctaEmailTemplateRepository.ReplaceEmailTemplateValues(stateChangeBody, appointment);
+
+            stateChangeBody = stateChangeBody.Replace("{PreviousState}", previousState?.Description ?? "Estado anterior")
+                                           .Replace("{NewState}", appointmentState?.Description ?? "Nuevo estado");
+
+            var emailData = new CtaEmailBackgroundJobData
+            {
+                CreatorEmails = new List<string> { creator.Email },
+                ContactEmails = allParticipants.ContactEmails,
+                UserEmails = allParticipants.UserEmails,
+                GuestEmails = allParticipants.GuestEmails,
+                AssignedSubject = emailTemplateForStateChange?.Subject ?? configStateChangeSubject,
+                AssignedBody = stateChangeBody,
+                ParticipantSubject = emailTemplateForStateChange?.Subject ?? configStateChangeSubject,
+                ParticipantBody = stateChangeBody,
+                CompanyId = companyId,
+                IsStateChange = true,
+                PreviousState = previousState?.Description,
+                NewState = appointmentState?.Description
+            };
+
+            _backgroundEmailService.QueueAppointmentEmails(emailData);
         }
 
         private async Task SendRegularEmailNotification(

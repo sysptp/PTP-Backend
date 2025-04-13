@@ -15,5 +15,9 @@ namespace DataLayer.Models.Modulo_Citas
         public long CompanyId { get; set; }
         public int AreaId { get; set; }
         public bool IsDefault { get; set; }
+        public long EmailTemplateIdUpdate { get; set; }
+        public long EmailTemplateIdUpdateParticipant { get; set; }
+        public long EmailTemplateIdStateChange { get; set; }
+
     }
 }

@@ -81,6 +81,8 @@ namespace DataLayer.Models.Modulo_Citas
                         IsActive = true,
                     };
 
+                    await _sessionDetailsRepository.Add(sessionDetail);
+
                 }
 
                 await _sessionEmailService.SendSessionEmailsAsync(sessionRequest, createdAppointments);

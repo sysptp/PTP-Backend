@@ -11,8 +11,9 @@
         public long CompanyId { get; set; }
         public int AreaId { get; set; }
         public string? AreaDescription { get; set; }
-        public bool IsDefault { get; set; }
-
-
+        public bool IsDefault { get; set; } 
+        public long EmailTemplateIdUpdate { get; set; }
+        public long EmailTemplateIdUpdateParticipant { get; set; }
+        public long EmailTemplateIdStateChange { get; set; }
     }
 }
