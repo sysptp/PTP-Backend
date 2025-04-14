@@ -7,5 +7,6 @@ namespace BussinessLayer.Interfaces.Repository.ModuloCitas
     public interface ICtaAppointmentUsersRepository : IGenericRepository<CtaAppointmentUsers>
     {
         Task<List<Usuario>> GetAllUserByAppointmentId(int appointmentId);
+        Task DeleteByAppointmentId(int appointmentId, int userId);
     }
 }

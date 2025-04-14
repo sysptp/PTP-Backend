@@ -230,7 +230,10 @@ namespace DataLayer.Models.Modulo_Citas
                     }).ToList();
 
                     if (appointmentUsersToDelete.Any())
-                        await _userAppointmentRepository.RemoveRangeAsync(appointmentUsersToDelete);
+                        foreach (var appointmentUser in appointmentUsersToDelete)
+                        {
+                            await _userAppointmentRepository.DeleteByAppointmentId(appointmentUser.AppointmentId,appointmentUser.UserId);
+                        }
                 }
 
                 // Agregar nuevos usuarios
@@ -290,7 +293,10 @@ namespace DataLayer.Models.Modulo_Citas
                     }).ToList();
 
                     if (appointmentContactsToDelete.Any())
-                        await _appointmentContactsRepository.RemoveRangeAsync(appointmentContactsToDelete);
+                        foreach (var contact in appointmentContactsToDelete) 
+                        {
+                        await _appointmentContactsRepository.DeleteByAppointmentId(contact.AppointmentId,contact.ContactId);
+                        }
                 }
 
                 // Agregar nuevos contactos
@@ -350,7 +356,10 @@ namespace DataLayer.Models.Modulo_Citas
                     }).ToList();
 
                     if (appointmentGuestsToDelete.Any())
-                        await _ctaAppointmentGuestRepository.RemoveRangeAsync(appointmentGuestsToDelete);
+                        foreach (var guest in appointmentGuestsToDelete)
+                        {
+                        await _ctaAppointmentGuestRepository.DeleteByAppointmentId(guest.AppointmentId, guest.GuestId);
+                        }
                 }
 
                 // Agregar nuevos invitados
