@@ -1,4 +1,5 @@
 ﻿using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
@@ -120,12 +121,11 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Actualizar una sesión", Description = "Endpoint para actualizar una sesión")]
-        public async Task<IActionResult> UpdateSession(int id, [FromBody] CtaSessionsRequest sessionDto)
+        public async Task<IActionResult> UpdateSessionSchedule(int id, [FromBody] CtaSessionsRequest sessionDto)
         {
             try
             {
                 var validationResult = await _validator.ValidateAsync(sessionDto);
-
                 if (!validationResult.IsValid)
                 {
                     var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
@@ -137,13 +137,16 @@ namespace PTP_API.Controllers.ModuloCita
                     return NotFound(Response<string>.NotFound("Sesión no encontrada."));
 
                 sessionDto.IdSession = id;
-                await _sessionsService.Update(sessionDto, id);
-                return Ok(Response<string>.Success(null, "Sesión actualizada correctamente."));
+
+                var updatedSession = await _sessionsService.UpdateSessionAndAppointments(sessionDto, id);
+
+                return Ok(Response<CtaSessionsRequest>.Success(updatedSession, "Sesión actualizada correctamente."));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
+        
         }
 
         [HttpDelete("{id}")]

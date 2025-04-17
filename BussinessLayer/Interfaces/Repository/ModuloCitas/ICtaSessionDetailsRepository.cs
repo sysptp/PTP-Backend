@@ -7,6 +7,7 @@ namespace BussinessLayer.Interface.Repository.Modulo_Citas
     {
         List<CtaSessionDetails> GetAllSessionDetailsBySessionId(int sessionId);
         Task<List<CtaAppointments>> GetAllAppointmentsBySessionId(int sessionId);
+        Task<List<CtaSessionDetails>> GetAllBySessionId(int sessionId);
     }
 
 }

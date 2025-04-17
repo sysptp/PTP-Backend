@@ -126,6 +126,63 @@ namespace DataLayer.Models.Modulo_Citas
             }
         }
 
+        public async Task<CtaSessionsRequest> UpdateSessionAndAppointments(CtaSessionsRequest sessionRequest, int sessionId)
+        {
+            // Actualizar la entidad de sesión
+            await base.Update(sessionRequest, sessionId);
+
+            // Obtener los detalles de la sesión actual para saber qué citas están asociadas
+            var sessionDetails = await _sessionDetailsRepository.GetAllAppointmentsBySessionId(sessionId);
+
+            if (sessionRequest.AppointmentInformation != null && sessionDetails.Any())
+            {
+                foreach (var appointmentDetail in sessionDetails)
+                {
+                    // Preparar el objeto de solicitud de cita con la información de la sesión
+                    var appointmentRequest = _mapper.Map<CtaAppointmentsRequest>(sessionRequest.AppointmentInformation);
+
+                    // Mantener el ID y la fecha de la cita existente
+                    appointmentRequest.AppointmentId = appointmentDetail.AppointmentId;
+                    appointmentRequest.AppointmentDate = appointmentDetail.AppointmentDate;
+
+                    // Asegurarse de que se preserve el usuario asignado
+                    appointmentRequest.AssignedUser = sessionRequest.AssignedUser;
+
+                    // Asegurarse de que se preserve el código de compañía
+                    appointmentRequest.CompanyId = sessionRequest.AppointmentInformation.CompanyId;
+
+                    // Actualizar la cita sin enviar correos
+                    await UpdateSessionAppointment(appointmentRequest, appointmentDetail.AppointmentId);
+                }
+            }
+
+            return sessionRequest;
+        }
+
+        // Método específico para actualizar citas de sesiones sin enviar correos
+        private async Task<CtaAppointmentsResponse> UpdateSessionAppointment(CtaAppointmentsRequest vm, int appointmentId)
+        {
+            // Obtener la cita actual para verificar su existencia
+            var currentAppointment = await _appointmentRepository.GetById(appointmentId);
+            if (currentAppointment == null)
+            {
+                throw new Exception($"La cita con ID {appointmentId} no existe");
+            }
+
+            // Asegurarse de que el ID de la cita esté establecido en el modelo
+            vm.AppointmentId = appointmentId;
+
+            // Actualizar la entidad de cita
+            await _appointmentRepository.Update(_mapper.Map<CtaAppointments>(vm), appointmentId);
+
+            // Actualizar los participantes de la cita
+            var appointmentResponse = _mapper.Map<CtaAppointmentsResponse>(vm);
+            await _appointmentsService.UpdateAppointmentParticipants(vm, appointmentId, appointmentResponse);
+
+            // Retornar la respuesta sin enviar correos
+            return appointmentResponse;
+        }
+
         public async Task DeleteAppointmentsInSessionRange(CtaSessionsRequest sessionDto)
         {
             var existingAppointments = await _appointmentRepository.GetAppointmentsInRange(sessionDto.FirstSessionDate, sessionDto.SessionEndDate, sessionDto.AppointmentInformation.CompanyId, sessionDto.AssignedUser);

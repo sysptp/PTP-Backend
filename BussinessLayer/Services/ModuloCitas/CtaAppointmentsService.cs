@@ -166,7 +166,6 @@ namespace DataLayer.Models.Modulo_Citas
             return null;
         }
 
-
         public async override Task<CtaAppointmentsResponse> Update(CtaAppointmentsRequest vm, int id)
         {
             var currentAppointment = await _appointmentRepository.GetById(id);
