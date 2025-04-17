@@ -1,4 +1,5 @@
 ﻿
+using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
@@ -36,6 +37,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerOperation(Summary = "Logear empresa", Description = "Devuelve el token de seguridad")]
+        [EnableBitacora]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
         {
 
