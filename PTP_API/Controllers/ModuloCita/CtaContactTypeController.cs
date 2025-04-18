@@ -1,7 +1,6 @@
 ﻿using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
-using BussinessLayer.FluentValidations.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
@@ -14,7 +13,7 @@ namespace PTP_API.Controllers.ModuloCita
 {
 
     [ApiController]
-    [SwaggerTag("Gestión de configuraciones de correo electrónico")]
+    [SwaggerTag("Gestión de configuraciones de tipo de contactos")]
     [Route("api/v1/[controller]")]
     [Authorize]
     [EnableBitacora]

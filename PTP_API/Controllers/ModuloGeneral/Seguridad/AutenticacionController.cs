@@ -1,6 +1,4 @@
-﻿
-using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.Account;
+﻿using BussinessLayer.DTOs.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.Interfaces.Services.IAccount;
@@ -9,9 +7,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
-using ForgotPasswordRequest = BussinessLayer.DTOs.Account.ForgotPasswordRequest;
-using RegisterRequest = BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest;
-using ResetPasswordRequest = BussinessLayer.DTOs.Account.ResetPasswordRequest;
 
 namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 {
@@ -21,7 +16,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
     public class AutenticacionController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly IValidator<BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest> _validator;
+        private readonly IValidator<RegisterRequest> _validator;
         private readonly IValidator<LoginRequestDTO> _validatorLogin;
 
         public AutenticacionController(IAccountService accountService, IValidator<LoginRequestDTO> validatorLogin, IValidator<RegisterRequest> validator)
@@ -37,7 +32,6 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerOperation(Summary = "Logear empresa", Description = "Devuelve el token de seguridad")]
-        [EnableBitacora]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
         {
 
@@ -75,7 +69,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "Registro de Usuarios", Description = "Endpoint para registrar los usuarios")]
-        public async Task<IActionResult> RegisterAsync([FromBody] BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest request)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request)
         {
             try
             {

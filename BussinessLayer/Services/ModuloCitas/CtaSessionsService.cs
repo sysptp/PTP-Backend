@@ -181,15 +181,6 @@ namespace DataLayer.Models.Modulo_Citas
                 session.IdState = firstAppointment.IdState;
                 session.IsConditionedTime = firstAppointment.IsConditionedTime;
                 session.EndAppointmentTime = firstAppointment.EndAppointmentTime;
-                session.SendEmail = firstAppointment.SendEmail;
-                session.SendSms = firstAppointment.SendSms;
-                session.SendSmsReminder = firstAppointment.SendSmsReminder;
-                session.SendEmailReminder = firstAppointment.SendEmailReminder;
-                session.DaysInAdvance = firstAppointment.DaysInAdvance;
-                session.NotificationTime = firstAppointment.NotificationTime;
-                session.NotifyClosure = firstAppointment.NotifyClosure;
-                session.NotifyAssignedUserEmail = firstAppointment.NotifyAssignedUserEmail;
-                session.NotifyAssignedUserSms = firstAppointment.NotifyAssignedUserSms;
                 session.AreaId = firstAppointment.AreaId;
             }
         }
