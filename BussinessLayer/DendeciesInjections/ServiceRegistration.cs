@@ -77,6 +77,8 @@ using BussinessLayer.Services.WhatsAppService.Contracts;
 using BussinessLayer.Services.WhatsAppService.Implementations;
 using BussinessLayer.Services.NotificationModule.Contracts;
 using BussinessLayer.Services.NotificationModule.Implementations;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Utils;
+using BussinessLayer.Services.ModuloGeneral.Utils;
 #endregion
 
 public static class ServiceRegistration
@@ -260,6 +262,7 @@ public static class ServiceRegistration
         services.AddScoped<ICtaEmailTemplateVariablesService, CtaEmailTemplateVariablesService>();
         services.AddSingleton<ICtaBackgroundEmailService, CtaBackgroundEmailService>();
         services.AddScoped<ICtaSessionEmailService, CtaSessionEmailService>();
+        services.AddScoped<ICtaMessageTemplatesService, CtaMessageTemplatesService>();
 
         #endregion
 
@@ -279,6 +282,7 @@ public static class ServiceRegistration
 
         services.AddScoped<IGnRepeatUnitService,GnRepeatUnitService>();
         services.AddScoped<IGnEmailService,GnEmailService>();
+        services.AddScoped<IGnMessageTypeService,GnMessageTypeService>();
         #endregion 
 
         #region Otros

@@ -35,6 +35,7 @@ using DataLayer.Models.ModuloGeneral;
 using DataLayer.Models.ModuloGeneral.SMTP;
 using DataLayer.Models.MessagingModule;
 using DataLayer.EntitiesConfiguration.MessagingModule;
+using DataLayer.Models.ModuloGeneral.Utils;
 
 namespace DataLayer.PDbContex
 {
@@ -212,6 +213,7 @@ namespace DataLayer.PDbContex
         public DbSet<GnRepeatUnit> GnRepeatUnit { get; set; }
         public DbSet<GnParametrosGenerales> GnParametrosGenerales { get; set; }
         public DbSet<GnSmtpConfiguracion> GnSmtpConfiguracion { get; set; }
+        public DbSet<GnMessageType> GnMessageType { get; set; }
         #endregion
 
         #region Auditoria
@@ -249,6 +251,8 @@ namespace DataLayer.PDbContex
         public DbSet<CtaNotificationSettings> CtaNotificationSettings { get; set; }
         public DbSet<CtaParticipantTypes> CtaParticipantTypes { get; set; }
         public DbSet<CtaEmailTemplateVariables> CtaEmailTemplateVariables { get; set; }
+        public DbSet<CtaMessageTemplates> CtaMessageTemplates { get; set; }
+       
 
         #endregion
 
