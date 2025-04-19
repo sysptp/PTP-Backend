@@ -5,7 +5,10 @@ using DataLayer.PDbContex;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Concurrent;
 using System.Data;
+using System.Linq.Expressions;
+using System.Reflection;
 
 
 namespace BussinessLayer.Repository.ROtros
@@ -13,7 +16,7 @@ namespace BussinessLayer.Repository.ROtros
     public class GenericRepository<T> : IGenericRepository<T> where T : AuditableEntities
     {
         private readonly ITokenService _tokenService;
-        protected readonly PDbContext _context;   
+        protected readonly PDbContext _context;
         private readonly string _connectionString;
 
         public GenericRepository(PDbContext dbContext, ITokenService tokenService)
@@ -43,14 +46,14 @@ namespace BussinessLayer.Repository.ROtros
             }
             return entity.Borrado == true ? null : entity;
         }
- 
+
         public virtual async Task<IList<T>> GetAll()
         {
             try
             {
                 return await _context.Set<T>().Where(e => !e.Borrado).ToListAsync();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -399,5 +402,51 @@ namespace BussinessLayer.Repository.ROtros
             return await query.Where(x => x.Borrado != true).ToListAsync();
         }
 
+        private static readonly ConcurrentDictionary<Type, PropertyInfo> IdPropertyCache = new();
+
+        public virtual async Task<T> GetAllWithIncludeByIdAsync(object id, List<string>? properties = null)
+        {
+            var query = _context.Set<T>().AsQueryable();
+
+            if (properties != null)
+            {
+                foreach (string property in properties)
+                {
+                    query = query.Include(property);
+                }
+            }
+
+            // Get cached ID property or find and cache it
+            var idProperty = IdPropertyCache.GetOrAdd(typeof(T), type =>
+            {
+                var entityType = _context.Model.FindEntityType(type);
+                var primaryKey = entityType?.FindPrimaryKey();
+
+                if (primaryKey != null && primaryKey.Properties.Count == 1)
+                {
+                    return primaryKey.Properties[0].PropertyInfo;
+                }
+
+                // Fallback to reflection if EF Core metadata isn't available
+                return type.GetProperties()
+                    .FirstOrDefault(p => p.Name.Equals("Id", StringComparison.OrdinalIgnoreCase) ||
+                                        p.Name.EndsWith("Id", StringComparison.OrdinalIgnoreCase) &&
+                                        p.Name.Contains(type.Name.Replace("Dto", "").Replace("Response", "")));
+            });
+
+            if (idProperty == null)
+            {
+                throw new InvalidOperationException($"No Id property found on type {typeof(T).Name}");
+            }
+
+            // Build the where clause
+            var parameter = Expression.Parameter(typeof(T), "x");
+            var idPropertyAccess = Expression.Property(parameter, idProperty);
+            var idConstant = Expression.Constant(Convert.ChangeType(id, idProperty.PropertyType));
+            var equality = Expression.Equal(idPropertyAccess, idConstant);
+            var lambda = Expression.Lambda<Func<T, bool>>(equality, parameter);
+
+            return await query.Where(lambda).Where(x => x.Borrado != true).FirstOrDefaultAsync();
+        }
     }
 }
