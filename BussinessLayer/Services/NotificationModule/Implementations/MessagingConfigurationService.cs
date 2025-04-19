@@ -44,6 +44,7 @@ namespace BussinessLayer.Services.WhatsAppService.Implementations
                     x.AccountSid,
                     x.AuthToken,
                     x.WhatsAppNumber,
+                    x.SmsNumber,
                     x.UsuarioAdicion
                 )).ToList();
 
@@ -80,6 +81,7 @@ namespace BussinessLayer.Services.WhatsAppService.Implementations
                     messagingConfiguration.AccountSid,
                     messagingConfiguration.AuthToken,
                     messagingConfiguration.WhatsAppNumber,
+                    messagingConfiguration.SmsNumber,
                     messagingConfiguration.UsuarioAdicion
                 );
                 return Response<MessagingConfigurationDto>.Success(messagingConfigurationDto);
