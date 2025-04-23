@@ -267,6 +267,7 @@ public static class ServiceRegistration
         services.AddScoped<ICtaSmsTemplatesService, CtaSmsTemplatesService>();
         services.AddScoped<ICtaWhatsAppTemplatesService, CtaWhatsAppTemplatesService>();
         services.AddScoped<ICtaNotificationTemplatesService, CtaNotificationTemplatesService>();
+        services.AddScoped<ICtaUnifiedNotificationService, CtaUnifiedNotificationService>();
 
         #endregion
 

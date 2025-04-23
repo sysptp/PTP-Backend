@@ -1,92 +1,192 @@
 ﻿using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
-using BussinessLayer.DTOs.ModuloCitas;
-using BussinessLayer.DTOs.ModuloGeneral.Email;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using DataLayer.Models.Modulo_Citas;
 using DataLayer.Models.ModuloCitas;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using BussinessLayer.Enums;
+using BussinessLayer.DTOs.NotificationModule.MessagingConfiguration;
+using BussinessLayer.Services.NotificationModule.Contracts;
+using BussinessLayer.DTOs.ModuloGeneral.Email;
+using BussinessLayer.DTOs.ModuloCitas;
+using System.Runtime.InteropServices;
+using Microsoft.Extensions.Configuration;
 
 namespace BussinessLayer.Services.ModuloCitas
 {
     public class CtaUnifiedNotificationService : ICtaUnifiedNotificationService
     {
-        private readonly ICtaNotificationTemplatesRepository _notificationTemplateRepo;
         private readonly ICtaStateRepository _stateRepository;
         private readonly ICtaConfiguracionRepository _configRepository;
-        private readonly IGnEmailService _emailService;
-        private readonly ITwilioService _messageService;
+        private readonly ICtaEmailTemplatesRepository _emailTemplateRepository;
         private readonly ILogger<CtaUnifiedNotificationService> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly ICtaSmsTemplatesRepository _smsTemplateRepository;
+        private readonly ICtaWhatsAppTemplatesRepository _whatsappRepository;
+        private readonly ICtaNotificationTemplatesRepository _notificationTemplatesRepository;
         private readonly IConfiguration _configuration;
 
-        public CtaUnifiedNotificationService(ICtaNotificationTemplatesRepository notificationTemplateRepo, 
-            ICtaStateRepository stateRepository, 
+        public CtaUnifiedNotificationService(
+            ICtaStateRepository stateRepository,
             ICtaConfiguracionRepository configRepository,
-            IGnEmailService emailService, ITwilioService messageService, 
-            ILogger<CtaUnifiedNotificationService> logger, IServiceScopeFactory serviceScopeFactory, 
+            ICtaEmailTemplatesRepository emailTemplateRepository,
+            ILogger<CtaUnifiedNotificationService> logger,
+            IServiceScopeFactory serviceScopeFactory,
+            ICtaSmsTemplatesRepository smsTemplateRepository,
+            ICtaWhatsAppTemplatesRepository whatsappRepository,
+            ICtaNotificationTemplatesRepository notificationTemplatesRepository,
             IConfiguration configuration)
         {
-            _notificationTemplateRepo = notificationTemplateRepo;
             _stateRepository = stateRepository;
             _configRepository = configRepository;
-            _emailService = emailService;
-            _messageService = messageService;
+            _emailTemplateRepository = emailTemplateRepository;
             _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
+            _smsTemplateRepository = smsTemplateRepository;
+            _whatsappRepository = whatsappRepository;
+            _notificationTemplatesRepository = notificationTemplatesRepository;
             _configuration = configuration;
         }
 
         public async Task SendNotificationsForAppointmentAsync(CtaAppointmentsRequest appointment, NotificationType notificationType, NotificationContext context)
         {
-            // 1. Obtener el estado y sus plantillas de notificación
-            var state = await _stateRepository.GetAllWithIncludeByIdAsync(appointment.IdState,
-                new List<string> { "AssignedUserNotificationTemplate", "ParticipantNotificationTemplate", "StateChangeNotificationTemplate",
-                    "AssignedUserNotificationTemplate.EmailTemplate", "AssignedUserNotificationTemplate.SmsTemplate", "AssignedUserNotificationTemplate.WhatsAppTemplate" });
-
-            // 2. Obtener configuración para saber qué notificaciones están activas
-            var config = _configRepository.GetByCompanyId(appointment.CompanyId);
-
-            // 3. Determinar qué plantilla usar basado en el tipo de notificación
-            CtaNotificationTemplates? notificationTemplate = notificationType switch
+            // 1. Obtener el estado
+            var state = await _stateRepository.GetById(appointment.IdState);
+            if (state == null)
             {
-                NotificationType.StateChange => state.StateChangeNotificationTemplate,
-                NotificationType.ParticipantNotification => state.ParticipantNotificationTemplate,
-                _ => state.AssignedUserNotificationTemplate
-            };
-
-            if (notificationTemplate == null)
-            {
-                _logger.LogWarning("No notification template found for type {NotificationType}", notificationType);
+                _logger.LogWarning("State not found for appointment {AppointmentId}", appointment.AppointmentId);
                 return;
             }
 
-            // 4. Enviar notificaciones basado en la configuración
-            await ProcessNotificationsAsync(appointment, notificationTemplate, config, context);
+            // 2. Obtener configuración para saber qué notificaciones están activas
+            var config = _configRepository.GetByCompanyId(appointment.CompanyId);
+            if (config == null)
+            {
+                _logger.LogWarning("Configuration not found for company {CompanyId}", appointment.CompanyId);
+                return;
+            }
+
+            // 3. Obtener plantillas de email basadas en el tipo de notificación
+            long? notificationTemplateId = GetNotificationTemplateId(state, notificationType);
+
+            // 5. Enviar notificaciones basado en la configuración
+            await ProcessNotificationsAsync(appointment, notificationTemplateId, config, context);
         }
 
-        private async Task ProcessNotificationsAsync(CtaAppointmentsRequest appointment, CtaNotificationTemplates notificationTemplate, CtaConfiguration config, NotificationContext context)
+        private long? GetNotificationTemplateId(CtaState state, NotificationType notificationType)
+        {
+            return notificationType switch
+            {
+                NotificationType.StateChangeForUser => state.TemplateIdUpdate,
+                NotificationType.StateChangeForParticipant => state.TemplateIdUpdateParticipant,
+                NotificationType.UpdateForParticipant => state.TemplateIdUpdateParticipant,
+                NotificationType.UpdateForUser => state.TemplateIdUpdate,
+                NotificationType.CreationForUser => state.TemplateIdIn,
+                NotificationType.CreationForParticipant => state.TemplateIdOut,
+                _ => state.TemplateIdIn
+            };
+        }
+        private async Task ProcessNotificationsAsync(CtaAppointmentsRequest appointment, long? notificationTemplateId, CtaConfiguration config, NotificationContext context)
         {
             var tasks = new List<Task>();
 
-            if (config.SendEmail && notificationTemplate.EmailTemplateId.HasValue)
+            // Si notificationTemplateId no existe o es cero, o el GetById falla, usamos plantillas predeterminadas
+            CtaNotificationTemplates notificationTemplate = null;
+            if (notificationTemplateId.HasValue && notificationTemplateId.Value > 0)
             {
-                tasks.Add(SendEmailNotificationsAsync(appointment, notificationTemplate.EmailTemplate!, context));
+                notificationTemplate = await _notificationTemplatesRepository.GetById(notificationTemplateId.Value);
             }
 
-            if (config.SendSms && notificationTemplate.SmsTemplateId.HasValue)
+            // Email notifications
+            if (config.SendEmail)
             {
-                tasks.Add(SendSmsNotificationsAsync(appointment, notificationTemplate.SmsTemplate!, context));
+                CtaEmailTemplates emailTemplate = null;
+                if (notificationTemplate != null && notificationTemplate.EmailTemplateId.HasValue)
+                {
+                    emailTemplate = await _emailTemplateRepository.GetById(notificationTemplate.EmailTemplateId.Value);
+                }
+
+                // Si no hay plantilla en base de datos, usar la plantilla predeterminada del appsettings
+                if (emailTemplate == null)
+                {
+                    // Crear una plantilla con valores predeterminados basados en el tipo de notificación
+                    string templateKey = GetEmailTemplateKeyForContext(context);
+                    emailTemplate = new CtaEmailTemplates
+                    {
+                        Subject = _configuration[$"CTAEmailTemplates:DefaultTemplates:{templateKey}:Subject"],
+                        Body = _configuration[$"CTAEmailTemplates:DefaultTemplates:{templateKey}:Body"]
+                    };
+
+                    _logger.LogInformation("Using default email template from appsettings: {TemplateKey}", templateKey);
+                }
+
+                tasks.Add(SendEmailNotificationsAsync(appointment, emailTemplate, context));
             }
 
-            if (config.SendWhatsapp && notificationTemplate.WhatsAppTemplateId.HasValue)
+            // SMS notifications
+            if (config.SendSms)
             {
-                tasks.Add(SendWhatsAppNotificationsAsync(appointment, notificationTemplate.WhatsAppTemplate!, context));
+                CtaSmsTemplates smsTemplate = null;
+                if (notificationTemplate != null && notificationTemplate.SmsTemplateId.HasValue)
+                {
+                    smsTemplate = await _smsTemplateRepository.GetById(notificationTemplate.SmsTemplateId.Value);
+                }
+
+                // Si no hay plantilla en base de datos, usar la plantilla predeterminada del appsettings
+                if (smsTemplate == null)
+                {
+                    string templateKey = GetSmsTemplateKeyForContext(context);
+                    smsTemplate = new CtaSmsTemplates
+                    {
+                        MessageContent = _configuration[$"CTAMessageTemplates:SMS:{templateKey}"]
+                    };
+
+                    _logger.LogInformation("Using default SMS template from appsettings: {TemplateKey}", templateKey);
+                }
+
+                // Modificar el contenido para SMS si es un cambio de estado
+                if (context.PreviousState != null && context.NewState != null)
+                {
+                    var originalContent = smsTemplate.MessageContent;
+                    smsTemplate.MessageContent = ModifySmsTemplateForStateChange(originalContent, context.PreviousState, context.NewState);
+                }
+
+                tasks.Add(SendSmsNotificationsAsync(appointment, smsTemplate, context));
+            }
+
+            // WhatsApp notifications
+            if (config.SendWhatsapp)
+            {
+                CtaWhatsAppTemplates whatsAppTemplate = null;
+                if (notificationTemplate != null && notificationTemplate.WhatsAppTemplateId.HasValue)
+                {
+                    whatsAppTemplate = await _whatsappRepository.GetById(notificationTemplate.WhatsAppTemplateId.Value);
+                }
+
+                // Si no hay plantilla en base de datos, usar la plantilla predeterminada del appsettings
+                if (whatsAppTemplate == null)
+                {
+                    string templateKey = GetWhatsAppTemplateKeyForContext(context);
+                    whatsAppTemplate = new CtaWhatsAppTemplates
+                    {
+                        MessageContent = _configuration[$"CTAMessageTemplates:WhatsApp:{templateKey}"],
+                        IsInteractive = false
+                    };
+
+                    _logger.LogInformation("Using default WhatsApp template from appsettings: {TemplateKey}", templateKey);
+                }
+
+                // Modificar el contenido para WhatsApp si es un cambio de estado
+                if (context.PreviousState != null && context.NewState != null)
+                {
+                    var originalContent = whatsAppTemplate.MessageContent;
+                    whatsAppTemplate.MessageContent = ModifyWhatsAppTemplateForStateChange(originalContent, context.PreviousState, context.NewState);
+                }
+
+                tasks.Add(SendWhatsAppNotificationsAsync(appointment, whatsAppTemplate, context));
             }
 
             await Task.WhenAll(tasks);
@@ -101,8 +201,22 @@ namespace BussinessLayer.Services.ModuloCitas
                 {
                     var emailService = scope.ServiceProvider.GetRequiredService<IGnEmailService>();
 
-                    var body = ReplaceTemplateValues(template.Body, appointment, context);
-                    var subject = ReplaceTemplateValues(template.Subject, appointment, context);
+                    string body = template.Body;
+                    string subject = template.Subject;
+
+                    // Si hay información de cambio de estado, modificar la plantilla
+                    if (context.PreviousState != null && context.NewState != null)
+                    {
+                        // Modificar el asunto para reflejar el cambio de estado
+                        subject = "Cambio de Estado en Cita: " + subject;
+
+                        // Añadir sección de cambio de estado al cuerpo
+                        body = ModifyEmailTemplateForStateChange(body);
+                    }
+
+                    // Aplicar las variables de sustitución
+                    body = ReplaceTemplateValues(body, appointment, context);
+                    subject = ReplaceTemplateValues(subject, appointment, context);
 
                     var emailMessage = new GnEmailMessageDto
                     {
@@ -122,39 +236,65 @@ namespace BussinessLayer.Services.ModuloCitas
             });
         }
 
-        private async Task SendSmsNotificationsAsync(CtaAppointmentsRequest appointment, CtaSmsTemplates template, NotificationContext context)
+        // Método para modificar la plantilla de correo y añadir la sección de cambio de estado
+        private string ModifyEmailTemplateForStateChange(string templateBody)
+        {
+            const string stateChangeSection = "<div class='state-change' style='background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;'><p><strong>El estado ha cambiado de:</strong> {PreviousState}</p><p><strong>A:</strong> {NewState}</p></div>";
+
+            // Buscar un lugar adecuado para insertar la sección de cambio de estado
+            if (templateBody.Contains("</ul><p>"))
+            {
+                // Insertar después de la lista de detalles
+                return templateBody.Replace("</ul><p>", "</ul>" + stateChangeSection + "<p>");
+            }
+            else if (templateBody.Contains("</ul>"))
+            {
+                // Insertar después de cualquier lista
+                return templateBody.Replace("</ul>", "</ul>" + stateChangeSection);
+            }
+            else if (templateBody.Contains("<div class='content'>"))
+            {
+                // Insertar al inicio del contenido
+                return templateBody.Replace("<div class='content'>", "<div class='content'>" + stateChangeSection);
+            }
+            else
+            {
+                // Si no hay un lugar ideal, añadir antes del cierre del body
+                return templateBody.Replace("</body>", stateChangeSection + "</body>");
+            }
+        }
+
+        private async Task SendSmsNotificationsAsync(CtaAppointmentsRequest appointment, CtaSmsTemplates ctaSmsTemplates, NotificationContext context)
         {
             Task.Run(async () =>
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 try
                 {
-                    var twilioService = scope.ServiceProvider.GetRequiredService<ITwilioService>();
+                    var messagingConfigRepo = scope.ServiceProvider.GetRequiredService<IMessagingConfigurationRepository>();
+                    var messageService = scope.ServiceProvider.GetRequiredService<IMessageService>();
 
-                    // Obtener configuración de Twilio desde configuración de la empresa
-                    var twilioConfig = GetTwilioConfig(appointment.CompanyId);
-
-                    if (string.IsNullOrEmpty(twilioConfig.AccountSid) || string.IsNullOrEmpty(twilioConfig.AuthToken))
+                    // Obtener configuración de mensajería desde configuración de la empresa
+                    var messagingConfig = messagingConfigRepo.GetByCompanyIdAsync(appointment.CompanyId);
+                    if (messagingConfig == null)
                     {
-                        _logger.LogWarning("Twilio configuration not found for company {CompanyId}", appointment.CompanyId);
+                        _logger.LogWarning("Messaging configuration not found for company {CompanyId}", appointment.CompanyId);
                         return;
                     }
 
-                    var message = ReplaceTemplateValues(template.MessageContent, appointment, context);
+                    var message = ReplaceTemplateValues(ctaSmsTemplates.MessageContent, appointment, context);
 
                     foreach (var phone in context.RecipientPhoneNumbers)
                     {
                         var smsMessage = new SendMessageDto(
-                            twilioConfig.AuthToken,
-                            twilioConfig.AccountSid,
-                            twilioConfig.FromNumber,
+                            messagingConfig.ConfigurationId,
                             phone,
                             MessageType.SMS,
                             message,
-                            (int)appointment.CompanyId
+                            appointment.CompanyId
                         );
 
-                        await twilioService.SendMessage(smsMessage);
+                        await messageService.SendMessage(smsMessage);
                     }
                 }
                 catch (Exception ex)
@@ -171,32 +311,32 @@ namespace BussinessLayer.Services.ModuloCitas
                 using var scope = _serviceScopeFactory.CreateScope();
                 try
                 {
-                    var twilioService = scope.ServiceProvider.GetRequiredService<ITwilioService>();
+                    var messagingConfigRepo = scope.ServiceProvider.GetRequiredService<IMessagingConfigurationRepository>();
+                    var messageService = scope.ServiceProvider.GetRequiredService<IMessageService>();
 
-                    // Obtener configuración de Twilio desde configuración de la empresa
-                    var twilioConfig = GetTwilioConfig(appointment.CompanyId);
-
-                    if (string.IsNullOrEmpty(twilioConfig.AccountSid) || string.IsNullOrEmpty(twilioConfig.AuthToken))
+                    // Obtener configuración de mensajería desde configuración de la empresa
+                    var messagingConfig = messagingConfigRepo.GetByCompanyIdAsync(appointment.CompanyId);
+                    if (messagingConfig == null)
                     {
-                        _logger.LogWarning("Twilio configuration not found for company {CompanyId}", appointment.CompanyId);
+                        _logger.LogWarning("Messaging configuration not found for company {CompanyId}", appointment.CompanyId);
                         return;
                     }
 
                     var message = ReplaceTemplateValues(template.MessageContent, appointment, context);
+                    var isInteractive = template.IsInteractive;
+                    var buttonConfig = template.ButtonConfig;
 
                     foreach (var phone in context.RecipientPhoneNumbers)
                     {
                         var whatsAppMessage = new SendMessageDto(
-                            twilioConfig.AuthToken,
-                            twilioConfig.AccountSid,
-                            FormatWhatsAppNumber(twilioConfig.FromNumber),
+                            messagingConfig.ConfigurationId,
                             FormatWhatsAppNumber(phone),
                             MessageType.WhatsApp,
                             message,
-                            (int)appointment.CompanyId
+                            appointment.CompanyId
                         );
-
-                        await twilioService.SendMessage(whatsAppMessage);
+                        
+                        await messageService.SendMessage(whatsAppMessage);
                     }
                 }
                 catch (Exception ex)
@@ -206,20 +346,19 @@ namespace BussinessLayer.Services.ModuloCitas
             });
         }
 
-
         private string ReplaceTemplateValues(string template, CtaAppointmentsRequest appointment, NotificationContext context)
         {
             return template
-                .Replace("{AssignedUser}", context.AssignedUserName)
-                .Replace("{ParticipantName}", context.ParticipantName)
-                .Replace("{AppointmentCode}", appointment.AppointmentCode)
-                .Replace("{Description}", appointment.Description)
+                .Replace("{AssignedUser}", context.AssignedUserName ?? "")
+                .Replace("{ParticipantName}", context.ParticipantName ?? "")
+                .Replace("{AppointmentCode}", appointment.AppointmentCode ?? "")
+                .Replace("{Description}", appointment.Description ?? "")
                 .Replace("{AppointmentDate}", appointment.AppointmentDate.ToString("dd/MM/yyyy"))
                 .Replace("{AppointmentTime}", appointment.AppointmentTime.ToString(@"hh\:mm"))
                 .Replace("{EndAppointmentTime}", appointment.EndAppointmentTime.ToString(@"hh\:mm"))
-                .Replace("{MeetingPlaceDescription}", context.MeetingPlaceDescription)
-                .Replace("{ReasonDescription}", context.ReasonDescription)
-                .Replace("{Area}", context.AreaDescription)
+                .Replace("{MeetingPlaceDescription}", context.MeetingPlaceDescription ?? "")
+                .Replace("{ReasonDescription}", context.ReasonDescription ?? "")
+                .Replace("{Area}", context.AreaDescription ?? "")
                 .Replace("{PreviousState}", context.PreviousState ?? "")
                 .Replace("{NewState}", context.NewState ?? "");
         }
@@ -233,6 +372,73 @@ namespace BussinessLayer.Services.ModuloCitas
                 return $"whatsapp:{phoneNumber}";
             }
             return phoneNumber;
+        }
+
+        // Método para modificar el mensaje SMS para cambio de estado
+        private string ModifySmsTemplateForStateChange(string smsContent, string previousState, string newState)
+        {
+            // Añadir información de cambio de estado al final del mensaje SMS
+            return smsContent + $"\nCambio de estado: {previousState} → {newState}";
+        }
+
+        // Método para modificar el mensaje WhatsApp para cambio de estado
+        private string ModifyWhatsAppTemplateForStateChange(string whatsAppContent, string previousState, string newState)
+        {
+            // Añadir información de cambio de estado al final del mensaje WhatsApp
+            return whatsAppContent + $"\n*Cambio de estado:* {previousState} → {newState}";
+        }
+
+        private string GetEmailTemplateKeyForContext(NotificationContext context)
+        {
+            if (context.PreviousState != null && context.NewState != null)
+            {
+                return "StateChangeTemplate";
+            }
+
+            if (context.IsUpdate)
+            {
+                return context.IsForAssignedUser
+                    ? "UpdatedAppointmentTemplate"
+                    : "UpdatedParticipantTemplate";
+            }
+
+            return context.IsForAssignedUser
+                ? "AssignedUserTemplate"
+                : "ParticipantTemplate";
+        }
+
+        private string GetSmsTemplateKeyForContext(NotificationContext context)
+        {
+            if (context.PreviousState != null && context.NewState != null)
+            {
+                return "StateChangeTemplate";
+            }
+
+            if (context.IsUpdate)
+            {
+                return "UpdatedAppointmentTemplate";
+            }
+
+            return context.IsForAssignedUser
+                ? "AssignedUserTemplate"
+                : "ParticipantTemplate";
+        }
+
+        private string GetWhatsAppTemplateKeyForContext(NotificationContext context)
+        {
+            if (context.PreviousState != null && context.NewState != null)
+            {
+                return "StateChangeTemplate";
+            }
+
+            if (context.IsUpdate)
+            {
+                return "UpdatedAppointmentTemplate";
+            }
+
+            return context.IsForAssignedUser
+                ? "AssignedUserTemplate"
+                : "ParticipantTemplate";
         }
     }
 }

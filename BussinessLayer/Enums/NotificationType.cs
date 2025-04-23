@@ -3,10 +3,11 @@ namespace BussinessLayer.Enums
 {
     public enum NotificationType
     {
-        Creation = 1,
-        Update,
-        StateChange,
-        ParticipantNotification,
-        AssignedUserNotification
+        CreationForUser = 1,
+        CreationForParticipant,
+        UpdateForUser,
+        UpdateForParticipant,
+        StateChangeForUser,
+        StateChangeForParticipant
     };
 }

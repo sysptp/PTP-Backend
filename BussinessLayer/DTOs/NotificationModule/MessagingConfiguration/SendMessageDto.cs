@@ -6,6 +6,6 @@ namespace BussinessLayer.DTOs.NotificationModule.MessagingConfiguration
         string ToNumber,
         MessageType MessageType,
         string Message,
-        int BusinessId
+        long BusinessId
     );
 }

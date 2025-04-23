@@ -12,7 +12,6 @@ namespace DataLayer.Models.ModuloCitas
         public long CompanyId { get; set; }
         public string? MessageTitle { get; set; }
         public string MessageContent { get; set; } = null!;
-        public int CharacterLimit { get; set; } = 160;
 
         [ForeignKey("CompanyId")]
         public virtual GnEmpresa? Company { get; set; }

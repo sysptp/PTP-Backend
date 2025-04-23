@@ -7,6 +7,5 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSmsTemplates
         public string? CompanyIdDescription { get; set; }
         public string? MessageTitle { get; set; }
         public string MessageContent { get; set; } = null!;
-        public int CharacterLimit { get; set; }
     }
 }

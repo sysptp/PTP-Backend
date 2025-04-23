@@ -35,7 +35,7 @@ public class MessagingConfigurationRepository : IMessagingConfigurationRepositor
         }
     }
 
-    public async Task<MessagingConfiguration> DeleteAsync(int configurationId, int BussinessId)
+    public async Task<MessagingConfiguration> DeleteAsync(int configurationId, long BussinessId)
     {
         try
         {
@@ -56,7 +56,7 @@ public class MessagingConfigurationRepository : IMessagingConfigurationRepositor
         }
     }
 
-    public async Task<List<MessagingConfiguration>> GetAllAsync(int BussinessId)
+    public async Task<List<MessagingConfiguration>> GetAllAsync(long BussinessId)
     {
         try
         {
@@ -72,7 +72,7 @@ public class MessagingConfigurationRepository : IMessagingConfigurationRepositor
         }
     }
 
-    public async Task<MessagingConfiguration> GetByIdAsync(int configurationId, int BussinessId)
+    public async Task<MessagingConfiguration> GetByIdAsync(int configurationId, long BussinessId)
     {
         try
         {
@@ -88,6 +88,24 @@ public class MessagingConfigurationRepository : IMessagingConfigurationRepositor
             throw new Exception(ex.Message);
         }
     }
+
+    public MessagingConfiguration GetByCompanyIdAsync(long BussinessId)
+    {
+        try
+        {
+            var configuration = _context.MessagingConfigurations.Where(x => x.BussinessId == BussinessId).FirstOrDefault();
+            if (configuration == null)
+            {
+                throw new Exception("Configuration not found");
+            }
+            return configuration;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
 
     public async Task<MessagingConfiguration> UpdateAsync(MessagingConfiguration configuration)
     {
