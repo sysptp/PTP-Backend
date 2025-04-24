@@ -4,7 +4,6 @@ namespace BussinessLayer.DTOs.ModuloCitas
     public class NotificationContext
     {
         public string? AssignedUserName { get; set; }
-        public string? ParticipantName { get; set; }
         public string? MeetingPlaceDescription { get; set; }
         public string? ReasonDescription { get; set; }
         public string? AreaDescription { get; set; }

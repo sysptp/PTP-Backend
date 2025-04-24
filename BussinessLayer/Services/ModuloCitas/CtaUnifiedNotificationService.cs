@@ -12,7 +12,6 @@ using BussinessLayer.DTOs.NotificationModule.MessagingConfiguration;
 using BussinessLayer.Services.NotificationModule.Contracts;
 using BussinessLayer.DTOs.ModuloGeneral.Email;
 using BussinessLayer.DTOs.ModuloCitas;
-using System.Runtime.InteropServices;
 using Microsoft.Extensions.Configuration;
 
 namespace BussinessLayer.Services.ModuloCitas
@@ -72,7 +71,7 @@ namespace BussinessLayer.Services.ModuloCitas
             // 3. Obtener plantillas de email basadas en el tipo de notificación
             long? notificationTemplateId = GetNotificationTemplateId(state, notificationType);
 
-            // 5. Enviar notificaciones basado en la configuración
+            // 4. Enviar notificaciones basado en la configuración
             await ProcessNotificationsAsync(appointment, notificationTemplateId, config, context);
         }
 
@@ -323,6 +322,8 @@ namespace BussinessLayer.Services.ModuloCitas
                     }
 
                     var message = ReplaceTemplateValues(template.MessageContent, appointment, context);
+                    message = message.Replace("\\n", "\n");
+
                     var isInteractive = template.IsInteractive;
                     var buttonConfig = template.ButtonConfig;
 
@@ -350,7 +351,7 @@ namespace BussinessLayer.Services.ModuloCitas
         {
             return template
                 .Replace("{AssignedUser}", context.AssignedUserName ?? "")
-                .Replace("{ParticipantName}", context.ParticipantName ?? "")
+                .Replace("{ParticipantName}", "Estimados participantes")
                 .Replace("{AppointmentCode}", appointment.AppointmentCode ?? "")
                 .Replace("{Description}", appointment.Description ?? "")
                 .Replace("{AppointmentDate}", appointment.AppointmentDate.ToString("dd/MM/yyyy"))
@@ -365,11 +366,9 @@ namespace BussinessLayer.Services.ModuloCitas
 
         private string FormatWhatsAppNumber(string phoneNumber)
         {
-            // Asegurarse de que el número esté en el formato correcto para WhatsApp
-            // Para WhatsApp, el formato es: whatsapp:+12345678901
             if (!phoneNumber.StartsWith("whatsapp:"))
             {
-                return $"whatsapp:{phoneNumber}";
+                return $"{phoneNumber}";
             }
             return phoneNumber;
         }
