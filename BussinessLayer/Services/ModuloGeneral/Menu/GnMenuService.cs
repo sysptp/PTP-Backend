@@ -48,6 +48,9 @@ namespace BussinessLayer.Services.ModuloGeneral.Menu
                     Create = menu.Crear,
                     Edit = menu.Editar,
                     Delete = menu.Eliminar,
+                    ModuleName = menu.ModuleName,
+                    ImgUrl = menu.ImgUrl,
+                    IsVisible = menu.IsVisible,
                     SubMenus = BuildMenuHierarchy(menus, menu.IDMenu)
                 })
                 .ToList();

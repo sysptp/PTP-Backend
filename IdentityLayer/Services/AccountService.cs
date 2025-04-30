@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.WebUtilities;
 using BussinessLayer.Interfaces.Services.IAccount;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
-using MimeKit.Cryptography;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
+using BussinessLayer.DTOs.ModuloGeneral.Email;
 
 namespace IdentityLayer.Services
 {
@@ -335,25 +335,35 @@ namespace IdentityLayer.Services
                 return response;
             }
 
-            // Generar el token de reseteo de contraseña
             var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-            resetToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken)); // Codificar el token para URL
 
-            // Construir la URL de reseteo de contraseña
-            var resetUri = QueryHelpers.AddQueryString($"{origin}/reset-password", "token", resetToken);
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
 
-            // Enviar el correo electrónico con el enlace de reseteo
-            //await _emailService.SendAsync(new EmailRequest
-            //{
-            //    To = user.Email,
-            //    Subject = "Restablecer contraseña",
-            //    Body = $"Para restablecer tu contraseña, haz clic en el siguiente enlace: {resetUri}"
-            //});
+            var resetUrl = QueryHelpers.AddQueryString($"{origin}/reset-password", "token", encodedToken);
+            resetUrl = QueryHelpers.AddQueryString(resetUrl, "email", user.Email);
+
+            var emailMessage = new GnEmailMessageDto
+            {
+                To = new List<string> { user.Email },
+                Subject = "Restablecimiento de contraseña",
+                Body = $@"
+            <h1>Solicitud de restablecimiento de contraseña</h1>
+            <p>Hemos recibido una solicitud para restablecer tu contraseña.</p>
+            <p>Para continuar con el proceso, haz clic en el siguiente enlace:</p>
+            <p><a href='{resetUrl}'>Restablecer contraseña</a></p>
+            <p>Este enlace caducará en 30 minutos por seguridad.</p>
+            <p>Si no solicitaste este cambio, puedes ignorar este correo.</p>
+            <p>Gracias,<br/>El equipo de PTP</p>
+        ",
+                IsHtml = true,
+                EmpresaId = user.CodigoEmp ?? 0
+            };
+
+            await _emailService.SendAsync(emailMessage, user.CodigoEmp ?? 0);
 
             return response;
         }
-
-        public async Task<ResetPasswordResponse> ResetPasswordAsync(BussinessLayer.DTOs.Account.ResetPasswordRequest request)
+        public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request)
         {
             ResetPasswordResponse response = new()
             {
@@ -370,16 +380,46 @@ namespace IdentityLayer.Services
             }
 
             // Decodificar el token de reseteo
-            var resetToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
 
-            // Restablecer la contraseña
-            var result = await _userManager.ResetPasswordAsync(user, resetToken, request.NewPassword);
+            // Verificar que las contraseñas coincidan
+            if (request.NewPassword != request.ConfirmPassword)
+            {
+                response.HasError = true;
+                response.Error = "Las contraseñas no coinciden.";
+                return response;
+            }
+
+            // Intentar restablecer la contraseña
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, request.NewPassword);
             if (!result.Succeeded)
             {
                 response.HasError = true;
-                response.Error = "Ocurrió un error al restablecer la contraseña. Asegúrate de que el token sea válido y que la nueva contraseña cumpla con los requisitos.";
+                response.Error = "Error al restablecer la contraseña. Verifica que el enlace no haya caducado e intenta nuevamente.";
+
+                // Opcional: Registrar los errores específicos para depuración
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                // _logger.LogError($"Errores al restablecer contraseña: {errors}");
+
                 return response;
             }
+
+            // Opcionalmente, enviar correo de confirmación
+            var confirmationEmail = new GnEmailMessageDto
+            {
+                To = new List<string> { user.Email },
+                Subject = "Contraseña restablecida con éxito",
+                Body = $@"
+            <h1>Tu contraseña ha sido restablecida</h1>
+            <p>La contraseña de tu cuenta ha sido cambiada exitosamente.</p>
+            <p>Si no realizaste este cambio, contacta inmediatamente a nuestro soporte técnico.</p>
+            <p>Gracias,<br/>El equipo de PTP</p>
+        ",
+                IsHtml = true,
+                EmpresaId = user.CodigoEmp ?? 0
+            };
+
+            await _emailService.SendAsync(confirmationEmail, user.CodigoEmp ?? 0);
 
             return response;
         }

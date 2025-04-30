@@ -93,52 +93,72 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
             }
         }
 
-        [HttpPost("ForgotPassword")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation(Summary = "Olvidé mi contraseña", Description = "Envía un correo para restablecer la contraseña")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
         {
             try
             {
-                var origin = Request?.Headers["origin"].ToString() ?? string.Empty;
-                var response = await _accountService.ForgotPasswordAsync(request, origin);
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
+                    return BadRequest(Response<string>.BadRequest(errors, 400));
+                }
 
+                // Obtener el origen desde el encabezado Origin o Referer
+                var origin = Request.Headers["Origin"].ToString();
+                if (string.IsNullOrEmpty(origin))
+                {
+                    origin = Request.Headers["Referer"].ToString();
+                }
+
+                if (string.IsNullOrEmpty(origin))
+                {
+                    origin = "https://ptp-frontend-dev.vercel.app";
+                }
+
+                var response = await _accountService.ForgotPasswordAsync(request, origin);
                 if (response.HasError)
                 {
                     return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
                 }
 
-                return Ok(Response<string>.Success("Correo de restablecimiento enviado. Por favor, revisa tu bandeja de entrada."));
+                return Ok(Response<string>.Success("Se ha enviado un enlace de restablecimiento a tu correo electrónico"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError(ex.Message));
+                return StatusCode(500, Response<string>.ServerError("Ha ocurrido un error inesperado. Por favor, inténtalo más tarde."));
             }
+
         }
 
-        [HttpPost("ResetPassword")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation(Summary = "Restablecer contraseña", Description = "Restablece la contraseña del usuario")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
         {
             try
             {
-                var response = await _accountService.ResetPasswordAsync(request);
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
+                    return BadRequest(Response<string>.BadRequest(errors, 400));
+                }
 
+                var response = await _accountService.ResetPasswordAsync(request);
                 if (response.HasError)
                 {
                     return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
                 }
 
-                return Ok(Response<string>.Success("Contraseña restablecida exitosamente."));
+                return Ok(Response<string>.Success("Contraseña restablecida con éxito"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError(ex.Message));
+                return StatusCode(500, Response<string>.ServerError("Ha ocurrido un error inesperado al restablecer la contraseña. Por favor, inténtalo más tarde."));
             }
         }
 
