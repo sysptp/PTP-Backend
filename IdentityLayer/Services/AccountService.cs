@@ -336,10 +336,9 @@ namespace IdentityLayer.Services
             }
 
             var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
 
-            var resetUrl = QueryHelpers.AddQueryString($"{origin}/reset-password", "token", encodedToken);
+            var resetUrl = $"{origin}/reset-password/token/{encodedToken}";
             resetUrl = QueryHelpers.AddQueryString(resetUrl, "email", user.Email);
 
             var emailMessage = new GnEmailMessageDto
@@ -363,6 +362,7 @@ namespace IdentityLayer.Services
 
             return response;
         }
+
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request)
         {
             ResetPasswordResponse response = new()
@@ -380,7 +380,28 @@ namespace IdentityLayer.Services
             }
 
             // Decodificar el token de reseteo
-            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
+            string decodedToken;
+            try
+            {
+                decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
+            }
+            catch (Exception)
+            {
+                response.HasError = true;
+                response.Error = "El token no es válido.";
+                return response;
+            }
+
+            // Validar que la contraseña cumpla con los requisitos
+            var passwordValidator = new PasswordValidator<Usuario>();
+            var passwordValidationResult = await passwordValidator.ValidateAsync(_userManager, null, request.NewPassword);
+
+            if (!passwordValidationResult.Succeeded)
+            {
+                response.HasError = true;
+                response.Error = "La contraseña no cumple con los requisitos mínimos de seguridad.";
+                return response;
+            }
 
             // Verificar que las contraseñas coincidan
             if (request.NewPassword != request.ConfirmPassword)
@@ -395,7 +416,16 @@ namespace IdentityLayer.Services
             if (!result.Succeeded)
             {
                 response.HasError = true;
-                response.Error = "Error al restablecer la contraseña. Verifica que el enlace no haya caducado e intenta nuevamente.";
+
+                // Verificar si el error está relacionado con un token vencido
+                if (result.Errors.Any(e => e.Code == "InvalidToken"))
+                {
+                    response.Error = "El enlace de restablecimiento ha caducado. Por favor, solicita uno nuevo.";
+                }
+                else
+                {
+                    response.Error = "Error al restablecer la contraseña. Verifica que el enlace no haya caducado e intenta nuevamente.";
+                }
 
                 // Opcional: Registrar los errores específicos para depuración
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
@@ -404,7 +434,7 @@ namespace IdentityLayer.Services
                 return response;
             }
 
-            // Opcionalmente, enviar correo de confirmación
+            // Enviar correo de confirmación
             var confirmationEmail = new GnEmailMessageDto
             {
                 To = new List<string> { user.Email },
@@ -423,6 +453,7 @@ namespace IdentityLayer.Services
 
             return response;
         }
+
 
         //public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         //{

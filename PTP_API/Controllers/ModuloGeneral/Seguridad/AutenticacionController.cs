@@ -18,12 +18,19 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         private readonly IAccountService _accountService;
         private readonly IValidator<RegisterRequest> _validator;
         private readonly IValidator<LoginRequestDTO> _validatorLogin;
+        private readonly IValidator<ForgotPasswordRequest> _forgotPasswordValidator;
+        private readonly IValidator<ResetPasswordRequest> _resetPasswordValidator;
 
-        public AutenticacionController(IAccountService accountService, IValidator<LoginRequestDTO> validatorLogin, IValidator<RegisterRequest> validator)
+        public AutenticacionController(
+            IAccountService accountService,
+            IValidator<RegisterRequest> validator,
+            IValidator<ForgotPasswordRequest> forgotPasswordValidator,
+            IValidator<ResetPasswordRequest> resetPasswordValidator)
         {
             _accountService = accountService;
-            _validatorLogin = validatorLogin;
             _validator = validator;
+            _forgotPasswordValidator = forgotPasswordValidator;
+            _resetPasswordValidator = resetPasswordValidator;
         }
 
         [HttpPost("Login")]
@@ -94,16 +101,14 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
             try
             {
-                if (!ModelState.IsValid)
+                var validationResult = await _forgotPasswordValidator.ValidateAsync(request);
+                if (!validationResult.IsValid)
                 {
-                    var errors = ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList();
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 
@@ -113,7 +118,6 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
                 {
                     origin = Request.Headers["Referer"].ToString();
                 }
-
                 if (string.IsNullOrEmpty(origin))
                 {
                     origin = "https://ptp-frontend-dev.vercel.app";
@@ -131,20 +135,17 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
             {
                 return StatusCode(500, Response<string>.ServerError("Ha ocurrido un error inesperado. Por favor, inténtalo más tarde."));
             }
-
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
             try
             {
-                if (!ModelState.IsValid)
+                var validationResult = await _resetPasswordValidator.ValidateAsync(request);
+                if (!validationResult.IsValid)
                 {
-                    var errors = ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                        .ToList();
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                     return BadRequest(Response<string>.BadRequest(errors, 400));
                 }
 

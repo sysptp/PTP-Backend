@@ -99,6 +99,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Smtp;
 using BussinessLayer.FluentValidations.ModuloGeneral.SMTP;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
 using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
+using BussinessLayer.DTOs.Account;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -325,6 +326,11 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaEmailTemplatesRequest>, CtaEmailTemplatesRequestValidator>();
             services.AddScoped<IValidator<CtaNotificationSettingsRequest>, CtaNotificationSettingsRequestValidator>();
 
+            #endregion
+
+            #region Seguridad y Autenticacion
+            services.AddScoped<IValidator<ForgotPasswordRequest>, ForgotPasswordRequestValidator>();
+            services.AddScoped<IValidator<ResetPasswordRequest>, ResetPasswordRequestValidator>();
             #endregion
         }
     } 
