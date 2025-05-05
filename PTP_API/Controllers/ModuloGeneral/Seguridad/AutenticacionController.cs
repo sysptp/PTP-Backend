@@ -25,12 +25,14 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
             IAccountService accountService,
             IValidator<RegisterRequest> validator,
             IValidator<ForgotPasswordRequest> forgotPasswordValidator,
-            IValidator<ResetPasswordRequest> resetPasswordValidator)
+            IValidator<ResetPasswordRequest> resetPasswordValidator,
+            IValidator<LoginRequestDTO> validatorLogin)
         {
             _accountService = accountService;
             _validator = validator;
             _forgotPasswordValidator = forgotPasswordValidator;
             _resetPasswordValidator = resetPasswordValidator;
+            _validatorLogin = validatorLogin;
         }
 
         [HttpPost("Login")]
