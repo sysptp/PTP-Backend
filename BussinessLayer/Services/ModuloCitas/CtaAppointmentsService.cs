@@ -321,7 +321,8 @@ namespace DataLayer.Models.Modulo_Citas
             { "CtaAppointmentReason",
                 "CtaMeetingPlace",
                 "CtaState",
-                "CtaAppointmentManagement"});
+                "CtaAppointmentManagement",
+                "Usuario"});
 
                 var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments.OrderByDescending(x => x.AppointmentId));
                 

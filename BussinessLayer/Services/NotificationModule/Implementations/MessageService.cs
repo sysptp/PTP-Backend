@@ -40,7 +40,7 @@ namespace BussinessLayer.Services.NotificationModule.Implementations
                         messagingConfiguration.Data.AuthToken,
                         messagingConfiguration.Data.AccountSid,
                         sendMessage.MessageType == MessageType.SMS ? messagingConfiguration.Data.SmsNumber : messagingConfiguration.Data.WhatsAppNumber,
-                        sendMessage.ToNumber,
+                        sendMessage.ToNumber.Trim(),
                         sendMessage.MessageType,
                         sendMessage.Message,
                         sendMessage.BusinessId

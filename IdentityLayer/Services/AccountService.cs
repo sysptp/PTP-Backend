@@ -338,7 +338,7 @@ namespace IdentityLayer.Services
             var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
 
-            var resetUrl = $"{origin}/reset-password/token/{encodedToken}";
+            var resetUrl = $"{origin}/reset-password/token={encodedToken}";
             resetUrl = QueryHelpers.AddQueryString(resetUrl, "email", user.Email);
 
             var emailMessage = new GnEmailMessageDto
