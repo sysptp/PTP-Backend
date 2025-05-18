@@ -19,5 +19,6 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario
         public int Id { get; set; }
         public string? LanguageCode { get; set; }
         public string? DefaultUrl { get; set; }
+        public bool TwoFactorEnabled { get; set; } = false;
     }
 }

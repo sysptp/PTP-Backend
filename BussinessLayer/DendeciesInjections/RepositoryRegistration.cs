@@ -78,6 +78,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<IGnRepeatUnitRepository, GnRepeatUnitRepository>();
             services.AddTransient<IGnSmtpConfiguracionRepository, GnSmtpConfiguracionRepository>();
             services.AddTransient<IGnMessageTypeRepository, GnMessageTypeRepository>();
+            services.AddTransient<IGnSecurityParametersRepository, GnSecurityParametersRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();

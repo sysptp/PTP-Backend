@@ -6,6 +6,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DProvincia;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DRegion;
 using BussinessLayer.DTOs.ModuloGeneral.Menu;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.GnSecurityParameters;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
@@ -189,6 +190,12 @@ namespace BussinessLayer.Mapping.ModuloGeneral
                 .ReverseMap();
             #endregion
 
+            #region SecurityParameters
+            CreateMap<GnSecurityParametersRequest, GnSecurityParameters>()
+                .ReverseMap();
+            CreateMap<GnSecurityParametersResponse, GnSecurityParameters>()
+                .ReverseMap();
+            #endregion
 
             #endregion
 

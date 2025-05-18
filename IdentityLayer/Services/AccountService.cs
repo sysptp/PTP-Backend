@@ -15,6 +15,9 @@ using BussinessLayer.Interfaces.Services.IAccount;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
 using BussinessLayer.DTOs.ModuloGeneral.Email;
+using Usuario = IdentityLayer.Entities.Usuario;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.GnSecurityParameters;
+using GnPerfil = IdentityLayer.Entities.GnPerfil;
 
 namespace IdentityLayer.Services
 {
@@ -26,6 +29,7 @@ namespace IdentityLayer.Services
         private readonly IGnEmailService _emailService;
         //private readonly TokenVerificationFactory _tokenVerificationFactory;
         private readonly IGnPermisoService _gnmisoService;
+        private readonly IGnSecurityParametersService _securityParametersService;
 
         public AccountService(
               UserManager<Usuario> userManager,
@@ -34,6 +38,8 @@ namespace IdentityLayer.Services
               IGnEmailService emailService
 ,
               IGnPermisoService gnmisoService
+,
+              IGnSecurityParametersService securityParametersService
 /*TokenVerificationFactory tokenVerificationFactory*/)
         {
             _userManager = userManager;
@@ -41,6 +47,7 @@ namespace IdentityLayer.Services
             _jwtSettings = jwtSettings.Value;
             _emailService = emailService;
             _gnmisoService = gnmisoService;
+            _securityParametersService = securityParametersService;
             //_tokenVerificationFactory = tokenVerificationFactory;
         }
 
@@ -60,66 +67,192 @@ namespace IdentityLayer.Services
 
             return user != null;
         }
-
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         {
             var response = new AuthenticationResponse();
 
-            var user = await _userManager.Users
-     .Include(u => u.GnPerfil)
-     .Include(u => u.GnEmpresa)
-     .Include(u => u.GnSucursal)
-     .FirstOrDefaultAsync(u => u.Email == request.UserCredential || u.UserName == request.UserCredential);
-
-            if (user == null)
+            var result = await ValidateUserCredentialsAsync(request.UserCredential, request.Password);
+            if (result.HasError)
             {
-                response.HasError = true;
-                response.Error = $"{request.UserCredential} no tiene cuenta registrada";
-                return response;
-            }
-            if (!user.IsActive)
-            {
-                response.HasError = true;
-                response.Error = $"{request.UserCredential} se encuentra inactivo";
+                response.HasError = result.HasError;
+                response.Error = result.Error;
                 return response;
             }
 
-            if (!await _userManager.CheckPasswordAsync(user, request.Password))
+            var user = result.User;
+
+            var companySecurityParameters = await _securityParametersService.GetByIdResponse(user.CodigoEmp);
+
+            await UpdateUserTwoFactorStatusAsync(user, companySecurityParameters);
+
+            bool requires2FA = await _userManager.GetTwoFactorEnabledAsync(user);
+
+            if (requires2FA)
             {
-                response.HasError = true;
-                response.Error = $"Credenciales incorrectas {request.UserCredential}";
+                return await SendTwoFactorCodeAsync(user);
+            }
+
+            await FillAuthenticationResponse(response, user);
+            return response;
+        }
+
+        private async Task UpdateUserTwoFactorStatusAsync(Usuario user, GnSecurityParametersResponse companySecurityParameters)
+        {
+            bool userHas2FAEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
+            bool companyRequires2FA = companySecurityParameters?.Requires2FA == true;
+            bool companyAllowsOptional2FA = companySecurityParameters?.AllowsOptional2FA == true;
+
+            if (companyRequires2FA)
+            {
+                if (!userHas2FAEnabled)
+                {
+                    await _userManager.SetTwoFactorEnabledAsync(user, true);
+                }
+            }
+            else if (!companyAllowsOptional2FA && userHas2FAEnabled)
+            {
+                await _userManager.SetTwoFactorEnabledAsync(user, false);
+            }
+
+        }
+
+        public async Task<AuthenticationResponse> VerifyTwoFactorCodeAsync(string userId, string code)
+        {
+            var response = new AuthenticationResponse();
+
+            var result = await GetAndValidateUserAsync(userId);
+            if (result.HasError)
+            {
+                response.HasError = result.HasError;
+                response.Error = result.Error;
                 return response;
             }
 
-            response.Id = user.Id;
-            response.Email = user?.Email;
-            response.UserName = user.UserName;
-            response.FullName = $"{user.Nombre} {user.Apellido}";
-            response.RoleId = user.IdPerfil;
-            response.IsVerified = user.EmailConfirmed;
+            var user = result.User;
 
-            response.IPUser = user.IpAdiccion ?? string.Empty;
-            response.CompanyId = user.CodigoEmp;
-            response.UserName = user.Nombre ?? string.Empty;
-            response.Email = user.Email ?? string.Empty;
-            response.PhoneNumber = user.PhoneNumber ?? string.Empty;
-            response.SucursalId = user.CodigoSuc;
-            response.RoleName = user.GnPerfil.Name;
-            response.CompanyName = user.GnEmpresa.NOMBRE_EMP;
-            response.SucursalName = user.GnSucursal.NombreSuc;
-            response.GnPermisoResponses = await _gnmisoService.GetAllPermisosForLogin(user.CodigoEmp, user.IdPerfil);
+            var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", code);
+            if (!isValid)
+            {
+                response.HasError = true;
+                response.Error = "Código de verificación inválido o expirado";
+                return response;
+            }
 
-            JwtSecurityToken jwtToken = GenerateJWToken(user);
-            response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+            await _userManager.UpdateSecurityStampAsync(user);
 
-            response.RefreshToken = GenerateRefreshToken().Token;
-            response.TokenDurationInMinutes = _jwtSettings.ExpirationInMinutes;
-            response.RequestDate = DateTime.Now;
+            await FillAuthenticationResponse(response, user);
 
             return response;
         }
 
         #region PrivateMethods
+
+
+        private async Task<(bool HasError, string Error, Usuario User)> ValidateUserCredentialsAsync(string userCredential, string password)
+        {
+            var user = await _userManager.Users
+                .Include(u => u.GnPerfil)
+                .Include(u => u.GnEmpresa)
+                .Include(u => u.GnSucursal)
+                .FirstOrDefaultAsync(u => u.Email == userCredential || u.UserName == userCredential);
+
+            if (user == null)
+            {
+                return (true, $"{userCredential} no tiene cuenta registrada", null);
+            }
+
+            if (!user.IsActive)
+            {
+                return (true, $"{userCredential} se encuentra inactivo", null);
+            }
+
+            if (!await _userManager.CheckPasswordAsync(user, password))
+            {
+                return (true, $"Credenciales incorrectas {userCredential}", null);
+            }
+
+            return (false, null, user);
+        }
+
+        private async Task<(bool HasError, string Error, Usuario User)> GetAndValidateUserAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return (true, "Usuario no encontrado", null);
+            }
+
+            if (!user.IsActive)
+            {
+                return (true, "La cuenta se encuentra inactiva", null);
+            }
+
+            user = await _userManager.Users
+                .Include(u => u.GnPerfil)
+                .Include(u => u.GnEmpresa)
+                .Include(u => u.GnSucursal)
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+
+            if (user == null)
+            {
+                return (true, "Error al cargar la información del usuario", null);
+            }
+
+            return (false, null, user);
+        }
+
+        private async Task<AuthenticationResponse> SendTwoFactorCodeAsync(Usuario user)
+        {
+            var response = new AuthenticationResponse();
+
+            var providers = await _userManager.GetValidTwoFactorProvidersAsync(user);
+            if (providers.Contains("Email"))
+            {
+                try
+                {
+                    var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+
+                    var emailMessage = new GnEmailMessageDto
+                    {
+                        To = new List<string> { user.Email },
+                        Subject = "Tu código de verificación en dos pasos",
+                        Body = $@"
+                    <h1>Verificación de dos factores</h1>
+                    <p>Tu código de verificación es: <strong>{token}</strong></p>
+                    <p>Este código expirará en 10 minutos.</p>
+                    <p>Gracias,<br/>El equipo de PTP</p>
+                ",
+                        IsHtml = true,
+                        EmpresaId = user.CodigoEmp ?? 0
+                    };
+
+                    await _emailService.SendAsync(emailMessage, user.CodigoEmp ?? 0);
+
+                    response.Requires2FA = true;
+                    response.Id = user.Id; 
+
+                    response.Email = user.Email;
+                    response.UserName = user.UserName;
+                    response.FullName = $"{user.Nombre} {user.Apellido}";
+
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    response.HasError = true;
+                    response.Error = "Error al enviar el código de verificación. Por favor, intente nuevamente.";
+                   
+                    return response;
+                }
+            }
+            else
+            {
+                response.HasError = true;
+                response.Error = "Error de configuración: No se puede enviar el código de verificación.";
+                return response;
+            }
+        }
+
 
         private JwtSecurityToken GenerateJWToken(Usuario user)
         {
@@ -227,6 +360,35 @@ namespace IdentityLayer.Services
                 EmailConfirmed = true,
                 IpAdiccion = request.UserIP
             };
+        }
+
+        // Método auxiliar para evitar duplicación de código
+        private async Task FillAuthenticationResponse(AuthenticationResponse response, Usuario user)
+        {
+            response.Id = user.Id;
+            response.Email = user.Email;
+            response.UserName = user.UserName;
+            response.FullName = $"{user.Nombre} {user.Apellido}";
+            response.RoleId = user.IdPerfil;
+            response.IsVerified = user.EmailConfirmed;
+
+            response.IPUser = user.IpAdiccion ?? string.Empty;
+            response.CompanyId = user.CodigoEmp;
+            response.UserName = user.Nombre ?? string.Empty;
+            response.Email = user.Email ?? string.Empty;
+            response.PhoneNumber = user.PhoneNumber ?? string.Empty;
+            response.SucursalId = user.CodigoSuc;
+            response.RoleName = user.GnPerfil.Name;
+            response.CompanyName = user.GnEmpresa.NOMBRE_EMP;
+            response.SucursalName = user.GnSucursal.NombreSuc;
+            response.GnPermisoResponses = await _gnmisoService.GetAllPermisosForLogin(user.CodigoEmp, user.IdPerfil);
+
+            JwtSecurityToken jwtToken = GenerateJWToken(user);
+            response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+
+            response.RefreshToken = GenerateRefreshToken().Token;
+            response.TokenDurationInMinutes = _jwtSettings.ExpirationInMinutes;
+            response.RequestDate = DateTime.Now;
         }
         #endregion
 
@@ -453,53 +615,6 @@ namespace IdentityLayer.Services
 
             return response;
         }
-
-
-        //public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
-        //{
-        //    var response = new AuthenticationResponse();
-
-        //    var user = await _userManager.FindByEmailAsync(request.Email) ?? await _userManager.FindByNameAsync(request.Email);
-        //    if (user == null)
-        //    {
-        //        response.HasError = true;
-        //        response.Error = $"No accounts registered with {request.Email}.";
-        //        return response;
-        //    }
-
-        //    if (!await _userManager.CheckPasswordAsync(user, request.Password))
-        //    {
-        //        response.HasError = true;
-        //        response.Error = "Invalid credentials.";
-        //        return response;
-        //    }
-
-        //    var empresaParametros = await _dbContext.EmpresaParametros.FirstOrDefaultAsync(ep => ep.EmpresaId == user.CodigoEmp);
-        //    if (empresaParametros?.Requiere2FA == true && await _userManager.GetTwoFactorEnabledAsync(user))
-        //    {
-        //        var providers = await _userManager.GetValidTwoFactorProvidersAsync(user);
-        //        if (providers.Contains("Email"))
-        //        {
-        //            var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
-        //            await _emailService.SendAsync(new EmailRequest
-        //            {
-        //                To = user.Email,
-        //                Subject = "Your 2FA Code",
-        //                Body = $"Your two-factor authentication code is: {token}"
-        //            });
-
-        //            response.Requires2FA = true;
-        //            response.UserId = user.Id;
-        //            return response;
-        //        }
-        //    }
-
-        //    // Generar JWT y refrescar token si no se requiere 2FA o ya se ha verificado
-        //    response.JWToken = new JwtSecurityTokenHandler().WriteToken(GenerateJWToken(user));
-        //    response.RefreshToken = GenerateRefreshToken().Token;
-        //    return response;
-        //}
-
 
         #region External Register Logic
         //public async Task<RegisterResponse> RegisterExternalUserAsync(ExternalRegisterRequest request)

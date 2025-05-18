@@ -224,6 +224,7 @@ namespace DataLayer.PDbContex
         public DbSet<GnParametrosGenerales> GnParametrosGenerales { get; set; }
         public DbSet<GnSmtpConfiguracion> GnSmtpConfiguracion { get; set; }
         public DbSet<GnMessageType> GnMessageType { get; set; }
+        public DbSet<GnSecurityParameters> GnSecurityParameters { get; set; }
         #endregion
 
         #region Auditoria

@@ -164,6 +164,29 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
                 return StatusCode(500, Response<string>.ServerError("Ha ocurrido un error inesperado al restablecer la contraseña. Por favor, inténtalo más tarde."));
             }
         }
+        [HttpPost("verify-2fa")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "Verificar código 2FA", Description = "Verifica el código de autenticación de dos factores")]
+        public async Task<IActionResult> VerifyTwoFactorCode([FromBody] TwoFactorVerificationRequest request)
+        {
+            try
+            {
+                var response = await _accountService.VerifyTwoFactorCodeAsync(request.UserId.ToString(), request.Code);
+
+                if (response.HasError)
+                {
+                    return BadRequest(Response<string>.BadRequest(new List<string> { response.Error ?? "Error en la verificación 2FA" }, 400));
+                }
+
+                return Ok(Response<object>.Success(response, "Verificación 2FA exitosa"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ha ocurrido un error inesperado. Por favor, inténtalo más tarde."));
+            }
+        }
 
         //[HttpGet("ConfirmEmail")]
         //[ProducesResponseType(StatusCodes.Status200OK)]

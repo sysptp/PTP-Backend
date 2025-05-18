@@ -288,6 +288,7 @@ public static class ServiceRegistration
         services.AddScoped<IGnRepeatUnitService,GnRepeatUnitService>();
         services.AddScoped<IGnEmailService,GnEmailService>();
         services.AddScoped<IGnMessageTypeService,GnMessageTypeService>();
+        services.AddScoped<IGnSecurityParametersService, GnSecurityParametersService>();
         #endregion 
 
         #region Otros
