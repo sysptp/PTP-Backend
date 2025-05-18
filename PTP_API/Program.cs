@@ -2,6 +2,8 @@ using IdentityLayer;
 using BussinessLayer.DendeciesInjections;
 using PTP_API.Extensions;
 using PTP_API.Middlewares;
+using SignalR;
+using SignalR.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +21,12 @@ builder.Services.AddServiceRegistration();
 builder.Services.AddRepositoryInjections();
 builder.Services.AddValidationInjections();
 builder.Services.AddIdentityLayer(builder.Configuration);
+builder.Services.AddSignalRLayer();
 builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
+builder.Services.AddSignalR();
 
 
 var app = builder.Build();
@@ -59,5 +63,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();

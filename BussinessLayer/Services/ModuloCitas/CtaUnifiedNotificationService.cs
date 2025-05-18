@@ -13,6 +13,7 @@ using BussinessLayer.Services.NotificationModule.Contracts;
 using BussinessLayer.DTOs.ModuloGeneral.Email;
 using BussinessLayer.DTOs.ModuloCitas;
 using Microsoft.Extensions.Configuration;
+using BussinessLayer.Interfaces.RealTimeContracts;
 
 namespace BussinessLayer.Services.ModuloCitas
 {
@@ -27,6 +28,7 @@ namespace BussinessLayer.Services.ModuloCitas
         private readonly ICtaWhatsAppTemplatesRepository _whatsappRepository;
         private readonly ICtaNotificationTemplatesRepository _notificationTemplatesRepository;
         private readonly IConfiguration _configuration;
+        private readonly INotificationService _notificationService;
 
         public CtaUnifiedNotificationService(
             ICtaStateRepository stateRepository,
@@ -37,7 +39,8 @@ namespace BussinessLayer.Services.ModuloCitas
             ICtaSmsTemplatesRepository smsTemplateRepository,
             ICtaWhatsAppTemplatesRepository whatsappRepository,
             ICtaNotificationTemplatesRepository notificationTemplatesRepository,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            INotificationService notificationService)
         {
             _stateRepository = stateRepository;
             _configRepository = configRepository;
@@ -48,6 +51,7 @@ namespace BussinessLayer.Services.ModuloCitas
             _whatsappRepository = whatsappRepository;
             _notificationTemplatesRepository = notificationTemplatesRepository;
             _configuration = configuration;
+            this._notificationService = notificationService;
         }
 
         public async Task SendNotificationsForAppointmentAsync(CtaAppointmentsRequest appointment, NotificationType notificationType, NotificationContext context)
@@ -73,6 +77,28 @@ namespace BussinessLayer.Services.ModuloCitas
 
             // 4. Enviar notificaciones basado en la configuración
             await ProcessNotificationsAsync(appointment, notificationTemplateId, config, context);
+
+            // Añade notificaciones en tiempo real con SignalR
+            if (notificationType == NotificationType.CreationForUser || notificationType == NotificationType.CreationForParticipant)
+            {
+                await _notificationService.NotifyAboutAppointmentCreationAsync(
+                    appointment,
+                    context.AssignedUserName);
+            }
+            else if (notificationType == NotificationType.StateChangeForUser || notificationType == NotificationType.StateChangeForParticipant)
+            {
+                await _notificationService.NotifyAboutAppointmentUpdateAsync(
+                    appointment,
+                    context.PreviousState,
+                    context.NewState);
+            }
+            else if (notificationType == NotificationType.UpdateForUser || notificationType == NotificationType.UpdateForParticipant)
+            {
+                await _notificationService.NotifyAboutAppointmentUpdateAsync(
+                    appointment,
+                    null,
+                    null);
+            }
         }
 
         private long? GetNotificationTemplateId(CtaState state, NotificationType notificationType)
