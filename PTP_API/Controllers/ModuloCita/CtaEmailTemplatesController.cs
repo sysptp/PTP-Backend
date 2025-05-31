@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de Plantillas de Correo")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaEmailTemplatesController : ControllerBase
     {
         private readonly ICtaEmailTemplatesService _emailTemplatesService;
@@ -30,6 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Plantillas de Correo", Description = "Devuelve una lista de plantillas o una plantilla específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllEmailTemplates([FromQuery] long? id, long? companyId)
         {
             try

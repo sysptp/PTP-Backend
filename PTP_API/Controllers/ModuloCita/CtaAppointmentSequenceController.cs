@@ -1,4 +1,5 @@
-﻿using BussinessLayer.DTOs.ModuloCitas;
+﻿using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de secuencias de citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaAppointmentSequenceController : ControllerBase
     {
         private readonly ICtaAppointmentSequenceService _appointmentSequenceService;
@@ -32,6 +34,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener secuencias de citas", Description = "Devuelve una lista de secuencias de citas o una secuencia específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllSequences([FromQuery] int? id, long? companyId)
         {
             try

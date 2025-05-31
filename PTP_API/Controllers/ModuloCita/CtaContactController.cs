@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaContacts;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de Contactos de Citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaContactController : ControllerBase
     {
         private readonly ICtaContactService _contactService;
@@ -30,6 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Contactos de Citas", Description = "Devuelve una lista de Contactos de Citas o un contacto específico si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllContacts([FromQuery] int? id, long? companyId)
         {
             try

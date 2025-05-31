@@ -1,4 +1,5 @@
-﻿using BussinessLayer.DTOs.ModuloCitas.CtaParticipantTypes;
+﻿using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.ModuloCitas.CtaParticipantTypes;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de Tipo de Participantes")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaParticipantTypesController : ControllerBase
     {
         private readonly ICtaParticipantTypesServices _participantsTypesServices;
@@ -26,6 +28,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Tipo de Participantes", Description = "Devuelve una lista de Tipos de Participantes o un participante en específico")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllNotificationSettings([FromQuery] long? id, long? companyId)
         {
             try

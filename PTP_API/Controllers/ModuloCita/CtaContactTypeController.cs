@@ -35,6 +35,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener tipo de contactos", Description = "Devuelve una lista de tipos de contactos o un tipo de contacto específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllConfigurations([FromQuery] int? id, long? companyId)
         {
             try

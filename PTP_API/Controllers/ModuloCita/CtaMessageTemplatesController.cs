@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaMessageTemplates;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de CtaMessageTemplates")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaMessageTemplatesController : ControllerBase
     {
         private readonly ICtaMessageTemplatesService _ctamessagetemplatesService;
@@ -30,6 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener CtaMessageTemplates", Description = "Devuelve una lista de CtaMessageTemplates o un elemento específico si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAll([FromQuery] long? id, long? companyId)
         {
             try

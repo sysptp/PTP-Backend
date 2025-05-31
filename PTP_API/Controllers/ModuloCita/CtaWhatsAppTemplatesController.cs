@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaWhatsAppTemplates;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de CtaWhatsAppTemplates")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaWhatsAppTemplatesController : ControllerBase
     {
         private readonly ICtaWhatsAppTemplatesService _ctawhatsapptemplatesService;
@@ -30,6 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener CtaWhatsAppTemplates", Description = "Devuelve una lista de CtaWhatsAppTemplates o un elemento específico si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAll([FromQuery] long? id, long? companyId)
         {
             try

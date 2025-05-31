@@ -32,6 +32,7 @@ namespace PTP_API.Controllers.ModuloCitas
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener contactos no deseados", Description = "Devuelve una lista de contactos no deseados o un contacto específico si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllUnwanted([FromQuery] int? IdUnwanted, long? companyId)
         {
             try
