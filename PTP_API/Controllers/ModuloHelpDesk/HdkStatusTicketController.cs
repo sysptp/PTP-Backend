@@ -14,12 +14,12 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [SwaggerTag("Gestión de Estado de Ticket")]
     [Authorize]
     [EnableBitacora]
-    public class StatusTicketController : ControllerBase
+    public class HdkStatusTicketController : ControllerBase
     {
         private readonly IHdkStatusTicketService _statusTicketService;
         private readonly IValidator<HdkStatusTicketRequest> _validator;
 
-        public StatusTicketController(IHdkStatusTicketService statusTicketService, IValidator<HdkStatusTicketRequest> validator)
+        public HdkStatusTicketController(IHdkStatusTicketService statusTicketService, IValidator<HdkStatusTicketRequest> validator)
         {
             _statusTicketService = statusTicketService;
             _validator = validator;

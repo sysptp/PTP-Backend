@@ -15,12 +15,12 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [SwaggerTag("Gestión de Notas de Ticket")]
     [Authorize]
     [EnableBitacora]
-    public class NoteTicketController : ControllerBase
+    public class HdkNoteTicketController : ControllerBase
     {
         private readonly IHdkNoteTicketService _noteTicketService;
         private readonly IValidator<HdkNoteTicketRequest> _validator;
 
-        public NoteTicketController(IHdkNoteTicketService noteTicketService, IValidator<HdkNoteTicketRequest> validator)
+        public HdkNoteTicketController(IHdkNoteTicketService noteTicketService, IValidator<HdkNoteTicketRequest> validator)
         {
             _noteTicketService = noteTicketService;
             _validator = validator;

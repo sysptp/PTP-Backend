@@ -15,12 +15,12 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [SwaggerTag("Gestión de SubCategoria de Ticket")]
     [Authorize]
     [EnableBitacora]
-    public class SubCategoryController : ControllerBase
+    public class HdkSubCategoryController : ControllerBase
     {
         private readonly IHdkSubCategoryService _subCategoryService;
         private readonly IValidator<HdkSubCategoryRequest> _validator;
 
-        public SubCategoryController(IHdkSubCategoryService subCategoryService, IValidator<HdkSubCategoryRequest> validator)
+        public HdkSubCategoryController(IHdkSubCategoryService subCategoryService, IValidator<HdkSubCategoryRequest> validator)
         {
             _subCategoryService = subCategoryService;
             _validator = validator;

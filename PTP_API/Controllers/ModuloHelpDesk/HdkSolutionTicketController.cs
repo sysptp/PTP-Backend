@@ -15,12 +15,12 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [SwaggerTag("Gestión de Solución de Ticket")]
     [Authorize]
     [EnableBitacora]
-    public class SolutionTicketController : ControllerBase
+    public class HdkSolutionTicketController : ControllerBase
     {
         private readonly IHdkSolutionTicketService _solutionTicketService;
         private readonly IValidator<HdkSolutionTicketRequest> _validator;
 
-        public SolutionTicketController(IHdkSolutionTicketService solutionTicketService, IValidator<HdkSolutionTicketRequest> validator)
+        public HdkSolutionTicketController(IHdkSolutionTicketService solutionTicketService, IValidator<HdkSolutionTicketRequest> validator)
         {
             _solutionTicketService = solutionTicketService;
             _validator = validator;

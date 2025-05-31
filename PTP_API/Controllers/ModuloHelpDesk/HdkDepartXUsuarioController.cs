@@ -15,12 +15,12 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [SwaggerTag("Gestión de DepartXUsuario de Ticket")]
     [Authorize]
     [EnableBitacora]
-    public class DepartXUsuarioController : ControllerBase
+    public class HdkDepartXUsuarioController : ControllerBase
     {
         private readonly IHdkDepartXUsuarioService _departXUsuarioService;
         private readonly IValidator<HdkDepartXUsuarioRequest> _validator;
 
-        public DepartXUsuarioController(IHdkDepartXUsuarioService departXUsuarioService, IValidator<HdkDepartXUsuarioRequest> validator)
+        public HdkDepartXUsuarioController(IHdkDepartXUsuarioService departXUsuarioService, IValidator<HdkDepartXUsuarioRequest> validator)
         {
             _departXUsuarioService = departXUsuarioService;
             _validator = validator;

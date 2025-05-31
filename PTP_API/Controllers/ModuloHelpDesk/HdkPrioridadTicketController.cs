@@ -15,12 +15,12 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [SwaggerTag("Gestión de Prioridad de Ticket")]
     [Authorize]
     [EnableBitacora]
-    public class PrioridadTicketController : ControllerBase
+    public class HdkPrioridadTicketController : ControllerBase
     {
         private readonly IHdkPrioridadTicketService _prioridadTicketService;
         private readonly IValidator<HdkPrioridadTicketRequest> _validator;
 
-        public PrioridadTicketController(IHdkPrioridadTicketService prioridadTicketService, IValidator<HdkPrioridadTicketRequest> validator)
+        public HdkPrioridadTicketController(IHdkPrioridadTicketService prioridadTicketService, IValidator<HdkPrioridadTicketRequest> validator)
         {
             _prioridadTicketService = prioridadTicketService;
             _validator = validator;

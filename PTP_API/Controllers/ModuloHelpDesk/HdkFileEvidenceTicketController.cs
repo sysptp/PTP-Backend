@@ -15,12 +15,12 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [SwaggerTag("Gestión de Archivos de Evidencias de Ticket")]
     [Authorize]
     [EnableBitacora]
-    public class FileEvidenceTicketController : ControllerBase
+    public class HdkFileEvidenceTicketController : ControllerBase
     {
         private readonly IHdkFileEvidenceTicketService _fileEvidenceTicketService;
         private readonly IValidator<HdkFileEvidenceTicketRequest> _validator;
 
-        public FileEvidenceTicketController(IHdkFileEvidenceTicketService fileEvidenceTicketService, IValidator<HdkFileEvidenceTicketRequest> validator)
+        public HdkFileEvidenceTicketController(IHdkFileEvidenceTicketService fileEvidenceTicketService, IValidator<HdkFileEvidenceTicketRequest> validator)
         {
             _fileEvidenceTicketService = fileEvidenceTicketService;
             _validator = validator;

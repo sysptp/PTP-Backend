@@ -15,12 +15,12 @@ namespace PTP_API.Controllers.ModuloHelpDesk
     [SwaggerTag("Gestión de Tipo de Ticket")]
     [Authorize]
     [EnableBitacora]
-    public class TypeTicketController : ControllerBase
+    public class HdkTypeTicketController : ControllerBase
     {
         private readonly IHdkTypeTicketService _typeTicketService;
         private readonly IValidator<HdkTypeTicketRequest> _validator;
 
-        public TypeTicketController(IHdkTypeTicketService typeTicketService, IValidator<HdkTypeTicketRequest> validator)
+        public HdkTypeTicketController(IHdkTypeTicketService typeTicketService, IValidator<HdkTypeTicketRequest> validator)
         {
             _typeTicketService = typeTicketService;
             _validator = validator;
