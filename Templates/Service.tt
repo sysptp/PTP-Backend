@@ -1,0 +1,15 @@
+using AutoMapper;
+using BussinessLayer.DTOs.ModuloCitas.{{ModelName}};
+using BussinessLayer.Interfaces.Repositories;
+using BussinessLayer.Interfaces.Services.ModuloCitas;
+using DataLayer.Models.ModuloCitas;
+
+namespace BussinessLayer.Services.ModuloCitas
+{
+    public class {{ModelName}}Service : GenericService<{{ModelName}}Request, {{ModelName}}Response, {{ModelName}}>, I{{ModelName}}Service
+    {
+        public {{ModelName}}Service(IGenericRepository<{{ModelName}}> repository, IMapper mapper) : base(repository, mapper)
+        {
+        }
+    }
+}
