@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BussinessLayer.DTOs.ModuloCitas;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailBackgroundJobData;
 using BussinessLayer.Enums;
@@ -12,7 +13,6 @@ using BussinessLayer.Services;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.ModuloCitas;
 using Microsoft.Extensions.Configuration;
-using SendGrid.Helpers.Errors.Model;
 
 namespace DataLayer.Models.Modulo_Citas
 {
@@ -33,6 +33,10 @@ namespace DataLayer.Models.Modulo_Citas
         private readonly ICtaStateRepository _ctaStateRepository;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly ICtaUnifiedNotificationService _notificationService;
+        private readonly ICtaMeetingPlaceRepository _meetingPlaceRepository;
+        private readonly ICtaAppointmentReasonRepository _appointmentReasonRepository;
+
 
         public CtaAppointmentsService(ICtaAppointmentsRepository appointmentRepository,
             IGnEmailService gnEmailService, IUsuarioRepository userRepository,
@@ -41,7 +45,7 @@ namespace DataLayer.Models.Modulo_Citas
             ICtaAppointmentUsersRepository userUsersRepository,
             ICtaAppointmentGuestRepository ctaAppointmentGuestRepository, ICtaAppointmentContactsRepository appointmentContactsRepository,
             ICtaEmailTemplatesRepository ctaEmailTemplateRepository, ICtaAppointmentAreaRepository ctaAppointmentAreaRepository,
-            ICtaBackgroundEmailService backgroundEmailService, ICtaStateRepository ctaStateRepository, IConfiguration configuration) : base(appointmentRepository, mapper)
+            ICtaBackgroundEmailService backgroundEmailService, ICtaStateRepository ctaStateRepository, IConfiguration configuration, ICtaUnifiedNotificationService notificationService, ICtaAppointmentReasonRepository appointmentReasonRepository, ICtaMeetingPlaceRepository meetingPlaceRepository) : base(appointmentRepository, mapper)
         {
             _appointmentRepository = appointmentRepository;
             _gnEmailService = gnEmailService;
@@ -58,27 +62,208 @@ namespace DataLayer.Models.Modulo_Citas
             _backgroundEmailService = backgroundEmailService;
             _ctaStateRepository = ctaStateRepository;
             _configuration = configuration;
+            _notificationService = notificationService;
+            _appointmentReasonRepository = appointmentReasonRepository;
+            _meetingPlaceRepository = meetingPlaceRepository;
         }
 
-        public async Task<CtaAppointmentsResponse> AddAppointment(CtaAppointmentsRequest vm,bool IsForSession)
+        public async Task<CtaAppointmentsResponse> AddAppointment(CtaAppointmentsRequest vm, bool IsForSession)
         {
             var nextSequence = await _sequenceService.GetFormattedSequenceAsync(vm.CompanyId, vm.AreaId);
             vm.AppointmentCode = nextSequence;
 
+            var appointmentEntity = await base.Add(vm);
             await _sequenceService.UpdateSequenceAsync(vm.CompanyId, vm.AreaId);
 
-            var appointmentEntity = await base.Add(vm);
-
-            var appointmentId = appointmentEntity.AppointmentId;
-
-            await AddAppointmentParticipants(vm, appointmentId, appointmentEntity);
+            vm.AppointmentId = appointmentEntity.AppointmentId;
+            await AddAppointmentParticipants(vm, vm.AppointmentId, appointmentEntity);
 
             if (!IsForSession)
             {
-                await SendAppointmentEmailsAsync(vm, vm.CompanyId);
+                // Notificación para el usuario asignado
+                var userContext = await CreateNotificationContext(vm, NotificationType.CreationForUser);
+                await _notificationService.SendNotificationsForAppointmentAsync(vm, NotificationType.CreationForUser, userContext);
+
+                // Notificación para los participantes
+                var participantsContext = await CreateNotificationContext(vm, NotificationType.CreationForParticipant);
+                await _notificationService.SendNotificationsForAppointmentAsync(vm, NotificationType.CreationForParticipant, participantsContext);
             }
 
             return _mapper.Map<CtaAppointmentsResponse>(appointmentEntity);
+        }
+
+        public override async Task<CtaAppointmentsResponse> Update(CtaAppointmentsRequest vm, int id)
+        {
+            var currentAppointment = await _appointmentRepository.GetById(id);
+            bool stateChanged = currentAppointment != null && currentAppointment.IdState != vm.IdState;
+
+            await base.Update(vm, id);
+            await UpdateAppointmentParticipants(vm, id, _mapper.Map<CtaAppointmentsResponse>(vm));
+
+            if (stateChanged)
+            {
+                // Notificación de cambio de estado para todos
+                var stateChangeContext = await CreateNotificationContext(vm, NotificationType.StateChangeForUser);
+                stateChangeContext.PreviousState = (await _ctaStateRepository.GetById(currentAppointment.IdState))?.Description;
+                stateChangeContext.NewState = (await _ctaStateRepository.GetById(vm.IdState))?.Description;
+                await _notificationService.SendNotificationsForAppointmentAsync(vm, NotificationType.StateChangeForParticipant, stateChangeContext);
+            }
+            else
+            {
+                // Notificación de actualización para el usuario asignado
+                var userUpdateContext = await CreateNotificationContext(vm, NotificationType.UpdateForUser);
+                await _notificationService.SendNotificationsForAppointmentAsync(vm, NotificationType.UpdateForUser, userUpdateContext);
+
+                // Notificación de actualización para los participantes
+                var participantsUpdateContext = await CreateNotificationContext(vm, NotificationType.UpdateForParticipant);
+                await _notificationService.SendNotificationsForAppointmentAsync(vm, NotificationType.UpdateForParticipant, participantsUpdateContext);
+            }
+
+            return _mapper.Map<CtaAppointmentsResponse>(vm);
+        }
+
+        private async Task<NotificationContext> CreateNotificationContext(CtaAppointmentsRequest appointment, NotificationType notificationType)
+        {
+            var context = new NotificationContext();
+
+            // Obtener información del usuario asignado
+            var assignedUser = await _userRepository.GetById(appointment.AssignedUser);
+            context.AssignedUserName = $"{assignedUser?.Nombre} {assignedUser?.Apellido}";
+
+            // Obtener información del lugar de reunión
+            var meetingPlace = await _meetingPlaceRepository.GetById(appointment.IdPlaceAppointment);
+            context.MeetingPlaceDescription = meetingPlace?.Description;
+
+            // Obtener información del motivo
+            var reason = await _appointmentReasonRepository.GetById(appointment.IdReasonAppointment);
+            context.ReasonDescription = reason?.Description;
+
+            // Obtener información del área
+            var area = await _ctaAppointmentAreaRepository.GetById(appointment.AreaId);
+            context.AreaDescription = area?.Description;
+
+            // Obtener correos y teléfonos según el tipo de notificación
+            await PopulateContactsByNotificationType(appointment, context, notificationType);
+
+            return context;
+        }
+        private async Task PopulateContactsByNotificationType(CtaAppointmentsRequest appointment, NotificationContext context, NotificationType notificationType)
+        {
+            var allContacts = await _contactRepository.GetAll();
+            var allUsers = await _userRepository.GetAll();
+            var allGuests = await _guestRepository.GetAll();
+
+            if (notificationType == NotificationType.CreationForUser || notificationType == NotificationType.UpdateForUser)
+            {
+                // Solo incluir al usuario asignado
+                var assignedUser = await _userRepository.GetById(appointment.AssignedUser);
+                if (assignedUser != null)
+                {
+                    if (!string.IsNullOrEmpty(assignedUser.Email))
+                        context.RecipientEmails.Add(assignedUser.Email);
+                    if (!string.IsNullOrEmpty(assignedUser.PhoneNumber))
+                        context.RecipientPhoneNumbers.Add(assignedUser.PhoneNumber);
+                }
+            }
+            else if (notificationType == NotificationType.CreationForParticipant || notificationType == NotificationType.UpdateForParticipant)
+            {
+                // Solo incluir a los participantes, sin el usuario asignado
+                if (appointment.AppointmentParticipants != null)
+                {
+                    foreach (var participant in appointment.AppointmentParticipants)
+                    {
+                        switch (participant.ParticipantTypeId)
+                        {
+                            case (int)AppointmentParticipant.Contact:
+                                var contact = allContacts.FirstOrDefault(c => c.Id == participant.ParticipantId);
+                                if (contact != null)
+                                {
+                                    if (!string.IsNullOrEmpty(contact.ContactEmail))
+                                        context.RecipientEmails.Add(contact.ContactEmail);
+                                    if (!string.IsNullOrEmpty(contact.ContactNumber))
+                                        context.RecipientPhoneNumbers.Add(contact.ContactNumber);
+                                }
+                                break;
+
+                            case (int)AppointmentParticipant.SystemUser:
+                                var user = allUsers.FirstOrDefault(u => u.Id == participant.ParticipantId);
+                                if (user != null && user.Id != appointment.AssignedUser) 
+                                {
+                                    if (!string.IsNullOrEmpty(user.Email))
+                                        context.RecipientEmails.Add(user.Email);
+                                    if (!string.IsNullOrEmpty(user.PhoneNumber))
+                                        context.RecipientPhoneNumbers.Add(user.PhoneNumber);
+                                }
+                                break;
+
+                            case (int)AppointmentParticipant.Guest:
+                                var guest = allGuests.FirstOrDefault(g => g.Id == participant.ParticipantId);
+                                if (guest != null)
+                                {
+                                    if (!string.IsNullOrEmpty(guest.Email))
+                                        context.RecipientEmails.Add(guest.Email);
+                                    if (!string.IsNullOrEmpty(guest.PhoneNumber))
+                                        context.RecipientPhoneNumbers.Add(guest.PhoneNumber);
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Para los demás tipos, incluir todos (comportamiento actual)
+                var assignedUser = await _userRepository.GetById(appointment.AssignedUser);
+                if (assignedUser != null)
+                {
+                    if (!string.IsNullOrEmpty(assignedUser.Email))
+                        context.RecipientEmails.Add(assignedUser.Email);
+                    if (!string.IsNullOrEmpty(assignedUser.PhoneNumber))
+                        context.RecipientPhoneNumbers.Add(assignedUser.PhoneNumber);
+                }
+
+                if (appointment.AppointmentParticipants != null)
+                {
+                    foreach (var participant in appointment.AppointmentParticipants)
+                    {
+                        switch (participant.ParticipantTypeId)
+                        {
+                            case (int)AppointmentParticipant.Contact:
+                                var contact = allContacts.FirstOrDefault(c => c.Id == participant.ParticipantId);
+                                if (contact != null)
+                                {
+                                    if (!string.IsNullOrEmpty(contact.ContactEmail))
+                                        context.RecipientEmails.Add(contact.ContactEmail);
+                                    if (!string.IsNullOrEmpty(contact.ContactNumber))
+                                        context.RecipientPhoneNumbers.Add(contact.ContactNumber);
+                                }
+                                break;
+
+                            case (int)AppointmentParticipant.SystemUser:
+                                var user = allUsers.FirstOrDefault(u => u.Id == participant.ParticipantId);
+                                if (user != null && user.Id != appointment.AssignedUser) 
+                                {
+                                    if (!string.IsNullOrEmpty(user.Email))
+                                        context.RecipientEmails.Add(user.Email);
+                                    if (!string.IsNullOrEmpty(user.PhoneNumber))
+                                        context.RecipientPhoneNumbers.Add(user.PhoneNumber);
+                                }
+                                break;
+
+                            case (int)AppointmentParticipant.Guest:
+                                var guest = allGuests.FirstOrDefault(g => g.Id == participant.ParticipantId);
+                                if (guest != null)
+                                {
+                                    if (!string.IsNullOrEmpty(guest.Email))
+                                        context.RecipientEmails.Add(guest.Email);
+                                    if (!string.IsNullOrEmpty(guest.PhoneNumber))
+                                        context.RecipientPhoneNumbers.Add(guest.PhoneNumber);
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
         }
 
         public async Task AddAppointmentParticipants(CtaAppointmentsRequest vm, int appointmentId, CtaAppointmentsResponse appointmentEntity)
@@ -136,7 +321,8 @@ namespace DataLayer.Models.Modulo_Citas
             { "CtaAppointmentReason",
                 "CtaMeetingPlace",
                 "CtaState",
-                "CtaAppointmentManagement"});
+                "CtaAppointmentManagement",
+                "Usuario"});
 
                 var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments.OrderByDescending(x => x.AppointmentId));
                 
@@ -164,20 +350,6 @@ namespace DataLayer.Models.Modulo_Citas
                 return appointment;
             }
             return null;
-        }
-
-        public async override Task<CtaAppointmentsResponse> Update(CtaAppointmentsRequest vm, int id)
-        {
-            var currentAppointment = await _appointmentRepository.GetById(id);
-            bool stateChanged = currentAppointment != null && currentAppointment.IdState != vm.IdState;
-
-            await base.Update(vm, id);
-
-            await UpdateAppointmentParticipants(vm, id, _mapper.Map<CtaAppointmentsResponse>(vm));
-
-            await SendAppointmentEmailsAsync(vm, vm.CompanyId, isUpdate: true, stateChanged);
-
-            return _mapper.Map<CtaAppointmentsResponse>(vm);
         }
 
         public async Task UpdateAppointmentParticipants(CtaAppointmentsRequest vm, int appointmentId, CtaAppointmentsResponse appointmentEntity)
@@ -377,154 +549,6 @@ namespace DataLayer.Models.Modulo_Citas
                 }
             }
         }
-
-        #region privateMethods
-        private async Task SendAppointmentEmailsAsync(CtaAppointmentsRequest appointment, long companyId, bool isUpdate = false, bool stateChanged = false)
-        {
-            var creator = await _userRepository.GetById(appointment.AssignedUser);
-            var appointmentState = await _ctaStateRepository.GetById(appointment.IdState);
-
-            if (isUpdate && stateChanged)
-            {
-                // Caso 1: Actualización con cambio de estado - se envía notificación de cambio de estado
-                await SendStateChangeEmailNotification(appointment, creator, appointmentState, companyId);
-            }
-            else
-            {
-                // Caso 2: Creación nueva o actualización sin cambio de estado - se envía notificación regular
-                await SendRegularEmailNotification(appointment, creator, appointmentState, companyId, isUpdate);
-            }
-
-        }
-
-        private async Task SendStateChangeEmailNotification(
-    CtaAppointmentsRequest appointment,
-    dynamic creator,
-    dynamic appointmentState,
-    long companyId)
-        {
-            var configStateChangeSubject = _configuration["EmailTemplates:DefaultTemplates:StateChangeTemplate:Subject"] ?? "Cambio de Estado en Cita";
-            var configStateChangeBody = _configuration["EmailTemplates:DefaultTemplates:StateChangeTemplate:Body"] ??
-                "<html><body><p>La cita {AppointmentCode} ha cambiado de estado de {PreviousState} a {NewState}.</p></body></html>";
-
-            var emailTemplateForStateChange = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdStateChange ?? 0);
-
-            var currentAppointment = await _appointmentRepository.GetById(appointment.AppointmentId);
-            var previousState = await _ctaStateRepository.GetById(currentAppointment.IdState);
-
-            var allParticipants = await GetAllEmailsForAppointment(appointment);
-
-            string stateChangeBody = emailTemplateForStateChange?.Body ?? configStateChangeBody;
-            stateChangeBody = _ctaEmailTemplateRepository.ReplaceEmailTemplateValues(stateChangeBody, appointment);
-
-            stateChangeBody = stateChangeBody.Replace("{PreviousState}", previousState?.Description ?? "Estado anterior")
-                                           .Replace("{NewState}", appointmentState?.Description ?? "Nuevo estado");
-
-            var emailData = new CtaEmailBackgroundJobData
-            {
-                CreatorEmails = new List<string> { creator.Email },
-                ContactEmails = allParticipants.ContactEmails,
-                UserEmails = allParticipants.UserEmails,
-                GuestEmails = allParticipants.GuestEmails,
-                AssignedSubject = emailTemplateForStateChange?.Subject ?? configStateChangeSubject,
-                AssignedBody = stateChangeBody,
-                ParticipantSubject = emailTemplateForStateChange?.Subject ?? configStateChangeSubject,
-                ParticipantBody = stateChangeBody,
-                CompanyId = companyId,
-                IsStateChange = true,
-                PreviousState = previousState?.Description,
-                NewState = appointmentState?.Description
-            };
-
-            _backgroundEmailService.QueueAppointmentEmails(emailData);
-        }
-
-        private async Task SendRegularEmailNotification(
-    CtaAppointmentsRequest appointment,
-    dynamic creator,
-    dynamic appointmentState,
-    long companyId,
-    bool isUpdate)
-        {
-            var configAssignedSubject = isUpdate
-                ? _configuration["EmailTemplates:DefaultTemplates:UpdatedAppointmentTemplate:Subject"]
-                : _configuration["EmailTemplates:DefaultTemplates:AssignedUserTemplate:Subject"];
-
-            var configAssignedBody = isUpdate
-                ? _configuration["EmailTemplates:DefaultTemplates:UpdatedAppointmentTemplate:Body"]
-                : _configuration["EmailTemplates:DefaultTemplates:AssignedUserTemplate:Body"];
-
-            var configParticipantSubject = isUpdate
-                ? _configuration["EmailTemplates:DefaultTemplates:UpdatedParticipantTemplate:Subject"]
-                : _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Subject"];
-
-            var configParticipantBody = isUpdate
-                ? _configuration["EmailTemplates:DefaultTemplates:UpdatedParticipantTemplate:Body"]
-                : _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Body"];
-
-            var emailTemplateIdToUse = isUpdate
-                ? appointmentState.EmailTemplateIdUpdate
-                : appointmentState.EmailTemplateIdIn;
-
-            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetById(emailTemplateIdToUse ?? 0);
-
-            var emailTemplateIdParticipantToUse = isUpdate
-                ? appointmentState.EmailTemplateIdUpdateParticipant
-                : appointmentState.EmailTemplateIdOut;
-
-            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetById(emailTemplateIdParticipantToUse ?? 0);
-
-            var allParticipantEmails = await GetAllEmailsForAppointment(appointment);
-
-            string assignedBody = emailTemplateForAssignedUser?.Body ?? configAssignedBody;
-            string participantBody = emailTemplateForParticipant?.Body ?? configParticipantBody;
-
-            assignedBody = _ctaEmailTemplateRepository.ReplaceEmailTemplateValues(assignedBody, appointment);
-            participantBody = _ctaEmailTemplateRepository.ReplaceEmailTemplateValues(participantBody, appointment);
-
-            var emailData = new CtaEmailBackgroundJobData
-            {
-                CreatorEmails = new List<string> { creator.Email },
-                ContactEmails = allParticipantEmails.ContactEmails,
-                UserEmails = allParticipantEmails.UserEmails,
-                GuestEmails = allParticipantEmails.GuestEmails,
-                AssignedSubject = emailTemplateForAssignedUser?.Subject ?? configAssignedSubject,
-                AssignedBody = assignedBody,
-                ParticipantSubject = emailTemplateForParticipant?.Subject ?? configParticipantSubject,
-                ParticipantBody = participantBody,
-                CompanyId = companyId,
-                IsUpdate = isUpdate
-            };
-
-            _backgroundEmailService.QueueAppointmentEmails(emailData);
-        }
-
-        private async Task<(List<string> ContactEmails, List<string> UserEmails, List<string> GuestEmails)>
-            GetAllEmailsForAppointment(CtaAppointmentsRequest appointment)
-        {
-            var allContacts = await _contactRepository.GetAll();
-            var allUsers = await _userRepository.GetAll();
-            var allGuests = await _guestRepository.GetAll();
-
-            var contactEmails = (appointment.AppointmentParticipants?
-                .Select(c => allContacts.FirstOrDefault(x =>
-                    c.ParticipantTypeId == (int)AppointmentParticipant.Contact && x.Id == c.ParticipantId)?.ContactEmail)
-                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-
-            var userEmails = (appointment.AppointmentParticipants?
-                .Select(u => allUsers.FirstOrDefault(x =>
-                    u.ParticipantTypeId == (int)AppointmentParticipant.SystemUser && x.Id == u.ParticipantId)?.Email)
-                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-
-            var guestEmails = (appointment.AppointmentParticipants?
-                .Select(g => allGuests.FirstOrDefault(x =>
-                    g.ParticipantTypeId == (int)AppointmentParticipant.Guest && x.Id == g.ParticipantId)?.Email)
-                .Where(email => !string.IsNullOrEmpty(email)) ?? new List<string>()).ToList();
-
-            return (contactEmails, userEmails, guestEmails);
-        }
-
-        #endregion
 
         public async Task<DetailMessage> ExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto)
         {

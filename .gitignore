@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Ignorar carpeta de Templates
+/Templates/
+
+# Ignorar scripts de PowerShell para generación de código
+*.ps1

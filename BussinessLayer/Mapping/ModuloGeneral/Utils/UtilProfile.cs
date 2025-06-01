@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BussinessLayer.DTOs.ModuloGeneral.Utils;
+using BussinessLayer.DTOs.ModuloGeneral.Utils.GnMessageType;
 using DataLayer.Models.ModuloGeneral;
+using DataLayer.Models.ModuloGeneral.Utils;
 
 namespace BussinessLayer.Mapping.ModuloGeneral.Utils
 {
@@ -12,6 +14,12 @@ namespace BussinessLayer.Mapping.ModuloGeneral.Utils
                .ReverseMap();
 
             CreateMap<GnRepeatUnit, GnRepeatUnitResponse>()
+              .ReverseMap();
+
+            CreateMap<GnMessageType, GnMessageTypeRequest>()
+              .ReverseMap();
+
+            CreateMap<GnMessageType, GnMessageTypeResponse>()
               .ReverseMap();
         }
     }

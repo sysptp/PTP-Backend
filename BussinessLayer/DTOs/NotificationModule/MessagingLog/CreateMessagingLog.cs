@@ -4,5 +4,5 @@ public record CreateMessagingLogDto(
     string ToPhoneNumber,
     string MessageContent,
     string MessageReponse,
-    int BussinesId
+    long BussinesId
 );

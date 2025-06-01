@@ -31,5 +31,6 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
         public bool HasError { get; set; }
         [JsonPropertyName("Privileges")]
         public List<GnPermisoResponseForLoggin>? GnPermisoResponses { get; set; }
+        public bool Requires2FA { get; set; }
     }
 }

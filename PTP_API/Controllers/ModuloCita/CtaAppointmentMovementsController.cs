@@ -32,6 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener movimientos de citas", Description = "Devuelve una lista de movimientos de citas o un movimiento específico si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllMovements([FromQuery] int? appointmentMovementId)
         {
             try

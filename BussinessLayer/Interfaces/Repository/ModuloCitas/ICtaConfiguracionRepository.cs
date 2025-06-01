@@ -5,5 +5,6 @@ namespace BussinessLayer.Interface.Repository.Modulo_Citas
 {
     public interface ICtaConfiguracionRepository : IGenericRepository<CtaConfiguration>
     {
+        CtaConfiguration? GetByCompanyId(long companyId);
     }
 }

@@ -99,6 +99,9 @@ using BussinessLayer.DTOs.ModuloGeneral.Smtp;
 using BussinessLayer.FluentValidations.ModuloGeneral.SMTP;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
 using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
+using BussinessLayer.DTOs.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.GnSecurityParameters;
+using YourProject.Validators;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -106,8 +109,9 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddValidationInjections(this IServiceCollection services)
         {
+            
             #region General
-          
+
             #region Auditoria
             services.AddScoped<IValidator<AleBitacoraRequest>, AleBitacoraRequestValidator>();
             services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
@@ -144,6 +148,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
             services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
             services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
+
+            services.AddValidatorsFromAssemblyContaining<TwoFactorVerificationRequestValidator>();
             #endregion
 
             #region HelpDesk
@@ -263,7 +269,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
             services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
             services.AddScoped<IValidator<GnRepeatUnitRequest>, GnRepeatUnitRequestValidation>();
-            
+            services.AddScoped<IValidator<GnSecurityParametersRequest>, GnSecurityParametersRequestValidator>();
             #endregion
 
             #region HelpDesk
@@ -325,6 +331,11 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaEmailTemplatesRequest>, CtaEmailTemplatesRequestValidator>();
             services.AddScoped<IValidator<CtaNotificationSettingsRequest>, CtaNotificationSettingsRequestValidator>();
 
+            #endregion
+
+            #region Seguridad y Autenticacion
+            services.AddScoped<IValidator<ForgotPasswordRequest>, ForgotPasswordRequestValidator>();
+            services.AddScoped<IValidator<ResetPasswordRequest>, ResetPasswordRequestValidator>();
             #endregion
         }
     } 

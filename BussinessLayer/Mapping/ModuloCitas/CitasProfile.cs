@@ -10,12 +10,16 @@ using BussinessLayer.DTOs.ModuloCitas.CtaEmailConfiguracion;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
 using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
 using BussinessLayer.DTOs.ModuloCitas.CtaMeetingPlace;
+using BussinessLayer.DTOs.ModuloCitas.CtaMessageTemplates;
 using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
+using BussinessLayer.DTOs.ModuloCitas.CtaNotificationTemplates;
 using BussinessLayer.DTOs.ModuloCitas.CtaParticipantTypes;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessionDetails;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
+using BussinessLayer.DTOs.ModuloCitas.CtaSmsTemplates;
 using BussinessLayer.DTOs.ModuloCitas.CtaState;
 using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
+using BussinessLayer.DTOs.ModuloCitas.CtaWhatsAppTemplates;
 using DataLayer.Models.Modulo_Citas;
 using DataLayer.Models.ModuloCitas;
 using DataLayer.Models.ModuloGeneral.Seguridad;
@@ -197,6 +201,26 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaParticipantTypesRequest, CtaParticipantTypes>()
             .ReverseMap();
             CreateMap<CtaParticipantTypesResponse, CtaParticipantTypes>()
+               .ReverseMap();
+
+            CreateMap<CtaMessageTemplates, CtaMessageTemplatesRequest>()
+            .ReverseMap();
+            CreateMap<CtaMessageTemplates, CtaMessageTemplatesResponse>()
+               .ReverseMap();
+
+            CreateMap<CtaNotificationTemplates, CtaNotificationTemplatesRequest>()
+            .ReverseMap();
+            CreateMap<CtaNotificationTemplates, CtaNotificationTemplatesResponse>()
+               .ReverseMap();
+
+            CreateMap<CtaSmsTemplates, CtaSmsTemplatesRequest>()
+            .ReverseMap();
+            CreateMap<CtaSmsTemplates, CtaSmsTemplatesResponse>()
+               .ReverseMap();
+
+            CreateMap<CtaWhatsAppTemplates, CtaWhatsAppTemplatesRequest>()
+            .ReverseMap();
+            CreateMap<CtaWhatsAppTemplates, CtaWhatsAppTemplatesResponse>()
                .ReverseMap();
         }
 

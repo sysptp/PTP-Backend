@@ -11,6 +11,8 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Menu
         public string? Icon { get; set; }
         public int ModuleID { get; set; }
         public int ParentMenuId { get; set; }
+        public bool IsVisible { get; set; }
+        public string? ImgUrl { get; set; }
         [JsonIgnore]
         public int IDMenu { get; set; }
     }

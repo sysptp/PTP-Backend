@@ -35,6 +35,9 @@ using BussinessLayer.Repository.ModuloGeneral.SMTP;
 using DataLayer.Models.ModuloCitas;
 using BussinessLayer.Repository.MessagingModule.Contracts;
 using BussinessLayer.Repository.MessagingModule.Implementations;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Utilis;
+using BussinessLayer.DTOs.ModuloGeneral.Utils.GnMessageType;
+using BussinessLayer.Repository.ModuloGeneral.Utils;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -74,6 +77,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICmpCampanaDetalleRepository, CmpCampanaDetalleRepository>();
             services.AddTransient<IGnRepeatUnitRepository, GnRepeatUnitRepository>();
             services.AddTransient<IGnSmtpConfiguracionRepository, GnSmtpConfiguracionRepository>();
+            services.AddTransient<IGnMessageTypeRepository, GnMessageTypeRepository>();
+            services.AddTransient<IGnSecurityParametersRepository, GnSecurityParametersRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();
@@ -159,6 +164,10 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICtaNotificationSettingsRepository, CtaNotificationSettingsRepository>();
             services.AddTransient<ICtaParticipantTypesRepository, CtaParticipantTypesRepository>();
             services.AddTransient<ICtaEmailTemplateVariablesRepository, CtaEmailTemplateVariablesRepository>();
+            services.AddTransient<ICtaMessageTemplatesRepository, CtaMessageTemplatesRepository>();
+            services.AddTransient<ICtaSmsTemplatesRepository, CtaSmsTemplatesRepository>();
+            services.AddTransient<ICtaWhatsAppTemplatesRepository, CtaWhatsAppTemplatesRepository>();
+            services.AddTransient<ICtaNotificationTemplatesRepository, CtaNotificationTemplatesRepository>();
 
 
             #endregion

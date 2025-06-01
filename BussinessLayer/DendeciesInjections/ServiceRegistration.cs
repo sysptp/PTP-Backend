@@ -77,6 +77,8 @@ using BussinessLayer.Services.WhatsAppService.Contracts;
 using BussinessLayer.Services.WhatsAppService.Implementations;
 using BussinessLayer.Services.NotificationModule.Contracts;
 using BussinessLayer.Services.NotificationModule.Implementations;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Utils;
+using BussinessLayer.Services.ModuloGeneral.Utils;
 #endregion
 
 public static class ServiceRegistration
@@ -86,6 +88,7 @@ public static class ServiceRegistration
         services.AddScoped<IMessagingConfigurationService, MessagingConfigurationService>();
         services.AddScoped<ITwilioService, TwilioService>();
         services.AddScoped<IMessagingLogService, MessagingLogService>();
+        services.AddScoped<IMessageService, MessageService>();
 
         #region Modulo Inventario
         services.AddScoped<IInvAlmacenesService, InvAlmacenesService>();
@@ -97,28 +100,28 @@ public static class ServiceRegistration
         //services.AddScoped<IAlmacenesService, AlmacenesService>();
         services.AddScoped<IContactosSuplidoresService, ContactosSuplidoresService>();
         services.AddScoped<ICotizacionService, CotizacionService>();
-       // services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
+        // services.AddScoped<ICuentaPorPagarService, CuentasPorPagarService>();
         services.AddScoped<ICuentasPorCobrar, CuentaPorCobrarService>();
         services.AddScoped<IDescuentoService, DescuentoService>();
         services.AddScoped<IDetalleCotizacionService, DetalleCotizacionService>();
         services.AddScoped<IDetalleCuentaPorPagar, DetalleCuentaPorPagarService>();
         services.AddScoped<IDetalleCuentasPorCobrar, DetalleCuentaPorCobrarService>();
         services.AddScoped<IDetalleFacturacionService, DetalleFacturacionService>();
-//services.AddScoped<IDetalleMovimientoAlmacenService, DetalleMovimientoAlmacenService>();
+        //services.AddScoped<IDetalleMovimientoAlmacenService, DetalleMovimientoAlmacenService>();
         services.AddScoped<IInvProductoImpuestoService, InvProductoImpuestoService>();
         //services.AddScoped<IMovimientoAlmacenService, MovimientoAlmacenService>();
         services.AddScoped<IPedidoService, PedidoService>();
         services.AddScoped<IPrecioService, PrecioService>();
         services.AddScoped<IProductoService, ProductoService>();
-         services.AddScoped<ITipoMovimientoService, TipoMovimientoService>();
+        services.AddScoped<ITipoMovimientoService, TipoMovimientoService>();
         services.AddScoped<ITipoPagoService, TipoPagoService>();
         services.AddScoped<ITipoTransaccionService, TipoTransaccionService>();
         services.AddScoped<IVersionService, VersionService>();
-       services.AddScoped<IAperturaCierreCajasService, AperturaCierreCajasService>();
+        services.AddScoped<IAperturaCierreCajasService, AperturaCierreCajasService>();
         services.AddScoped<ICajaService, CajaService>();
         services.AddScoped<ITipoMovimientoBancoService, TipoMovimientoBancoService>();
         services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
-       services.AddScoped<IImpuestosService, ImpuestosService>();
+        services.AddScoped<IImpuestosService, ImpuestosService>();
         services.AddScoped<IMovimientoBancoesService, MovimientoBancoesService>();
         services.AddScoped<IMonedasService, MonedasService>();
         services.AddScoped<ICuentaBancosService, CuentaBancosService>();
@@ -140,7 +143,7 @@ public static class ServiceRegistration
         services.AddScoped<IInvMovimientoAlmacenDetalleService, InvMovimientoAlmacenDetalleService>();
         services.AddScoped<IInvMovimientoSucursalDetalleService, InvMovimientoSucursalDetalleService>();
         services.AddScoped<IGnSmtpConfiguracionService, GnSmtpConfiguracionService>();
-       
+
         #endregion
 
         #region Auditoria
@@ -152,7 +155,7 @@ public static class ServiceRegistration
         services.AddScoped<IAleAuditTableControlService, AleAuditTableControlService>();
         #endregion
 
-      
+
 
         #region Modulo Contabilidad
         #endregion
@@ -187,9 +190,9 @@ public static class ServiceRegistration
         #endregion
 
         #region FluentValidation
-        services.AddScoped<IGenericValidation,GenericValidation>();
+        services.AddScoped<IGenericValidation, GenericValidation>();
         #endregion
-        
+
         #region ModuloCampaña
         services.AddScoped<ICmpClientService, CmpClientService>();
         services.AddScoped<ICmpServidoresSmtpService, CmpServidoresSmtpService>();
@@ -260,6 +263,11 @@ public static class ServiceRegistration
         services.AddScoped<ICtaEmailTemplateVariablesService, CtaEmailTemplateVariablesService>();
         services.AddSingleton<ICtaBackgroundEmailService, CtaBackgroundEmailService>();
         services.AddScoped<ICtaSessionEmailService, CtaSessionEmailService>();
+        services.AddScoped<ICtaMessageTemplatesService, CtaMessageTemplatesService>();
+        services.AddScoped<ICtaSmsTemplatesService, CtaSmsTemplatesService>();
+        services.AddScoped<ICtaWhatsAppTemplatesService, CtaWhatsAppTemplatesService>();
+        services.AddScoped<ICtaNotificationTemplatesService, CtaNotificationTemplatesService>();
+        services.AddScoped<ICtaUnifiedNotificationService, CtaUnifiedNotificationService>();
 
         #endregion
 
@@ -279,6 +287,8 @@ public static class ServiceRegistration
 
         services.AddScoped<IGnRepeatUnitService,GnRepeatUnitService>();
         services.AddScoped<IGnEmailService,GnEmailService>();
+        services.AddScoped<IGnMessageTypeService,GnMessageTypeService>();
+        services.AddScoped<IGnSecurityParametersService, GnSecurityParametersService>();
         #endregion 
 
         #region Otros

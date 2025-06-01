@@ -33,6 +33,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener razones de citas", Description = "Devuelve una lista de razones de citas o una razón específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllReasons([FromQuery] int? IdReason,long? companyId)
         {
             try

@@ -33,6 +33,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener lugares de reunión", Description = "Devuelve una lista de lugares de reunión o un lugar específico si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllMeetingPlaces([FromQuery] int? IdMeetingPlace,long? companyId)
         {
             try

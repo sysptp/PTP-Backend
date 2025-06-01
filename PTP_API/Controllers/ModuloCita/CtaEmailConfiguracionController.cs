@@ -32,6 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener configuraciones de correo electrónico", Description = "Devuelve una lista de configuraciones de correo electrónico o una configuración específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllConfigurations([FromQuery] int? IdEmailConfiguration, long? companyId)
         {
             try

@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaGuest;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de Invitados de Citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaGuestController : ControllerBase
     {
         private readonly ICtaGuestService _guestService;
@@ -30,6 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Invitados de Citas", Description = "Devuelve una lista de invitados o un invitado específico si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllGuests([FromQuery] int? id, long? companyId)
         {
             try

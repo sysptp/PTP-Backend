@@ -49,10 +49,6 @@ namespace BussinessLayer.FluentValidations.Account
             RuleFor(x => x.Phone)
                 .NotEmpty().WithMessage("El número de teléfono es requerido.");
 
-            RuleFor(x => x.Email)
-               .Must(email => EmailExists(email))
-               .WithMessage("Este email ya ha sido utilizado por otro usuario.");
-
             RuleFor(x => x.CompanyId)
                 .MustAsync(async (companyId, cancellation) => await CompanyExists(companyId))
                 .WithMessage("El ID de la compañía no es válido.");
@@ -64,11 +60,6 @@ namespace BussinessLayer.FluentValidations.Account
             RuleFor(x => x.SucursalId)
                .MustAsync(async (sucursalId, cancellation) => await SucursalExists(sucursalId))
                .WithMessage("El ID de la sucursal no es válido.");
-        }
-
-        private bool EmailExists(string email)
-        {
-            return _usuarioRepository.EmailExists(email);
         }
 
         private async Task<bool> CompanyExists(long companyId)

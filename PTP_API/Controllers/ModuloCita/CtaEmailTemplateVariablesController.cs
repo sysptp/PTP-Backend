@@ -1,4 +1,5 @@
-﻿using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateVariables;
+﻿using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplateVariables;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de Variables de Plantilla de Correo")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaEmailTemplateVariablesController : ControllerBase
     {
         private readonly ICtaEmailTemplateVariablesService _service;
@@ -26,6 +28,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "ObtenerVariables de Plantillas de Correos", Description = "Devuelve una lista de variables o una variable de Plantillas de Correos  específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllEmailTemplateVariables([FromQuery] long? id)
         {
             try
