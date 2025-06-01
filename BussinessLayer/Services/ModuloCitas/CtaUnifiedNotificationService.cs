@@ -78,27 +78,16 @@ namespace BussinessLayer.Services.ModuloCitas
             // 4. Enviar notificaciones basado en la configuración
             await ProcessNotificationsAsync(appointment, notificationTemplateId, config, context);
 
-            // Añade notificaciones en tiempo real con SignalR
-            if (notificationType == NotificationType.CreationForUser || notificationType == NotificationType.CreationForParticipant)
+            // 5. Enviar notificaciones en tiempo real con SignalR
+            try
             {
-                await _notificationService.NotifyAboutAppointmentCreationAsync(
-                    appointment,
-                    context.AssignedUserName);
+                await SendSignalRNotifications(appointment, notificationType, context);
             }
-            else if (notificationType == NotificationType.StateChangeForUser || notificationType == NotificationType.StateChangeForParticipant)
+            catch (Exception ex)
             {
-                await _notificationService.NotifyAboutAppointmentUpdateAsync(
-                    appointment,
-                    context.PreviousState,
-                    context.NewState);
+                _logger.LogError(ex, "Error sending SignalR notifications for appointment {AppointmentId}", appointment.AppointmentId);
             }
-            else if (notificationType == NotificationType.UpdateForUser || notificationType == NotificationType.UpdateForParticipant)
-            {
-                await _notificationService.NotifyAboutAppointmentUpdateAsync(
-                    appointment,
-                    null,
-                    null);
-            }
+
         }
 
         private long? GetNotificationTemplateId(CtaState state, NotificationType notificationType)
@@ -373,6 +362,43 @@ namespace BussinessLayer.Services.ModuloCitas
             });
         }
 
+        private string GetNotificationTitle(NotificationType notificationType)
+        {
+            return notificationType switch
+            {
+                NotificationType.CreationForUser => "Nueva Cita Asignada",
+                NotificationType.CreationForParticipant => "Invitación a Cita",
+                NotificationType.UpdateForUser => "Cita Actualizada",
+                NotificationType.UpdateForParticipant => "Actualización de Cita",
+                NotificationType.StateChangeForUser => "Cambio de Estado - Cita",
+                NotificationType.StateChangeForParticipant => "Cambio de Estado - Cita",
+                _ => "Notificación de Cita"
+            };
+        }
+
+        private string GetNotificationMessage(CtaAppointmentsRequest appointment, NotificationContext context, NotificationType notificationType)
+        {
+            var baseMessage = $"Cita: {appointment.AppointmentCode} - {appointment.Description}";
+
+            if (context.PreviousState != null && context.NewState != null)
+            {
+                return $"{baseMessage}. Estado: {context.PreviousState} → {context.NewState}";
+            }
+
+            return baseMessage;
+        }
+
+        private string GetNotificationType(NotificationType notificationType)
+        {
+            return notificationType switch
+            {
+                NotificationType.CreationForUser or NotificationType.CreationForParticipant => "appointment_created",
+                NotificationType.UpdateForUser or NotificationType.UpdateForParticipant => "appointment_updated",
+                NotificationType.StateChangeForUser or NotificationType.StateChangeForParticipant => "appointment_state_changed",
+                _ => "appointment_notification"
+            };
+        }
+
         private string ReplaceTemplateValues(string template, CtaAppointmentsRequest appointment, NotificationContext context)
         {
             return template
@@ -465,5 +491,102 @@ namespace BussinessLayer.Services.ModuloCitas
                 ? "AssignedUserTemplate"
                 : "ParticipantTemplate";
         }
+
+
+        private async Task SendSignalRNotifications(CtaAppointmentsRequest appointment, NotificationType notificationType, NotificationContext context)
+        {
+            var notificationData = new
+            {
+                AppointmentId = appointment.AppointmentId,
+                AppointmentCode = appointment.AppointmentCode,
+                Description = appointment.Description,
+                AppointmentDate = appointment.AppointmentDate,
+                AppointmentTime = appointment.AppointmentTime,
+                EndAppointmentTime = appointment.EndAppointmentTime,
+                MeetingPlace = context.MeetingPlaceDescription,
+                Reason = context.ReasonDescription,
+                Area = context.AreaDescription,
+                AssignedUser = context.AssignedUserName,
+                PreviousState = context.PreviousState,
+                NewState = context.NewState
+            };
+
+            // 1. Notificar al usuario asignado
+            if (notificationType == NotificationType.CreationForUser ||
+                notificationType == NotificationType.UpdateForUser ||
+                notificationType == NotificationType.StateChangeForUser)
+            {
+                await _notificationService.NotifyUserAsync(
+                    appointment.AssignedUser.ToString(),
+                    GetNotificationTitle(notificationType, true),
+                    GetNotificationMessage(appointment, context, notificationType, true),
+                    GetNotificationType(notificationType),
+                    notificationData
+                );
+            }
+
+            // 2. Notificar a los participantes
+            if (notificationType == NotificationType.CreationForParticipant ||
+                notificationType == NotificationType.UpdateForParticipant ||
+                notificationType == NotificationType.StateChangeForParticipant)
+            {
+                await NotifyParticipants(appointment, context, notificationType, notificationData);
+            }
+        }
+
+        private async Task NotifyParticipants(CtaAppointmentsRequest appointment, NotificationContext context, NotificationType notificationType, object notificationData)
+        {
+            // Obtener participantes de la cita
+            if (appointment.AppointmentParticipants != null)
+            {
+                foreach (var participant in appointment.AppointmentParticipants)
+                {
+                    // Solo notificar a usuarios del sistema (tipo 2)
+                    if (participant.ParticipantTypeId == 2) // SystemUser
+                    {
+                        await _notificationService.NotifyUserAsync(
+                            participant.ParticipantId.ToString(),
+                            GetNotificationTitle(notificationType, false),
+                            GetNotificationMessage(appointment, context, notificationType, false),
+                            GetNotificationType(notificationType),
+                            notificationData
+                        );
+                    }
+                }
+            }
+        }
+
+        private string GetNotificationTitle(NotificationType notificationType, bool isAssignedUser)
+        {
+            return notificationType switch
+            {
+                NotificationType.CreationForUser => "Nueva Cita Asignada",
+                NotificationType.CreationForParticipant => "Invitación a Cita",
+                NotificationType.UpdateForUser => "Cita Actualizada",
+                NotificationType.UpdateForParticipant => "Actualización de Cita",
+                NotificationType.StateChangeForUser => "Cambio de Estado - Cita",
+                NotificationType.StateChangeForParticipant => "Cambio de Estado - Cita",
+                _ => "Notificación de Cita"
+            };
+        }
+
+        private string GetNotificationMessage(CtaAppointmentsRequest appointment, NotificationContext context, NotificationType notificationType, bool isAssignedUser)
+        {
+            var baseMessage = $"Cita: {appointment.AppointmentCode} - {appointment.Description}";
+
+            var dateString = appointment.AppointmentDate.ToString("dd/MM/yyyy");
+            var startTime = appointment.AppointmentTime.ToString()?.Substring(0, 5) ?? "00:00";
+            var endTime = appointment.EndAppointmentTime.ToString()?.Substring(0, 5) ?? "00:00";
+
+            var dateTime = $"Fecha: {dateString} de {startTime} a {endTime}";
+
+            if (context.PreviousState != null && context.NewState != null)
+            {
+                return $"{baseMessage}. {dateTime}. Estado cambió de: {context.PreviousState} → {context.NewState}";
+            }
+
+            return $"{baseMessage}. {dateTime}";
+        }
+
     }
 }

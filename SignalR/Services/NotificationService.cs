@@ -18,11 +18,11 @@ namespace SignalR.Services
         {
             var notification = new
             {
-                Title = title,
-                Message = message,
-                Type = type,
-                Data = data,
-                Timestamp = DateTime.UtcNow
+                title = title,
+                message = message,
+                type = type,
+                data = data,
+                timestamp = DateTime.UtcNow
             };
 
             await _hubContext.Clients.Group($"User_{userId}").SendAsync("ReceiveNotification", notification);
@@ -48,7 +48,7 @@ namespace SignalR.Services
             var title = "Nueva Cita Creada";
             var message = $"Se ha creado una nueva cita con código {appointment.AppointmentCode}";
 
-            await NotifyUserAsync(appointment.AssignedUser.ToString(), title, message, "appointment_created", new
+            await NotifyUserAsync(appointment.AssignedUser.ToString(), title, message, "Cita Creada", new
             {
                 appointment.AppointmentId,
                 appointment.AppointmentCode,
@@ -58,7 +58,7 @@ namespace SignalR.Services
                 appointment.EndAppointmentTime
             });
 
-            await NotifyAppointmentParticipantsAsync(appointment.AppointmentId, title, message, "appointment_created");
+            await NotifyAppointmentParticipantsAsync(appointment.AppointmentId, title, message, "Cita Creada");
         }
 
         public async Task NotifyAboutAppointmentUpdateAsync(CtaAppointmentsRequest appointment, string previousState, string newState)
@@ -75,7 +75,7 @@ namespace SignalR.Services
                 message = $"La cita {appointment.AppointmentCode} ha sido actualizada";
             }
 
-            await NotifyUserAsync(appointment.AssignedUser.ToString(), title, message, "appointment_updated", new
+            await NotifyUserAsync(appointment.AssignedUser.ToString(), title, message, "Cita Actualizada", new
             {
                 appointment.AppointmentId,
                 appointment.AppointmentCode,
@@ -83,7 +83,7 @@ namespace SignalR.Services
                 NewState = newState
             });
 
-            await NotifyAppointmentParticipantsAsync(appointment.AppointmentId, title, message, "appointment_updated");
+            await NotifyAppointmentParticipantsAsync(appointment.AppointmentId, title, message, "Cita Actualizada");
         }
     }
 }

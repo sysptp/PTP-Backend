@@ -26,14 +26,23 @@ builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
-builder.Services.AddSignalR();
 
+builder.Services.AddSignalR()
+    .AddJsonProtocol(options =>
+    {
+        options.PayloadSerializerOptions.PropertyNamingPolicy = null; 
+        options.PayloadSerializerOptions.WriteIndented = true;
+    });
 
 var app = builder.Build();
 
-app.UseCors(policy => policy.AllowAnyHeader()
-                             .AllowAnyMethod()
-                             .AllowAnyOrigin());
+app.UseStaticFiles();
+
+app.UseCors(policy => policy
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .SetIsOriginAllowed(origin => true) 
+    .AllowCredentials());
 
 app.UseMiddleware<SqlInjectionProtectionMiddleware>();
 app.UseMiddleware<AuditingMiddleware>();

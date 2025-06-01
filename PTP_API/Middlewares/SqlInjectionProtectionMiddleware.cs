@@ -21,6 +21,18 @@ public class SqlInjectionProtectionMiddleware
             return;
         }
 
+        if (context.Request.Path.StartsWithSegments("/notificationHub"))
+        {
+            await _next(context);
+            return;
+        }
+
+        if (context.Request.Method == "OPTIONS")
+        {
+            await _next(context);
+            return;
+        }
+
         context.Request.EnableBuffering();
 
         if (context.Request.Method == HttpMethods.Post || context.Request.Method == HttpMethods.Put)

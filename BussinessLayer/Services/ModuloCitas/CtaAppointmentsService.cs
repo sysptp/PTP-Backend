@@ -75,8 +75,8 @@ namespace DataLayer.Models.Modulo_Citas
             var appointmentEntity = await base.Add(vm);
             await _sequenceService.UpdateSequenceAsync(vm.CompanyId, vm.AreaId);
 
-            var appointmentId = appointmentEntity.AppointmentId;
-            await AddAppointmentParticipants(vm, appointmentId, appointmentEntity);
+            vm.AppointmentId = appointmentEntity.AppointmentId;
+            await AddAppointmentParticipants(vm, vm.AppointmentId, appointmentEntity);
 
             if (!IsForSession)
             {
