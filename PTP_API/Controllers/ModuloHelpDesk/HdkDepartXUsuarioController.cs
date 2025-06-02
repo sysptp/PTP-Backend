@@ -35,7 +35,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Departamento por usuario de ticket", Description = "Obtiene una lista de todos los departamento de ticket o un departamento por usuario específico si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, long? companyId)
         {
             try
             {
@@ -55,7 +55,9 @@ namespace PTP_API.Controllers.ModuloHelpDesk
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<HdkDepartXUsuarioReponse>>.Success(departXUsuarioTickets, "Departamentos por usuario de ticket obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<HdkDepartXUsuarioReponse>>
+                        .Success(
+                        companyId.HasValue ? departXUsuarioTickets.Where(x => x.IdEmpresa == companyId) : departXUsuarioTickets, "Departamentos por usuario de ticket obtenidos correctamente."));
                 }
             }
             catch (Exception ex)

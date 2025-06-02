@@ -34,7 +34,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Archivo de Evidencia de ticket", Description = "Obtiene una lista de todos los departamento de ticket o un Archivo de Evidencia específico si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, long? companyId)
         {
             try
             {
@@ -54,7 +54,11 @@ namespace PTP_API.Controllers.ModuloHelpDesk
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<HdkFileEvidenceTicketReponse>>.Success(fileEvidenceTicketTickets, "Archivo de Evidencia de ticket obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<HdkFileEvidenceTicketReponse>>
+                        .Success(
+                        companyId.HasValue ? fileEvidenceTicketTickets.Where(x => x.IdEmpresa == companyId) 
+                        : fileEvidenceTicketTickets,
+                        "Archivo de Evidencia de ticket obtenidos correctamente."));
                 }
             }
             catch (Exception ex)

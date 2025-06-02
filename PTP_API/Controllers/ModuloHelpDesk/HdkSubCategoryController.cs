@@ -7,6 +7,7 @@ using FluentValidation;
 using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloHelpDesk;
 using BussinessLayer.Interfaces.Services.ModuloHelpDesk;
+using System.ComponentModel.Design;
 
 namespace PTP_API.Controllers.ModuloHelpDesk
 {
@@ -35,7 +36,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener SubCategoria de ticket", Description = "Obtiene una lista de todos los departamento de ticket o un SubCategoria específico si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id,long? companyId)
         {
             try
             {
@@ -55,7 +56,11 @@ namespace PTP_API.Controllers.ModuloHelpDesk
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<HdkSubCategoryReponse>>.Success(subCategoryTickets, "SubCategoria de ticket obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<HdkSubCategoryReponse>>
+                    .Success(
+                        companyId.HasValue ? 
+                        subCategoryTickets.Where(x => x.IdEmpresa == companyId) 
+                        : subCategoryTickets, "SubCategoria de ticket obtenidos correctamente."));
                 }
             }
             catch (Exception ex)

@@ -35,7 +35,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Prioridad de ticket", Description = "Obtiene una lista de todos las prioridades de ticket o un Prioridad específico si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, long? companyId)
         {
             try
             {
@@ -55,7 +55,10 @@ namespace PTP_API.Controllers.ModuloHelpDesk
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<HdkPrioridadTicketReponse>>.Success(prioridadTicketTickets, "Prioridades de ticket obtenidas correctamente."));
+                    return Ok(Response<IEnumerable<HdkPrioridadTicketReponse>>
+                        .Success(
+                        companyId.HasValue ? prioridadTicketTickets.Where(x => x.IdEmpresa == companyId)
+                        : prioridadTicketTickets, "Prioridades de ticket obtenidas correctamente."));
                 }
             }
             catch (Exception ex)
