@@ -34,7 +34,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Error Subcategoria de ticket", Description = "Obtiene una lista de todos los Error por Subcategoria o un error Subcategoria específica si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, long? companyId)
         {
             try
             {
@@ -54,7 +54,10 @@ namespace PTP_API.Controllers.ModuloHelpDesk
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<HdkErrorSubCategoryReponse>>.Success(errorSubCategoryTickets, "Error por Subcategoria de ticket obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<HdkErrorSubCategoryReponse>>
+                        .Success(
+                        companyId.HasValue ? errorSubCategoryTickets
+                        .Where(x => x.IdEmpresa == companyId) : errorSubCategoryTickets, "Error por Subcategoria de ticket obtenidos correctamente."));
                 }
             }
             catch (Exception ex)

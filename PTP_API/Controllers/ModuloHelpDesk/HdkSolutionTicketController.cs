@@ -35,7 +35,7 @@ namespace PTP_API.Controllers.ModuloHelpDesk
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Solución de Ticket", Description = "Obtiene una lista de todos los departamento de ticket o un Solucion específico si se proporciona un ID.")]
         [DisableBitacora]
-        public async Task<IActionResult> Get([FromQuery] int? id)
+        public async Task<IActionResult> Get([FromQuery] int? id, long? companyId)
         {
             try
             {
@@ -55,7 +55,10 @@ namespace PTP_API.Controllers.ModuloHelpDesk
                     {
                         return NoContent();
                     }
-                    return Ok(Response<IEnumerable<HdkSolutionTicketReponse>>.Success(solutionTicketTickets, "Solución de Ticket obtenidos correctamente."));
+                    return Ok(Response<IEnumerable<HdkSolutionTicketReponse>>
+                        .Success(
+                        companyId.HasValue ? solutionTicketTickets
+                        .Where(x => x.IdEmpresa == companyId) : solutionTicketTickets, "Solución de Ticket obtenidos correctamente."));
                 }
             }
             catch (Exception ex)
