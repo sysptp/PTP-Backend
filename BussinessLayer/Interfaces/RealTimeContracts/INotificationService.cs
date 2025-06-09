@@ -9,5 +9,7 @@ namespace BussinessLayer.Interfaces.RealTimeContracts
         Task NotifyAppointmentParticipantsAsync(int appointmentId, string title, string message, string type, object data = null);
         Task NotifyAboutAppointmentCreationAsync(CtaAppointmentsRequest appointment, string userName);
         Task NotifyAboutAppointmentUpdateAsync(CtaAppointmentsRequest appointment, string previousState, string newState);
+        Task PersistNotificationAsync(int userId, string title, string message, string type, object data, int? appointmentId);
+
     }
 }

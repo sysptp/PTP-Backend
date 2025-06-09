@@ -266,6 +266,7 @@ namespace DataLayer.PDbContex
         public DbSet<CtaNotificationTemplates> CtaNotificationTemplates { get; set; }
         public DbSet<CtaSmsTemplates> CtaSmsTemplates { get; set; }
         public DbSet<CtaWhatsAppTemplates> CtaWhatsAppTemplates { get; set; }
+        public DbSet<CtaUserNotificationReads> CtaUserNotificationReads { get; set; }
        
         #endregion
 

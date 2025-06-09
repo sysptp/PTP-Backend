@@ -1,8 +1,10 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SignalR Notifications Monitor - PTP API</title>
-    <script src="https://unpkg.com/@microsoft/signalr@latest/dist/browser/signalr.min.  js"></script>
+    <script src="https://unpkg.com/@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -163,7 +165,7 @@
                 background-color: #f8f9fa;
             }
 
-            .notification.appointment_created {
+            .notification.Nueva Cita Creada {
                 border-left: 4px solid #28a745;
                 background-color: #f8fff9;
             }
@@ -487,18 +489,18 @@
                 const div = document.createElement("div");
                 div.className = `notification ${notification.Type || ''}`;
 
-                const data = notification.data ?
-                    `<div class="notification-data">${JSON.stringify(notification.data, null, 2)}</div>` :
+                const data = notification.Data ?
+                    `<div class="notification-data">${JSON.stringify(notification.Data, null, 2)}</div>` :
                     '';
 
                 div.innerHTML = `
                             <div class="notification-header">
-                                <h4 class="notification-title">${notification.title || 'Sin título'}</h4>
-                                <span class="notification-time">${new Date(notification.timestamp).toLocaleString()}</span>
+                                <h4 class="notification-title">${notification.Title || 'Sin título'}</h4>
+                                <span class="notification-time">${new Date(notification.CreatedDate).toLocaleString()}</span>
                             </div>
-                            <div class="notification-message">${notification.message || 'Sin mensaje'}</div>
+                            <div class="notification-message">${notification.Message || 'Sin mensaje'}</div>
                             <div class="notification-meta">
-                                <span><strong>Tipo:</strong> ${notification.type || 'N/A'}</span>
+                                <span><strong>Tipo:</strong> ${notification.Type || 'N/A'}</span>
                                 <span><strong>Recibido:</strong> ${new Date().toLocaleTimeString()}</span>
                             </div>
                             ${data}
