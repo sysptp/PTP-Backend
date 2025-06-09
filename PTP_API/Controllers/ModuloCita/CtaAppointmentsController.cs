@@ -211,21 +211,21 @@ namespace PTP_API.Controllers.ModuloCita
             }
         }
 
-        [HttpPost("MarkNotificationAsRead")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerOperation(Summary = "Marca una notificación como leída")]
-        public async Task<IActionResult> MarkNotificationAsRead([FromBody] MarkNotificationReadRequest request)
-        {
-            try
-            {
-                await _notificationService.MarkAsRead(request.UserId, request.NotificationId, request.NotificationType);
-                return Ok(Response<string>.Success(null, "Notificación marcada como leída."));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, Response<string>.ServerError(ex.Message));
-            }
-        }
+        //[HttpPost("MarkNotificationAsRead")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[SwaggerOperation(Summary = "Marca una notificación como leída")]
+        //public async Task<IActionResult> MarkNotificationAsRead([FromBody] MarkNotificationReadRequest request)
+        //{
+        //    try
+        //    {
+        //        await _notificationService.MarkAsRead(request.UserId, request.NotificationId, request.NotificationType);
+        //        return Ok(Response<string>.Success(null, "Notificación marcada como leída."));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, Response<string>.ServerError(ex.Message));
+        //    }
+        //}
     }
 
 }

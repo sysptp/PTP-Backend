@@ -38,6 +38,7 @@ using BussinessLayer.Repository.MessagingModule.Implementations;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Utilis;
 using BussinessLayer.DTOs.ModuloGeneral.Utils.GnMessageType;
 using BussinessLayer.Repository.ModuloGeneral.Utils;
+using BussinessLayer.Interfaces.Services.ModuloCitas;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -168,6 +169,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICtaSmsTemplatesRepository, CtaSmsTemplatesRepository>();
             services.AddTransient<ICtaWhatsAppTemplatesRepository, CtaWhatsAppTemplatesRepository>();
             services.AddTransient<ICtaNotificationTemplatesRepository, CtaNotificationTemplatesRepository>();
+            services.AddTransient<ICtaUserNotificationReadsRepository, CtaUserNotificationReadsRepository>();
 
 
             #endregion
