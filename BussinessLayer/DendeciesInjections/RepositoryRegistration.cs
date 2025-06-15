@@ -15,7 +15,6 @@ using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
-using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 using BussinessLayer.Services.SCliente;
 using BussinessLayer.Repository.RCampaña;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
@@ -38,6 +37,7 @@ using BussinessLayer.Repository.MessagingModule.Implementations;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Utilis;
 using BussinessLayer.DTOs.ModuloGeneral.Utils.GnMessageType;
 using BussinessLayer.Repository.ModuloGeneral.Utils;
+using BussinessLayer.Services.RConfiguracion.ParametrosGenerales;
 
 namespace BussinessLayer.DendeciesInjections
 {
