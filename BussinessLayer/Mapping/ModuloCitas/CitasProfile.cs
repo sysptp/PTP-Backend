@@ -123,6 +123,7 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaSessionsRequest, CtaSessions>()
                 .ForPath(dest => dest.CompanyId, opt => opt.MapFrom(src => src.AppointmentInformation.CompanyId))
                 .ForPath(dest => dest.Description, opt => opt.MapFrom(src => src.AppointmentInformation.Description))
+                .ForPath(dest => dest.Title, opt => opt.MapFrom(src => src.AppointmentInformation.Title))
                 .ForMember(dest => dest.IdUser, opt => opt.MapFrom(src => src.AssignedUser))
                 .ReverseMap();
 

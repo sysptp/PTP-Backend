@@ -10,6 +10,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
         public int AppointmentId { get; set; }
         [JsonIgnore]
         public string? AppointmentCode { get; set; }
+        public string? Title { get; set; }
         public string? Description { get; set; }
         public int IdReasonAppointment { get; set; }
         public TimeSpan AppointmentTime { get; set; }

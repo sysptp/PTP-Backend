@@ -12,5 +12,6 @@ namespace BussinessLayer.Interfaces.Repositories
         Task<IEnumerable<TResult>> ExecuteStoredProcedureAsync<TResult>(string storedProcedure, object parameters = null);
         Task<List<T>> GetAllWithIncludeAsync(List<string> properties);
         Task<T> GetAllWithIncludeByIdAsync(object id, List<string>? properties = null);
+        Task AddRangeCompositeKeyAsync(IEnumerable<T> entities);
     }
 }
