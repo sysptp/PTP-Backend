@@ -6,6 +6,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
     {
         public int AppointmentId { get; set; }
         public string AppointmentCode { get; set; } = null!;
+        public string? Title { get; set; }
         public string? Description { get; set; }
         public int IdReasonAppointment { get; set; }
         public string? ReasonDescription { get; set; }
