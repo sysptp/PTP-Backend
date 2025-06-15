@@ -7,6 +7,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
     {
         public int IdSession { get; set; }
         public string? Description { get; set; }
+        public string? Title { get; set; }
         public int? AssignedUserId { get; set; }
         public string? AssignedUser { get; set; }
         public string? UserEmail { get; set; }
