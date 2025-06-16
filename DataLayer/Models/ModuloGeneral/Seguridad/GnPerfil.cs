@@ -8,6 +8,7 @@ namespace DataLayer.Models.ModuloGeneral.Seguridad
         [Key]
         public int Id { get; set; }
         public string Name { get; set; } = null!;
+        public string NormalizedName { get; set; } = null!;
         public string? Descripcion { get; set; }
         public long? IDEmpresa { get; set; }
     }

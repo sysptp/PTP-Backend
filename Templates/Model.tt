@@ -1,0 +1,21 @@
+using DataLayer.Models.Otros;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DataLayer.Models.ModuloCitas
+{
+    public class {{ModelName}} : AuditableEntities
+    {
+        {{#each Properties}}
+        {{#if IsPrimaryKey}}
+        [Key]
+        {{/if}}
+        public {{Type}}{{#if Nullable}}?{{/if}} {{Name}} { get; set; }{{#if (Type == "string" && !Nullable)}} = null!;{{/if}}
+        {{#if IsForeignKey}}
+        
+        [ForeignKey("{{Name}}")]
+        public virtual GnMessageType {{Name}}Navigation { get; set; }
+        {{/if}}
+        {{/each}}
+    }
+}

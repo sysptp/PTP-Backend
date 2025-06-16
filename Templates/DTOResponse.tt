@@ -1,0 +1,12 @@
+namespace BussinessLayer.DTOs.ModuloCitas.{{ModelName}}
+{
+    public class {{ModelName}}Response
+    {
+        {{#each Properties}}
+        public {{Type}}{{#if Nullable}}?{{/if}} {{Name}} { get; set; }{{#if (Type == "string" && !Nullable)}} = null!;{{/if}}
+        {{#if IsForeignKey}}
+        public string? {{Name}}Description { get; set; }
+        {{/if}}
+        {{/each}}
+    }
+}

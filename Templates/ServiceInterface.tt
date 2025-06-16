@@ -1,0 +1,10 @@
+using BussinessLayer.DTOs.ModuloCitas.{{ModelName}};
+using BussinessLayer.Interfaces.Services.IOtros;
+using DataLayer.Models.ModuloCitas;
+
+namespace BussinessLayer.Interfaces.Services.ModuloCitas
+{
+    public interface I{{ModelName}}Service : IGenericService<{{ModelName}}Request, {{ModelName}}Response, {{ModelName}}>
+    {
+    }
+}

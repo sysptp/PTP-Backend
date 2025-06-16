@@ -12,6 +12,7 @@ namespace DataLayer.Models.Modulo_Citas
         [Key]
         public int IdSession { get; set; }
         public string Description { get; set; } = null!;
+        public string? Title { get; set; }
         public int IdUser { get; set; }
         [ForeignKey("IdUser")]
         public Usuario? Usuario { get; set; }

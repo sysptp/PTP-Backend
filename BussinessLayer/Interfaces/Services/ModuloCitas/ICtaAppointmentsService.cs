@@ -12,5 +12,6 @@ namespace BussinessLayer.Interfaces.Services.ModuloCitas
         Task<List<AppointmentParticipantsResponse>> GetAllParticipants();
         Task<CtaAppointmentsResponse> AddAppointment(CtaAppointmentsRequest vm, bool IsForSession);
         Task<List<AppointmentParticipantsResponse>> GetAllParticipantsByAppointmentId(int appointmentId);
+        Task UpdateAppointmentParticipants(CtaAppointmentsRequest vm, int appointmentId, CtaAppointmentsResponse appointmentEntity);
     }
 }

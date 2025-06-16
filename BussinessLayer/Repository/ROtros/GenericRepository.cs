@@ -237,6 +237,73 @@ namespace BussinessLayer.Repository.ROtros
             }
         }
 
+        public virtual async Task AddRangeCompositeKeyAsync(IEnumerable<T> entities)
+        {
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    entity.FechaAdicion = DateTime.Now;
+                    entity.UsuarioAdicion = _tokenService.GetClaimValue("sub") ?? "UsuarioDesconocido";
+                }
+
+                var dbContext = _context;
+                var entityType = dbContext.Model.FindEntityType(typeof(T));
+                var tableName = entityType?.GetTableName();
+
+                if (string.IsNullOrEmpty(tableName))
+                {
+                    throw new InvalidOperationException("No se pudo determinar el nombre de la tabla.");
+                }
+
+                var columns = typeof(T).GetProperties()
+                    .Where(p => p.PropertyType.IsPrimitive ||
+                               p.PropertyType == typeof(string) ||
+                               p.PropertyType == typeof(DateTime) ||
+                               p.PropertyType == typeof(TimeSpan) ||
+                               (Nullable.GetUnderlyingType(p.PropertyType)?.IsPrimitive ?? false) ||
+                               Nullable.GetUnderlyingType(p.PropertyType) == typeof(DateTime) ||
+                               Nullable.GetUnderlyingType(p.PropertyType) == typeof(TimeSpan))
+                    .Select(p => p.Name);
+
+                var values = string.Join(", ", columns.Select(c => $"@{c}"));
+
+                var primaryKey = entityType.FindPrimaryKey();
+                if (primaryKey?.Properties?.Count > 1)
+                {
+                    var keyColumns = primaryKey.Properties.Select(p => p.Name).ToList();
+                    var whereConditions = string.Join(" AND ", keyColumns.Select(k => $"{k} = @{k}"));
+
+                    foreach (var entity in entities)
+                    {
+                        var checkSql = $"SELECT COUNT(1) FROM {tableName} WHERE {whereConditions}";
+
+                        using (var connection = new SqlConnection(_connectionString))
+                        {
+                            var exists = await connection.ExecuteScalarAsync<int>(checkSql, entity);
+                            if (exists > 0)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                }
+
+                var sql = $@"
+INSERT INTO {tableName} ({string.Join(", ", columns)})
+VALUES ({values})";
+
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.ExecuteAsync(sql, entities);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error en AddRangeCompositeKeyAsync: {ex.Message}", ex);
+            }
+        }
+
         public virtual async Task Update(T entity, Object id)
         {
             try

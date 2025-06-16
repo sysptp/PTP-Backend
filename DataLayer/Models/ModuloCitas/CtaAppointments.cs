@@ -12,6 +12,7 @@ namespace DataLayer.Models.Modulo_Citas
         public int AppointmentId { get; set; }
         public string AppointmentCode { get; set; } = null!;
         public string? Description { get; set; }
+        public string? Title { get; set; }
         public int IdReasonAppointment { get; set; }
         [ForeignKey("IdReasonAppointment")]
         public CtaAppointmentReason? CtaAppointmentReason { get; set; }
