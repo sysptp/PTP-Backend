@@ -12,12 +12,12 @@ on:
       environment:
         description: 'Choose environment to deploy'
         required: true
-        default: 'qa'
+        default: 'QA'
         type: choice
         options:
-          - dev
-          - qa
-          - production
+          - DEV
+          - QA
+          - PROD
 
 jobs:
   debug-info:
@@ -50,17 +50,17 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             ENV="${{ github.event.inputs.environment }}"
             echo "Manual trigger - Environment: $ENV"
-          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            ENV="production"
-            echo "Main branch detected - Environment: $ENV"
-          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            ENV="qa"
+          elif [[ "${{ github.ref }}" == "refs/heads/PROD" ]]; then
+            ENV="PROD"
+            echo "PROD branch detected - Environment: $ENV"
+          elif [[ "${{ github.ref }}" == "refs/heads/QA" ]]; then
+            ENV="QA"
             echo "QA branch detected - Environment: $ENV"
-          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            ENV="dev"
-            echo "Dev branch detected - Environment: $ENV"
+          elif [[ "${{ github.ref }}" == "refs/heads/DEV" ]]; then
+            ENV="DEV"
+            echo "DEV branch detected - Environment: $ENV"
           else
-            ENV="qa"
+            ENV="QA"
             echo "Default fallback - Environment: $ENV"
           fi
           
