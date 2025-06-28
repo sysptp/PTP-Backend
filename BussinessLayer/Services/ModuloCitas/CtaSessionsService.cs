@@ -171,6 +171,7 @@ namespace DataLayer.Models.Modulo_Citas
 
             // Asegurarse de que el ID de la cita esté establecido en el modelo
             vm.AppointmentId = appointmentId;
+            vm.AppointmentCode = currentAppointment.AppointmentCode;
 
             // Actualizar la entidad de cita
             await _appointmentRepository.Update(_mapper.Map<CtaAppointments>(vm), appointmentId);
