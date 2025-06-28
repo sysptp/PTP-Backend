@@ -258,6 +258,12 @@ jobs:
           cat ./publish/web.config
 
       - name: 🗑️ Clean remote directory
+        run: |
+          echo "🗑️ Creating empty directory for cleanup..."
+          mkdir -p ./empty
+          echo "✅ Empty directory created"
+        
+      - name: 🗑️ Deploy empty directory (clean remote)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ vars.FTP_SERVER }}
