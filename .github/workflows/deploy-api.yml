@@ -258,23 +258,57 @@ jobs:
 
       # Opcional: Limpiar directorio remoto antes del despliegue
       # ⚠️ CUIDADO: Esto eliminará TODOS los archivos del directorio remoto
-      - name: 🗑️ Clean remote directory (OPTIONAL)
-        run: |
-          echo "🗑️ Creating empty directory for cleanup..."
-          mkdir -p ./empty
-          echo "✅ Empty directory created"
-        
-      - name: 🗑️ Deploy empty directory (clean remote)
+      - name: 🛑 Create app_offline.htm to stop application
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ vars.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./empty/
+          local-dir: ./offline/
           server-dir: ${{ vars.SERVER_DIR }}
-          dangerous-clean-slate: true
           
-      - name: 📤 Deploy to SmarterASP FTP
+      - name: 🗑️ Clean remote directory (OPTIONAL)
+        run: |
+          echo "🗑️ Creating files for deployment..."
+          mkdir -p ./empty
+          mkdir -p ./offline
+          
+          # Crear app_offline.htm para detener la aplicación
+          cat > ./offline/app_offline.htm << 'OFFLINE'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Application Updating</title>
+              <style>
+                  body { font-family: Arial; text-align: center; padding: 50px; }
+                  h1 { color: #333; }
+              </style>
+          </head>
+          <body>
+              <h1>🔄 Application is being updated</h1>
+              <p>Please wait a moment while we deploy the latest version...</p>
+          </body>
+          </html>
+          OFFLINE
+          
+          echo "✅ Created app_offline.htm"
+        
+      - name: 🗑️ Deploy app_offline.htm (stop application)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ vars.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./offline/
+          server-dir: ${{ vars.SERVER_DIR }}
+          
+      - name: ⏱️ Wait for application to stop
+        run: |
+          echo "⏱️ Waiting for application to stop..."
+          sleep 10
+          echo "✅ Application should be stopped now"
+          
+      - name: 📤 Deploy new application files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ vars.FTP_SERVER }}
@@ -289,6 +323,22 @@ jobs:
             **/bin/Debug/**
             **/*.log
           dry-run: false
+          
+      - name: 🚀 Start application (remove app_offline.htm)
+        run: |
+          echo "🚀 Preparing to start application..."
+          # Crear un directorio vacío para la limpieza final
+          mkdir -p ./start_app
+          echo "Ready to remove app_offline.htm"
+        
+      - name: 🗑️ Remove app_offline.htm via FTP
+        run: |
+          echo "🗑️ Removing app_offline.htm to start the application..."
+          # Usamos curl para eliminar el archivo específico
+          curl -v --ftp-method singlecwd \
+               --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" \
+               -Q "DELE ${{ vars.SERVER_DIR }}app_offline.htm" \
+               "ftp://${{ vars.FTP_SERVER }}/" || echo "app_offline.htm might not exist or already deleted"
           
       - name: 🔍 Post-deployment verification
         run: |
