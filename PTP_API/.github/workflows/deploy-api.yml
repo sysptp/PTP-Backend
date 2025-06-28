@@ -1,0 +1,171 @@
+# .github/workflows/deploy-api.yml
+name: Deploy API to SmarterASP
+
+on:
+  push:
+    branches:
+      - dev        # Trigger DEV deployment (SITE 1)
+      - qa         # Trigger QA deployment (SITE QA) 
+      - main       # Trigger PRODUCTION deployment
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose environment to deploy'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - qa
+          - production
+
+jobs:
+  determine-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+    steps:
+      - name: Determine deployment environment
+        id: set-env
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            ENV="${{ github.event.inputs.environment }}"
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            ENV="production"
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
+            ENV="qa"
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            ENV="dev"
+          else
+            ENV="dev"
+          fi
+          
+          echo "environment=$ENV" >> $GITHUB_OUTPUT
+          echo "🎯 Deploying to: $ENV"
+
+  build-and-deploy:
+    needs: determine-environment
+    runs-on: ubuntu-latest
+    environment: ${{ needs.determine-environment.outputs.environment }}
+    
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup .NET 8
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: 📦 Restore dependencies
+        run: dotnet restore
+        
+      - name: 🔨 Build project
+        run: dotnet build --no-restore --configuration Release
+        
+      - name: 🧪 Run tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
+        continue-on-error: false
+        
+      - name: 📋 Configure environment settings
+        run: |
+          ENV="${{ needs.determine-environment.outputs.environment }}"
+          echo "Configuring for environment: $ENV"
+          
+          # Si tienes appsettings específicos por ambiente
+          if [ -f "appsettings.$ENV.json" ]; then
+            cp "appsettings.$ENV.json" "appsettings.Production.json"
+            echo "✅ Applied appsettings.$ENV.json"
+          fi
+        
+      - name: 🚀 Publish API
+        run: |
+          dotnet publish \
+            --no-build \
+            --configuration Release \
+            --output ./publish \
+            --runtime win-x64 \
+            --self-contained false
+            
+      - name: 🗂️ Prepare deployment files for SmarterASP
+        run: |
+          # Crear web.config optimizado para SmarterASP
+          cat > ./publish/web.config << 'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <location path="." inheritInChildApplications="false">
+              <system.webServer>
+                <handlers>
+                  <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+                </handlers>
+                <aspNetCore processPath="dotnet" 
+                           arguments=".\YourApiName.dll" 
+                           stdoutLogEnabled="true" 
+                           stdoutLogFile=".\logs\stdout" 
+                           hostingModel="inprocess">
+                  <environmentVariables>
+                    <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Production" />
+                  </environmentVariables>
+                </aspNetCore>
+                <httpErrors errorMode="Detailed" />
+                <asp scriptErrorSentToBrowser="true"/>
+              </system.webServer>
+            </location>
+          </configuration>
+          EOF
+          
+          echo "✅ Created web.config for SmarterASP"
+          
+          # Crear directorio de logs
+          mkdir -p ./publish/logs
+          
+          # Limpiar archivos innecesarios
+          find ./publish -name "*.pdb" -delete
+          find ./publish -name "appsettings.Development.json" -delete
+          
+          echo "📁 Files prepared for deployment:"
+          ls -la ./publish/
+
+      - name: 🗑️ Clean remote directory before deployment
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ vars.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./empty/
+          server-dir: ${{ vars.SERVER_DIR }}
+          dangerous-clean-slate: true
+          
+      - name: 📤 Deploy to SmarterASP FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ vars.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./publish/
+          server-dir: ${{ vars.SERVER_DIR }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/obj/**
+            **/bin/Debug/**
+            **/*.log
+          dry-run: false
+          
+      - name: ✅ Deployment Success
+        if: success()
+        run: |
+          ENV="${{ needs.determine-environment.outputs.environment }}"
+          echo "🎉 Successfully deployed to $ENV environment!"
+          echo "🌐 Environment: $ENV"
+          echo "🖥️  Server: ${{ vars.FTP_SERVER }}"
+          echo "📁 Directory: ${{ vars.SERVER_DIR }}"
+          echo "👤 User: ${{ secrets.FTP_USERNAME }}"
+          echo "🗑️ Remote directory was cleaned before deployment"
+          
+      - name: ❌ Deployment Failed
+        if: failure()
+        run: |
+          ENV="${{ needs.determine-environment.outputs.environment }}"
+          echo "💥 Deployment to $ENV failed!"
+          echo "Check the logs above for details."
