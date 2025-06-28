@@ -221,23 +221,23 @@ jobs:
           echo "📦 Project name detected: $PROJECT_NAME"
           
           # Crear web.config correcto para SmarterASP (outofprocess)
-          cat > ./publish/web.config << EOF
-          <?xml version="1.0" encoding="utf-8"?>
-          <configuration>
-            <location path="." inheritInChildApplications="false">
-              <system.webServer>
-                <handlers>
-                  <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
-                </handlers>
-                <aspNetCore processPath="dotnet" 
-                           arguments=".\${PROJECT_NAME}.dll" 
-                           stdoutLogEnabled="false" 
-                           stdoutLogFile=".\logs\stdout" 
-                           hostingModel="outofprocess" />
-              </system.webServer>
-            </location>
-          </configuration>
-          EOF
+          cat > ./publish/web.config <<EOF
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <location path="." inheritInChildApplications="false">
+    <system.webServer>
+      <handlers>
+        <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+      </handlers>
+      <aspNetCore processPath="dotnet" 
+                 arguments=".\${PROJECT_NAME}.dll" 
+                 stdoutLogEnabled="true" 
+                 stdoutLogFile=".\logs\stdout" 
+                 hostingModel="outofprocess" />
+    </system.webServer>
+  </location>
+</configuration>
+EOF
           
           echo "✅ Created web.config with outofprocess hosting model"
           
