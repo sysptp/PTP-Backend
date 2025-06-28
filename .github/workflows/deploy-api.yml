@@ -290,6 +290,25 @@ jobs:
             **/*.log
           dry-run: false
           
+      - name: 🔍 Post-deployment verification
+        run: |
+          echo "🔍 Verifying deployment files..."
+          echo "📁 Published files:"
+          find ./publish -type f -name "*.dll" -o -name "*.exe" -o -name "web.config" -o -name "appsettings*.json" | sort
+          echo ""
+          echo "📄 Final web.config content:"
+          cat ./publish/web.config
+          echo ""
+          echo "📦 Main DLL check:"
+          if [ -f "./publish/PTP_API.dll" ]; then
+            echo "✅ PTP_API.dll exists"
+            ls -la ./publish/PTP_API.dll
+          else
+            echo "❌ PTP_API.dll NOT found!"
+            echo "Available DLL files:"
+            find ./publish -name "*.dll"
+          fi
+          
       - name: ✅ Deployment Success
         if: success()
         run: |
