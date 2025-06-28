@@ -4,9 +4,9 @@ name: Deploy API to SmarterASP
 on:
   push:
     branches:
-      - dev
-      - qa         
-      - main
+      - DEV
+      - QA         
+      - PROD
   workflow_dispatch:
     inputs:
       environment:
