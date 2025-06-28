@@ -220,7 +220,7 @@ jobs:
           PROJECT_NAME=$(find ./PTP_API -name "*.csproj" | head -1 | xargs basename -s .csproj)
           echo "📦 Project name detected: $PROJECT_NAME"
           
-          # Crear web.config
+          # Crear web.config correcto para SmarterASP (outofprocess)
           cat > ./publish/web.config << EOF
           <?xml version="1.0" encoding="utf-8"?>
           <configuration>
@@ -231,19 +231,15 @@ jobs:
                 </handlers>
                 <aspNetCore processPath="dotnet" 
                            arguments=".\${PROJECT_NAME}.dll" 
-                           stdoutLogEnabled="true" 
+                           stdoutLogEnabled="false" 
                            stdoutLogFile=".\logs\stdout" 
-                           hostingModel="inprocess">
-                  <environmentVariables>
-                    <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Production" />
-                  </environmentVariables>
-                </aspNetCore>
+                           hostingModel="outofprocess" />
               </system.webServer>
             </location>
           </configuration>
           EOF
           
-          echo "✅ Created web.config"
+          echo "✅ Created web.config with outofprocess hosting model"
           
           # Crear directorio de logs
           mkdir -p ./publish/logs
@@ -256,8 +252,13 @@ jobs:
           ls -la ./publish/
           echo "📄 web.config content:"
           cat ./publish/web.config
+          echo ""
+          echo "📄 DLL files in publish directory:"
+          find ./publish -name "*.dll" | head -10
 
-      - name: 🗑️ Clean remote directory
+      # Opcional: Limpiar directorio remoto antes del despliegue
+      # ⚠️ CUIDADO: Esto eliminará TODOS los archivos del directorio remoto
+      - name: 🗑️ Clean remote directory (OPTIONAL)
         run: |
           echo "🗑️ Creating empty directory for cleanup..."
           mkdir -p ./empty
