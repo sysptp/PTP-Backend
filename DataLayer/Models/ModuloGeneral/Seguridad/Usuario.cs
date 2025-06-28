@@ -3,6 +3,7 @@ using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace DataLayer.Models.ModuloGeneral.Seguridad
 {
     public class Usuario : AuditableEntities
