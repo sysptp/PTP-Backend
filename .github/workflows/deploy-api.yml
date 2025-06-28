@@ -122,21 +122,43 @@ jobs:
           echo "Current directory: $(pwd)"
           echo "Contents:"
           ls -la
-          dotnet restore
+          
+          # Restore para toda la solución sin runtime específico
+          if [ -f "PTP_API.sln" ]; then
+            echo "📁 Found solution file, restoring..."
+            dotnet restore PTP_API.sln
+          else
+            echo "📁 No solution found, restoring individual project..."
+            dotnet restore
+          fi
           echo "✅ Dependencies restored"
           
       - name: 🔨 Build project
         working-directory: ./PTP_API
         run: |
           echo "🔨 Building project in PTP_API folder..."
-          dotnet build --no-restore --configuration Release --verbosity normal
+          
+          # Build para toda la solución
+          if [ -f "PTP_API.sln" ]; then
+            echo "🔨 Building solution..."
+            dotnet build PTP_API.sln --no-restore --configuration Release --verbosity normal
+          else
+            echo "🔨 Building individual project..."
+            dotnet build --no-restore --configuration Release --verbosity normal
+          fi
           echo "✅ Build completed"
           
       - name: 🧪 Run tests (optional - continues on error)
         working-directory: ./PTP_API
         run: |
           echo "🧪 Running tests in PTP_API folder..."
-          dotnet test --no-build --configuration Release --verbosity normal || echo "⚠️ Tests failed but continuing..."
+          
+          # Tests para toda la solución
+          if [ -f "PTP_API.sln" ]; then
+            dotnet test PTP_API.sln --no-build --configuration Release --verbosity normal || echo "⚠️ Tests failed but continuing..."
+          else
+            dotnet test --no-build --configuration Release --verbosity normal || echo "⚠️ Tests failed but continuing..."
+          fi
           echo "✅ Tests completed"
         
       - name: 📋 Configure environment settings
@@ -145,24 +167,49 @@ jobs:
           ENV="${{ needs.determine-environment.outputs.environment }}"
           echo "📋 Configuring for environment: $ENV"
           
-          if [ -f "appsettings.$ENV.json" ]; then
-            cp "appsettings.$ENV.json" "appsettings.Production.json"
-            echo "✅ Applied appsettings.$ENV.json"
+          # Buscar el proyecto API principal
+          API_PROJECT=$(find . -name "*.csproj" -path "*/PTP_API.csproj" | head -1)
+          if [ -z "$API_PROJECT" ]; then
+            API_PROJECT=$(find . -name "PTP_API.csproj" | head -1)
+          fi
+          
+          if [ ! -z "$API_PROJECT" ]; then
+            API_DIR=$(dirname "$API_PROJECT")
+            echo "📁 Found API project at: $API_PROJECT"
+            echo "📁 API directory: $API_DIR"
+            
+            if [ -f "$API_DIR/appsettings.$ENV.json" ]; then
+              cp "$API_DIR/appsettings.$ENV.json" "$API_DIR/appsettings.Production.json"
+              echo "✅ Applied appsettings.$ENV.json"
+            else
+              echo "ℹ️ No specific appsettings.$ENV.json found, using default"
+            fi
           else
-            echo "ℹ️ No specific appsettings.$ENV.json found, using default"
+            echo "⚠️ Could not find PTP_API.csproj"
           fi
         
       - name: 🚀 Publish API
         working-directory: ./PTP_API
         run: |
           echo "🚀 Publishing API from PTP_API folder..."
-          dotnet publish \
-            --no-build \
-            --configuration Release \
-            --output ../publish \
-            --runtime win-x64 \
-            --self-contained false \
-            --verbosity normal
+          
+          # Buscar el proyecto API específico (no la solución)
+          API_PROJECT=$(find . -name "PTP_API.csproj" | head -1)
+          
+          if [ ! -z "$API_PROJECT" ]; then
+            echo "📦 Publishing specific API project: $API_PROJECT"
+            dotnet publish "$API_PROJECT" \
+              --no-build \
+              --configuration Release \
+              --output ../publish \
+              --verbosity normal
+          else
+            echo "❌ Could not find PTP_API.csproj file!"
+            echo "Available .csproj files:"
+            find . -name "*.csproj"
+            exit 1
+          fi
+          
           echo "✅ Publish completed"
           
       - name: 🗂️ Prepare deployment files
