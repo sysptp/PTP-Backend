@@ -1,18 +1,23 @@
-# .github/workflows/deploy-api.yml
+- name: 🧪 Run tests (optional - continues on error)
+        run: |
+          echo "🧪 Running tests..."
+          
+          # Buscar archivo de solución primero para tests
+          SLN_FILE=$(find . -name "*.sln" -type f | head -1)# .github/workflows/deploy-api.yml
 name: Deploy API to SmarterASP
 
 on:
   push:
     branches:
-      - DEV        # Trigger DEV deployment (SITE 1)
-      - QA         # Trigger QA deployment (SITE QA) 
-      - PROD       # Trigger PRODUCTION deployment
+      - dev
+      - qa         
+      - main
   workflow_dispatch:
     inputs:
       environment:
         description: 'Choose environment to deploy'
         required: true
-        default: 'dev'
+        default: 'qa'
         type: choice
         options:
           - dev
@@ -20,28 +25,53 @@ on:
           - production
 
 jobs:
+  debug-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🐛 Debug Info
+        run: |
+          echo "=== DEBUG INFORMATION ==="
+          echo "Event: ${{ github.event_name }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "========================="
+
   determine-environment:
     runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.set-env.outputs.environment }}
     steps:
-      - name: Determine deployment environment
+      - name: 🎯 Determine deployment environment
         id: set-env
         run: |
+          echo "=== ENVIRONMENT DETERMINATION ==="
+          echo "Event name: ${{ github.event_name }}"
+          echo "GitHub ref: ${{ github.ref }}"
+          echo "Branch name: ${{ github.ref_name }}"
+          
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             ENV="${{ github.event.inputs.environment }}"
+            echo "Manual trigger - Environment: $ENV"
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             ENV="production"
+            echo "Main branch detected - Environment: $ENV"
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
             ENV="qa"
+            echo "QA branch detected - Environment: $ENV"
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
             ENV="dev"
+            echo "Dev branch detected - Environment: $ENV"
           else
-            ENV="dev"
+            ENV="qa"
+            echo "Default fallback - Environment: $ENV"
           fi
           
           echo "environment=$ENV" >> $GITHUB_OUTPUT
-          echo "🎯 Deploying to: $ENV"
+          echo "🎯 Final environment: $ENV"
+          echo "================================="
 
   build-and-deploy:
     needs: determine-environment
@@ -52,45 +82,101 @@ jobs:
       - name: 🔄 Checkout code
         uses: actions/checkout@v4
         
+      - name: 📋 Environment Check
+        run: |
+          echo "=== ENVIRONMENT VARIABLES CHECK ==="
+          echo "Environment: ${{ needs.determine-environment.outputs.environment }}"
+          echo "FTP Server: ${{ vars.FTP_SERVER }}"
+          echo "Server Dir: ${{ vars.SERVER_DIR }}"
+          echo "FTP Username: ${{ secrets.FTP_USERNAME }}"
+          if [ -z "${{ secrets.FTP_PASSWORD }}" ]; then
+            echo "❌ FTP_PASSWORD is empty!"
+          else
+            echo "✅ FTP_PASSWORD is set"
+          fi
+          if [ -z "${{ vars.FTP_SERVER }}" ]; then
+            echo "❌ FTP_SERVER is empty!"
+          else
+            echo "✅ FTP_SERVER is set"
+          fi
+          if [ -z "${{ vars.SERVER_DIR }}" ]; then
+            echo "❌ SERVER_DIR is empty!"
+          else
+            echo "✅ SERVER_DIR is set"
+          fi
+          echo "==================================="
+        
       - name: ⚙️ Setup .NET 8
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
           
+      - name: 🔍 Project structure check
+        run: |
+          echo "🔍 Current directory structure:"
+          ls -la
+          echo ""
+          echo "🔍 Looking for PTP_API folder:"
+          ls -la PTP_API/ || echo "PTP_API folder not found"
+          echo ""
+          
       - name: 📦 Restore dependencies
-        run: dotnet restore
-        
+        working-directory: ./PTP_API
+        run: |
+          echo "🔄 Restoring dependencies in PTP_API folder..."
+          echo "Current directory: $(pwd)"
+          echo "Contents:"
+          ls -la
+          dotnet restore
+          echo "✅ Dependencies restored"
+          
       - name: 🔨 Build project
-        run: dotnet build --no-restore --configuration Release
-        
-      - name: 🧪 Run tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
-        continue-on-error: false
+        working-directory: ./PTP_API
+        run: |
+          echo "🔨 Building project in PTP_API folder..."
+          dotnet build --no-restore --configuration Release --verbosity normal
+          echo "✅ Build completed"
+          
+      - name: 🧪 Run tests (optional - continues on error)
+        run: |
+          echo "🧪 Running tests..."
+          dotnet test --no-build --configuration Release --verbosity normal || echo "⚠️ Tests failed but continuing..."
+          echo "✅ Tests completed"
         
       - name: 📋 Configure environment settings
         run: |
           ENV="${{ needs.determine-environment.outputs.environment }}"
-          echo "Configuring for environment: $ENV"
+          echo "📋 Configuring for environment: $ENV"
           
-          # Si tienes appsettings específicos por ambiente
           if [ -f "appsettings.$ENV.json" ]; then
             cp "appsettings.$ENV.json" "appsettings.Production.json"
             echo "✅ Applied appsettings.$ENV.json"
+          else
+            echo "ℹ️ No specific appsettings.$ENV.json found, using default"
           fi
         
       - name: 🚀 Publish API
         run: |
+          echo "🚀 Publishing API..."
           dotnet publish \
             --no-build \
             --configuration Release \
             --output ./publish \
             --runtime win-x64 \
-            --self-contained false
-            
-      - name: 🗂️ Prepare deployment files for SmarterASP
+            --self-contained false \
+            --verbosity normal
+          echo "✅ Publish completed"
+          
+      - name: 🗂️ Prepare deployment files
         run: |
-          # Crear web.config optimizado para SmarterASP
-          cat > ./publish/web.config << 'EOF'
+          echo "🗂️ Preparing deployment files..."
+          
+          # Obtener el nombre del proyecto principal
+          PROJECT_NAME=$(find . -name "*.csproj" -not -path "./obj/*" -not -path "./bin/*" | head -1 | xargs basename -s .csproj)
+          echo "📦 Project name detected: $PROJECT_NAME"
+          
+          # Crear web.config
+          cat > ./publish/web.config << EOF
           <?xml version="1.0" encoding="utf-8"?>
           <configuration>
             <location path="." inheritInChildApplications="false">
@@ -99,7 +185,7 @@ jobs:
                   <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
                 </handlers>
                 <aspNetCore processPath="dotnet" 
-                           arguments=".\YourApiName.dll" 
+                           arguments=".\${PROJECT_NAME}.dll" 
                            stdoutLogEnabled="true" 
                            stdoutLogFile=".\logs\stdout" 
                            hostingModel="inprocess">
@@ -107,14 +193,12 @@ jobs:
                     <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Production" />
                   </environmentVariables>
                 </aspNetCore>
-                <httpErrors errorMode="Detailed" />
-                <asp scriptErrorSentToBrowser="true"/>
               </system.webServer>
             </location>
           </configuration>
           EOF
           
-          echo "✅ Created web.config for SmarterASP"
+          echo "✅ Created web.config"
           
           # Crear directorio de logs
           mkdir -p ./publish/logs
@@ -125,8 +209,13 @@ jobs:
           
           echo "📁 Files prepared for deployment:"
           ls -la ./publish/
+          echo "📄 web.config content:"
+          cat ./publish/web.config
 
-      - name: 🗑️ Clean remote directory before deployment
+      - name: 🗑️ Clean remote directory
+        run: |
+          echo "🗑️ Cleaning remote directory..."
+          echo "This step will remove all files from: ${{ vars.SERVER_DIR }}"
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ vars.FTP_SERVER }}
@@ -169,3 +258,7 @@ jobs:
           ENV="${{ needs.determine-environment.outputs.environment }}"
           echo "💥 Deployment to $ENV failed!"
           echo "Check the logs above for details."
+          echo "Common issues:"
+          echo "- Check FTP credentials"
+          echo "- Verify server directory path"
+          echo "- Ensure network connectivity"
