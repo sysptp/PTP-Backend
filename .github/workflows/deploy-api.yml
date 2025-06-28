@@ -1,9 +1,4 @@
-- name: 🧪 Run tests (optional - continues on error)
-        run: |
-          echo "🧪 Running tests..."
-          
-          # Buscar archivo de solución primero para tests
-          SLN_FILE=$(find . -name "*.sln" -type f | head -1)# .github/workflows/deploy-api.yml
+# .github/workflows/deploy-api.yml
 name: Deploy API to SmarterASP
 
 on:
@@ -138,12 +133,14 @@ jobs:
           echo "✅ Build completed"
           
       - name: 🧪 Run tests (optional - continues on error)
+        working-directory: ./PTP_API
         run: |
-          echo "🧪 Running tests..."
+          echo "🧪 Running tests in PTP_API folder..."
           dotnet test --no-build --configuration Release --verbosity normal || echo "⚠️ Tests failed but continuing..."
           echo "✅ Tests completed"
         
       - name: 📋 Configure environment settings
+        working-directory: ./PTP_API
         run: |
           ENV="${{ needs.determine-environment.outputs.environment }}"
           echo "📋 Configuring for environment: $ENV"
@@ -156,12 +153,13 @@ jobs:
           fi
         
       - name: 🚀 Publish API
+        working-directory: ./PTP_API
         run: |
-          echo "🚀 Publishing API..."
+          echo "🚀 Publishing API from PTP_API folder..."
           dotnet publish \
             --no-build \
             --configuration Release \
-            --output ./publish \
+            --output ../publish \
             --runtime win-x64 \
             --self-contained false \
             --verbosity normal
@@ -172,7 +170,7 @@ jobs:
           echo "🗂️ Preparing deployment files..."
           
           # Obtener el nombre del proyecto principal
-          PROJECT_NAME=$(find . -name "*.csproj" -not -path "./obj/*" -not -path "./bin/*" | head -1 | xargs basename -s .csproj)
+          PROJECT_NAME=$(find ./PTP_API -name "*.csproj" | head -1 | xargs basename -s .csproj)
           echo "📦 Project name detected: $PROJECT_NAME"
           
           # Crear web.config
@@ -213,9 +211,6 @@ jobs:
           cat ./publish/web.config
 
       - name: 🗑️ Clean remote directory
-        run: |
-          echo "🗑️ Cleaning remote directory..."
-          echo "This step will remove all files from: ${{ vars.SERVER_DIR }}"
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ vars.FTP_SERVER }}
