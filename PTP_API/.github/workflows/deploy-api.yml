@@ -4,9 +4,9 @@ name: Deploy API to SmarterASP
 on:
   push:
     branches:
-      - dev        # Trigger DEV deployment (SITE 1)
-      - qa         # Trigger QA deployment (SITE QA) 
-      - main       # Trigger PRODUCTION deployment
+      - DEV        # Trigger DEV deployment (SITE 1)
+      - QA         # Trigger QA deployment (SITE QA) 
+      - PROD       # Trigger PRODUCTION deployment
   workflow_dispatch:
     inputs:
       environment:
