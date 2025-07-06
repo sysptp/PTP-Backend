@@ -112,7 +112,7 @@ namespace DataLayer.Models.Modulo_Citas
             {
                 // Notificación de actualización para el usuario asignado
                 var userUpdateContext = await CreateNotificationContext(vm, NotificationType.UpdateForUser);
-                await _notificationService.SendNotificationsForAppointmentAsync(vm, NotificationType.UpdateForUser, userUpdateContext);
+                  await _notificationService.SendNotificationsForAppointmentAsync(vm, NotificationType.UpdateForUser, userUpdateContext);
 
                 // Notificación de actualización para los participantes
                 var participantsUpdateContext = await CreateNotificationContext(vm, NotificationType.UpdateForParticipant);
