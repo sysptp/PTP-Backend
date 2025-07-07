@@ -15,7 +15,7 @@ namespace BussinessLayer.Repository.ROtros
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : AuditableEntities
     {
-        private readonly ITokenService _tokenService;
+        protected readonly ITokenService _tokenService;
         protected readonly PDbContext _context;
         private readonly string _connectionString;
 
