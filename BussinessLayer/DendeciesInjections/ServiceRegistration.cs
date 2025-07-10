@@ -270,6 +270,8 @@ public static class ServiceRegistration
         services.AddScoped<ICtaUnifiedNotificationService, CtaUnifiedNotificationService>();
         services.AddScoped<ICtaUserNotificationReadsService, CtaUserNotificationReadsService>();
         services.AddScoped<ICtaBookingPortalService, CtaBookingPortalService>();
+        services.AddScoped<ICtaBookingPortalAreasService, CtaBookingPortalAreasService>();
+        services.AddScoped<ICtaBookingPortalUsersService, CtaBookingPortalUsersService>();
 
         #endregion
 

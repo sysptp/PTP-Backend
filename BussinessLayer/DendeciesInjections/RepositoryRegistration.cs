@@ -167,6 +167,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICtaNotificationTemplatesRepository, CtaNotificationTemplatesRepository>();
             services.AddTransient<ICtaUserNotificationReadsRepository, CtaUserNotificationReadsRepository>();
             services.AddScoped<ICtaBookingPortalConfigRepository, CtaBookingPortalConfigRepository>();
+            services.AddScoped<ICtaBookingPortalAreasRepository, CtaBookingPortalAreasRepository>();
+            services.AddScoped<ICtaBookingPortalUsersRepository, CtaBookingPortalUsersRepository>();
+
 
             #endregion
         }

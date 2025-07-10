@@ -14,6 +14,8 @@ namespace BussinessLayer.Services.ModuloCitas
     public class CtaBookingPortalService : ICtaBookingPortalService
     {
         private readonly ICtaBookingPortalConfigRepository _portalRepository;
+        private readonly ICtaBookingPortalUsersRepository _portalUsersRepository;
+        private readonly ICtaBookingPortalAreasRepository _portalAreasRepository;
         private readonly ICtaContactRepository _contactRepository;
         private readonly ICtaGuestRepository _guestRepository;
         private readonly ICtaAppointmentsService _appointmentService;
@@ -24,6 +26,8 @@ namespace BussinessLayer.Services.ModuloCitas
 
         public CtaBookingPortalService(
             ICtaBookingPortalConfigRepository portalRepository,
+            ICtaBookingPortalUsersRepository portalUsersRepository,
+            ICtaBookingPortalAreasRepository portalAreasRepository,
             ICtaContactRepository contactRepository,
             ICtaGuestRepository guestRepository,
             ICtaAppointmentsService appointmentService,
@@ -33,6 +37,8 @@ namespace BussinessLayer.Services.ModuloCitas
             IConfiguration configuration)
         {
             _portalRepository = portalRepository;
+            _portalUsersRepository = portalUsersRepository;
+            _portalAreasRepository = portalAreasRepository;
             _contactRepository = contactRepository;
             _guestRepository = guestRepository;
             _appointmentService = appointmentService;
@@ -44,14 +50,12 @@ namespace BussinessLayer.Services.ModuloCitas
 
         public async Task<BookingPortalConfigResponse> CreatePortalAsync(BookingPortalConfigRequest request)
         {
-            // Generar slug único si no se proporciona
             if (string.IsNullOrEmpty(request.CustomSlug))
             {
                 request.CustomSlug = await GenerateUniqueSlugAsync(request.PortalName);
             }
             else
             {
-                // Verificar que el slug no exista
                 if (await _portalRepository.SlugExistsAsync(request.CustomSlug))
                 {
                     throw new InvalidOperationException($"El slug '{request.CustomSlug}' ya está en uso.");
@@ -63,10 +67,178 @@ namespace BussinessLayer.Services.ModuloCitas
                 JsonSerializer.Serialize(request.AvailableDays) : null;
 
             var created = await _portalRepository.Add(entity);
-            var response = _mapper.Map<BookingPortalConfigResponse>(created);
+
+            // Crear relaciones Many-to-Many para usuarios
+            if (request.AssignedUserIds != null && request.AssignedUserIds.Any())
+            {
+                var portalUsers = request.AssignedUserIds.Select(userId => new CtaBookingPortalUsers
+                {
+                    PortalId = created.Id,
+                    UserId = userId,
+                    IsMainAssignee = userId == request.MainAssigneeUserId
+                }).ToList();
+
+                foreach (var portalUser in portalUsers)
+                {
+                    await _portalUsersRepository.Add(portalUser);
+                }
+            }
+
+            // Crear relaciones Many-to-Many para áreas
+            if (request.AreaIds != null && request.AreaIds.Any())
+            {
+                var portalAreas = request.AreaIds.Select(areaId => new CtaBookingPortalAreas
+                {
+                    PortalId = created.Id,
+                    AreaId = areaId,
+                    IsDefault = areaId == request.DefaultAreaId
+                }).ToList();
+
+                foreach (var portalArea in portalAreas)
+                {
+                    await _portalAreasRepository.Add(portalArea);
+                }
+            }
+
+            var response = await GetPortalByIdAsync(created.Id);
+            return response!;
+        }
+
+        public async Task<BookingPortalConfigResponse> UpdatePortalAsync(int id, BookingPortalConfigRequest request)
+        {
+            var existingPortal = await _portalRepository.GetById(id);
+            if (existingPortal == null)
+            {
+                throw new InvalidOperationException("Portal no encontrado");
+            }
+
+            if (!string.IsNullOrEmpty(request.CustomSlug) && request.CustomSlug != existingPortal.CustomSlug)
+            {
+                if (await _portalRepository.SlugExistsAsync(request.CustomSlug, id))
+                {
+                    throw new InvalidOperationException($"El slug '{request.CustomSlug}' ya está en uso.");
+                }
+            }
+
+            _mapper.Map(request, existingPortal);
+            existingPortal.AvailableDaysJson = request.AvailableDays != null ?
+                JsonSerializer.Serialize(request.AvailableDays) : null;
+
+            await _portalRepository.Update(existingPortal, id);
+
+            // Actualizar relaciones Many-to-Many para usuarios
+            await _portalUsersRepository.DeleteByPortalIdAsync(id);
+            if (request.AssignedUserIds != null && request.AssignedUserIds.Any())
+            {
+                var portalUsers = request.AssignedUserIds.Select(userId => new CtaBookingPortalUsers
+                {
+                    PortalId = id,
+                    UserId = userId,
+                    IsMainAssignee = userId == request.MainAssigneeUserId
+                }).ToList();
+
+                foreach (var portalUser in portalUsers)
+                {
+                    await _portalUsersRepository.Add(portalUser);
+                }
+            }
+
+            // Actualizar relaciones Many-to-Many para áreas
+            await _portalAreasRepository.DeleteByPortalIdAsync(id);
+            if (request.AreaIds != null && request.AreaIds.Any())
+            {
+                var portalAreas = request.AreaIds.Select(areaId => new CtaBookingPortalAreas
+                {
+                    PortalId = id,
+                    AreaId = areaId,
+                    IsDefault = areaId == request.DefaultAreaId
+                }).ToList();
+
+                foreach (var portalArea in portalAreas)
+                {
+                    await _portalAreasRepository.Add(portalArea);
+                }
+            }
+
+            var response = await GetPortalByIdAsync(id);
+            return response!;
+        }
+
+        public async Task DeletePortalAsync(int id)
+        {
+            var existingPortal = await _portalRepository.GetById(id);
+            if (existingPortal == null)
+            {
+                throw new InvalidOperationException("Portal no encontrado");
+            }
+
+            // Eliminar relaciones Many-to-Many
+            await _portalUsersRepository.DeleteByPortalIdAsync(id);
+            await _portalAreasRepository.DeleteByPortalIdAsync(id);
+
+            // Eliminar el portal principal
+            await _portalRepository.Delete(id);
+        }
+
+        public async Task<BookingPortalConfigResponse?> GetPortalByIdAsync(int id)
+        {
+            var portal = await _portalRepository.GetById(id);
+            if (portal == null) return null;
+
+            var response = _mapper.Map<BookingPortalConfigResponse>(portal);
+
+            // Cargar usuarios asignados
+            var portalUsers = await _portalUsersRepository.GetByPortalIdAsync(id);
+            response.AssignedUsers = portalUsers.Select(pu => new BookingPortalUserResponse
+            {
+                Id = pu.Id,
+                PortalId = pu.PortalId,
+                UserId = pu.UserId,
+                UserName = pu.User?.Nombre + " " + pu.User?.Apellido,
+                UserEmail = pu.User?.Email,
+                IsMainAssignee = pu.IsMainAssignee
+            }).ToList();
+
+            // Cargar áreas asignadas
+            var portalAreas = await _portalAreasRepository.GetByPortalIdAsync(id);
+            response.Areas = portalAreas.Select(pa => new BookingPortalAreaResponse
+            {
+                Id = pa.Id,
+                PortalId = pa.PortalId,
+                AreaId = pa.AreaId,
+                AreaName = pa.Area?.Description,
+                AreaDescription = pa.Area?.Description,
+                IsDefault = pa.IsDefault
+            }).ToList();
+
             response.PublicUrl = GeneratePublicUrl(response.CustomSlug);
 
             return response;
+        }
+
+        public async Task<BookingPortalConfigResponse?> GetPortalBySlugAsync(string slug)
+        {
+            var portal = await _portalRepository.GetBySlugAsync(slug);
+            if (portal == null) return null;
+
+            return await GetPortalByIdAsync(portal.Id);
+        }
+
+        public async Task<List<BookingPortalConfigResponse>> GetPortalsByCompanyAsync(long companyId)
+        {
+            var portals = await _portalRepository.GetActivePortalsByCompanyAsync(companyId);
+            var responses = new List<BookingPortalConfigResponse>();
+
+            foreach (var portal in portals)
+            {
+                var response = await GetPortalByIdAsync(portal.Id);
+                if (response != null)
+                {
+                    responses.Add(response);
+                }
+            }
+
+            return responses;
         }
 
         public async Task<ClientAuthenticationResponse> AuthenticateClientAsync(ClientAuthenticationRequest request)
@@ -81,7 +253,6 @@ namespace BussinessLayer.Services.ModuloCitas
                 };
             }
 
-            // Si el portal no requiere autenticación, permitir acceso
             if (!portal.RequireAuthentication)
             {
                 return new ClientAuthenticationResponse
@@ -93,7 +264,6 @@ namespace BussinessLayer.Services.ModuloCitas
                 };
             }
 
-            // Buscar en contactos
             var contacts = await _contactRepository.GetAll();
             var contact = contacts.FirstOrDefault(c =>
                 c.ContactNumber == request.PhoneNumber &&
@@ -115,7 +285,6 @@ namespace BussinessLayer.Services.ModuloCitas
                 };
             }
 
-            // Buscar en invitados
             var guests = await _guestRepository.GetAll();
             var guest = guests.FirstOrDefault(g =>
                 g.PhoneNumber == request.PhoneNumber &&
@@ -153,7 +322,6 @@ namespace BussinessLayer.Services.ModuloCitas
                 throw new InvalidOperationException("Portal no encontrado");
             }
 
-            // Si requiere autenticación, validar token
             if (portal.RequireAuthentication && string.IsNullOrEmpty(request.AuthToken))
             {
                 throw new UnauthorizedAccessException("Se requiere autenticación");
@@ -165,22 +333,23 @@ namespace BussinessLayer.Services.ModuloCitas
                 AvailableSlots = new List<TimeSlot>()
             };
 
-            // Verificar si el día está disponible
             var availableDays = !string.IsNullOrEmpty(portal.AvailableDaysJson) ?
                 JsonSerializer.Deserialize<List<int>>(portal.AvailableDaysJson) : null;
 
             if (availableDays != null && !availableDays.Contains((int)request.Date.DayOfWeek))
             {
-                return response; // Día no disponible
+                return response;
             }
 
-            // Generar slots disponibles
             var startTime = portal.StartTime ?? new TimeSpan(9, 0, 0);
             var endTime = portal.EndTime ?? new TimeSpan(17, 0, 0);
             var duration = portal.DefaultAppointmentDuration ?? new TimeSpan(1, 0, 0);
 
-            // Obtener citas existentes para ese día
-            var existingAppointments = await GetExistingAppointmentsForDate(request.Date, portal.AssignedUserId, portal.CompanyId);
+            // Obtener usuario principal del portal
+            var mainAssignee = await _portalUsersRepository.GetMainAssigneeByPortalIdAsync(portal.Id);
+            int assignedUserId = mainAssignee?.UserId ?? 0;
+
+            var existingAppointments = await GetExistingAppointmentsForDate(request.Date, assignedUserId, portal.CompanyId);
 
             var currentTime = startTime;
             while (currentTime.Add(duration) <= endTime)
@@ -220,7 +389,6 @@ namespace BussinessLayer.Services.ModuloCitas
             int participantId;
             int participantTypeId;
 
-            // Si requiere autenticación, validar y obtener participante existente
             if (portal.RequireAuthentication)
             {
                 if (string.IsNullOrEmpty(request.AuthToken))
@@ -239,7 +407,6 @@ namespace BussinessLayer.Services.ModuloCitas
             }
             else
             {
-                // Crear nuevo participante como guest
                 if (string.IsNullOrEmpty(request.ClientName) || string.IsNullOrEmpty(request.ClientPhone))
                 {
                     return new PublicAppointmentResponse
@@ -264,7 +431,10 @@ namespace BussinessLayer.Services.ModuloCitas
                 participantTypeId = (int)AppointmentParticipant.Guest;
             }
 
-            // Crear la cita
+            // Obtener usuario principal y área por defecto
+            var mainAssignee = await _portalUsersRepository.GetMainAssigneeByPortalIdAsync(portal.Id);
+            var defaultArea = await _portalAreasRepository.GetDefaultAreaByPortalIdAsync(portal.Id);
+
             var appointmentRequest = new CtaAppointmentsRequest
             {
                 Description = request.Description ?? "Cita agendada desde portal público",
@@ -277,8 +447,8 @@ namespace BussinessLayer.Services.ModuloCitas
                 IsConditionedTime = true,
                 EndAppointmentTime = request.AppointmentTime.Add(portal.DefaultAppointmentDuration ?? new TimeSpan(1, 0, 0)),
                 NotificationTime = new TimeSpan(0, 30, 0),
-                AreaId = portal.AreaId,
-                AssignedUser = portal.AssignedUserId,
+                AreaId = defaultArea?.AreaId,
+                AssignedUser = mainAssignee?.UserId ?? 1,
                 CompanyId = portal.CompanyId,
                 AppointmentParticipants = new List<AppointmentParticipantsRequest>
                 {
@@ -314,41 +484,6 @@ namespace BussinessLayer.Services.ModuloCitas
             }
         }
 
-        // Métodos auxiliares privados
-        private async Task<List<dynamic>> GetExistingAppointmentsForDate(DateTime date, int userId, long companyId)
-        {
-            // Aquí implementarías la lógica para obtener citas existentes
-            // Por simplicidad, retorno una lista vacía
-            return new List<dynamic>();
-        }
-
-        private string GenerateAuthToken(string phoneNumber, int portalId)
-        {
-            var tokenData = $"{phoneNumber}:{portalId}:{DateTime.UtcNow:yyyy-MM-dd}";
-            return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(tokenData));
-        }
-
-        private (int ClientId, string ClientType) ValidateAuthToken(string authToken)
-        {
-            try
-            {
-                var tokenData = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
-                // Implementar validación real del token
-                // Por ahora retorno valores dummy
-                return (1, "Contact");
-            }
-            catch
-            {
-                throw new UnauthorizedAccessException("Token inválido");
-            }
-        }
-
-        private string GeneratePublicUrl(string slug)
-        {
-            var baseUrl = _configuration["ApplicationUrl"] ?? "https://localhost";
-            return $"{baseUrl}/booking/{slug}";
-        }
-
         public async Task<string> GenerateUniqueSlugAsync(string baseName)
         {
             var slug = baseName.ToLower()
@@ -368,30 +503,35 @@ namespace BussinessLayer.Services.ModuloCitas
             return slug;
         }
 
-        // Implementar otros métodos de la interfaz...
-        public Task<BookingPortalConfigResponse> UpdatePortalAsync(int id, BookingPortalConfigRequest request)
+        // Métodos auxiliares privados
+        private async Task<List<dynamic>> GetExistingAppointmentsForDate(DateTime date, int userId, long companyId)
         {
-            throw new NotImplementedException();
+            return new List<dynamic>();
         }
 
-        public Task DeletePortalAsync(int id)
+        private string GenerateAuthToken(string phoneNumber, int portalId)
         {
-            throw new NotImplementedException();
+            var tokenData = $"{phoneNumber}:{portalId}:{DateTime.UtcNow:yyyy-MM-dd}";
+            return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(tokenData));
         }
 
-        public Task<BookingPortalConfigResponse?> GetPortalByIdAsync(int id)
+        private (int ClientId, string ClientType) ValidateAuthToken(string authToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var tokenData = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
+                return (1, "Contact");
+            }
+            catch
+            {
+                throw new UnauthorizedAccessException("Token inválido");
+            }
         }
 
-        public Task<BookingPortalConfigResponse?> GetPortalBySlugAsync(string slug)
+        private string GeneratePublicUrl(string slug)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<BookingPortalConfigResponse>> GetPortalsByCompanyAsync(long companyId)
-        {
-            throw new NotImplementedException();
+            var baseUrl = _configuration["ApplicationUrl"] ?? "https://localhost";
+            return $"{baseUrl}/booking/{slug}";
         }
     }
 }
