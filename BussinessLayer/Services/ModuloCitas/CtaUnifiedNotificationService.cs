@@ -14,6 +14,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Email;
 using BussinessLayer.DTOs.ModuloCitas;
 using Microsoft.Extensions.Configuration;
 using BussinessLayer.Interfaces.RealTimeContracts;
+using BussinessLayer.DTOs.ModuloCitas.CtaUserNotificationReads;
 
 namespace BussinessLayer.Services.ModuloCitas
 {
@@ -362,39 +363,13 @@ namespace BussinessLayer.Services.ModuloCitas
             });
         }
 
-        private string GetNotificationTitle(NotificationType notificationType)
-        {
-            return notificationType switch
-            {
-                NotificationType.CreationForUser => "Nueva Cita Asignada",
-                NotificationType.CreationForParticipant => "Invitación a Cita",
-                NotificationType.UpdateForUser => "Cita Actualizada",
-                NotificationType.UpdateForParticipant => "Actualización de Cita",
-                NotificationType.StateChangeForUser => "Cambio de Estado - Cita",
-                NotificationType.StateChangeForParticipant => "Cambio de Estado - Cita",
-                _ => "Notificación de Cita"
-            };
-        }
-
-        private string GetNotificationMessage(CtaAppointmentsRequest appointment, NotificationContext context, NotificationType notificationType)
-        {
-            var baseMessage = $"Cita: {appointment.AppointmentCode} - {appointment.Description}";
-
-            if (context.PreviousState != null && context.NewState != null)
-            {
-                return $"{baseMessage}. Estado: {context.PreviousState} → {context.NewState}";
-            }
-
-            return baseMessage;
-        }
-
         private string GetNotificationType(NotificationType notificationType)
         {
             return notificationType switch
             {
-                NotificationType.CreationForUser or NotificationType.CreationForParticipant => "appointment_created",
-                NotificationType.UpdateForUser or NotificationType.UpdateForParticipant => "appointment_updated",
-                NotificationType.StateChangeForUser or NotificationType.StateChangeForParticipant => "appointment_state_changed",
+                NotificationType.CreationForUser or NotificationType.CreationForParticipant => "Nueva Cita Creada",
+                NotificationType.UpdateForUser or NotificationType.UpdateForParticipant => "Cita Actualizada",
+                NotificationType.StateChangeForUser or NotificationType.StateChangeForParticipant => "El estado de la cita fue actualizado",
                 _ => "appointment_notification"
             };
         }
@@ -508,8 +483,12 @@ namespace BussinessLayer.Services.ModuloCitas
                 Area = context.AreaDescription,
                 AssignedUser = context.AssignedUserName,
                 PreviousState = context.PreviousState,
-                NewState = context.NewState
+                NewState = context.NewState,
+                CompanyId = appointment.CompanyId
             };
+
+            var usersToNotify = new List<int>();
+            var participantUserIds = new List<int>();
 
             // 1. Notificar al usuario asignado
             if (notificationType == NotificationType.CreationForUser ||
@@ -523,6 +502,8 @@ namespace BussinessLayer.Services.ModuloCitas
                     GetNotificationType(notificationType),
                     notificationData
                 );
+
+                usersToNotify.Add(appointment.AssignedUser);
             }
 
             // 2. Notificar a los participantes
@@ -530,12 +511,23 @@ namespace BussinessLayer.Services.ModuloCitas
                 notificationType == NotificationType.UpdateForParticipant ||
                 notificationType == NotificationType.StateChangeForParticipant)
             {
-                await NotifyParticipants(appointment, context, notificationType, notificationData);
+                participantUserIds = await NotifyParticipants(appointment, context, notificationType, notificationData);
+            }
+
+            if (usersToNotify.Any())
+            {
+                await PersistNotificationForUsers(appointment, notificationType, context, usersToNotify.Distinct().ToList());
+            }
+            else
+            {
+                await PersistNotificationForUsers(appointment, notificationType, context, participantUserIds.Distinct().ToList());
             }
         }
 
-        private async Task NotifyParticipants(CtaAppointmentsRequest appointment, NotificationContext context, NotificationType notificationType, object notificationData)
+        private async Task<List<int>> NotifyParticipants(CtaAppointmentsRequest appointment, NotificationContext context, NotificationType notificationType, object notificationData)
         {
+            var notifiedUserIds = new List<int>();
+
             // Obtener participantes de la cita
             if (appointment.AppointmentParticipants != null)
             {
@@ -551,9 +543,13 @@ namespace BussinessLayer.Services.ModuloCitas
                             GetNotificationType(notificationType),
                             notificationData
                         );
+
+                        notifiedUserIds.Add(participant.ParticipantId);
                     }
                 }
             }
+
+            return notifiedUserIds;
         }
 
         private string GetNotificationTitle(NotificationType notificationType, bool isAssignedUser)
@@ -588,5 +584,56 @@ namespace BussinessLayer.Services.ModuloCitas
             return $"{baseMessage}. {dateTime}";
         }
 
+        private async Task PersistNotificationForUsers(CtaAppointmentsRequest appointment, NotificationType notificationType, NotificationContext context, List<int> userIds)
+        {
+            try
+            {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var notificationService = scope.ServiceProvider.GetRequiredService<ICtaUserNotificationReadsService>();
+
+                var title = GetNotificationTitle(notificationType, true);
+                var message = GetNotificationMessage(appointment, context, notificationType, true);
+                var type = GetNotificationType(notificationType);
+
+                var data = new
+                {
+                    AppointmentId = appointment.AppointmentId,
+                    AppointmentCode = appointment.AppointmentCode,
+                    Description = appointment.Description,
+                    AppointmentDate = appointment.AppointmentDate,
+                    AppointmentTime = appointment.AppointmentTime,
+                    EndAppointmentTime = appointment.EndAppointmentTime,
+                    MeetingPlace = context.MeetingPlaceDescription,
+                    Reason = context.ReasonDescription,
+                    Area = context.AreaDescription,
+                    AssignedUser = context.AssignedUserName,
+                    PreviousState = context.PreviousState,
+                    NewState = context.NewState,
+                    CompanyId = appointment.CompanyId
+                };
+
+                foreach (var userId in userIds)
+                {
+                    var notificationRequest = new CtaUserNotificationReadsRequest
+                    {
+                        UserId = userId,
+                        Type = type,
+                        IsRead = false,
+                        Title = title,
+                        Message = message,
+                        Data = System.Text.Json.JsonSerializer.Serialize(data),
+                        CreatedDate = DateTime.UtcNow,
+                        AppointmentId = appointment.AppointmentId,
+                        CompanyId = appointment.CompanyId
+                    };
+
+                    await notificationService.CreateNotificationAsync(notificationRequest);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error persisting notifications for appointment {AppointmentId}", appointment.AppointmentId);
+            }
+        }
     }
 }

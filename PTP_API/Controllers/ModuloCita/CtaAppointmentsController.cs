@@ -181,7 +181,8 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Todos los participantes que pueden particar en Citas", Description = "Devuelve una lista de posibles participantes para citas o un participante específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAlParticipants([FromQuery] int? participantTypeId, int? participantId, long? companyId)
+        [DisableBitacora]
+        public async Task<IActionResult> GetAllParticipants([FromQuery] int? participantTypeId, int? participantId, long? companyId)
         {
             try
             {
@@ -210,6 +211,22 @@ namespace PTP_API.Controllers.ModuloCita
                 return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
+
+        //[HttpPost("MarkNotificationAsRead")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[SwaggerOperation(Summary = "Marca una notificación como leída")]
+        //public async Task<IActionResult> MarkNotificationAsRead([FromBody] MarkNotificationReadRequest request)
+        //{
+        //    try
+        //    {
+        //        await _notificationService.MarkAsRead(request.UserId, request.NotificationId, request.NotificationType);
+        //        return Ok(Response<string>.Success(null, "Notificación marcada como leída."));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, Response<string>.ServerError(ex.Message));
+        //    }
+        //}
     }
 
 }

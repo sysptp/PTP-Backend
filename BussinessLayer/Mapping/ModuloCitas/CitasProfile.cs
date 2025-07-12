@@ -19,6 +19,7 @@ using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.DTOs.ModuloCitas.CtaSmsTemplates;
 using BussinessLayer.DTOs.ModuloCitas.CtaState;
 using BussinessLayer.DTOs.ModuloCitas.CtaUnwanted;
+using BussinessLayer.DTOs.ModuloCitas.CtaUserNotificationReads;
 using BussinessLayer.DTOs.ModuloCitas.CtaWhatsAppTemplates;
 using DataLayer.Models.Modulo_Citas;
 using DataLayer.Models.ModuloCitas;
@@ -122,6 +123,7 @@ namespace BussinessLayer.Mapping.ModuloCitas
             CreateMap<CtaSessionsRequest, CtaSessions>()
                 .ForPath(dest => dest.CompanyId, opt => opt.MapFrom(src => src.AppointmentInformation.CompanyId))
                 .ForPath(dest => dest.Description, opt => opt.MapFrom(src => src.AppointmentInformation.Description))
+                .ForPath(dest => dest.Title, opt => opt.MapFrom(src => src.AppointmentInformation.Title))
                 .ForMember(dest => dest.IdUser, opt => opt.MapFrom(src => src.AssignedUser))
                 .ReverseMap();
 
@@ -222,6 +224,13 @@ namespace BussinessLayer.Mapping.ModuloCitas
             .ReverseMap();
             CreateMap<CtaWhatsAppTemplates, CtaWhatsAppTemplatesResponse>()
                .ReverseMap();
+
+            CreateMap<CtaUserNotificationReads, CtaUserNotificationReadsResponse>().ReverseMap();
+
+            CreateMap<CtaUserNotificationReadsRequest, CtaUserNotificationReads>()
+                .ForMember(dest => dest.Usuario, opt => opt.Ignore()).ReverseMap();
+
+            CreateMap<CtaUserNotificationReads, CtaUserNotificationReadsRequest>().ReverseMap();
         }
 
     }

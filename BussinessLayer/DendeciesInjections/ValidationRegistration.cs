@@ -102,6 +102,8 @@ using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
 using BussinessLayer.DTOs.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.GnSecurityParameters;
 using YourProject.Validators;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
+using BussinessLayer.FluentValidations.Usuario;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -191,6 +193,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
+            services.AddScoped<IValidator<UpdateUserRequest>, UpdateUserRequestValidator>();
 
             services.AddScoped<IValidator<CreateProductsDto>, CreateProductosRequestValidator>();
             services.AddScoped<IValidator<EditProductDto>, EditProductosRequestValidator>();

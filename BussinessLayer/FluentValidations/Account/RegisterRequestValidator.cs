@@ -50,8 +50,10 @@ namespace BussinessLayer.FluentValidations.Account
                 .NotEmpty().WithMessage("El número de teléfono es requerido.");
 
             RuleFor(x => x.CompanyId)
-                .MustAsync(async (companyId, cancellation) => await CompanyExists(companyId))
-                .WithMessage("El ID de la compañía no es válido.");
+               .MustAsync(async (companyId, cancellation) => await CompanyExists(companyId))
+               .WithMessage("El ID de la compañía no es válido.")
+               .MustAsync(async (companyId, cancellation) => await CompanyUserLimitNotExceeded(companyId))
+               .WithMessage("La empresa ha alcanzado el límite máximo de usuarios permitidos.");
 
             RuleFor(x => x.RoleId)
                .MustAsync(async (roleId, cancellation) => await RoleExists(roleId))
@@ -78,6 +80,10 @@ namespace BussinessLayer.FluentValidations.Account
         {
             var sucursal = await _sucursalRepository.GetById(id);
             return sucursal != null;
+        }
+        private async Task<bool> CompanyUserLimitNotExceeded(long companyId)
+        {
+            return await _usuarioRepository.VerifyCompanyUserLimit(companyId);
         }
     }
 }

@@ -402,3 +402,4 @@ FodyWeavers.xsd
 
 # Ignorar scripts de PowerShell para generación de código
 *.ps1
+*.tt

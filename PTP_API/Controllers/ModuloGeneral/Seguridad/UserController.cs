@@ -2,7 +2,6 @@
 using System.Net.Mime;
 using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
-using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 using BussinessLayer.Interfaces.Services.IAccount;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Seguridad;
@@ -21,13 +20,15 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
     {
         private readonly IUsuarioService _usuarioService;
         private readonly IValidator<RegisterRequest> _validator;
+        private readonly IValidator<UpdateUserRequest> _userValidator;
         private readonly IAccountService _accountService;
 
-        public UserController(IUsuarioService usuarioService, IValidator<RegisterRequest> validator, IAccountService accountService)
+        public UserController(IUsuarioService usuarioService, IValidator<RegisterRequest> validator, IAccountService accountService, IValidator<UpdateUserRequest> userValidator)
         {
             _usuarioService = usuarioService;
             _validator = validator;
             _accountService = accountService;
+            _userValidator = userValidator;
         }
 
         [HttpGet]
@@ -76,13 +77,13 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         [EnableBitacora]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserRequest userRequest)
         {
-            //var validationResult = await _validator.ValidateAsync(permisoDto);
+            var validationResult = await _userValidator.ValidateAsync(userRequest);
 
-            //if (!validationResult.IsValid)
-            //{
-            //    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-            //    return BadRequest(Response<string>.BadRequest(errors, 400));
-            //}
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
 
             try
             {
@@ -91,6 +92,10 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
                     return NotFound(Response<string>.NotFound("usuario no encontrado"));
 
                 userRequest.Id = id;
+                userRequest.CompanyId = existingUser.CompanyId;
+                userRequest.UserName = existingUser.UserName;
+                userRequest.NormalizedEmail = existingUser.Email.ToUpper();
+                userRequest.NormalizedUserName = existingUser.UserName.ToUpper();
                 await _usuarioService.UpdateUser(userRequest);
                 return Ok(Response<string>.Success(null, "usuario actualizado correctamente"));
             }

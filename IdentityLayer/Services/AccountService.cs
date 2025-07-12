@@ -358,7 +358,12 @@ namespace IdentityLayer.Services
                 CodigoSuc = request.SucursalId,
                 IdPerfil = request.RoleId,
                 EmailConfirmed = true,
-                IpAdiccion = request.UserIP
+                IpAdiccion = request.UserIP,
+                IsActive = request.IsActive,
+                 ImagenUsuario = request.UserImage,
+                 LanguageCode = request.LanguageCode,
+                 DefaultUrl = request.DefaultUrl,
+                 TwoFactorEnabled = request.TwoFactorEnabled
             };
         }
 
