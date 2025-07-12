@@ -16,8 +16,6 @@ namespace BussinessLayer.Repository.ModuloCitas
         {
             return await _context.Set<CtaBookingPortalConfig>()
                 .Include(p => p.Company)
-                .Include(p => p.Area)
-                .Include(p => p.AssignedUser)
                 .Include(p => p.DefaultReason)
                 .Include(p => p.DefaultPlace)
                 .Include(p => p.DefaultState)
@@ -28,7 +26,6 @@ namespace BussinessLayer.Repository.ModuloCitas
         {
             return await _context.Set<CtaBookingPortalConfig>()
                 .FirstOrDefaultAsync(p => p.CompanyId == companyId &&
-                                         p.AreaId == areaId &&
                                          p.IsActive &&
                                          !p.Borrado);
         }
@@ -37,8 +34,6 @@ namespace BussinessLayer.Repository.ModuloCitas
         {
             return await _context.Set<CtaBookingPortalConfig>()
                 .Where(p => p.CompanyId == companyId && p.IsActive && !p.Borrado)
-                .Include(p => p.Area)
-                .Include(p => p.AssignedUser)
                 .ToListAsync();
         }
 

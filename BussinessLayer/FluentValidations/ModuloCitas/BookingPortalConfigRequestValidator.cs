@@ -17,10 +17,6 @@ namespace BussinessLayer.FluentValidations.ModuloCitas
                 .MaximumLength(100)
                 .WithMessage("Nombre del portal no debe exceder 100 caracteres");
 
-            RuleFor(x => x.AssignedUserId)
-                .GreaterThan(0)
-                .WithMessage("Usuario asignado es requerido");
-
             RuleFor(x => x.CustomSlug)
                 .Matches("^[a-z0-9-]+$")
                 .When(x => !string.IsNullOrEmpty(x.CustomSlug))
