@@ -26,18 +26,14 @@ using BussinessLayer.Repository.ModuloVentas.RClient;
 using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Repository.ModuloCitas;
-using BussinessLayer.Interfaces.Services.ModuloGeneral;
 using BussinessLayer.Interface.Repository.ModuloGeneral;
 using BussinessLayer.Repository.ModuloGeneral;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.SMTP;
 using BussinessLayer.Repository.ModuloGeneral.SMTP;
-using DataLayer.Models.ModuloCitas;
 using BussinessLayer.Repository.MessagingModule.Contracts;
 using BussinessLayer.Repository.MessagingModule.Implementations;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Utilis;
-using BussinessLayer.DTOs.ModuloGeneral.Utils.GnMessageType;
 using BussinessLayer.Repository.ModuloGeneral.Utils;
-using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Services.RConfiguracion.ParametrosGenerales;
 
 namespace BussinessLayer.DendeciesInjections
@@ -170,6 +166,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICtaWhatsAppTemplatesRepository, CtaWhatsAppTemplatesRepository>();
             services.AddTransient<ICtaNotificationTemplatesRepository, CtaNotificationTemplatesRepository>();
             services.AddTransient<ICtaUserNotificationReadsRepository, CtaUserNotificationReadsRepository>();
+            services.AddScoped<ICtaBookingPortalConfigRepository, CtaBookingPortalConfigRepository>();
+            services.AddScoped<ICtaBookingPortalAreasRepository, CtaBookingPortalAreasRepository>();
+            services.AddScoped<ICtaBookingPortalUsersRepository, CtaBookingPortalUsersRepository>();
 
 
             #endregion

@@ -62,5 +62,6 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
         public string? LanguageCode { get; set; }
         public string? DefaultUrl { get; set; }
         public bool TwoFactorEnabled { get; set; } = false;
+
     }
 }

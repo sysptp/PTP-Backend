@@ -104,6 +104,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Seguridad.GnSecurityParameters;
 using YourProject.Validators;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
 using BussinessLayer.FluentValidations.Usuario;
+using BussinessLayer.DTOs.ModuloCitas.BookingPortal;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -140,6 +141,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaAppointmentAreaRequest>, CtaAppointmentAreaRequestValidator>();
             services.AddScoped<IValidator<CtaAreaXUserRequest>, CtaAreaXUserRequestValidator>();
             services.AddScoped<IValidator<CtaContactTypeRequest>, CtaContactTypeRequestValidator>();
+            services.AddScoped<IValidator<BookingPortalConfigRequest>, BookingPortalConfigRequestValidator>();
+            services.AddScoped<IValidator<ClientAuthenticationRequest>, ClientAuthenticationRequestValidator>();
+            services.AddScoped<IValidator<PublicAppointmentRequest>, PublicAppointmentRequestValidator>();
 
             #endregion
 

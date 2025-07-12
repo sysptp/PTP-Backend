@@ -32,6 +32,7 @@ namespace PTP_API.Controllers.ModuloGeneral
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener unidades de repetición", Description = "Devuelve una lista de unidades de repetición o una específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllRepeatUnits([FromQuery] int? id)
         {
             try
