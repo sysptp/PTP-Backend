@@ -8,6 +8,8 @@ namespace BussinessLayer.DTOs.ModuloCitas.BookingPortal
         public TimeSpan AppointmentTime { get; set; }
         public string? Description { get; set; }
         public string? AuthToken { get; set; }
+        public int? AreaId { get; set; }
+        public int? AssignedUser { get; set; }
 
         // Información del cliente (si no está autenticado)
         public string? ClientName { get; set; }

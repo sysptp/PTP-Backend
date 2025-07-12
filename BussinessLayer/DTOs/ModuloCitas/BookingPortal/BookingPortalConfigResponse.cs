@@ -10,7 +10,6 @@
         public bool RequireAuthentication { get; set; }
         public bool IsActive { get; set; }
         public string? CustomSlug { get; set; }
-        public string PublicUrl { get; set; } = null!;
         public int? DefaultReasonId { get; set; }
         public string? DefaultReasonName { get; set; }
         public int? DefaultPlaceId { get; set; }

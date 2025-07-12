@@ -105,6 +105,7 @@ namespace PTP_API.Controllers.ModuloCita
         {
             try
             {
+                request.Id = id;
                 var response = await _bookingPortalService.UpdatePortalAsync(id, request);
                 return Ok(Response<BookingPortalConfigResponse>.Success(response, "Portal actualizado exitosamente"));
             }
@@ -234,7 +235,7 @@ namespace PTP_API.Controllers.ModuloCita
 
                 if (!response.Success)
                 {
-                    return BadRequest(Response<string>.BadRequest(new List<string> { response.Message }, 400));
+                    return BadRequest(Response<string>.BadRequest(new List<string> { response.ErrorMessage }, 400));
                 }
 
                 return CreatedAtAction(nameof(GetPublicPortal), new { slug = request.PortalSlug },

@@ -211,8 +211,6 @@ namespace BussinessLayer.Services.ModuloCitas
                 IsDefault = pa.IsDefault
             }).ToList();
 
-            response.PublicUrl = GeneratePublicUrl(response.CustomSlug);
-
             return response;
         }
 
@@ -382,7 +380,7 @@ namespace BussinessLayer.Services.ModuloCitas
                 return new PublicAppointmentResponse
                 {
                     Success = false,
-                    Message = "Portal no encontrado"
+                    ErrorMessage = "Portal no encontrado"
                 };
             }
 
@@ -396,7 +394,7 @@ namespace BussinessLayer.Services.ModuloCitas
                     return new PublicAppointmentResponse
                     {
                         Success = false,
-                        Message = "Se requiere autenticación"
+                        ErrorMessage = "Se requiere autenticación"
                     };
                 }
 
@@ -412,7 +410,7 @@ namespace BussinessLayer.Services.ModuloCitas
                     return new PublicAppointmentResponse
                     {
                         Success = false,
-                        Message = "Se requiere nombre y teléfono del cliente"
+                        ErrorMessage = "Se requiere nombre y teléfono del cliente"
                     };
                 }
 
@@ -431,9 +429,29 @@ namespace BussinessLayer.Services.ModuloCitas
                 participantTypeId = (int)AppointmentParticipant.Guest;
             }
 
-            // Obtener usuario principal y área por defecto
-            var mainAssignee = await _portalUsersRepository.GetMainAssigneeByPortalIdAsync(portal.Id);
-            var defaultArea = await _portalAreasRepository.GetDefaultAreaByPortalIdAsync(portal.Id);
+            // Obtener usuario asignado
+            int assignedUserId;
+            if (request.AssignedUser != null && request.AssignedUser != 0)
+            {
+                assignedUserId = request.AssignedUser.Value;
+            }
+            else
+            {
+                var mainAssignee = await _portalUsersRepository.GetMainAssigneeByPortalIdAsync(portal.Id);
+                assignedUserId = mainAssignee?.UserId ?? throw new InvalidOperationException("No hay usuario principal configurado");
+            }
+
+            // Obtener área seleccionada
+            int? selectedAreaId;
+            if (request.AreaId.HasValue && request.AreaId.Value > 0)
+            {
+                selectedAreaId = request.AreaId.Value;
+            }
+            else
+            {
+                var defaultArea = await _portalAreasRepository.GetDefaultAreaByPortalIdAsync(portal.Id);
+                selectedAreaId = defaultArea?.AreaId;
+            }
 
             var appointmentRequest = new CtaAppointmentsRequest
             {
@@ -447,8 +465,8 @@ namespace BussinessLayer.Services.ModuloCitas
                 IsConditionedTime = true,
                 EndAppointmentTime = request.AppointmentTime.Add(portal.DefaultAppointmentDuration ?? new TimeSpan(1, 0, 0)),
                 NotificationTime = new TimeSpan(0, 30, 0),
-                AreaId = defaultArea?.AreaId,
-                AssignedUser = mainAssignee?.UserId ?? 1,
+                AreaId = selectedAreaId,
+                AssignedUser = assignedUserId,
                 CompanyId = portal.CompanyId,
                 AppointmentParticipants = new List<AppointmentParticipantsRequest>
                 {
@@ -470,8 +488,7 @@ namespace BussinessLayer.Services.ModuloCitas
                     AppointmentCode = createdAppointment.AppointmentCode,
                     AppointmentDate = createdAppointment.AppointmentDate,
                     AppointmentTime = createdAppointment.AppointmentTime,
-                    Message = "Cita creada exitosamente",
-                    ConfirmationDetails = $"Su cita ha sido confirmada para el {createdAppointment.AppointmentDate:dd/MM/yyyy} a las {createdAppointment.AppointmentTime:HH:mm}. Código de cita: {createdAppointment.AppointmentCode}"
+                    ConfirmationDetails = $"Su cita ha sido confirmada para el {createdAppointment.AppointmentDate:dd/MM/yyyy} a las {createdAppointment.AppointmentTime.ToString(@"hh\:mm")}. Código de cita: {createdAppointment.AppointmentCode}"
                 };
             }
             catch (Exception ex)
@@ -479,7 +496,7 @@ namespace BussinessLayer.Services.ModuloCitas
                 return new PublicAppointmentResponse
                 {
                     Success = false,
-                    Message = $"Error al crear la cita: {ex.Message}"
+                    ErrorMessage = $"Error al crear la cita: {ex.Message}"
                 };
             }
         }
@@ -528,10 +545,5 @@ namespace BussinessLayer.Services.ModuloCitas
             }
         }
 
-        private string GeneratePublicUrl(string slug)
-        {
-            var baseUrl = _configuration["ApplicationUrl"] ?? "https://localhost";
-            return $"{baseUrl}/booking/{slug}";
-        }
     }
 }
