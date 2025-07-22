@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
+using BussinessLayer.DTOs.Common;
 using BussinessLayer.DTOs.ModuloCitas;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
-using BussinessLayer.DTOs.ModuloCitas.CtaEmailBackgroundJobData;
 using BussinessLayer.Enums;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
 using BussinessLayer.Interface.Repository.ModuloCitas;
@@ -19,7 +20,6 @@ namespace DataLayer.Models.Modulo_Citas
     public class CtaAppointmentsService : GenericService<CtaAppointmentsRequest, CtaAppointmentsResponse, CtaAppointments>, ICtaAppointmentsService
     {
         private readonly ICtaAppointmentsRepository _appointmentRepository;
-        private readonly IGnEmailService _gnEmailService;
         private readonly IUsuarioRepository _userRepository;
         private readonly ICtaContactRepository _contactRepository;
         private readonly ICtaGuestRepository _guestRepository;
@@ -27,11 +27,8 @@ namespace DataLayer.Models.Modulo_Citas
         private readonly ICtaAppointmentUsersRepository _userAppointmentRepository;
         private readonly ICtaAppointmentContactsRepository _appointmentContactsRepository;
         private readonly ICtaAppointmentGuestRepository _ctaAppointmentGuestRepository;
-        private readonly ICtaEmailTemplatesRepository _ctaEmailTemplateRepository;
         private readonly ICtaAppointmentAreaRepository _ctaAppointmentAreaRepository;
-        private readonly ICtaBackgroundEmailService _backgroundEmailService;
         private readonly ICtaStateRepository _ctaStateRepository;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly ICtaUnifiedNotificationService _notificationService;
         private readonly ICtaMeetingPlaceRepository _meetingPlaceRepository;
@@ -39,16 +36,15 @@ namespace DataLayer.Models.Modulo_Citas
 
 
         public CtaAppointmentsService(ICtaAppointmentsRepository appointmentRepository,
-            IGnEmailService gnEmailService, IUsuarioRepository userRepository,
+            IUsuarioRepository userRepository,
             ICtaContactRepository contactRepository,
             ICtaGuestRepository guestRepository, IMapper mapper, ICtaAppointmentSequenceService appointmentSequenceService,
             ICtaAppointmentUsersRepository userUsersRepository,
             ICtaAppointmentGuestRepository ctaAppointmentGuestRepository, ICtaAppointmentContactsRepository appointmentContactsRepository,
-            ICtaEmailTemplatesRepository ctaEmailTemplateRepository, ICtaAppointmentAreaRepository ctaAppointmentAreaRepository,
-            ICtaBackgroundEmailService backgroundEmailService, ICtaStateRepository ctaStateRepository, IConfiguration configuration, ICtaUnifiedNotificationService notificationService, ICtaAppointmentReasonRepository appointmentReasonRepository, ICtaMeetingPlaceRepository meetingPlaceRepository) : base(appointmentRepository, mapper)
+            ICtaAppointmentAreaRepository ctaAppointmentAreaRepository,
+            ICtaStateRepository ctaStateRepository, ICtaUnifiedNotificationService notificationService, ICtaAppointmentReasonRepository appointmentReasonRepository, ICtaMeetingPlaceRepository meetingPlaceRepository) : base(appointmentRepository, mapper)
         {
             _appointmentRepository = appointmentRepository;
-            _gnEmailService = gnEmailService;
             _userRepository = userRepository;
             _contactRepository = contactRepository;
             _guestRepository = guestRepository;
@@ -57,11 +53,8 @@ namespace DataLayer.Models.Modulo_Citas
             _ctaAppointmentGuestRepository = ctaAppointmentGuestRepository;
             _appointmentContactsRepository = appointmentContactsRepository;
             _mapper = mapper;
-            _ctaEmailTemplateRepository = ctaEmailTemplateRepository;
             _ctaAppointmentAreaRepository = ctaAppointmentAreaRepository;
-            _backgroundEmailService = backgroundEmailService;
             _ctaStateRepository = ctaStateRepository;
-            _configuration = configuration;
             _notificationService = notificationService;
             _appointmentReasonRepository = appointmentReasonRepository;
             _meetingPlaceRepository = meetingPlaceRepository;
@@ -312,32 +305,59 @@ namespace DataLayer.Models.Modulo_Citas
                 }
             }
         }
-
-        public override async Task<List<CtaAppointmentsResponse>> GetAllDto()
+        public async Task<PaginatedResponse<CtaAppointmentsResponse>> GetAllPaginatedAsync(
+           PaginationRequest pagination,
+           long? companyId = null,
+           int? userId = null,
+           string? appointmentCode = null)
         {
             try
             {
-                var appointments = await _appointmentRepository.GetAllWithIncludeAsync(new List<string>
-            { "CtaAppointmentReason",
-                "CtaMeetingPlace",
-                "CtaState",
-                "CtaAppointmentManagement",
-                "Usuario"});
+                // Construir filtro dinámicamente
+                Expression<Func<CtaAppointments, bool>>? filter = null;
 
-                var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointments.OrderByDescending(x => x.AppointmentId));
-                
-                foreach(var appointmentDto in appointmentDtoList)
+                if (companyId.HasValue || userId.HasValue || !string.IsNullOrEmpty(appointmentCode))
                 {
-                    var area = await _ctaAppointmentAreaRepository.GetById(appointmentDto.AreaId);
-                    appointmentDto.Area = area?.Description;
+                    filter = appointment =>
+                        (!companyId.HasValue || appointment.CompanyId == companyId.Value) &&
+                        (!userId.HasValue || appointment.UserId == userId.Value) &&
+                        (string.IsNullOrEmpty(appointmentCode) || appointment.AppointmentCode == appointmentCode);
+                }
+
+                // ⭐ DEFINIR ORDENAMIENTO ESPECÍFICO PARA APPOINTMENTS
+                var (appointmentsData, totalCount) = await _appointmentRepository.GetAllWithIncludePaginatedAsync(
+                    new List<string>
+                    {
+                        "CtaAppointmentReason",
+                        "CtaMeetingPlace",
+                        "CtaState",
+                        "CtaAppointmentManagement",
+                        "Usuario"
+                    },
+                    pagination,
+                    filter
+                );
+
+                // Mapear a DTO
+                var appointmentDtoList = _mapper.Map<List<CtaAppointmentsResponse>>(appointmentsData);
+
+                // Completar información adicional (esto es rápido porque son pocos registros)
+                foreach (var appointmentDto in appointmentDtoList)
+                {
+                    if (appointmentDto.AreaId.HasValue)
+                    {
+                        var area = await _ctaAppointmentAreaRepository.GetById(appointmentDto.AreaId.Value);
+                        appointmentDto.Area = area?.Description;
+                    }
+
                     appointmentDto.Participants = await GetAllParticipantsByAppointmentId(appointmentDto.AppointmentId);
                 }
 
-                return appointmentDtoList;
+                return PaginatedResponse<CtaAppointmentsResponse>.Create(appointmentDtoList, totalCount, pagination);
             }
-            catch (AutoMapperMappingException ex)
+            catch (Exception ex)
             {
-                throw new Exception($"Error en el mapeo: {ex.Message}, InnerException: {ex.InnerException?.Message}");
+                throw new Exception($"Error retrieving paginated appointments: {ex.Message}", ex);
             }
         }
 

@@ -1,14 +1,15 @@
-﻿using BussinessLayer.Interfaces.Repositories;
+﻿using System.Collections.Concurrent;
+using System.Data;
+using System.Linq.Expressions;
+using System.Reflection;
+using BussinessLayer.DTOs.Common;
+using BussinessLayer.Interfaces.Repositories;
 using Dapper;
 using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Concurrent;
-using System.Data;
-using System.Linq.Expressions;
-using System.Reflection;
 
 
 namespace BussinessLayer.Repository.ROtros
@@ -59,6 +60,96 @@ namespace BussinessLayer.Repository.ROtros
             }
 
         }
+
+        public virtual async Task<(IList<T> Data, int TotalCount)> GetAllPaginatedAsync(
+           PaginationRequest pagination,
+           Expression<Func<T, bool>>? filter = null,
+           Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+           string includeProperties = "")
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            // Aplicar filtro de no borrados
+            query = query.Where(e => EF.Property<bool>(e, "Borrado") == false);
+
+            // Aplicar filtro adicional si existe
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // Incluir propiedades relacionadas
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty.Trim());
+            }
+
+            // Contar total antes de paginación
+            var totalCount = await query.CountAsync();
+
+            // Aplicar ordenamiento
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+            else
+            {
+                // Ordenamiento por defecto usando reflexión
+                query = ApplyDefaultOrdering(query);
+            }
+
+            // Aplicar paginación si está habilitada
+            if (pagination.HasPagination)
+            {
+                query = query.Skip(pagination.Skip).Take(pagination.PageSize);
+            }
+
+            var data = await query.ToListAsync();
+
+            return (data, totalCount);
+        }
+
+        // ⭐ VERSIÓN SIMPLIFICADA para repositorios específicos
+        public virtual async Task<(IList<T> Data, int TotalCount)> GetAllWithIncludePaginatedAsync(
+            List<string> includeProperties,
+            PaginationRequest pagination,
+            Expression<Func<T, bool>>? filter = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            // Aplicar filtro de no borrados
+            query = query.Where(e => EF.Property<bool>(e, "Borrado") == false);
+
+            // Aplicar filtro adicional
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // Incluir propiedades relacionadas
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
+            // Contar total
+            var totalCount = await query.CountAsync();
+
+            // Aplicar ordenamiento por defecto
+            query = ApplyDefaultOrdering(query);
+
+            // Aplicar paginación
+            if (pagination.HasPagination)
+            {
+                query = query.Skip(pagination.Skip).Take(pagination.PageSize);
+            }
+
+            var data = await query.ToListAsync();
+
+            return (data, totalCount);
+        }
+
+
         public virtual async Task Update(T entity, Object id)
         {
             try
@@ -283,6 +374,56 @@ VALUES ({values})";
             var lambda = Expression.Lambda<Func<T, bool>>(equality, parameter);
 
             return await query.Where(lambda).Where(x => x.Borrado != true).FirstOrDefaultAsync();
+        }
+
+        // Método auxiliar para aplicar ordenamiento por defecto
+        private IQueryable<T> ApplyDefaultOrdering(IQueryable<T> query)
+        {
+            var entityType = typeof(T);
+
+            // Buscar propiedades Id comunes
+            var idProperty = entityType.GetProperties()
+                .FirstOrDefault(p =>
+                    p.Name.Equals("Id", StringComparison.OrdinalIgnoreCase) ||
+                    p.Name.Equals($"{entityType.Name}Id", StringComparison.OrdinalIgnoreCase) ||
+                    p.Name.EndsWith("Id", StringComparison.OrdinalIgnoreCase));
+
+            if (idProperty != null)
+            {
+                // Crear expresión tipada correctamente
+                var parameter = Expression.Parameter(entityType, "x");
+                var property = Expression.Property(parameter, idProperty.Name);
+
+                // Crear lambda tipado específicamente para el tipo de la propiedad
+                var lambdaType = typeof(Func<,>).MakeGenericType(entityType, idProperty.PropertyType);
+                var lambda = Expression.Lambda(lambdaType, property, parameter);
+
+                // Usar reflexión para llamar OrderByDescending con los tipos correctos
+                var orderByMethod = typeof(Queryable).GetMethods()
+                    .First(m => m.Name == "OrderByDescending" && m.GetParameters().Length == 2)
+                    .MakeGenericMethod(entityType, idProperty.PropertyType);
+
+                return (IQueryable<T>)orderByMethod.Invoke(null, new object[] { query, lambda });
+            }
+
+            // Si no encuentra Id, usar ordenamiento por fecha de creación si existe
+            var createdProperty = entityType.GetProperties()
+                .FirstOrDefault(p =>
+                    p.Name.Equals("FechaAdicion", StringComparison.OrdinalIgnoreCase) ||
+                    p.Name.Equals("CreatedDate", StringComparison.OrdinalIgnoreCase) ||
+                    p.Name.Equals("DateCreated", StringComparison.OrdinalIgnoreCase));
+
+            if (createdProperty != null && createdProperty.PropertyType == typeof(DateTime))
+            {
+                var parameter = Expression.Parameter(entityType, "x");
+                var property = Expression.Property(parameter, createdProperty.Name);
+                var lambda = Expression.Lambda<Func<T, DateTime>>(property, parameter);
+
+                return query.OrderByDescending(lambda);
+            }
+
+            // Fallback: sin ordenamiento específico
+            return query;
         }
     }
 }

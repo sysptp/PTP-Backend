@@ -1,5 +1,6 @@
-﻿using BussinessLayer.Atributes;
-using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+﻿using System.Net.Mime;
+using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.Common;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
@@ -7,7 +8,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Net.Mime;
 
 namespace PTP_API.Controllers.ModuloCita
 {
@@ -29,16 +29,20 @@ namespace PTP_API.Controllers.ModuloCita
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Response<IEnumerable<CtaSessionsResponse>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Obtener sesiones", Description = "Devuelve una lista de sesiones o una sesión específica si se proporciona un ID")]
+        [ProducesResponseType(typeof(Response<PaginatedResponse<CtaSessionsResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<CtaSessionsResponse>), StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Obtener sesiones con paginación eficiente")]
         [DisableBitacora]
-        public async Task<IActionResult> GetAllSessions([FromQuery] int? IdSession, long? companyId, int? userId)
+        public async Task<IActionResult> GetAllSessions(
+            [FromQuery] int? IdSession,
+            [FromQuery] long? companyId,
+            [FromQuery] int? userId,
+            [FromQuery] int? page,
+            [FromQuery] int? size)
         {
             try
             {
+                // Si solicita una sesión específica
                 if (IdSession.HasValue)
                 {
                     var session = await _sessionsService.GetByIdResponse(IdSession.Value);
@@ -47,24 +51,23 @@ namespace PTP_API.Controllers.ModuloCita
 
                     return Ok(Response<CtaSessionsResponse>.Success(session, "Sesión encontrada."));
                 }
-                else
+
+                // ⭐ USAR PAGINACIÓN A NIVEL DE BD
+                var pagination = new PaginationRequest(page, size);
+                var paginatedResult = await _sessionsService.GetAllPaginatedAsync(
+                    pagination,
+                    companyId,
+                    userId
+                );
+
+                if (paginatedResult.TotalCount == 0)
                 {
-                    var sessions = await _sessionsService.GetAllDto();
-                    if (sessions == null || !sessions.Any())
-                        return StatusCode(204, Response<IEnumerable<CtaSessionsResponse>>.NoContent("No hay sesiones disponibles."));
-
-                    var filteredSessions = sessions.AsQueryable();
-
-                    if (companyId.HasValue)
-                        filteredSessions = filteredSessions.Where(x => x.CompanyId == companyId.Value);
-
-                    if (userId.HasValue)
-                        filteredSessions = filteredSessions.Where(x => x.AssignedUserId == userId.Value);
-
-                    return Ok(Response<IEnumerable<CtaSessionsResponse>>.Success(
-                        filteredSessions.ToList(),
-                        "Sesiones obtenidas correctamente."));
+                    return StatusCode(204, Response<PaginatedResponse<CtaSessionsResponse>>.NoContent("No hay sesiones disponibles."));
                 }
+
+                return Ok(Response<PaginatedResponse<CtaSessionsResponse>>.Success(
+                    paginatedResult,
+                    $"Sesiones obtenidas correctamente. Página {paginatedResult.Page} de {paginatedResult.TotalPages}"));
             }
             catch (Exception ex)
             {
