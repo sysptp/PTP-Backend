@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
+using BussinessLayer.DTOs.Common;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.Enums;
@@ -30,23 +32,51 @@ namespace DataLayer.Models.Modulo_Citas
             _appointmentRepository = appointmentRepository;
             _sessionEmailService = sessionEmailService;
         }
-        public override async Task<List<CtaSessionsResponse>> GetAllDto()
+
+        public async Task<PaginatedResponse<CtaSessionsResponse>> GetAllPaginatedAsync(
+            PaginationRequest pagination,
+            long? companyId = null,
+            int? userId = null)
         {
-            var sessionList = await _sessionRepository.GetAllWithIncludeAsync(new List<string>
-    {
-        "GnRepeatUnit",
-        "Usuario"
-    });
-
-            var sessionDtoList = _mapper.Map<List<CtaSessionsResponse>>(sessionList);
-
-            foreach (var session in sessionDtoList)
+            try
             {
-                session.TotalAppointments = _sessionDetailsRepository.GetAllSessionDetailsBySessionId(session.IdSession).Count();
-                await MapSessionAppointmentDetailsAsync(session);
-            }
+                // Construir filtro
+                Expression<Func<CtaSessions, bool>>? filter = null;
 
-            return sessionDtoList.OrderByDescending(x => x.IdSession).ToList();
+                if (companyId.HasValue || userId.HasValue)
+                {
+                    filter = session =>
+                        (!companyId.HasValue || session.CompanyId == companyId.Value) &&
+                        (!userId.HasValue || session.IdUser == userId.Value);
+                }
+
+                // ⭐ DEFINIR ORDENAMIENTO ESPECÍFICO PARA SESSIONS
+                var (sessionsData, totalCount) = await _sessionRepository.GetAllWithIncludePaginatedAsync(
+                    new List<string>
+                    {
+                        "GnRepeatUnit",
+                        "Usuario"
+                    },
+                    pagination,
+                    filter
+                );
+
+                // Mapear a DTO
+                var sessionDtoList = _mapper.Map<List<CtaSessionsResponse>>(sessionsData);
+
+                // Completar información adicional
+                foreach (var session in sessionDtoList)
+                {
+                    session.TotalAppointments = _sessionDetailsRepository.GetAllSessionDetailsBySessionId(session.IdSession).Count();
+                    await MapSessionAppointmentDetailsAsync(session);
+                }
+
+                return PaginatedResponse<CtaSessionsResponse>.Create(sessionDtoList, totalCount, pagination);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving paginated sessions: {ex.Message}", ex);
+            }
         }
 
         public override async Task<CtaSessionsResponse> GetByIdResponse(int id)
