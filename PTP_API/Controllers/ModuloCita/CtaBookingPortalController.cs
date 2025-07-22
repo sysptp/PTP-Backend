@@ -222,6 +222,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerOperation(Summary = "Crear cita pública", Description = "Crea una nueva cita desde el portal público")]
+        [DisableBitacora]
         public async Task<IActionResult> CreatePublicAppointment([FromBody] PublicAppointmentRequest request)
         {
             try
