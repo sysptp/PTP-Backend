@@ -14,5 +14,6 @@ namespace BussinessLayer.Interfaces.Services.ModuloCitas
         Task<AvailableSlotResponse> GetAvailableSlotsAsync(AvailableSlotRequest request);
         Task<PublicAppointmentResponse> CreatePublicAppointmentAsync(PublicAppointmentRequest request);
         Task<string> GenerateUniqueSlugAsync(string baseName);
+        Task<CtaClientInfoResponse?> GetClientInfoAsync(CtaClientInfoRequest request);
     }
 }

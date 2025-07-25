@@ -270,10 +270,29 @@ namespace PTP_API.Controllers.ModuloCita
                 return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
+
+        [HttpPost("public/client-info")]
+        [AllowAnonymous]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(Response<CtaClientInfoResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation(Summary = "Obtener información del cliente", Description = "Busca información del cliente por teléfono o email para pre-llenar formulario")]
+        public async Task<IActionResult> GetClientInfo([FromBody] CtaClientInfoRequest request)
+        {
+            try
+            {
+                var response = await _bookingPortalService.GetClientInfoAsync(request);
+                if (response == null)
+                    return NotFound(Response<string>.NotFound("Cliente no encontrado"));
+
+                return Ok(Response<CtaClientInfoResponse>.Success(response, "Información del cliente encontrada"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
+            }
+        }
     }
 
-    public class GenerateSlugRequest
-    {
-        public string BaseName { get; set; } = null!;
-    }
+   
 }

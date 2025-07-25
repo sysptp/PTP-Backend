@@ -519,6 +519,71 @@ namespace BussinessLayer.Services.ModuloCitas
             return slug;
         }
 
+        public async Task<CtaClientInfoResponse?> GetClientInfoAsync(CtaClientInfoRequest request)
+        {
+            // Buscar por teléfono si se proporciona
+            if (!string.IsNullOrEmpty(request.PhoneNumber))
+            {
+                var clientByPhone = await FindClientByPhoneAndEmailAsync(request.PhoneNumber, null, request.CompanyId);
+                if (clientByPhone != null) return clientByPhone;
+            }
+
+            // Buscar por email si se proporciona
+            if (!string.IsNullOrEmpty(request.Email))
+            {
+                var clientByEmail = await FindClientByPhoneAndEmailAsync(null, request.Email, request.CompanyId);
+                if (clientByEmail != null) return clientByEmail;
+            }
+
+            return null;
+        }
+
+        private async Task<CtaClientInfoResponse?> FindClientByPhoneAndEmailAsync(string? phoneNumber, string? email, long companyId)
+        {
+            // Buscar en contactos
+            var contacts = await _contactRepository.GetAll();
+            var contact = contacts.FirstOrDefault(c =>
+                ((!string.IsNullOrEmpty(phoneNumber) && c.ContactNumber == phoneNumber) ||
+                 (!string.IsNullOrEmpty(email) && c.ContactEmail == email)) &&
+                c.CompanyId == companyId &&
+                !c.Borrado);
+
+            if (contact != null)
+            {
+                return new CtaClientInfoResponse
+                {
+                    ClientName = contact.Name,
+                    ClientPhone = contact.ContactNumber,
+                    ClientEmail = contact.ContactEmail,
+                    ClientType = nameof(AppointmentParticipant.Contact),
+                    IsExistingClient = true
+                };
+            }
+
+            // Buscar en invitados
+            var guests = await _guestRepository.GetAll();
+            var guest = guests.FirstOrDefault(g =>
+                ((!string.IsNullOrEmpty(phoneNumber) && g.PhoneNumber == phoneNumber) ||
+                 (!string.IsNullOrEmpty(email) && g.Email == email)) &&
+                g.CompanyId == companyId &&
+                !g.Borrado);
+
+            if (guest != null)
+            {
+                return new CtaClientInfoResponse
+                {
+                    ClientName = $"{guest.Names} {guest.LastName}",
+                    ClientPhone = guest.PhoneNumber,
+                    ClientEmail = guest.Email,
+                    ClientNickName = guest.NickName,
+                    ClientType = nameof(AppointmentParticipant.Guest),
+                    IsExistingClient = true
+                };
+            }
+
+            return null;
+        }
+
         // Métodos auxiliares privados
         private async Task<List<dynamic>> GetExistingAppointmentsForDate(DateTime date, int userId, long companyId)
         {
