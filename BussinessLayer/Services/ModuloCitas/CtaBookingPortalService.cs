@@ -257,8 +257,8 @@ namespace BussinessLayer.Services.ModuloCitas
                 {
                     IsAuthenticated = true,
                     IsNewClient = false,
-                    Message = "Acceso permitido",
-                    AuthToken = GenerateAuthToken(request.PhoneNumber, portal.Id)
+                    Message = "Este portal no requiere autenticación",
+                    AuthToken = null
                 };
             }
 
@@ -277,8 +277,8 @@ namespace BussinessLayer.Services.ModuloCitas
                     ClientName = contact.Name,
                     ClientEmail = contact.ContactEmail,
                     ClientId = contact.Id,
-                    ClientType = "Contact",
-                    AuthToken = GenerateAuthToken(request.PhoneNumber, portal.Id),
+                    ClientType = nameof(AppointmentParticipant.Contact),
+                    AuthToken = GenerateAuthToken(contact.Id, (int)AppointmentParticipant.Contact, portal.Id),
                     Message = "Cliente autenticado exitosamente"
                 };
             }
@@ -298,8 +298,8 @@ namespace BussinessLayer.Services.ModuloCitas
                     ClientName = $"{guest.Names} {guest.LastName}",
                     ClientEmail = guest.Email,
                     ClientId = guest.Id,
-                    ClientType = "Guest",
-                    AuthToken = GenerateAuthToken(request.PhoneNumber, portal.Id),
+                    ClientType = nameof(AppointmentParticipant.Guest),
+                    AuthToken = GenerateAuthToken(guest.Id, (int)AppointmentParticipant.Guest, portal.Id),
                     Message = "Cliente autenticado exitosamente"
                 };
             }
@@ -400,8 +400,7 @@ namespace BussinessLayer.Services.ModuloCitas
 
                 var clientInfo = ValidateAuthToken(request.AuthToken);
                 participantId = clientInfo.ClientId;
-                participantTypeId = clientInfo.ClientType == "Contact" ?
-                    (int)AppointmentParticipant.Contact : (int)AppointmentParticipant.Guest;
+                participantTypeId = clientInfo.ParticipantTypeId;
             }
             else
             {
@@ -526,18 +525,27 @@ namespace BussinessLayer.Services.ModuloCitas
             return new List<dynamic>();
         }
 
-        private string GenerateAuthToken(string phoneNumber, int portalId)
+        private string GenerateAuthToken(int clientId, int participantTypeId, int portalId)
         {
-            var tokenData = $"{phoneNumber}:{portalId}:{DateTime.UtcNow:yyyy-MM-dd}";
+            var tokenData = $"{clientId}:{participantTypeId}:{portalId}:{DateTime.UtcNow:yyyy-MM-dd}";
             return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(tokenData));
         }
 
-        private (int ClientId, string ClientType) ValidateAuthToken(string authToken)
+        private (int ClientId, int ParticipantTypeId) ValidateAuthToken(string authToken)
         {
             try
             {
                 var tokenData = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
-                return (1, "Contact");
+                var parts = tokenData.Split(':');
+
+                if (parts.Length >= 3)
+                {
+                    var clientId = int.Parse(parts[0]);
+                    var participantTypeId = int.Parse(parts[1]);
+                    return (clientId, participantTypeId);
+                }
+
+                throw new UnauthorizedAccessException("Formato de token inválido");
             }
             catch
             {
