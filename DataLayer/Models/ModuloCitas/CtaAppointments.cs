@@ -12,6 +12,7 @@ namespace DataLayer.Models.Modulo_Citas
         public int AppointmentId { get; set; }
         public string AppointmentCode { get; set; } = null!;
         public string? Description { get; set; }
+        public string? Title { get; set; }
         public int IdReasonAppointment { get; set; }
         [ForeignKey("IdReasonAppointment")]
         public CtaAppointmentReason? CtaAppointmentReason { get; set; }
@@ -25,15 +26,7 @@ namespace DataLayer.Models.Modulo_Citas
         public CtaState? CtaState { get; set; }
         public bool IsConditionedTime { get; set; }
         public TimeSpan EndAppointmentTime { get; set; }
-        public bool SendEmail { get; set; } = false;
-        public bool SendSms { get; set; } = false;
-        public bool SendEmailReminder { get; set; } = false;
-        public bool SendSmsReminder { get; set; } = false;
-        public int? DaysInAdvance { get; set; }
         public TimeSpan NotificationTime { get; set; }
-        public bool NotifyClosure { get; set; } = false;
-        public bool NotifyAssignedUserEmail { get; set; } = false;
-        public bool NotifyAssignedUserSms { get; set; } = false;
         public int UserId { get; set; }
         [ForeignKey("UserId")]
         public Usuario? Usuario { get; set; }

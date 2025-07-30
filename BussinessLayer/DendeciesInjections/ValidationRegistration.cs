@@ -101,6 +101,12 @@ using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
 using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
 using BussinessLayer.DTOs.ModuloPaypal;
 using BussinessLayer.FluentValidations.ModuloPaypal;
+using BussinessLayer.DTOs.Account;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.GnSecurityParameters;
+using YourProject.Validators;
+using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario;
+using BussinessLayer.FluentValidations.Usuario;
+using BussinessLayer.DTOs.ModuloCitas.BookingPortal;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -108,8 +114,9 @@ namespace BussinessLayer.DendeciesInjections
     {
         public static void AddValidationInjections(this IServiceCollection services)
         {
+            
             #region General
-          
+
             #region Auditoria
             services.AddScoped<IValidator<AleBitacoraRequest>, AleBitacoraRequestValidator>();
             services.AddScoped<IValidator<AleLoginRequest>, AleLoginRequestValidator>();
@@ -136,6 +143,9 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaAppointmentAreaRequest>, CtaAppointmentAreaRequestValidator>();
             services.AddScoped<IValidator<CtaAreaXUserRequest>, CtaAreaXUserRequestValidator>();
             services.AddScoped<IValidator<CtaContactTypeRequest>, CtaContactTypeRequestValidator>();
+            services.AddScoped<IValidator<BookingPortalConfigRequest>, BookingPortalConfigRequestValidator>();
+            services.AddScoped<IValidator<ClientAuthenticationRequest>, ClientAuthenticationRequestValidator>();
+            services.AddScoped<IValidator<PublicAppointmentRequest>, PublicAppointmentRequestValidator>();
 
             #endregion
 
@@ -146,6 +156,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<GnParametrosGeneralesRequest>, GnParametrosGeneralesRequestValidator>();
             services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
             services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
+
+            services.AddValidatorsFromAssemblyContaining<TwoFactorVerificationRequestValidator>();
             #endregion
 
             #region HelpDesk
@@ -187,6 +199,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<GnPerfilRequest>, GnPerfilRequestValidator>();
             services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddScoped<IValidator<LoginRequestDTO>, LoginRequestValidator>();
+            services.AddScoped<IValidator<UpdateUserRequest>, UpdateUserRequestValidator>();
 
             services.AddScoped<IValidator<CreateProductsDto>, CreateProductosRequestValidator>();
             services.AddScoped<IValidator<EditProductDto>, EditProductosRequestValidator>();
@@ -265,7 +278,7 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<GnScheduleRequest>, GnScheduleRequestValidator>();
             services.AddScoped<IValidator<GnScheduleUserRequest>, GnScheduleUserRequestValidator>();
             services.AddScoped<IValidator<GnRepeatUnitRequest>, GnRepeatUnitRequestValidation>();
-            
+            services.AddScoped<IValidator<GnSecurityParametersRequest>, GnSecurityParametersRequestValidator>();
             #endregion
 
             #region HelpDesk
@@ -327,6 +340,11 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaEmailTemplatesRequest>, CtaEmailTemplatesRequestValidator>();
             services.AddScoped<IValidator<CtaNotificationSettingsRequest>, CtaNotificationSettingsRequestValidator>();
 
+            #endregion
+
+            #region Seguridad y Autenticacion
+            services.AddScoped<IValidator<ForgotPasswordRequest>, ForgotPasswordRequestValidator>();
+            services.AddScoped<IValidator<ResetPasswordRequest>, ResetPasswordRequestValidator>();
             #endregion
 
             services.AddScoped<IValidator<PaypalOrderCreateDto>, CreateOrderPaypalValidator>();

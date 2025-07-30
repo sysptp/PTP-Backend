@@ -1,4 +1,6 @@
-﻿using BussinessLayer.Atributes;
+﻿using System.Net.Mime;
+using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.Common;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
@@ -7,7 +9,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Net.Mime;
 
 namespace PTP_API.Controllers.ModuloCita
 {
@@ -31,16 +32,21 @@ namespace PTP_API.Controllers.ModuloCita
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Response<IEnumerable<CtaAppointmentsResponse>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Obtener citas", Description = "Devuelve una lista de citas o una cita específica si se proporciona un ID")]
-        [DisableBitacora]       
-        public async Task<IActionResult> GetAllAppointments([FromQuery] string? appointmentCode, int? appointmentId, long? companyId, int? userId)
+        [ProducesResponseType(typeof(Response<PaginatedResponse<CtaAppointmentsResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Response<CtaAppointmentsResponse>), StatusCodes.Status200OK)]
+        [SwaggerOperation(Summary = "Obtener citas con paginación eficiente", Description = "Devuelve citas con paginación a nivel de base de datos para mejor rendimiento")]
+        [DisableBitacora]
+        public async Task<IActionResult> GetAllAppointments(
+            [FromQuery] string? appointmentCode,
+            [FromQuery] int? appointmentId,
+            [FromQuery] long? companyId,
+            [FromQuery] int? userId,
+            [FromQuery] int? page,
+            [FromQuery] int? size)
         {
             try
             {
+                // Si solicita una cita específica, usar método existente
                 if (appointmentId.HasValue)
                 {
                     var appointment = await _appointmentService.GetByIdResponse(appointmentId);
@@ -49,28 +55,24 @@ namespace PTP_API.Controllers.ModuloCita
 
                     return Ok(Response<CtaAppointmentsResponse>.Success(appointment, "Cita encontrada."));
                 }
-                else
+
+                // ⭐ USAR PAGINACIÓN A NIVEL DE BD
+                var pagination = new PaginationRequest(page, size);
+                var paginatedResult = await _appointmentService.GetAllPaginatedAsync(
+                    pagination,
+                    companyId,
+                    userId,
+                    appointmentCode
+                );
+
+                if (paginatedResult.TotalCount == 0)
                 {
-                    var appointments = await _appointmentService.GetAllDto();
-                    if (appointments == null || !appointments.Any())
-                        return StatusCode(204, Response<IEnumerable<CtaAppointmentsResponse>>.NoContent("No hay citas disponibles."));
-
-                    // Aplicando filtros de manera más clara y manejando valores nulos
-                    var filteredAppointments = appointments.AsQueryable();
-
-                    if (companyId.HasValue)
-                        filteredAppointments = filteredAppointments.Where(x => x.CompanyId == companyId.Value);
-
-                    if (!string.IsNullOrEmpty(appointmentCode))
-                        filteredAppointments = filteredAppointments.Where(x => x.AppointmentCode == appointmentCode);
-
-                    if (userId.HasValue)
-                        filteredAppointments = filteredAppointments.Where(x => x.UserId == userId.Value);
-
-                    return Ok(Response<IEnumerable<CtaAppointmentsResponse>>.Success(
-                        filteredAppointments.ToList(),
-                        "Citas obtenidas correctamente."));
+                    return StatusCode(204, Response<PaginatedResponse<CtaAppointmentsResponse>>.NoContent("No hay citas disponibles."));
                 }
+
+                return Ok(Response<PaginatedResponse<CtaAppointmentsResponse>>.Success(
+                    paginatedResult,
+                    $"Citas obtenidas correctamente. Página {paginatedResult.Page} de {paginatedResult.TotalPages}"));
             }
             catch (Exception ex)
             {
@@ -181,7 +183,8 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Todos los participantes que pueden particar en Citas", Description = "Devuelve una lista de posibles participantes para citas o un participante específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAlParticipants([FromQuery] int? participantTypeId, int? participantId, long? companyId)
+        [DisableBitacora]
+        public async Task<IActionResult> GetAllParticipants([FromQuery] int? participantTypeId, int? participantId, long? companyId)
         {
             try
             {
@@ -210,6 +213,22 @@ namespace PTP_API.Controllers.ModuloCita
                 return StatusCode(500, Response<string>.ServerError(ex.Message));
             }
         }
+
+        //[HttpPost("MarkNotificationAsRead")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[SwaggerOperation(Summary = "Marca una notificación como leída")]
+        //public async Task<IActionResult> MarkNotificationAsRead([FromBody] MarkNotificationReadRequest request)
+        //{
+        //    try
+        //    {
+        //        await _notificationService.MarkAsRead(request.UserId, request.NotificationId, request.NotificationType);
+        //        return Ok(Response<string>.Success(null, "Notificación marcada como leída."));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, Response<string>.ServerError(ex.Message));
+        //    }
+        //}
     }
 
 }

@@ -35,8 +35,10 @@ using DataLayer.Models.ModuloGeneral;
 using DataLayer.Models.ModuloGeneral.SMTP;
 using DataLayer.Models.MessagingModule;
 using DataLayer.EntitiesConfiguration.MessagingModule;
+using DataLayer.Models.ModuloGeneral.Utils;
 using DataLayer.EntitiesConfiguration.SendGridModule;
 using DataLayer.Models.SendGridModule;
+using DataLayer.EntitiesConfiguration.ModuloCitas;
 
 namespace DataLayer.PDbContex
 {
@@ -100,6 +102,10 @@ namespace DataLayer.PDbContex
             
             modelBuilder.ApplyConfiguration(new ClientContactConfiguration());
             modelBuilder.ApplyConfiguration(new TypeContactConfiguration());
+
+            modelBuilder.ApplyConfiguration(new CtaBookingPortalConfigConfiguration());
+            modelBuilder.ApplyConfiguration(new CtaBookingPortalUsersConfiguration());
+            modelBuilder.ApplyConfiguration(new CtaBookingPortalAreasConfiguration());
         }
 
         #region  SendGridModule
@@ -222,6 +228,8 @@ namespace DataLayer.PDbContex
         public DbSet<GnRepeatUnit> GnRepeatUnit { get; set; }
         public DbSet<GnParametrosGenerales> GnParametrosGenerales { get; set; }
         public DbSet<GnSmtpConfiguracion> GnSmtpConfiguracion { get; set; }
+        public DbSet<GnMessageType> GnMessageType { get; set; }
+        public DbSet<GnSecurityParameters> GnSecurityParameters { get; set; }
         #endregion
 
         #region Auditoria
@@ -259,6 +267,14 @@ namespace DataLayer.PDbContex
         public DbSet<CtaNotificationSettings> CtaNotificationSettings { get; set; }
         public DbSet<CtaParticipantTypes> CtaParticipantTypes { get; set; }
         public DbSet<CtaEmailTemplateVariables> CtaEmailTemplateVariables { get; set; }
+        public DbSet<CtaMessageTemplates> CtaMessageTemplates { get; set; }
+        public DbSet<CtaNotificationTemplates> CtaNotificationTemplates { get; set; }
+        public DbSet<CtaSmsTemplates> CtaSmsTemplates { get; set; }
+        public DbSet<CtaWhatsAppTemplates> CtaWhatsAppTemplates { get; set; }
+        public DbSet<CtaUserNotificationReads> CtaUserNotificationReads { get; set; }
+        public DbSet<CtaBookingPortalConfig> CtaBookingPortalConfigs { get; set; }
+        public DbSet<CtaBookingPortalUsers> CtaBookingPortalUsers { get; set; }
+        public DbSet<CtaBookingPortalAreas> CtaBookingPortalAreas { get; set; }
 
         #endregion
 

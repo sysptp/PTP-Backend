@@ -34,6 +34,7 @@ namespace PTP_API.Controllers.ModuloCitas
         [SwaggerOperation(
      Summary = "Obtener estados",
      Description = "Devuelve una lista de estados de citas filtrada por diferentes criterios o un estado específico si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllStates(
      [FromQuery] int? IdStateAppointment,
      [FromQuery] long? CompanyId,

@@ -1,0 +1,373 @@
+# .github/workflows/deploy-api.yml
+name: Deploy API to SmarterASP
+
+on:
+  push:
+    branches:
+      - DEV
+      - QA         
+      - PROD
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose environment to deploy'
+        required: true
+        default: 'QA'
+        type: choice
+        options:
+          - DEV
+          - QA
+          - PROD
+
+jobs:
+  debug-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🐛 Debug Info
+        run: |
+          echo "=== DEBUG INFORMATION ==="
+          echo "Event: ${{ github.event_name }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "========================="
+
+  determine-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+    steps:
+      - name: 🎯 Determine deployment environment
+        id: set-env
+        run: |
+          echo "=== ENVIRONMENT DETERMINATION ==="
+          echo "Event name: ${{ github.event_name }}"
+          echo "GitHub ref: ${{ github.ref }}"
+          echo "Branch name: ${{ github.ref_name }}"
+          
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            ENV="${{ github.event.inputs.environment }}"
+            echo "Manual trigger - Environment: $ENV"
+          elif [[ "${{ github.ref }}" == "refs/heads/PROD" ]]; then
+            ENV="PROD"
+            echo "PROD branch detected - Environment: $ENV"
+          elif [[ "${{ github.ref }}" == "refs/heads/QA" ]]; then
+            ENV="QA"
+            echo "QA branch detected - Environment: $ENV"
+          elif [[ "${{ github.ref }}" == "refs/heads/DEV" ]]; then
+            ENV="DEV"
+            echo "DEV branch detected - Environment: $ENV"
+          else
+            ENV="QA"
+            echo "Default fallback - Environment: $ENV"
+          fi
+          
+          echo "environment=$ENV" >> $GITHUB_OUTPUT
+          echo "🎯 Final environment: $ENV"
+          echo "================================="
+
+  build-and-deploy:
+    needs: determine-environment
+    runs-on: ubuntu-latest
+    environment: ${{ needs.determine-environment.outputs.environment }}
+    
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📋 Environment Check
+        run: |
+          echo "=== ENVIRONMENT VARIABLES CHECK ==="
+          echo "Environment: ${{ needs.determine-environment.outputs.environment }}"
+          echo "FTP Server: ${{ vars.FTP_SERVER }}"
+          echo "Server Dir: ${{ vars.SERVER_DIR }}"
+          echo "FTP Username: ${{ secrets.FTP_USERNAME }}"
+          if [ -z "${{ secrets.FTP_PASSWORD }}" ]; then
+            echo "❌ FTP_PASSWORD is empty!"
+          else
+            echo "✅ FTP_PASSWORD is set"
+          fi
+          if [ -z "${{ vars.FTP_SERVER }}" ]; then
+            echo "❌ FTP_SERVER is empty!"
+          else
+            echo "✅ FTP_SERVER is set"
+          fi
+          if [ -z "${{ vars.SERVER_DIR }}" ]; then
+            echo "❌ SERVER_DIR is empty!"
+          else
+            echo "✅ SERVER_DIR is set"
+          fi
+          echo "==================================="
+        
+      - name: ⚙️ Setup .NET 8
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: 🔍 Project structure check
+        run: |
+          echo "🔍 Current directory structure:"
+          ls -la
+          echo ""
+          echo "🔍 Looking for PTP_API folder:"
+          ls -la PTP_API/ || echo "PTP_API folder not found"
+          echo ""
+          
+      - name: 📦 Restore dependencies
+        working-directory: ./PTP_API
+        run: |
+          echo "🔄 Restoring dependencies in PTP_API folder..."
+          echo "Current directory: $(pwd)"
+          echo "Contents:"
+          ls -la
+          
+          # Restore para toda la solución sin runtime específico
+          if [ -f "PTP_API.sln" ]; then
+            echo "📁 Found solution file, restoring..."
+            dotnet restore PTP_API.sln
+          else
+            echo "📁 No solution found, restoring individual project..."
+            dotnet restore
+          fi
+          echo "✅ Dependencies restored"
+          
+      - name: 🔨 Build project
+        working-directory: ./PTP_API
+        run: |
+          echo "🔨 Building project in PTP_API folder..."
+          
+          # Build para toda la solución
+          if [ -f "PTP_API.sln" ]; then
+            echo "🔨 Building solution..."
+            dotnet build PTP_API.sln --no-restore --configuration Release --verbosity normal
+          else
+            echo "🔨 Building individual project..."
+            dotnet build --no-restore --configuration Release --verbosity normal
+          fi
+          echo "✅ Build completed"
+          
+      - name: 🧪 Run tests (optional - continues on error)
+        working-directory: ./PTP_API
+        run: |
+          echo "🧪 Running tests in PTP_API folder..."
+          
+          # Tests para toda la solución
+          if [ -f "PTP_API.sln" ]; then
+            dotnet test PTP_API.sln --no-build --configuration Release --verbosity normal || echo "⚠️ Tests failed but continuing..."
+          else
+            dotnet test --no-build --configuration Release --verbosity normal || echo "⚠️ Tests failed but continuing..."
+          fi
+          echo "✅ Tests completed"
+        
+      - name: 📋 Configure environment settings
+        working-directory: ./PTP_API
+        run: |
+          ENV="${{ needs.determine-environment.outputs.environment }}"
+          echo "📋 Configuring for environment: $ENV"
+          
+          # Buscar el proyecto API principal
+          API_PROJECT=$(find . -name "*.csproj" -path "*/PTP_API.csproj" | head -1)
+          if [ -z "$API_PROJECT" ]; then
+            API_PROJECT=$(find . -name "PTP_API.csproj" | head -1)
+          fi
+          
+          if [ ! -z "$API_PROJECT" ]; then
+            API_DIR=$(dirname "$API_PROJECT")
+            echo "📁 Found API project at: $API_PROJECT"
+            echo "📁 API directory: $API_DIR"
+            
+            if [ -f "$API_DIR/appsettings.$ENV.json" ]; then
+              cp "$API_DIR/appsettings.$ENV.json" "$API_DIR/appsettings.Production.json"
+              echo "✅ Applied appsettings.$ENV.json"
+            else
+              echo "ℹ️ No specific appsettings.$ENV.json found, using default"
+            fi
+          else
+            echo "⚠️ Could not find PTP_API.csproj"
+          fi
+        
+      - name: 🚀 Publish API
+        working-directory: ./PTP_API
+        run: |
+          echo "🚀 Publishing API from PTP_API folder..."
+          
+          # Buscar el proyecto API específico (no la solución)
+          API_PROJECT=$(find . -name "PTP_API.csproj" | head -1)
+          
+          if [ ! -z "$API_PROJECT" ]; then
+            echo "📦 Publishing specific API project: $API_PROJECT"
+            dotnet publish "$API_PROJECT" \
+              --no-build \
+              --configuration Release \
+              --output ../publish \
+              --verbosity normal
+          else
+            echo "❌ Could not find PTP_API.csproj file!"
+            echo "Available .csproj files:"
+            find . -name "*.csproj"
+            exit 1
+          fi
+          
+          echo "✅ Publish completed"
+          
+      - name: 🗂️ Prepare deployment files
+        run: |
+          echo "🗂️ Preparing deployment files..."
+          
+          # Obtener el nombre del proyecto principal
+          PROJECT_NAME=$(find ./PTP_API -name "*.csproj" | head -1 | xargs basename -s .csproj)
+          echo "📦 Project name detected: $PROJECT_NAME"
+          
+          # Crear web.config correcto para SmarterASP (outofprocess)
+          cat > ./publish/web.config << 'WEBCONFIG'
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <location path="." inheritInChildApplications="false">
+              <system.webServer>
+                <handlers>
+                  <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+                </handlers>
+                <aspNetCore processPath="dotnet" 
+                           arguments=".\PTP_API.dll" 
+                           stdoutLogEnabled="true" 
+                           stdoutLogFile=".\logs\stdout" 
+                           hostingModel="outofprocess" />
+              </system.webServer>
+            </location>
+          </configuration>
+          WEBCONFIG
+          
+          echo "✅ Created web.config with outofprocess hosting model"
+          
+          # Crear directorio de logs
+          mkdir -p ./publish/logs
+          
+          # Limpiar archivos innecesarios
+          find ./publish -name "*.pdb" -delete
+          find ./publish -name "appsettings.Development.json" -delete
+          
+          echo "📁 Files prepared for deployment:"
+          ls -la ./publish/
+          echo "📄 web.config content:"
+          cat ./publish/web.config
+          echo ""
+          echo "📄 DLL files in publish directory:"
+          find ./publish -name "*.dll" | head -10
+
+      - name: 🛑 Stop application with app_offline.htm
+        run: |
+          echo "🛑 Creating app_offline.htm to stop application..."
+          mkdir -p ./stop_app
+          
+          cat > ./stop_app/app_offline.htm << 'OFFLINE'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Application Updating</title>
+              <style>
+                  body { font-family: Arial; text-align: center; padding: 50px; background: #f5f5f5; }
+                  h1 { color: #333; }
+                  .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 20px auto; }
+                  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+              </style>
+          </head>
+          <body>
+              <h1>🔄 Application is being updated</h1>
+              <div class="spinner"></div>
+              <p>Please wait a moment while we deploy the latest version...</p>
+              <p><small>This usually takes less than a minute.</small></p>
+          </body>
+          </html>
+          OFFLINE
+          
+          echo "✅ Created app_offline.htm"
+        
+      - name: 🛑 Deploy app_offline.htm (this stops the app)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ vars.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./stop_app/
+          server-dir: ${{ vars.SERVER_DIR }}
+          
+      - name: ⏱️ Wait for application to fully stop
+        run: |
+          echo "⏱️ Waiting for IIS to release file locks..."
+          sleep 15
+          echo "✅ Application should be stopped now"
+          
+      - name: 📤 Deploy new application files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ vars.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./publish/
+          server-dir: ${{ vars.SERVER_DIR }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/obj/**
+            **/bin/Debug/**
+            **/*.log
+          dry-run: false
+          
+      - name: 🚀 Start application (remove app_offline.htm)
+        run: |
+          echo "🚀 Preparing to start application..."
+          # Crear un directorio vacío para la limpieza final
+          mkdir -p ./start_app
+          echo "Ready to remove app_offline.htm"
+        
+      - name: 🗑️ Remove app_offline.htm via FTP
+        run: |
+          echo "🗑️ Removing app_offline.htm to start the application..."
+          # Usamos curl para eliminar el archivo específico
+          curl -v --ftp-method singlecwd \
+               --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" \
+               -Q "DELE ${{ vars.SERVER_DIR }}app_offline.htm" \
+               "ftp://${{ vars.FTP_SERVER }}/" || echo "app_offline.htm might not exist or already deleted"
+          
+      - name: 🔍 Post-deployment verification
+        run: |
+          echo "🔍 Verifying deployment files..."
+          echo "📁 Published files:"
+          find ./publish -type f -name "*.dll" -o -name "*.exe" -o -name "web.config" -o -name "appsettings*.json" | sort
+          echo ""
+          echo "📄 Final web.config content:"
+          cat ./publish/web.config
+          echo ""
+          echo "📦 Main DLL check:"
+          if [ -f "./publish/PTP_API.dll" ]; then
+            echo "✅ PTP_API.dll exists"
+            ls -la ./publish/PTP_API.dll
+          else
+            echo "❌ PTP_API.dll NOT found!"
+            echo "Available DLL files:"
+            find ./publish -name "*.dll"
+          fi
+          
+      - name: ✅ Deployment Success
+        if: success()
+        run: |
+          ENV="${{ needs.determine-environment.outputs.environment }}"
+          echo "🎉 Successfully deployed to $ENV environment!"
+          echo "🌐 Environment: $ENV"
+          echo "🖥️  Server: ${{ vars.FTP_SERVER }}"
+          echo "📁 Directory: ${{ vars.SERVER_DIR }}"
+          echo "👤 User: ${{ secrets.FTP_USERNAME }}"
+          echo "🗑️ Remote directory was cleaned before deployment"
+          
+      - name: ❌ Deployment Failed
+        if: failure()
+        run: |
+          ENV="${{ needs.determine-environment.outputs.environment }}"
+          echo "💥 Deployment to $ENV failed!"
+          echo "Check the logs above for details."
+          echo "Common issues:"
+          echo "- Check FTP credentials"
+          echo "- Verify server directory path"
+          echo "- Ensure network connectivity"

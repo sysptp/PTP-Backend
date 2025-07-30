@@ -15,6 +15,10 @@ namespace DataLayer.Models.ModuloGeneral.Menu
         public string? MenuIcon { get; set; }
         public int IdModulo { get; set; }
         public int MenuPadre { get; set; }
+        public bool IsVisible { get; set; }
+        public string? ImgUrl { get; set; }
+        [NotMapped]
+        public string? ModuleName { get; set; }
         [NotMapped]
         public bool Consultar { get; set; }
         [NotMapped]

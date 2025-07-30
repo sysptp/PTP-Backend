@@ -15,7 +15,6 @@ using BussinessLayer.Interfaces.Repository.ModuloGeneral.Empresa;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Repository.ModuloGeneral.Geografia;
 using BussinessLayer.Interfaces.Repository.Configuracion.ParametrosGenerales;
-using BussinessLayer.Repository.RConfiguracion.ParametrosGenerales;
 using BussinessLayer.Services.SCliente;
 using BussinessLayer.Repository.RCampaña;
 using BussinessLayer.Interface.Repository.Modulo_Citas;
@@ -27,14 +26,15 @@ using BussinessLayer.Repository.ModuloVentas.RClient;
 using BussinessLayer.Interface.Repository.ModuloCitas;
 using BussinessLayer.Interfaces.Repository.ModuloCitas;
 using BussinessLayer.Repository.ModuloCitas;
-using BussinessLayer.Interfaces.Services.ModuloGeneral;
 using BussinessLayer.Interface.Repository.ModuloGeneral;
 using BussinessLayer.Repository.ModuloGeneral;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.SMTP;
 using BussinessLayer.Repository.ModuloGeneral.SMTP;
-using DataLayer.Models.ModuloCitas;
 using BussinessLayer.Repository.MessagingModule.Contracts;
 using BussinessLayer.Repository.MessagingModule.Implementations;
+using BussinessLayer.Interfaces.Repository.ModuloGeneral.Utilis;
+using BussinessLayer.Repository.ModuloGeneral.Utils;
+using BussinessLayer.Services.RConfiguracion.ParametrosGenerales;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -74,6 +74,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICmpCampanaDetalleRepository, CmpCampanaDetalleRepository>();
             services.AddTransient<IGnRepeatUnitRepository, GnRepeatUnitRepository>();
             services.AddTransient<IGnSmtpConfiguracionRepository, GnSmtpConfiguracionRepository>();
+            services.AddTransient<IGnMessageTypeRepository, GnMessageTypeRepository>();
+            services.AddTransient<IGnSecurityParametersRepository, GnSecurityParametersRepository>();
             #region Geografia
 
             services.AddTransient<IPaisRepository, PaisRepository>();
@@ -159,6 +161,14 @@ namespace BussinessLayer.DendeciesInjections
             services.AddTransient<ICtaNotificationSettingsRepository, CtaNotificationSettingsRepository>();
             services.AddTransient<ICtaParticipantTypesRepository, CtaParticipantTypesRepository>();
             services.AddTransient<ICtaEmailTemplateVariablesRepository, CtaEmailTemplateVariablesRepository>();
+            services.AddTransient<ICtaMessageTemplatesRepository, CtaMessageTemplatesRepository>();
+            services.AddTransient<ICtaSmsTemplatesRepository, CtaSmsTemplatesRepository>();
+            services.AddTransient<ICtaWhatsAppTemplatesRepository, CtaWhatsAppTemplatesRepository>();
+            services.AddTransient<ICtaNotificationTemplatesRepository, CtaNotificationTemplatesRepository>();
+            services.AddTransient<ICtaUserNotificationReadsRepository, CtaUserNotificationReadsRepository>();
+            services.AddScoped<ICtaBookingPortalConfigRepository, CtaBookingPortalConfigRepository>();
+            services.AddScoped<ICtaBookingPortalAreasRepository, CtaBookingPortalAreasRepository>();
+            services.AddScoped<ICtaBookingPortalUsersRepository, CtaBookingPortalUsersRepository>();
 
 
             #endregion

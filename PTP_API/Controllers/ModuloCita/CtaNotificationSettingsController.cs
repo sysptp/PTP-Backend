@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using BussinessLayer.Atributes;
 using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de Configuraciones de Notificaciones")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaNotificationSettingsController : ControllerBase
     {
         private readonly ICtaNotificationSettingsService _notificationSettingsService;
@@ -30,6 +32,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener Configuraciones de Notificaciones", Description = "Devuelve una lista de configuraciones o una configuración específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllNotificationSettings([FromQuery] long? id, long? companyId)
         {
             try

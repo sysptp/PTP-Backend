@@ -3,6 +3,7 @@ using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace DataLayer.Models.ModuloGeneral.Seguridad
 {
     public class Usuario : AuditableEntities
@@ -24,6 +25,8 @@ namespace DataLayer.Models.ModuloGeneral.Seguridad
         public string? IpModificacion { get; set; }
         public string Longitud { get; set; } = "0";
         public string Latitud { get; set; } = "0";
+        public string NormalizedUserName { get; set; } = null!;
+        public string NormalizedEmail { get; set; } = null!;
 
         public bool IsActive = true;
         public string Email { get; set; } = null!;

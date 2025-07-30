@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
+using BussinessLayer.DTOs.Common;
 using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
 using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.Enums;
@@ -30,23 +32,51 @@ namespace DataLayer.Models.Modulo_Citas
             _appointmentRepository = appointmentRepository;
             _sessionEmailService = sessionEmailService;
         }
-        public override async Task<List<CtaSessionsResponse>> GetAllDto()
+
+        public async Task<PaginatedResponse<CtaSessionsResponse>> GetAllPaginatedAsync(
+            PaginationRequest pagination,
+            long? companyId = null,
+            int? userId = null)
         {
-            var sessionList = await _sessionRepository.GetAllWithIncludeAsync(new List<string>
-    {
-        "GnRepeatUnit",
-        "Usuario"
-    });
-
-            var sessionDtoList = _mapper.Map<List<CtaSessionsResponse>>(sessionList);
-
-            foreach (var session in sessionDtoList)
+            try
             {
-                session.TotalAppointments = _sessionDetailsRepository.GetAllSessionDetailsBySessionId(session.IdSession).Count();
-                await MapSessionAppointmentDetailsAsync(session);
-            }
+                // Construir filtro
+                Expression<Func<CtaSessions, bool>>? filter = null;
 
-            return sessionDtoList.OrderByDescending(x => x.IdSession).ToList();
+                if (companyId.HasValue || userId.HasValue)
+                {
+                    filter = session =>
+                        (!companyId.HasValue || session.CompanyId == companyId.Value) &&
+                        (!userId.HasValue || session.IdUser == userId.Value);
+                }
+
+                // ⭐ DEFINIR ORDENAMIENTO ESPECÍFICO PARA SESSIONS
+                var (sessionsData, totalCount) = await _sessionRepository.GetAllWithIncludePaginatedAsync(
+                    new List<string>
+                    {
+                        "GnRepeatUnit",
+                        "Usuario"
+                    },
+                    pagination,
+                    filter
+                );
+
+                // Mapear a DTO
+                var sessionDtoList = _mapper.Map<List<CtaSessionsResponse>>(sessionsData);
+
+                // Completar información adicional
+                foreach (var session in sessionDtoList)
+                {
+                    session.TotalAppointments = _sessionDetailsRepository.GetAllSessionDetailsBySessionId(session.IdSession).Count();
+                    await MapSessionAppointmentDetailsAsync(session);
+                }
+
+                return PaginatedResponse<CtaSessionsResponse>.Create(sessionDtoList, totalCount, pagination);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving paginated sessions: {ex.Message}", ex);
+            }
         }
 
         public override async Task<CtaSessionsResponse> GetByIdResponse(int id)
@@ -126,6 +156,64 @@ namespace DataLayer.Models.Modulo_Citas
             }
         }
 
+        public async Task<CtaSessionsRequest> UpdateSessionAndAppointments(CtaSessionsRequest sessionRequest, int sessionId)
+        {
+            // Actualizar la entidad de sesión
+            await base.Update(sessionRequest, sessionId);
+
+            // Obtener los detalles de la sesión actual para saber qué citas están asociadas
+            var sessionDetails = await _sessionDetailsRepository.GetAllAppointmentsBySessionId(sessionId);
+
+            if (sessionRequest.AppointmentInformation != null && sessionDetails.Any())
+            {
+                foreach (var appointmentDetail in sessionDetails)
+                {
+                    // Preparar el objeto de solicitud de cita con la información de la sesión
+                    var appointmentRequest = _mapper.Map<CtaAppointmentsRequest>(sessionRequest.AppointmentInformation);
+
+                    // Mantener el ID y la fecha de la cita existente
+                    appointmentRequest.AppointmentId = appointmentDetail.AppointmentId;
+                    appointmentRequest.AppointmentDate = appointmentDetail.AppointmentDate;
+
+                    // Asegurarse de que se preserve el usuario asignado
+                    appointmentRequest.AssignedUser = sessionRequest.AssignedUser;
+
+                    // Asegurarse de que se preserve el código de compañía
+                    appointmentRequest.CompanyId = sessionRequest.AppointmentInformation.CompanyId;
+
+                    // Actualizar la cita sin enviar correos
+                    await UpdateSessionAppointment(appointmentRequest, appointmentDetail.AppointmentId);
+                }
+            }
+
+            return sessionRequest;
+        }
+
+        // Método específico para actualizar citas de sesiones sin enviar correos
+        private async Task<CtaAppointmentsResponse> UpdateSessionAppointment(CtaAppointmentsRequest vm, int appointmentId)
+        {
+            // Obtener la cita actual para verificar su existencia
+            var currentAppointment = await _appointmentRepository.GetById(appointmentId);
+            if (currentAppointment == null)
+            {
+                throw new Exception($"La cita con ID {appointmentId} no existe");
+            }
+
+            // Asegurarse de que el ID de la cita esté establecido en el modelo
+            vm.AppointmentId = appointmentId;
+            vm.AppointmentCode = currentAppointment.AppointmentCode;
+
+            // Actualizar la entidad de cita
+            await _appointmentRepository.Update(_mapper.Map<CtaAppointments>(vm), appointmentId);
+
+            // Actualizar los participantes de la cita
+            var appointmentResponse = _mapper.Map<CtaAppointmentsResponse>(vm);
+            await _appointmentsService.UpdateAppointmentParticipants(vm, appointmentId, appointmentResponse);
+
+            // Retornar la respuesta sin enviar correos
+            return appointmentResponse;
+        }
+
         public async Task DeleteAppointmentsInSessionRange(CtaSessionsRequest sessionDto)
         {
             var existingAppointments = await _appointmentRepository.GetAppointmentsInRange(sessionDto.FirstSessionDate, sessionDto.SessionEndDate, sessionDto.AppointmentInformation.CompanyId, sessionDto.AssignedUser);
@@ -181,15 +269,6 @@ namespace DataLayer.Models.Modulo_Citas
                 session.IdState = firstAppointment.IdState;
                 session.IsConditionedTime = firstAppointment.IsConditionedTime;
                 session.EndAppointmentTime = firstAppointment.EndAppointmentTime;
-                session.SendEmail = firstAppointment.SendEmail;
-                session.SendSms = firstAppointment.SendSms;
-                session.SendSmsReminder = firstAppointment.SendSmsReminder;
-                session.SendEmailReminder = firstAppointment.SendEmailReminder;
-                session.DaysInAdvance = firstAppointment.DaysInAdvance;
-                session.NotificationTime = firstAppointment.NotificationTime;
-                session.NotifyClosure = firstAppointment.NotifyClosure;
-                session.NotifyAssignedUserEmail = firstAppointment.NotifyAssignedUserEmail;
-                session.NotifyAssignedUserSms = firstAppointment.NotifyAssignedUserSms;
                 session.AreaId = firstAppointment.AreaId;
             }
         }

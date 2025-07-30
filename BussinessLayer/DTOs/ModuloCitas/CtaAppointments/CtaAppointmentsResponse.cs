@@ -6,6 +6,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
     {
         public int AppointmentId { get; set; }
         public string AppointmentCode { get; set; } = null!;
+        public string? Title { get; set; }
         public string? Description { get; set; }
         public int IdReasonAppointment { get; set; }
         public string? ReasonDescription { get; set; }
@@ -17,15 +18,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointments
         public string? StateDescription { get; set; }
         public bool IsConditionedTime { get; set; }
         public TimeSpan EndAppointmentTime { get; set; }
-        public bool SendEmail { get; set; } = false;
-        public bool SendSms { get; set; } = false;
-        public bool SendEmailReminder { get; set; } = false;
-        public bool SendSmsReminder { get; set; } = false;
-        public int? DaysInAdvance { get; set; }
         public TimeSpan NotificationTime { get; set; }
-        public bool NotifyClosure { get; set; } = false;
-        public bool NotifyAssignedUserEmail { get; set; } = false;
-        public bool NotifyAssignedUserSms { get; set; } = false;
         public int? AreaId { get; set; }
         public string? Area { get; set; } 
         public int UserId { get; set; }

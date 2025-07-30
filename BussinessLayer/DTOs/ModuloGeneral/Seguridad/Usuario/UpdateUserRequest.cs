@@ -17,7 +17,16 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Seguridad.Usuario
         public string? UserImage { get; set; }
         [JsonIgnore]
         public int Id { get; set; }
+        [JsonIgnore]
+        public string? UserName { get; set; }
+        [JsonIgnore]
+        public int? IdPerfil { get; set; }
+        [JsonIgnore]
+        public string? NormalizedUserName { get; set; } = null!;
+        [JsonIgnore]
+        public string? NormalizedEmail { get; set; } = null!;
         public string? LanguageCode { get; set; }
         public string? DefaultUrl { get; set; }
+        public bool TwoFactorEnabled { get; set; } = false;
     }
 }

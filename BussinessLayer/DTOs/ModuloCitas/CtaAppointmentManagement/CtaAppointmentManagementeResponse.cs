@@ -9,5 +9,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaAppointmentManagement
         public CtaAppointmentsResponse? Appointment { get; set; }
         public string? Comment { get; set; }
         public string? AppointmentSequence { get; set; }
+        public string? UsuarioAdicion { get; set; } = string.Empty;
+        public DateTime? FechaAdicion { get; set; }
     }
 }

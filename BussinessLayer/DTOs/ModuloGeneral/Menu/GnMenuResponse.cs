@@ -15,6 +15,9 @@
         public bool Create { get; set; }
         public bool Edit { get; set; }
         public bool Delete { get; set; }
+        public bool IsVisible { get; set; }
+        public string? ImgUrl { get; set; }
+        public string? ModuleName { get; set; }
         public List<GnMenuResponse>? SubMenus { get; set; } = new List<GnMenuResponse>();
     }
 

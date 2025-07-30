@@ -17,5 +17,6 @@ namespace BussinessLayer.Interfaces.Services.IAccount
         Task<string> SendPasswordResetEmailAsync(string email, string origin);
         Task<bool> VerifyUser(string UserName);
         Task<bool> VerifyUserById(int userId);
+        Task<AuthenticationResponse> VerifyTwoFactorCodeAsync(string userId, string code);
     }
 }

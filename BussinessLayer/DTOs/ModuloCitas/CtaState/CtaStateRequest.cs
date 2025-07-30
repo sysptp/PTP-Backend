@@ -9,14 +9,13 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaState
         public string? Description { get; set; }
         public bool IsClosure { get; set; } = false;
         public DateTime CreationDate { get; set; } = DateTime.Now;
-        public long EmailTemplateIdIn { get; set; }
-        public long EmailTemplateIdOut { get; set; }
         public long CompanyId { get; set; }
         public int AreaId { get; set; }
         public bool IsDefault { get; set; }
-        public long EmailTemplateIdUpdate { get; set; }
-        public long EmailTemplateIdUpdateParticipant { get; set; }
-        public long EmailTemplateIdStateChange { get; set; }
+        public long TemplateIdIn { get; set; }
+        public long TemplateIdOut { get; set; }
+        public long TemplateIdUpdate { get; set; }
+        public long TemplateIdUpdateParticipant { get; set; }
 
     }
 }

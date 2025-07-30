@@ -10,5 +10,10 @@ namespace BussinessLayer.Repository.Modulo_Citas
         public CtaConfiguracionRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
         {
         }
+
+        public CtaConfiguration? GetByCompanyId(long companyId)
+        {
+           return _context.CtaConfiguration.Where(x => x.CompanyId == companyId).FirstOrDefault();
+        }
     }
 }

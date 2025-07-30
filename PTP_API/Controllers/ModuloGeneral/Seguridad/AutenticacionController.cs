@@ -1,5 +1,4 @@
-﻿
-using BussinessLayer.DTOs.Account;
+﻿using BussinessLayer.DTOs.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Autenticacion;
 using BussinessLayer.Interfaces.Services.IAccount;
@@ -8,9 +7,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net.Mime;
-using ForgotPasswordRequest = BussinessLayer.DTOs.Account.ForgotPasswordRequest;
-using RegisterRequest = BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest;
-using ResetPasswordRequest = BussinessLayer.DTOs.Account.ResetPasswordRequest;
 
 namespace PTP_API.Controllers.ModuloGeneral.Seguridad
 {
@@ -20,14 +16,23 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
     public class AutenticacionController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly IValidator<BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest> _validator;
+        private readonly IValidator<RegisterRequest> _validator;
         private readonly IValidator<LoginRequestDTO> _validatorLogin;
+        private readonly IValidator<ForgotPasswordRequest> _forgotPasswordValidator;
+        private readonly IValidator<ResetPasswordRequest> _resetPasswordValidator;
 
-        public AutenticacionController(IAccountService accountService, IValidator<LoginRequestDTO> validatorLogin, IValidator<RegisterRequest> validator)
+        public AutenticacionController(
+            IAccountService accountService,
+            IValidator<RegisterRequest> validator,
+            IValidator<ForgotPasswordRequest> forgotPasswordValidator,
+            IValidator<ResetPasswordRequest> resetPasswordValidator,
+            IValidator<LoginRequestDTO> validatorLogin)
         {
             _accountService = accountService;
-            _validatorLogin = validatorLogin;
             _validator = validator;
+            _forgotPasswordValidator = forgotPasswordValidator;
+            _resetPasswordValidator = resetPasswordValidator;
+            _validatorLogin = validatorLogin;
         }
 
         [HttpPost("Login")]
@@ -73,7 +78,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation(Summary = "Registro de Usuarios", Description = "Endpoint para registrar los usuarios")]
-        public async Task<IActionResult> RegisterAsync([FromBody] BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest request)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request)
         {
             try
             {
@@ -97,52 +102,89 @@ namespace PTP_API.Controllers.ModuloGeneral.Seguridad
             }
         }
 
-        [HttpPost("ForgotPassword")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation(Summary = "Olvidé mi contraseña", Description = "Envía un correo para restablecer la contraseña")]
+        [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
             try
             {
-                var origin = Request?.Headers["origin"].ToString() ?? string.Empty;
-                var response = await _accountService.ForgotPasswordAsync(request, origin);
+                var validationResult = await _forgotPasswordValidator.ValidateAsync(request);
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                    return BadRequest(Response<string>.BadRequest(errors, 400));
+                }
 
+                // Obtener el origen desde el encabezado Origin o Referer
+                var origin = Request.Headers["Origin"].ToString();
+                if (string.IsNullOrEmpty(origin))
+                {
+                    origin = Request.Headers["Referer"].ToString();
+                }
+                if (string.IsNullOrEmpty(origin))
+                {
+                    origin = "https://ptp-frontend-dev.vercel.app";
+                }
+
+                var response = await _accountService.ForgotPasswordAsync(request, origin);
                 if (response.HasError)
                 {
                     return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
                 }
 
-                return Ok(Response<string>.Success("Correo de restablecimiento enviado. Por favor, revisa tu bandeja de entrada."));
+                return Ok(Response<string>.Success("Se ha enviado un enlace de restablecimiento a tu correo electrónico"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError(ex.Message));
+                return StatusCode(500, Response<string>.ServerError("Ha ocurrido un error inesperado. Por favor, inténtalo más tarde."));
             }
         }
 
-        [HttpPost("ResetPassword")]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation(Summary = "Restablecer contraseña", Description = "Restablece la contraseña del usuario")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
             try
             {
-                var response = await _accountService.ResetPasswordAsync(request);
+                var validationResult = await _resetPasswordValidator.ValidateAsync(request);
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                    return BadRequest(Response<string>.BadRequest(errors, 400));
+                }
 
+                var response = await _accountService.ResetPasswordAsync(request);
                 if (response.HasError)
                 {
                     return BadRequest(Response<string>.BadRequest(new List<string> { response.Error }, 400));
                 }
 
-                return Ok(Response<string>.Success("Contraseña restablecida exitosamente."));
+                return Ok(Response<string>.Success("Contraseña restablecida con éxito"));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Response<string>.ServerError(ex.Message));
+                return StatusCode(500, Response<string>.ServerError("Ha ocurrido un error inesperado al restablecer la contraseña. Por favor, inténtalo más tarde."));
+            }
+        }
+        [HttpPost("verify-2fa")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation(Summary = "Verificar código 2FA", Description = "Verifica el código de autenticación de dos factores")]
+        public async Task<IActionResult> VerifyTwoFactorCode([FromBody] TwoFactorVerificationRequest request)
+        {
+            try
+            {
+                var response = await _accountService.VerifyTwoFactorCodeAsync(request.UserId.ToString(), request.Code);
+
+                if (response.HasError)
+                {
+                    return BadRequest(Response<string>.BadRequest(new List<string> { response.Error ?? "Error en la verificación 2FA" }, 400));
+                }
+
+                return Ok(Response<object>.Success(response, "Verificación 2FA exitosa"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError("Ha ocurrido un error inesperado. Por favor, inténtalo más tarde."));
             }
         }
 

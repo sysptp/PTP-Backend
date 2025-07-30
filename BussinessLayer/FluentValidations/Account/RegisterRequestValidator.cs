@@ -49,13 +49,11 @@ namespace BussinessLayer.FluentValidations.Account
             RuleFor(x => x.Phone)
                 .NotEmpty().WithMessage("El número de teléfono es requerido.");
 
-            RuleFor(x => x.Email)
-               .Must(email => EmailExists(email))
-               .WithMessage("Este email ya ha sido utilizado por otro usuario.");
-
             RuleFor(x => x.CompanyId)
-                .MustAsync(async (companyId, cancellation) => await CompanyExists(companyId))
-                .WithMessage("El ID de la compañía no es válido.");
+               .MustAsync(async (companyId, cancellation) => await CompanyExists(companyId))
+               .WithMessage("El ID de la compañía no es válido.")
+               .MustAsync(async (companyId, cancellation) => await CompanyUserLimitNotExceeded(companyId))
+               .WithMessage("La empresa ha alcanzado el límite máximo de usuarios permitidos.");
 
             RuleFor(x => x.RoleId)
                .MustAsync(async (roleId, cancellation) => await RoleExists(roleId))
@@ -64,11 +62,6 @@ namespace BussinessLayer.FluentValidations.Account
             RuleFor(x => x.SucursalId)
                .MustAsync(async (sucursalId, cancellation) => await SucursalExists(sucursalId))
                .WithMessage("El ID de la sucursal no es válido.");
-        }
-
-        private bool EmailExists(string email)
-        {
-            return _usuarioRepository.EmailExists(email);
         }
 
         private async Task<bool> CompanyExists(long companyId)
@@ -87,6 +80,10 @@ namespace BussinessLayer.FluentValidations.Account
         {
             var sucursal = await _sucursalRepository.GetById(id);
             return sucursal != null;
+        }
+        private async Task<bool> CompanyUserLimitNotExceeded(long companyId)
+        {
+            return await _usuarioRepository.VerifyCompanyUserLimit(companyId);
         }
     }
 }

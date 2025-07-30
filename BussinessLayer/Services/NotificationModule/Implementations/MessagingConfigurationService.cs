@@ -24,7 +24,7 @@ namespace BussinessLayer.Services.WhatsAppService.Implementations
             }
         }
 
-        public async  Task<Response<List<MessagingConfigurationDto>>> GetAllAsync(int bussinessId)
+        public async  Task<Response<List<MessagingConfigurationDto>>> GetAllAsync(long bussinessId)
         {
             try{
 
@@ -59,7 +59,7 @@ namespace BussinessLayer.Services.WhatsAppService.Implementations
         }
 
         
-        public async Task<Response<MessagingConfigurationDto>> GetByIdAsync(int configurationId, int businessId)
+        public async Task<Response<MessagingConfigurationDto>> GetByIdAsync(int configurationId, long businessId)
         {
             try
             {

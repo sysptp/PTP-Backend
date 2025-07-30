@@ -1,4 +1,5 @@
-﻿using BussinessLayer.DTOs.ModuloCitas;
+﻿using BussinessLayer.Atributes;
+using BussinessLayer.DTOs.ModuloCitas;
 using BussinessLayer.Interfaces.Services.ModuloCitas;
 using BussinessLayer.Wrappers;
 using FluentValidation;
@@ -13,6 +14,7 @@ namespace PTP_API.Controllers.ModuloCita
     [SwaggerTag("Gestión de áreas de citas")]
     [Route("api/v1/[controller]")]
     [Authorize]
+    [EnableBitacora]
     public class CtaAppointmentAreaController : ControllerBase
     {
         private readonly ICtaAppointmentAreaService _appointmentAreaService;
@@ -32,6 +34,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener áreas de citas", Description = "Devuelve una lista de áreas de citas o un área específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllAreas([FromQuery] int? id, long? companyId)
         {
             try

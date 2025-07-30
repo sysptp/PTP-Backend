@@ -1,0 +1,14 @@
+using System.Text.Json.Serialization;
+
+namespace BussinessLayer.DTOs.ModuloCitas.{{ModelName}}
+{
+    public class {{ModelName}}Request
+    {
+        {{#each Properties}}
+        {{#if IsPrimaryKey}}
+        [JsonIgnore]
+        {{/if}}
+        public {{Type}}{{#if Nullable}}?{{/if}} {{Name}} { get; set; }{{#if (Type == "string" && !Nullable)}} = null!;{{else if (Type == "bool" && !Nullable)}} = false;{{/if}}
+        {{/each}}
+    }
+}

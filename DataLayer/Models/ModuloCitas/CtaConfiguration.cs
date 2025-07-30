@@ -14,5 +14,7 @@ namespace DataLayer.Models.Modulo_Citas
         public bool SendWhatsapp { get; set; } = false;
         public bool SendWhatsappReminder { get; set; } = false;
         public long CompanyId { get; set; }
+        public bool NotifyClosure { get; set; } = false;
+        public int? DaysInAdvance { get; set; }
     }
 }

@@ -8,7 +8,7 @@
      string ToNumber,
      MessageType MessageType,
      string Message,
-     int BusinessId
+     long BusinessId
     );
 
 

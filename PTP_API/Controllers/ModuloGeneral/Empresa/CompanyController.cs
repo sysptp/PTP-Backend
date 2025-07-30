@@ -71,6 +71,7 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Crear una nueva empresa", Description = "Crea una nueva empresa en el sistema.")]
+        [DisableBitacora]   
         public async Task<IActionResult> Add([FromBody] GnEmpresaRequest request)
         {
             var validationResult = await _validator.ValidateAsync(request);

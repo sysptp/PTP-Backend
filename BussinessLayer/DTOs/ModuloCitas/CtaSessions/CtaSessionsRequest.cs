@@ -1,5 +1,4 @@
-﻿using BussinessLayer.DTOs.ModuloCitas.CtaAppointmentGuest;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
 {

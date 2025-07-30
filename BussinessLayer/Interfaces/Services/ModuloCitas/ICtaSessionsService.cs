@@ -1,4 +1,6 @@
-﻿using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
+﻿using BussinessLayer.DTOs.Common;
+using BussinessLayer.DTOs.ModuloCitas.CtaAppointments;
+using BussinessLayer.DTOs.ModuloCitas.CtaSessions;
 using BussinessLayer.Interfaces.Services.IOtros;
 using BussinessLayer.Wrappers;
 using DataLayer.Models.Modulo_Citas;
@@ -10,5 +12,7 @@ namespace BussinessLayer.Interfaces.Services.ModuloCitas
         Task<CtaSessionsRequest> CreateSessionAndGenerateAppointments(CtaSessionsRequest sessionRequest);
         Task DeleteAppointmentsInSessionRange(CtaSessionsRequest sessionDto);
         Task<DetailMessage> GetConflictingAppointmentsInSessionRange(CtaSessionsRequest sessionDto);
+        Task<CtaSessionsRequest> UpdateSessionAndAppointments(CtaSessionsRequest sessionRequest, int sessionId);
+        Task<PaginatedResponse<CtaSessionsResponse>> GetAllPaginatedAsync(PaginationRequest pagination, long? companyId = null, int? userId = null);
     }
 }

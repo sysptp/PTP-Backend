@@ -82,6 +82,8 @@ using BussinessLayer.Settings;
 using Microsoft.Extensions.Configuration;
 using BussinessLayer.Helpers.UtilsHelpers;
 using System.Net.Http.Headers;
+using BussinessLayer.Interfaces.Services.ModuloGeneral.Utils;
+using BussinessLayer.Services.ModuloGeneral.Utils;
 #endregion
 
 public static class ServiceRegistration
@@ -282,6 +284,15 @@ public static class ServiceRegistration
         services.AddScoped<ICtaEmailTemplateVariablesService, CtaEmailTemplateVariablesService>();
         services.AddSingleton<ICtaBackgroundEmailService, CtaBackgroundEmailService>();
         services.AddScoped<ICtaSessionEmailService, CtaSessionEmailService>();
+        services.AddScoped<ICtaMessageTemplatesService, CtaMessageTemplatesService>();
+        services.AddScoped<ICtaSmsTemplatesService, CtaSmsTemplatesService>();
+        services.AddScoped<ICtaWhatsAppTemplatesService, CtaWhatsAppTemplatesService>();
+        services.AddScoped<ICtaNotificationTemplatesService, CtaNotificationTemplatesService>();
+        services.AddScoped<ICtaUnifiedNotificationService, CtaUnifiedNotificationService>();
+        services.AddScoped<ICtaUserNotificationReadsService, CtaUserNotificationReadsService>();
+        services.AddScoped<ICtaBookingPortalService, CtaBookingPortalService>();
+        services.AddScoped<ICtaBookingPortalAreasService, CtaBookingPortalAreasService>();
+        services.AddScoped<ICtaBookingPortalUsersService, CtaBookingPortalUsersService>();
 
         #endregion
 
@@ -299,8 +310,10 @@ public static class ServiceRegistration
 
         #region Modulo General
 
-        services.AddScoped<IGnRepeatUnitService, GnRepeatUnitService>();
-        services.AddScoped<IGnEmailService, GnEmailService>();
+        services.AddScoped<IGnRepeatUnitService,GnRepeatUnitService>();
+        services.AddScoped<IGnEmailService,GnEmailService>();
+        services.AddScoped<IGnMessageTypeService,GnMessageTypeService>();
+        services.AddScoped<IGnSecurityParametersService, GnSecurityParametersService>();
         #endregion 
 
         #region Otros

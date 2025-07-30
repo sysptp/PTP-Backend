@@ -28,5 +28,12 @@ namespace BussinessLayer.Repository.Modulo_Citas
                 .Where(c => c != null)
                 .ToListAsync();
         }
+
+        public async Task<List<CtaSessionDetails>> GetAllBySessionId(int sessionId)
+        {
+            return await _context.Set<CtaSessionDetails>()
+                .Where(ac => ac.IdSession == sessionId)
+                .ToListAsync();
+        }
     }
 }

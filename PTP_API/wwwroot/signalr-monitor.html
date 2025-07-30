@@ -1,0 +1,633 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Notifications Monitor - PTP API</title>
+    <script src="https://unpkg.com/@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .connection-status {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .status-connected {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .user-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+            .user-input input {
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                flex: 1;
+                min-width: 200px;
+            }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .active-users {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .user-tag {
+            display: inline-block;
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid #dee2e6;
+        }
+
+            .user-tag.monitoring {
+                background-color: #d1ecf1;
+                border-color: #bee5eb;
+                color: #0c5460;
+            }
+
+        .notifications-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .notifications-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #dee2e6;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification {
+            border-bottom: 1px solid #eee;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+            .notification:last-child {
+                border-bottom: none;
+                border-radius: 0 0 10px 10px;
+            }
+
+            .notification:hover {
+                background-color: #f8f9fa;
+            }
+
+            .notification.Nueva Cita Creada {
+                border-left: 4px solid #28a745;
+                background-color: #f8fff9;
+            }
+
+            .notification.appointment_updated {
+                border-left: 4px solid #ffc107;
+                background-color: #fffdf0;
+            }
+
+            .notification.appointment_state_changed {
+                border-left: 4px solid #17a2b8;
+                background-color: #f0fdff;
+            }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .notification-message {
+            color: #555;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .notification-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .notification-data {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+            .empty-state svg {
+                width: 64px;
+                height: 64px;
+                margin-bottom: 20px;
+                opacity: 0.5;
+            }
+
+        @media (max-width: 768px) {
+            .user-input {
+                flex-direction: column;
+            }
+
+                .user-input input {
+                    min-width: 100%;
+                }
+
+            .notification-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📡 SignalR Notifications Monitor</h1>
+            <p>Monitor en tiempo real de notificaciones PTP API</p>
+        </div>
+
+        <div id="connectionStatus" class="connection-status status-disconnected">
+            🔴 Desconectado
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalNotifications">0</div>
+                <div class="stat-label">Total Notificaciones</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeUsers">0</div>
+                <div class="stat-label">Usuarios Monitoreados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="connectionTime">0s</div>
+                <div class="stat-label">Tiempo Conectado</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="lastNotificationTime">-</div>
+                <div class="stat-label">Última Notificación</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <h3>Control de Monitoreo</h3>
+            <div class="user-input">
+                <input type="text" id="userIdInput" placeholder="ID de usuario (ej: 32, 24, 123...)" value="">
+                <button class="btn btn-primary" onclick="monitorUser()">📥 Monitorear Usuario</button>
+                <button class="btn btn-warning" onclick="stopMonitoringUser()">📤 Dejar de Monitorear</button>
+                <button class="btn btn-danger" onclick="clearNotifications()">🗑️ Limpiar</button>
+                <button class="btn btn-success" onclick="testConnection()">🔧 Test Conexión</button>
+            </div>
+        </div>
+
+        <div class="active-users">
+            <h3>Usuarios en Monitoreo</h3>
+            <div id="activeUsersList">
+                <span class="user-tag">Ningún usuario siendo monitoreado</span>
+            </div>
+        </div>
+
+        <div class="notifications-container">
+            <div class="notifications-header">
+                <h3>📨 Notificaciones Recibidas</h3>
+                <button class="btn btn-primary" onclick="exportNotifications()">📊 Exportar</button>
+            </div>
+            <div id="notifications">
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    <h4>Sin notificaciones</h4>
+                    <p>Las notificaciones aparecerán aquí cuando se reciban</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SignalRMonitor {
+            constructor() {
+                this.connection = null;
+                this.monitoredUsers = new Set();
+                this.notifications = [];
+                this.startTime = null;
+                this.connectionTimer = null;
+                this.stats = {
+                    totalNotifications: 0,
+                    lastNotificationTime: null
+                };
+            }
+
+            async init() {
+                await this.setupConnection();
+                this.setupEventHandlers();
+                this.startConnectionTimer();
+                await this.connect();
+            }
+
+            async setupConnection() {
+                this.connection = new signalR.HubConnectionBuilder()
+                    .withUrl("https://localhost:7140/notificationHub", {
+                        skipNegotiation: false,
+                        transport: signalR.HttpTransportType.WebSockets
+                    })
+                    .withAutomaticReconnect([0, 1000, 5000, 10000])
+                    .configureLogging(signalR.LogLevel.Information)
+                    .build();
+            }
+
+            setupEventHandlers() {
+                this.connection.on("ReceiveNotification", (notification) => {
+                    this.handleNotification(notification);
+                });
+
+                this.connection.onreconnecting(() => {
+                    this.updateConnectionStatus("🟡 Reconectando...", "status-disconnected");
+                });
+
+                this.connection.onreconnected(() => {
+                    this.updateConnectionStatus("🟢 Conectado", "status-connected");
+                    this.rejoinGroups();
+                });
+
+                this.connection.onclose(() => {
+                    this.updateConnectionStatus("🔴 Desconectado", "status-disconnected");
+                });
+            }
+
+            async connect() {
+                try {
+                    await this.connection.start();
+                    this.startTime = new Date();
+                    this.updateConnectionStatus("🟢 Conectado", "status-connected");
+                    console.log("🚀 Conectado exitosamente a SignalR");
+                } catch (err) {
+                    console.error("❌ Error de conexión:", err);
+                    this.updateConnectionStatus("🔴 Error de conexión", "status-disconnected");
+                    setTimeout(() => this.connect(), 5000);
+                }
+            }
+
+            async rejoinGroups() {
+                for (const userId of this.monitoredUsers) {
+                    try {
+                        await this.connection.invoke("JoinUserGroup", userId);
+                        console.log(`🔄 Reconectado al grupo del usuario ${userId}`);
+                    } catch (err) {
+                        console.error(`❌ Error reconectando al usuario ${userId}:`, err);
+                    }
+                }
+            }
+
+            updateConnectionStatus(text, className) {
+                const statusEl = document.getElementById("connectionStatus");
+                statusEl.textContent = text;
+                statusEl.className = `connection-status ${className}`;
+            }
+
+            async monitorUser(userId) {
+                if (!userId || this.monitoredUsers.has(userId)) return;
+
+                try {
+                    await this.connection.invoke("JoinUserGroup", userId);
+                    this.monitoredUsers.add(userId);
+                    this.updateActiveUsers();
+                    console.log(`📥 Monitoreando usuario ${userId}`);
+                } catch (err) {
+                    console.error(`❌ Error monitoreando usuario ${userId}:`, err);
+                    alert(`Error monitoreando usuario ${userId}: ${err.message}`);
+                }
+            }
+
+            async stopMonitoringUser(userId) {
+                if (!userId || !this.monitoredUsers.has(userId)) return;
+
+                this.monitoredUsers.delete(userId);
+                this.updateActiveUsers();
+                console.log(`📤 Dejando de monitorear usuario ${userId}`);
+            }
+
+            updateActiveUsers() {
+                const listEl = document.getElementById("activeUsersList");
+                const activeUsersEl = document.getElementById("activeUsers");
+
+                if (this.monitoredUsers.size === 0) {
+                    listEl.innerHTML = '<span class="user-tag">Ningún usuario siendo monitoreado</span>';
+                } else {
+                    listEl.innerHTML = Array.from(this.monitoredUsers)
+                        .map(userId => `<span class="user-tag monitoring">Usuario ${userId} <button onclick="monitor.stopMonitoringUser('${userId}')" style="border:none;background:none;color:#0c5460;cursor:pointer;">✕</button></span>`)
+                        .join('');
+                }
+
+                activeUsersEl.textContent = this.monitoredUsers.size;
+            }
+
+            handleNotification(notification) {
+                console.log("🔔 Notificación recibida:", notification);
+
+                this.notifications.unshift({
+                    ...notification,
+                    receivedAt: new Date()
+                });
+
+                this.stats.totalNotifications++;
+                this.stats.lastNotificationTime = new Date().toLocaleTimeString();
+
+                this.renderNotification(notification);
+                this.updateStats();
+                this.updateEmptyState();
+            }
+
+            renderNotification(notification) {
+                const notificationsEl = document.getElementById("notifications");
+                const emptyState = notificationsEl.querySelector('.empty-state');
+                if (emptyState) emptyState.remove();
+
+                const div = document.createElement("div");
+                div.className = `notification ${notification.Type || ''}`;
+
+                const data = notification.Data ?
+                    `<div class="notification-data">${JSON.stringify(notification.Data, null, 2)}</div>` :
+                    '';
+
+                div.innerHTML = `
+                            <div class="notification-header">
+                                <h4 class="notification-title">${notification.Title || 'Sin título'}</h4>
+                                <span class="notification-time">${new Date(notification.CreatedDate).toLocaleString()}</span>
+                            </div>
+                            <div class="notification-message">${notification.Message || 'Sin mensaje'}</div>
+                            <div class="notification-meta">
+                                <span><strong>Tipo:</strong> ${notification.Type || 'N/A'}</span>
+                                <span><strong>Recibido:</strong> ${new Date().toLocaleTimeString()}</span>
+                            </div>
+                            ${data}
+                        `;
+
+                notificationsEl.insertBefore(div, notificationsEl.firstChild);
+
+                while (notificationsEl.children.length > 100) {
+                    notificationsEl.removeChild(notificationsEl.lastChild);
+                }
+            }
+
+            updateStats() {
+                document.getElementById("totalNotifications").textContent = this.stats.totalNotifications;
+                document.getElementById("lastNotificationTime").textContent =
+                    this.stats.lastNotificationTime || '-';
+            }
+
+            updateEmptyState() {
+                const notificationsEl = document.getElementById("notifications");
+                if (notificationsEl.children.length === 0) {
+                    notificationsEl.innerHTML = `
+                                <div class="empty-state">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                    </svg>
+                                    <h4>Sin notificaciones</h4>
+                                    <p>Las notificaciones aparecerán aquí cuando se reciban</p>
+                                </div>
+                            `;
+                }
+            }
+
+            startConnectionTimer() {
+                this.connectionTimer = setInterval(() => {
+                    if (this.startTime) {
+                        const elapsed = Math.floor((new Date() - this.startTime) / 1000);
+                        document.getElementById("connectionTime").textContent = `${elapsed}s`;
+                    }
+                }, 1000);
+            }
+
+            clearNotifications() {
+                if (confirm('¿Estás seguro de que quieres limpiar todas las notificaciones?')) {
+                    document.getElementById("notifications").innerHTML = '';
+                    this.notifications = [];
+                    this.stats.totalNotifications = 0;
+                    this.stats.lastNotificationTime = null;
+                    this.updateStats();
+                    this.updateEmptyState();
+                }
+            }
+
+            exportNotifications() {
+                const data = {
+                    exportDate: new Date().toISOString(),
+                    monitoredUsers: Array.from(this.monitoredUsers),
+                    totalNotifications: this.stats.totalNotifications,
+                    notifications: this.notifications
+                };
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `signalr-notifications-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+
+            async testConnection() {
+                try {
+                    await this.connection.invoke("JoinUserGroup", "test");
+                    alert("✅ Conexión funcionando correctamente");
+                } catch (err) {
+                    alert(`❌ Error en la conexión: ${err.message}`);
+                }
+            }
+        }
+
+        const monitor = new SignalRMonitor();
+
+        async function monitorUser() {
+            const userId = document.getElementById("userIdInput").value.trim();
+            if (!userId) {
+                alert("Por favor ingresa un ID de usuario");
+                return;
+            }
+            await monitor.monitorUser(userId);
+            document.getElementById("userIdInput").value = "";
+        }
+
+        async function stopMonitoringUser() {
+            const userId = document.getElementById("userIdInput").value.trim();
+            if (!userId) {
+                alert("Por favor ingresa un ID de usuario");
+                return;
+            }
+            await monitor.stopMonitoringUser(userId);
+            document.getElementById("userIdInput").value = "";
+        }
+
+        function clearNotifications() {
+            monitor.clearNotifications();
+        }
+
+        function exportNotifications() {
+            monitor.exportNotifications();
+        }
+
+        async function testConnection() {
+            await monitor.testConnection();
+        }
+
+        document.getElementById("userIdInput").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                monitorUser();
+            }
+        });
+
+        window.onload = () => monitor.init();
+
+        window.onbeforeunload = () => {
+            if (monitor.connectionTimer) {
+                clearInterval(monitor.connectionTimer);
+            }
+        };
+    </script>
+</body>
+</html>

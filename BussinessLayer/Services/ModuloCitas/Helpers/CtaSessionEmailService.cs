@@ -79,8 +79,8 @@ namespace BussinessLayer.Services.ModuloCitas
             var configParticipantSubject = _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Subject"];
             var configParticipantBody = _configuration["EmailTemplates:DefaultTemplates:ParticipantTemplate:Body"];
 
-            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdIn);
-            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetById(appointmentState.EmailTemplateIdOut);
+            var emailTemplateForAssignedUser = await _ctaEmailTemplateRepository.GetById(12);
+            var emailTemplateForParticipant = await _ctaEmailTemplateRepository.GetById(13);
 
             return (
                 AssignedSubject: emailTemplateForAssignedUser?.Subject ?? configAssignedSubject,

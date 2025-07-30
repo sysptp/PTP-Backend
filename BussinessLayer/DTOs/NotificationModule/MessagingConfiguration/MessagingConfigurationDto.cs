@@ -13,7 +13,7 @@
 namespace BussinessLayer.DTOs.NotificationModule.MessagingConfiguration{
 public record MessagingConfigurationDto(
     int ConfigurationId,
-    int BussinessId,
+    long BussinessId,
     string AccountSid,
     string AuthToken,
     string WhatsAppNumber,
