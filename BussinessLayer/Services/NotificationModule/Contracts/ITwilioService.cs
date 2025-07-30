@@ -6,6 +6,6 @@ namespace BussinessLayer.Services.NotificationModule.Contracts
 {
     public interface ITwilioService
     {
-        MessageResource SendMessage(SendMessageTwilioDto sendMessageDto);
+        Task<MessageResource> SendMessage(SendMessageTwilioDto sendMessageDto);
     }
 }

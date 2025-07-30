@@ -89,9 +89,9 @@ public static class ServiceRegistration
     public static void AddServiceRegistration(this IServiceCollection services,IConfiguration configuration)
     {
         services.AddScoped<IMessagingConfigurationService, MessagingConfigurationService>();
-        services.AddScoped<ITwilioService, TwilioService>();
+        //services.AddScoped<ITwilioService, TwilioService>();
         services.AddScoped<IMessagingLogService, MessagingLogService>();
-        services.AddScoped<IMessageService, MessageService>();
+        //services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<IPaypalService, PaypalService>();
 
 
