@@ -57,7 +57,7 @@ namespace BussinessLayer.Validations.ModuloCitas.CtaAppointments
                 .MustAsync(async (id, cancellation) => await _companyRepository.GetById(id) != null)
                 .WithMessage("El identificador de la empresa (CompanyId) no existe en la base de datos.");
 
-            RuleFor(x => x.UserId)
+            RuleFor(x => x.AssignedUser)
                 .GreaterThan(0).WithMessage("El usuario asignado (UserId) es obligatorio.")
                 .MustAsync(async (id, cancellation) => await _userRepository.GetById(id) != null)
                 .WithMessage("El usuario asignado (UserId) no existe en la base de datos.");

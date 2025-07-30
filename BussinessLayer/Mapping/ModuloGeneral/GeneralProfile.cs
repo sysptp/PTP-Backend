@@ -150,6 +150,11 @@ namespace BussinessLayer.Mapping.ModuloGeneral
                .ForMember(dest => dest.Query, opt => opt.MapFrom(src => src.Consultar))
                .ReverseMap();
 
+
+            CreateMap<GnPermisoResponseForLoggin, GnPermisoResponse>()
+               .ReverseMap();
+
+
             CreateMap<GnPermisoRequest, GnPermiso>()
                 .ForMember(dest => dest.IDPerfil, opt => opt.MapFrom(src => src.RoleId))
                 .ForMember(dest => dest.IDMenu, opt => opt.MapFrom(src => src.MenuId))

@@ -17,6 +17,7 @@ namespace DataLayer.Models.ModuloGeneral.Seguridad
         public string? ImagenUsuario { get; set; }
         public string? TelefonoPersonal { get; set; }
         public string? Telefono { get; set; }
+        public string? PhoneNumber { get; set; }
         public bool OnlineUsuario { get; set; }
         public long? CodigoSuc { get; set; }
         public string? IpAdiccion { get; set; }

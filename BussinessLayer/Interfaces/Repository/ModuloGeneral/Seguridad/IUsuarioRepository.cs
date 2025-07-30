@@ -5,6 +5,6 @@ namespace BussinessLayer.Interfaces.Repository.ModuloGeneral.Seguridad
 {
     public interface IUsuarioRepository : IGenericRepository<Usuario>
     {
-
+        bool EmailExists(string email);
     }
 }

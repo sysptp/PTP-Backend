@@ -24,13 +24,14 @@ namespace BussinessLayer.Services.NotificationModule.Implementations
                 //Enviando el mensaje
                 var messageResponse = MessageResource.Create(messageOptions);
 
-              
-                //Retornando el resultado
-                return messageResponse;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
+            await LogMessage(sendMessageDto, messageResponse);
+
+            //Retornando el resultado
+            return messageResponse;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message); 
 
             }
         }

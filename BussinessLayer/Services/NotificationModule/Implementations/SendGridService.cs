@@ -13,15 +13,19 @@
 
 //                SendGridClient sendGridClient = new SendGridClient(apiKey);
 
-//                var message = new SendGridMessage()
-//                {
-//                    From 
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                throw new ApplicationException(ex.Message, ex);
-//            }
-//        }
-//    }
-//}
+    var from = new EmailAddress("es.geraldsilverio@gmail.com", "Example User");
+    var subject = "Sending with SendGrid is Fun";
+        //var to = new EmailAddress("geraldsilverio412@gmail.com", "Example User");
+        var to = new EmailAddress("djlocuralapara@gmail.com", "Example User");
+        var plainTextContent = "and easy to do anywhere, even with C#";
+    var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
+
+    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+
+    var response = await client.SendEmailAsync(msg);
+
+    return response;
+
+   }
+    
+}

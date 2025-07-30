@@ -10,5 +10,10 @@ namespace BussinessLayer.Repository.ModuloGeneral.Seguridad
         public UsuarioRepository(PDbContext dbContext, ITokenService tokenService) : base(dbContext, tokenService)
         {
         }
+
+        public bool EmailExists(string email)
+        {
+            return _context.Set<Usuario>().Any(x => x.Email == email);
+        }
     }
 }

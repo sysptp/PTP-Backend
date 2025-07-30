@@ -33,6 +33,7 @@ namespace PTP_API.Controllers.ModuloCita
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Obtener sesiones", Description = "Devuelve una lista de sesiones o una sesión específica si se proporciona un ID")]
+        [DisableBitacora]
         public async Task<IActionResult> GetAllSessions([FromQuery] int? IdSession, long? companyId, int? userId)
         {
             try
@@ -57,7 +58,7 @@ namespace PTP_API.Controllers.ModuloCita
                         filteredSessions = filteredSessions.Where(x => x.CompanyId == companyId.Value);
 
                     if (userId.HasValue)
-                        filteredSessions = filteredSessions.Where(x => x.IdUser == userId.Value);
+                        filteredSessions = filteredSessions.Where(x => x.AssignedUserId == userId.Value);
 
                     return Ok(Response<IEnumerable<CtaSessionsResponse>>.Success(
                         filteredSessions.ToList(),

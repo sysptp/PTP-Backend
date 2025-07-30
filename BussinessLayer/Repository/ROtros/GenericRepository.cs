@@ -4,7 +4,6 @@ using DataLayer.Models.Otros;
 using DataLayer.PDbContex;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
@@ -33,7 +32,7 @@ namespace BussinessLayer.Repository.ROtros
                 .Build();
 
             return configuration.GetConnectionString("POS_CONN");
-            }
+        }
 
         public virtual async Task<T> GetById(object id)
         {
@@ -374,7 +373,7 @@ namespace BussinessLayer.Repository.ROtros
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error al realizar Soft Delete con Dapper", ex);
+                throw new InvalidOperationException(ex.Message, ex);
             }
         }
 

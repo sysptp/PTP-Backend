@@ -1,5 +1,4 @@
-﻿using DataLayer.Models.ModuloCitas;
-using DataLayer.Models.ModuloGeneral.Empresa;
+﻿using DataLayer.Models.ModuloGeneral.Empresa;
 using DataLayer.Models.ModuloGeneral.Seguridad;
 using DataLayer.Models.Otros;
 using System.ComponentModel.DataAnnotations;
@@ -43,8 +42,5 @@ namespace DataLayer.Models.Modulo_Citas
         [ForeignKey("CompanyId")]
         public GnEmpresa? GnEmpresa { get; set; }
         public List<CtaAppointmentManagement>? CtaAppointmentManagement { get; set; }
-        public List<CtaAppointmentContacts>? CtaAppointmentContacts { get; set; }
-        public List<CtaAppointmentUsers>? CtaAppointmentUsers { get; set; }
-        public List<CtaAppointmentGuest>? CtaAppointmentGuest { get; set; }
     }
 }

@@ -10,5 +10,7 @@ namespace BussinessLayer.Interfaces.Services.ModuloCitas
         Task<DetailMessage> ExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto);
         Task DeleteExistsAppointmentInTimeRange(CtaAppointmentsRequest appointmentDto);
         Task<List<AppointmentParticipantsResponse>> GetAllParticipants();
+        Task<CtaAppointmentsResponse> AddAppointment(CtaAppointmentsRequest vm, bool IsForSession);
+        Task<List<AppointmentParticipantsResponse>> GetAllParticipantsByAppointmentId(int appointmentId);
     }
 }

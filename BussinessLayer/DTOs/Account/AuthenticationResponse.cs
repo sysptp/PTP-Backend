@@ -30,6 +30,6 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account
         [JsonIgnore]
         public bool HasError { get; set; }
         //[JsonPropertyName("Privileges")]
-        //public List<GnPermisoResponse>? GnPermisoResponses { get; set; }
+        //public List<GnPermisoResponseForLoggin>? GnPermisoResponses { get; set; }
     }
 }

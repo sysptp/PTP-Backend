@@ -109,6 +109,7 @@ namespace PTP_API.Controllers.ModuloCita
 
                 sequenceRequest.Id = id;
                 sequenceRequest.LastUsed = existingSequence.LastUsed;
+                sequenceRequest.SequenceNumber = existingSequence.SequenceNumber;
                 await _appointmentSequenceService.Update(sequenceRequest, id);
                 return Ok(Response<string>.Success(null, "Secuencia actualizada correctamente."));
             }

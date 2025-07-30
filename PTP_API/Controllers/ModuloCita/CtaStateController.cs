@@ -31,8 +31,15 @@ namespace PTP_API.Controllers.ModuloCitas
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Obtener estados", Description = "Devuelve una lista de estados de citas o un estado específico si se proporciona un ID")]
-        public async Task<IActionResult> GetAllStates([FromQuery] int? IdStateAppointment)
+        [SwaggerOperation(
+     Summary = "Obtener estados",
+     Description = "Devuelve una lista de estados de citas filtrada por diferentes criterios o un estado específico si se proporciona un ID")]
+        public async Task<IActionResult> GetAllStates(
+     [FromQuery] int? IdStateAppointment,
+     [FromQuery] long? CompanyId,
+     [FromQuery] int? AreaId,
+     [FromQuery] bool? IsClosure = null,
+     [FromQuery] bool? IsDefault = null)
         {
             try
             {
@@ -41,14 +48,29 @@ namespace PTP_API.Controllers.ModuloCitas
                     var state = await _stateService.GetByIdResponse(IdStateAppointment.Value);
                     if (state == null)
                         return NotFound(Response<CtaStateResponse>.NotFound("Estado no encontrado."));
-
                     return Ok(Response<CtaStateResponse>.Success(state, "Estado encontrado."));
                 }
                 else
                 {
                     var states = await _stateService.GetAllDto();
+
                     if (states == null || !states.Any())
                         return StatusCode(204, Response<IEnumerable<CtaStateResponse>>.NoContent("No hay estados disponibles."));
+
+                    if (CompanyId.HasValue)
+                        states = states.Where(s => s.CompanyId == CompanyId.Value).ToList();
+
+                    if (AreaId.HasValue)
+                        states = states.Where(s => s.AreaId == AreaId.Value).ToList();
+
+                    if (IsClosure.HasValue)
+                        states = states.Where(s => s.IsClosure == IsClosure.Value).ToList();
+
+                    if (IsDefault.HasValue)
+                        states = states.Where(s => s.IsDefault == IsDefault.Value).ToList();
+
+                    if (!states.Any())
+                        return StatusCode(204, Response<IEnumerable<CtaStateResponse>>.NoContent("No hay estados que coincidan con los criterios de búsqueda."));
 
                     return Ok(Response<IEnumerable<CtaStateResponse>>.Success(states, "Estados obtenidos correctamente."));
                 }

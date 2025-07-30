@@ -280,6 +280,8 @@ public static class ServiceRegistration
         services.AddScoped<ICtaNotificationSettingsService, CtaNotificationSettingsService>();
         services.AddScoped<ICtaParticipantTypesServices, CtaParticipantTypesService>();
         services.AddScoped<ICtaEmailTemplateVariablesService, CtaEmailTemplateVariablesService>();
+        services.AddSingleton<ICtaBackgroundEmailService, CtaBackgroundEmailService>();
+        services.AddScoped<ICtaSessionEmailService, CtaSessionEmailService>();
 
         #endregion
 

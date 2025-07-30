@@ -9,7 +9,7 @@ namespace BussinessLayer.DTOs.ModuloCitas.CtaSessions
         public int IdSession { get; set; }
         public DateTime FirstSessionDate { get; set; }
         public DateTime SessionEndDate { get; set; }
-        public int IdUser { get; set; }
+        public int AssignedUser { get; set; }
         [JsonIgnore]
         public int CompletedAppointments { get; set; } = 0;
         public int RepeatEvery { get; set; }
