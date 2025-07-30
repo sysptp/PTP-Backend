@@ -1,4 +1,5 @@
 using BussinessLayer.DTOs.NotificationModule.MessagingConfiguration;
+using BussinessLayer.DTOs.Paypal.CreateOrder;
 using BussinessLayer.Services.NotificationModule.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,4 +21,12 @@ public class NotificationController : ControllerBase
         var response = await _messageService.SendMessage(sendMessageDto);
         return Ok(response);
     }
+    [HttpPost] 
+    [Route("create")]
+    public async Task<IActionResult> Created(CreatePaypalOrderDto sendMessageDto)
+    {
+        //var response = await _messageService.SendMessage(sendMessageDto);
+        return NoContent();
+    }
+
 }

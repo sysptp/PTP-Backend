@@ -1,4 +1,5 @@
-﻿using DataLayer.PDbContex;
+﻿using BussinessLayer.Settings;
+using DataLayer.PDbContex;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ namespace BussinessLayer.DendeciesInjections
             #region HttpClient 
             services.AddHttpClient();
             #endregion
+
         }
     }
 }

@@ -99,6 +99,8 @@ using BussinessLayer.DTOs.ModuloGeneral.Smtp;
 using BussinessLayer.FluentValidations.ModuloGeneral.SMTP;
 using BussinessLayer.DTOs.ModuloCitas.CtaEmailTemplates;
 using BussinessLayer.DTOs.ModuloCitas.CtaNotificationSettings;
+using BussinessLayer.DTOs.ModuloPaypal;
+using BussinessLayer.FluentValidations.ModuloPaypal;
 
 namespace BussinessLayer.DendeciesInjections
 {
@@ -326,6 +328,8 @@ namespace BussinessLayer.DendeciesInjections
             services.AddScoped<IValidator<CtaNotificationSettingsRequest>, CtaNotificationSettingsRequestValidator>();
 
             #endregion
+
+            services.AddScoped<IValidator<PaypalOrderCreateDto>, CreateOrderPaypalValidator>();
         }
     } 
 }

@@ -2,6 +2,7 @@ using IdentityLayer;
 using BussinessLayer.DendeciesInjections;
 using PTP_API.Extensions;
 using PTP_API.Middlewares;
+using BussinessLayer.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +11,14 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
     });
+
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerExtension();
 builder.Services.AddApiVersioningExtension();
 builder.Services.AddDependenciesRegistration(builder.Configuration);
-builder.Services.AddServiceRegistration();
+builder.Services.AddServiceRegistration(builder.Configuration);
 builder.Services.AddRepositoryInjections();
 builder.Services.AddValidationInjections();
 builder.Services.AddIdentityLayer(builder.Configuration);
@@ -23,6 +26,11 @@ builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
+
+builder.Configuration
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
 
 
 var app = builder.Build();

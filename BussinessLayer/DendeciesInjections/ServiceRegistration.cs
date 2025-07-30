@@ -77,16 +77,37 @@ using BussinessLayer.Services.WhatsAppService.Contracts;
 using BussinessLayer.Services.WhatsAppService.Implementations;
 using BussinessLayer.Services.NotificationModule.Contracts;
 using BussinessLayer.Services.NotificationModule.Implementations;
+using BussinessLayer.Interfaces.Services.ModuloPaypal;
+using BussinessLayer.Settings;
+using Microsoft.Extensions.Configuration;
+using BussinessLayer.Helpers.UtilsHelpers;
+using System.Net.Http.Headers;
 #endregion
 
 public static class ServiceRegistration
 {
-    public static void AddServiceRegistration(this IServiceCollection services)
+    public static void AddServiceRegistration(this IServiceCollection services,IConfiguration configuration)
     {
         services.AddScoped<IMessagingConfigurationService, MessagingConfigurationService>();
         services.AddScoped<ITwilioService, TwilioService>();
         services.AddScoped<IMessagingLogService, MessagingLogService>();
         services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IPaypalService, PaypalService>();
+
+
+        #region PaypalHttpClient
+
+        string serviceUrl = ReadFromConfiguration.GetValueFromConfig(configuration, "PAYPAL_URL");
+        string accessToken = ReadFromConfiguration.GetValueFromConfig(configuration, "ACCESS_TOKEN");
+
+        services.AddHttpClient("paypal_service",client =>
+        {
+            client.BaseAddress = new Uri(serviceUrl);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        });
+
+        #endregion
+
 
         #region Modulo Inventario
         services.AddScoped<IInvAlmacenesService, InvAlmacenesService>();
