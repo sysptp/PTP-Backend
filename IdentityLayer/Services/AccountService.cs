@@ -223,7 +223,7 @@ namespace IdentityLayer.Services
                     <p>Gracias,<br/>El equipo de PTP</p>
                 ",
                         IsHtml = true,
-                        EmpresaId = user.CodigoEmp ?? 0
+                        CompanyId = user.CodigoEmp ?? 0
                     };
 
                     await _emailService.SendAsync(emailMessage, user.CodigoEmp ?? 0);
@@ -522,7 +522,7 @@ namespace IdentityLayer.Services
             <p>Gracias,<br/>El equipo de PTP</p>
         ",
                 IsHtml = true,
-                EmpresaId = user.CodigoEmp ?? 0
+                CompanyId = user.CodigoEmp ?? 0
             };
 
             await _emailService.SendAsync(emailMessage, user.CodigoEmp ?? 0);
@@ -613,7 +613,7 @@ namespace IdentityLayer.Services
             <p>Gracias,<br/>El equipo de PTP</p>
         ",
                 IsHtml = true,
-                EmpresaId = user.CodigoEmp ?? 0
+                CompanyId = user.CodigoEmp ?? 0
             };
 
             await _emailService.SendAsync(confirmationEmail, user.CodigoEmp ?? 0);

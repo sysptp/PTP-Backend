@@ -1,6 +1,7 @@
 ﻿using BussinessLayer.DTOs.ModuloGeneral.Email;
 using BussinessLayer.Interfaces.Repository.ModuloGeneral.SMTP;
 using BussinessLayer.Interfaces.Services.ModuloGeneral.Email;
+using MailKit.Security;
 using MimeKit;
 
 namespace BussinessLayer.Services.ModuloGeneral.Email
@@ -14,38 +15,74 @@ namespace BussinessLayer.Services.ModuloGeneral.Email
             _configuracionRepository = configuracionRepository;
         }
 
-        public async Task SendAsync(GnEmailMessageDto request,long companyId)
+        public async Task SendAsync(GnEmailMessageDto request, long companyId)
         {
             try
             {
-                MimeMessage email = new(); 
-                var smtpServer = await _configuracionRepository.GetSMTPByCompanyIdAsync(companyId);
+                var smtpServer = await _configuracionRepository.GetSMTPByCompanyIdAsync(companyId)
+                                 ?? throw new InvalidOperationException("No hay configuración SMTP para la empresa.");
 
-                email.Sender = MailboxAddress.Parse($"{smtpServer.NombreRemitente} <{smtpServer.Remitente}>");
-                if (request.To != null)
+                var email = new MimeMessage();
+
+                // From y Sender
+                var sender = new MailboxAddress(smtpServer.NombreRemitente ?? "", smtpServer.Remitente);
+                email.From.Add(sender);
+                email.Sender = sender;
+
+                // TO
+                if (request.To != null && request.To.Count() > 0)
                 {
-                    foreach (var recipient in request.To)
-                    {
+                    foreach (var recipient in request.To.Where(x => !string.IsNullOrWhiteSpace(x)))
                         email.To.Add(MailboxAddress.Parse(recipient));
+                }
+
+                // CC
+                if (request.Cc != null && request.Cc.Count() > 0)
+                {
+                    foreach (var cc in request.Cc.Where(x => !string.IsNullOrWhiteSpace(x)))
+                        email.Cc.Add(MailboxAddress.Parse(cc));
+                }
+
+                email.Subject = request.Subject ?? string.Empty;
+
+                // Body
+                var builder = new BodyBuilder();
+                if (request.IsHtml)
+                    builder.HtmlBody = request.Body ?? string.Empty;
+                else
+                    builder.TextBody = request.Body ?? string.Empty;
+
+                // Adjuntos
+                if (request.Attachments != null)
+                {
+                    foreach (var file in request.Attachments.Where(f => f?.Length > 0))
+                    {
+                        using var stream = file.OpenReadStream();
+                        builder.Attachments.Add(file.FileName, stream);
                     }
                 }
-                email.Subject = request.Subject;
-                BodyBuilder builder = new();
-                builder.HtmlBody = request.Body;
+
                 email.Body = builder.ToMessageBody();
 
-                using MailKit.Net.Smtp.SmtpClient smtp = new();
-                smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
-                smtp.Connect(smtpServer.Servidor, smtpServer.Puerto, MailKit.Security.SecureSocketOptions.StartTls);
-                smtp.Authenticate(smtpServer.UsuarioSmtp,smtpServer.PassUsuario);
+                using var smtp = new MailKit.Net.Smtp.SmtpClient();
+
+                // ❗ Recomendado: NO deshabilitar validación de certificado en producción.
+                // smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+                // Elige la opción de seguridad según tu configuración (ejemplos):
+                // var secure = smtpServer.UsarStartTls ? SecureSocketOptions.StartTls : SecureSocketOptions.Auto;
+                var secure = SecureSocketOptions.StartTls;
+
+                await smtp.ConnectAsync(smtpServer.Servidor, smtpServer.Puerto, secure);
+                await smtp.AuthenticateAsync(smtpServer.UsuarioSmtp, smtpServer.PassUsuario);
+
                 await smtp.SendAsync(email);
-                smtp.Disconnect(true);
+                await smtp.DisconnectAsync(true);
             }
             catch (Exception ex)
             {
-
+                throw;
             }
         }
     }
 }
-

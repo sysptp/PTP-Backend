@@ -167,7 +167,7 @@ namespace BussinessLayer.Services.ModuloCitas
                     Body = body,
                     IsHtml = true,
                     Attachments = null,
-                    EmpresaId = companyId
+                    CompanyId = companyId
                 };
 
                 await _gnEmailService.SendAsync(creatorEmailMessage, companyId);
@@ -185,7 +185,7 @@ namespace BussinessLayer.Services.ModuloCitas
                     Body = body,
                     IsHtml = true,
                     Attachments = null,
-                    EmpresaId = companyId
+                    CompanyId = companyId
                 };
 
                 await _gnEmailService.SendAsync(participantEmailMessage, companyId);

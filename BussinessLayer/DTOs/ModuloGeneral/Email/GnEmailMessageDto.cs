@@ -11,7 +11,6 @@ namespace BussinessLayer.DTOs.ModuloGeneral.Email
         public string Body { get; set; } = string.Empty;
         public bool IsHtml { get; set; }
         public List<IFormFile>? Attachments { get; set; }
-        public long EmpresaId { get; set; }
-        public int ConfiguracionId { get; set; }
+        public long CompanyId { get; set; }
     }
 }

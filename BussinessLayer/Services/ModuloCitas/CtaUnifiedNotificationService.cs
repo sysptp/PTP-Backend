@@ -239,7 +239,7 @@ namespace BussinessLayer.Services.ModuloCitas
                         Subject = subject,
                         Body = body,
                         IsHtml = true,
-                        EmpresaId = appointment.CompanyId
+                        CompanyId = appointment.CompanyId
                     };
 
                     await emailService.SendAsync(emailMessage, appointment.CompanyId);

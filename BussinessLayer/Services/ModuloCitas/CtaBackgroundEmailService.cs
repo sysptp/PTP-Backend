@@ -44,7 +44,7 @@ namespace BussinessLayer.Services.ModuloCitas
                                 Body = emailData.AssignedBody,
                                 IsHtml = true,
                                 Attachments = null,
-                                EmpresaId = emailData.CompanyId,
+                                CompanyId = emailData.CompanyId,
                             };
                             emailTasks.Add(emailService.SendAsync(creatorEmailMessage, emailData.CompanyId));
                         }
@@ -59,7 +59,7 @@ namespace BussinessLayer.Services.ModuloCitas
                                 Body = emailData.ParticipantBody,
                                 IsHtml = true,
                                 Attachments = null,
-                                EmpresaId = emailData.CompanyId,
+                                CompanyId = emailData.CompanyId,
                             };
                             emailTasks.Add(emailService.SendAsync(contactEmailMessage, emailData.CompanyId));
                         }
@@ -74,7 +74,7 @@ namespace BussinessLayer.Services.ModuloCitas
                                 Body = emailData.ParticipantBody,
                                 IsHtml = true,
                                 Attachments = null,
-                                EmpresaId = emailData.CompanyId,
+                                CompanyId = emailData.CompanyId,
                             };
                             emailTasks.Add(emailService.SendAsync(userEmailMessage, emailData.CompanyId));
                         }
@@ -89,7 +89,7 @@ namespace BussinessLayer.Services.ModuloCitas
                                 Body = emailData.ParticipantBody,
                                 IsHtml = true,
                                 Attachments = null,
-                                EmpresaId = emailData.CompanyId,
+                                CompanyId = emailData.CompanyId,
                             };
                             emailTasks.Add(emailService.SendAsync(guestEmailMessage, emailData.CompanyId));
                         }
