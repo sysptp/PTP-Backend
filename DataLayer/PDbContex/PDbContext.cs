@@ -192,9 +192,9 @@ namespace DataLayer.PDbContex
         #endregion
 
         #region Refactor del Menu
-        public DbSet<GnModulo> GNModulos { get; set; }
+        public DbSet<GnModulo> GNModulo { get; set; }
         public DbSet<GnSubMenu> GNSubMenus { get; set; }
-        public DbSet<GnEmpresaXModulo> GnEmpresaXModulos { get; set; }
+        public DbSet<GnEmpresaXModulo> GnEmpresaXModulo { get; set; }
         public DbSet<GnEmpresaXPerfilXSubMenu> GnEmpresaXPerfilXSubMenus { get; set; }
         #endregion
 

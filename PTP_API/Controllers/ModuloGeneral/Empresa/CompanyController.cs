@@ -150,5 +150,37 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
                 return StatusCode(500, Response<string>.ServerError("Ocurrió un error al eliminar la empresa. Por favor, intente nuevamente."));
             }
         }
+
+        [HttpPost("register-with-admin")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Registrar empresa con usuario administrador", Description = "Crea una nueva empresa junto con su usuario administrador y asigna los módulos seleccionados.")]
+        [DisableBitacora]
+        public async Task<IActionResult> RegisterWithAdmin([FromBody] CompanyRegistrationRequest request)
+        {
+            var companyValidationResult = await _validator.ValidateAsync(request.Company);
+            if (!companyValidationResult.IsValid)
+            {
+                var errors = companyValidationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(Response<string>.BadRequest(errors, 400));
+            }
+
+            if (request.SelectedModuleIds == null || !request.SelectedModuleIds.Any() || request.SelectedModuleIds.Contains(0))
+            {
+                return BadRequest(Response<string>.BadRequest(new List<string> { "Debe seleccionar al menos un módulo válido" }, 400));
+            }
+
+            try
+            {
+                var result = await _empresaService.RegisterCompanyWithAdmin(request);
+                return StatusCode(201, Response<CompanyRegistrationResponse>.Created(result, "Empresa y usuario administrador creados exitosamente."));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Response<string>.ServerError(ex.Message));
+            }
+        }
     }
 }

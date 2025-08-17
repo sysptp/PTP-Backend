@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account;
 using BussinessLayer.DTOs.ModuloGeneral.Configuracion.Seguridad.Schedule;
 using BussinessLayer.DTOs.ModuloGeneral.Empresas;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DMunicipio;
@@ -6,6 +7,7 @@ using BussinessLayer.DTOs.ModuloGeneral.Geografia.DPais;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DProvincia;
 using BussinessLayer.DTOs.ModuloGeneral.Geografia.DRegion;
 using BussinessLayer.DTOs.ModuloGeneral.Menu;
+using BussinessLayer.DTOs.ModuloGeneral.Modulo;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.GnSecurityParameters;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Perfil;
 using BussinessLayer.DTOs.ModuloGeneral.Seguridad.Permiso;
@@ -123,6 +125,7 @@ namespace BussinessLayer.Mapping.ModuloGeneral
            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Telefono))
            .ReverseMap();
 
+            CreateMap<UserResponse, RegisterRequest>().ReverseMap();
 
             CreateMap<Usuario, UpdateUserRequest>()
            .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.IdHorario))
@@ -194,6 +197,13 @@ namespace BussinessLayer.Mapping.ModuloGeneral
             CreateMap<GnSecurityParametersRequest, GnSecurityParameters>()
                 .ReverseMap();
             CreateMap<GnSecurityParametersResponse, GnSecurityParameters>()
+                .ReverseMap();
+            #endregion
+
+            #region Modulo
+            CreateMap<GnModuloResponse, GnModulo>()
+               .ReverseMap();
+            CreateMap<GnModuloRequest, GnModulo>()
                 .ReverseMap();
             #endregion
 
