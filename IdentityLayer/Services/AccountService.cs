@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using IdentityLayer.Entities;
 using BussinessLayer.Settings;
 using System.Security.Cryptography;
 using BussinessLayer.DTOs.Account;
@@ -275,7 +274,7 @@ namespace IdentityLayer.Services
                 signingCredentials: creds);
         }
 
-        public async Task<RegisterResponse> RegisterUserAsync(BussinessLayer.DTOs.ModuloGeneral.Configuracion.Account.RegisterRequest request, string origin)
+        public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest request, string origin)
         {
             try
             {
@@ -284,19 +283,11 @@ namespace IdentityLayer.Services
                     HasError = false
                 };
 
-                var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
-                if (userWithSameUserName != null)
+                var validationErrors = await ValidateUserRegistrationAsync(request.UserName, request.Email);
+                if (validationErrors.Any())
                 {
                     response.HasError = true;
-                    response.Error = $"El nombre de usuario '{request.UserName}' ya está en uso.";
-                    return response;
-                }
-
-                var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
-                if (userWithSameEmail != null)
-                {
-                    response.HasError = true;
-                    response.Error = $"El correo electrónico '{request.Email}' ya está registrado.";
+                    response.Error = string.Join(", ", validationErrors);
                     return response;
                 }
 
@@ -324,7 +315,6 @@ namespace IdentityLayer.Services
             {
                 throw new Exception(ex.Message, ex);
             }
-
         }
 
         private RefreshToken GenerateRefreshToken()
@@ -619,6 +609,25 @@ namespace IdentityLayer.Services
             await _emailService.SendAsync(confirmationEmail, user.CodigoEmp ?? 0);
 
             return response;
+        }
+
+        public async Task<List<string>> ValidateUserRegistrationAsync(string userName, string email)
+        {
+            var errors = new List<string>();
+
+            var userWithSameUserName = await _userManager.FindByNameAsync(userName);
+            if (userWithSameUserName != null)
+            {
+                errors.Add($"El nombre de usuario '{userName}' ya está en uso");
+            }
+
+            var userWithSameEmail = await _userManager.FindByEmailAsync(email);
+            if (userWithSameEmail != null)
+            {
+                errors.Add($"El correo electrónico '{email}' ya está registrado");
+            }
+
+            return errors;
         }
 
         #region External Register Logic

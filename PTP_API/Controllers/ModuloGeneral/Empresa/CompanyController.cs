@@ -19,12 +19,14 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
     {
         private readonly IGnEmpresaservice _empresaService;
         private readonly IValidator<GnEmpresaRequest> _validator;
+        private readonly IValidator<CompanyRegistrationRequest> _companyAndAdminUserRegistrationValidator;
 
 
-        public CompanyController(IGnEmpresaservice empresaService, IValidator<GnEmpresaRequest> validator)
+        public CompanyController(IGnEmpresaservice empresaService, IValidator<GnEmpresaRequest> validator, IValidator<CompanyRegistrationRequest> companyAndAdminUserRegistrationValidator)
         {
             _empresaService = empresaService;
             _validator = validator;
+            _companyAndAdminUserRegistrationValidator = companyAndAdminUserRegistrationValidator;
         }
 
         [HttpGet]
@@ -161,15 +163,24 @@ namespace PTP_API.Controllers.ModuloGeneral.Empresa
         public async Task<IActionResult> RegisterWithAdmin([FromBody] CompanyRegistrationRequest request)
         {
             var companyValidationResult = await _validator.ValidateAsync(request.Company);
-            if (!companyValidationResult.IsValid)
+            var companyandAdminUserValidationResult = await _companyAndAdminUserRegistrationValidator.ValidateAsync(request);
+
+            if (!companyValidationResult.IsValid || !companyandAdminUserValidationResult.IsValid)
             {
-                var errors = companyValidationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return BadRequest(Response<string>.BadRequest(errors, 400));
+                var errors = new List<string>();
+
+                // Agregar errores de validación de empresa
+                errors.AddRange(companyValidationResult.Errors.Select(e => e.ErrorMessage));
+
+                // Agregar errores de validación de usuario administrador
+                errors.AddRange(companyandAdminUserValidationResult.Errors.Select(e => e.ErrorMessage));
+
+                return BadRequest(Response<CompanyRegistrationResponse>.BadRequest(errors, 400));
             }
 
-            if (request.SelectedModuleIds == null || !request.SelectedModuleIds.Any() || request.SelectedModuleIds.Contains(0))
+            if (request.SelectedModuleIds == null || !request.SelectedModuleIds.Any())
             {
-                return BadRequest(Response<string>.BadRequest(new List<string> { "Debe seleccionar al menos un módulo válido" }, 400));
+                return BadRequest(Response<CompanyRegistrationResponse>.BadRequest(new List<string> { "Debe seleccionar al menos un módulo válido" }, 400));
             }
 
             try

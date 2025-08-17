@@ -18,5 +18,6 @@ namespace BussinessLayer.Interfaces.Services.IAccount
         Task<bool> VerifyUser(string UserName);
         Task<bool> VerifyUserById(int userId);
         Task<AuthenticationResponse> VerifyTwoFactorCodeAsync(string userId, string code);
+        Task<List<string>> ValidateUserRegistrationAsync(string userName, string email);
     }
 }
